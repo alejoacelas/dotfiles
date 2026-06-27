@@ -35,7 +35,9 @@ Everything else — including anything about me or that I produce — is public.
 Tips:
 - Push toward more public: offer to anonymize, add a `.env.example`, or share a
   high-level summary rather than holding the whole thing back.
-- Keep "commit and push at the end of each bout of work" safe to do by default.
+- Always commit: when you find uncommitted work, commit and push it rather than
+  leaving a dirty tree — after a quick check that nothing private (credentials,
+  confided content) is going in. Don't ask whether to commit; it's the default.
 - When something must stay private, keep it out of the public tree and point to
   it, eg., using a git submodule.
 
