@@ -31,9 +31,13 @@ link claude/skills      "$HOME/.claude/skills"
 link codex/AGENTS.md    "$HOME/.codex/AGENTS.md"
 link codex/config.toml  "$HOME/.codex/config.toml"
 link codex/rules        "$HOME/.codex/rules"
-link shell/zprofile     "$HOME/.zprofile"
-link git/gitconfig      "$HOME/.gitconfig"
+link shell/zprofile       "$HOME/.zprofile"
+link git/gitconfig        "$HOME/.gitconfig"
+link claude/settings.json "$HOME/.claude/settings.json"
 
-# Intentionally NOT linked: ~/.claude/settings.json
-# Claude Code rewrites it, which would clobber a symlink. Kept a real file in place.
+# Enable the repo's tracked git hooks (the secret-scan pre-commit guard).
+git -C "$DOTFILES" config core.hooksPath hooks
+
+# Keep machine-local or secret settings in ~/.claude/settings.local.json (untracked) —
+# never in the tracked settings.json linked above.
 echo "Done."

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "cleanupPeriodDays": 36500,
+  "permissions": {
+    "allow": [
+      "Bash(brew install:*)",
+      "Bash(brew update:*)",
+      "Bash(brew upgrade:*)",
+      "Bash(brew info:*)",
+      "Bash(brew search:*)",
+      "Bash(brew list:*)",
+      "Bash(brew link:*)",
+      "Bash(brew unlink:*)",
+      "Bash(brew tap:*)",
+      "Bash(brew --prefix:*)",
+      "Bash(uv:*)",
+      "Bash(uvx:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(pnpm:*)",
+      "Bash(yarn:*)",
+      "Bash(corepack:*)",
+      "Bash(cargo:*)",
+      "Bash(rustup:*)",
+      "Bash(rustc:*)",
+      "Bash(python3:*)",
+      "Bash(pip3:*)",
+      "Bash(pip:*)",
+      "Bash(gh:*)"
+    ]
+  },
+  "model": "opus[1m]",
+  "effortLevel": "xhigh",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark"
+}
