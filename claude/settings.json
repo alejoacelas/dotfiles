@@ -30,6 +30,19 @@
       "Bash(gh:*)"
     ]
   },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ \"$CLAUDE_PROJECT_DIR\" = \"$HOME/people\" ]; then python3 \"$HOME/.dotfiles/claude/hooks/sync_gate.py\"; fi"
+          }
+        ]
+      }
+    ]
+  },
   "model": "opus[1m]",
   "effortLevel": "xhigh",
   "skipDangerousModePermissionPrompt": true,
