@@ -1,0 +1,4 @@
+# Applied only inside the `best` superproject, via the includeIf in gitconfig.
+# Keeps the submodule-pointer pre-push hook out of the best working tree.
+[core]
+	hooksPath = /Users/alejo/.dotfiles/git/best-hooks

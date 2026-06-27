@@ -1,3 +1,7 @@
 [user]
 	name = Alejandro Acelas
 	email = alejoacelas@gmail.com
+
+# Scope the best submodule-pointer pre-push hook to the best repo only.
+[includeIf "gitdir:/Users/alejo/best/"]
+	path = /Users/alejo/.dotfiles/git/best.gitconfig

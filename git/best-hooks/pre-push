@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Block pushing this repo if any submodule pointer isn't on the submodule's
+# remote yet — that's the classic broken-pointer mess. Push the submodule first.
+fail=0
+while read -r path; do
+  [ -d "$path/.git" ] || [ -f "$path/.git" ] || continue
+  sha=$(git -C "$path" rev-parse HEAD 2>/dev/null) || continue
+  if ! git -C "$path" branch -r --contains "$sha" 2>/dev/null | grep -q .; then
+    echo "pre-push: submodule '$path' is at $sha, which is NOT on its remote." >&2
+    echo "          Commit & push inside '$path' first, then push here." >&2
+    fail=1
+  fi
+done < <(git config -f .gitmodules --get-regexp '\.path$' 2>/dev/null | awk '{print $2}')
+[ "$fail" = 0 ] || exit 1
+exit 0
