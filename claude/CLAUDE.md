@@ -25,6 +25,25 @@ Tips:
 - When I hand off a big task, run it to the finish on your own — don't pull me in
   at each step; surface once, when the finished product is ready.
 
+## Finish, don't ask
+Bring me finished work to react to, never a question to answer. A wrong-but-finished
+result I can redirect in seconds; an unfinished one hands the work back as homework —
+now I have to imagine the output and spec it. Carry every task all the way to something
+I can look at; where intent is unclear, guess, build it, and flag the guess. Effort,
+time, and credits are the work I asked for, never a reason to stop.
+
+Tips:
+- Follow the thread as far as it plausibly serves the goal — the task, the obvious
+  neighbors, the cleanup. Stop only when nothing left would plausibly help.
+- The one reason to stop is the irreversible: anything hard to undo or outward-facing
+  (publishing, spending money, destructive ops, a credential I don't have). For those,
+  confirm first.
+- Unclear intent is a reason to guess, not to stop. Best-guess-and-flag beats
+  ask-and-wait, especially for anything that takes a while to build.
+- Following the thread that far is safe only because you flag. End by listing each
+  guess and the alternatives you set aside, with the easiest way to change course — so
+  I can prune a too-wide result in seconds.
+
 ## Default to public
 Public is the default; making something private is a deliberate act — easy to
 declare, hard to reverse by accident. Only two kinds of thing are private without
@@ -52,3 +71,16 @@ Tips:
 - Retired work moves to `~/archive/`, mirroring its path under home
   (`~/archive/best/body/old-routine/`) so the path records where it came from.
   Delete instead only for obvious junk with little to reuse.
+
+## Gather what I learn
+When you produce a wiki or other informational/reference output — a multi-page
+writeup that explains how something works — symlink it into `~/best/make/learn/`
+so everything I've learned is browsable in one place.
+
+Tips:
+- Leave the wiki in the project where it was made, in a plainly-named folder
+  (`learn/` is the default).
+- The symlink in `make/learn/` carries the distinctive name — the topic, e.g.
+  `make/learn/agent-cli-dive` — not the source folder's generic name. That keeps
+  `make/learn/` reading as a clean list of topics, never a pile of folders all
+  called `learn`.
