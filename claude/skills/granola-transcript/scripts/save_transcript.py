@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """Resolve the right folder for a cleaned Granola transcript and write it.
 
-Default location logic (relative to --base-dir, default: current working dir):
+Default location logic (relative to --base-dir, default: current working dir).
+Calls live under the person's ``sources/`` channel folder; a legacy top-level
+``calls/`` is honored if that's what the person folder already uses.
   1. A folder named after the person (nickname-aware, e.g. ``sam/`` for
-     "Samantha")  ->  save in ``<that-folder>/calls/<YYYY-MM-DD>/``.
-  2. Else an existing ``calls/`` at the base  ->  save in ``calls/<YYYY-MM-DD>/``.
-  3. Else create ``calls/<YYYY-MM-DD>/`` at the base and save there (and say so).
+     "Samantha")  ->  save in ``<that-folder>/sources/calls/<YYYY-MM-DD>/``
+     (or ``<that-folder>/calls/`` if the folder still uses the legacy layout).
+  2. Else an existing ``sources/calls/`` or ``calls/`` at the base  ->  save there.
+  3. Else create ``sources/calls/<YYYY-MM-DD>/`` at the base and save there (and say so).
 
 The file is named ``transcript.md`` — the dated folder carries the call's identity.
 For a second call with the same person on the same day, pass --name to disambiguate
@@ -17,7 +20,7 @@ import sys
 from pathlib import Path
 
 # Folders that name a content bucket, not a person — never treated as a person dir.
-RESERVED_DIRS = {"calls", "transcripts", "notes", "deliverables", "wiki",
+RESERVED_DIRS = {"sources", "calls", "transcripts", "notes", "deliverables", "wiki",
                  "node_modules", "__pycache__"}
 
 
@@ -44,15 +47,24 @@ def find_person_dir(base: Path, person: str):
     return None
 
 
+def _calls_root(folder: Path) -> Path:
+    """Where calls live inside ``folder``: ``sources/calls/`` by default, but the
+    legacy top-level ``calls/`` if that folder already uses it (and has no sources/)."""
+    if (folder / "calls").is_dir() and not (folder / "sources" / "calls").is_dir():
+        return folder / "calls"
+    return folder / "sources" / "calls"
+
+
 def resolve_dir(base: Path, person: str, date: str):
     """Return (target_dir, note): the dated call folder following the location logic."""
     person_dir = find_person_dir(base, person)
     if person_dir is not None:
-        return person_dir / "calls" / date, f"person folder '{person_dir.name}/'"
-    existing = base / "calls"
-    if existing.is_dir():
-        return existing / date, "existing calls/ folder"
-    return existing / date, "created new calls/ folder (no person folder found)"
+        root = _calls_root(person_dir)
+        return root / date, f"person folder '{person_dir.name}/' ({root.relative_to(person_dir)}/)"
+    root = _calls_root(base)
+    if root.is_dir():
+        return root / date, f"existing {root.relative_to(base)}/ folder"
+    return root / date, f"created new {root.relative_to(base)}/ folder (no person folder found)"
 
 
 def main() -> int:

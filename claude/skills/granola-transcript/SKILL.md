@@ -60,10 +60,11 @@ directly and report back only the path.
 By default, resolve the save location relative to the **current working directory**:
 
 1. If a folder named after the person exists (nickname-aware, e.g. `sam/` for
-   Samantha) → save in `<that-folder>/calls/<YYYY-MM-DD>/`.
-2. Else if a `calls/` folder exists at the cwd → save in `calls/<YYYY-MM-DD>/`.
-3. Else → there's no obvious home; create `calls/<YYYY-MM-DD>/` at the cwd **and tell
-   the user where you saved it** (or ask first if it's ambiguous).
+   Samantha) → save in `<that-folder>/sources/calls/<YYYY-MM-DD>/` (or its legacy
+   top-level `calls/` if that folder still uses the old layout).
+2. Else if a `sources/calls/` or `calls/` folder exists at the cwd → save there.
+3. Else → there's no obvious home; create `sources/calls/<YYYY-MM-DD>/` at the cwd
+   **and tell the user where you saved it** (or ask first if it's ambiguous).
 
 Use the helper to resolve the path and write deterministically:
 
@@ -72,7 +73,7 @@ python3 scripts/save_transcript.py \
   --person "Samantha" \
   --date 2026-06-19 \
   --content-file /tmp/cleaned.md          # or pipe cleaned text via stdin
-# prints the absolute path it wrote (…/sam/calls/2026-06-19/transcript.md)
+# prints the absolute path it wrote (…/sam/sources/calls/2026-06-19/transcript.md)
 ```
 
 The script applies the resolution rules above and writes `transcript.md` inside the
@@ -81,8 +82,9 @@ print the resolved path, and `--name` to disambiguate a second call on the same 
 
 ## Conventions
 
-- **Path:** `<person>/calls/<YYYY-MM-DD>/transcript.md`. The person folder and the
-  dated folder carry the call's identity, so the file is just `transcript.md`.
+- **Path:** `<person>/sources/calls/<YYYY-MM-DD>/transcript.md`. The person folder and
+  the dated folder carry the call's identity, so the file is just `transcript.md`.
+  (`calls/` is one channel under `sources/`; see the people repo's `present/CLAUDE.md`.)
 - **One file per call.** If the same call was recorded twice, keep the longer one. For
   two *different* calls with the person on one day, give the later one a `--name`
   (e.g. `transcript-strategy.md`).
