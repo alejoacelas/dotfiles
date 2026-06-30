@@ -60,32 +60,36 @@ directly and report back only the path.
 By default, resolve the save location relative to the **current working directory**:
 
 1. If a folder named after the person exists (nickname-aware, e.g. `sam/` for
-   Samantha) → save in `<that-folder>/sources/calls/<YYYY-MM-DD>/` (or its legacy
-   top-level `calls/` if that folder still uses the old layout).
-2. Else if a `sources/calls/` or `calls/` folder exists at the cwd → save there.
-3. Else → there's no obvious home; create `sources/calls/<YYYY-MM-DD>/` at the cwd
+   Samantha) → save in `<that-folder>/about/calls/<YYYY-MM-DD-slug>/` (or its legacy
+   `sources/calls/` / `calls/` if that folder still uses the old layout).
+2. Else if an `about/calls/` (or legacy `sources/calls/` / `calls/`) folder exists at
+   the cwd → save there.
+3. Else → there's no obvious home; create `about/calls/<YYYY-MM-DD-slug>/` at the cwd
    **and tell the user where you saved it** (or ask first if it's ambiguous).
+
+The call folder follows the `YYYY-MM-DD-<slug>` grammar — pass `--slug` with a short
+topic (`--slug donor-circle`). Pick the slug from what the call was about.
 
 Use the helper to resolve the path and write deterministically:
 
 ```bash
 python3 scripts/save_transcript.py \
   --person "Samantha" \
-  --date 2026-06-19 \
+  --date 2026-06-19 --slug donor-circle \
   --content-file /tmp/cleaned.md          # or pipe cleaned text via stdin
-# prints the absolute path it wrote (…/sam/sources/calls/2026-06-19/transcript.md)
+# prints the absolute path it wrote (…/sam/about/calls/2026-06-19-donor-circle/transcript.md)
 ```
 
 The script applies the resolution rules above and writes `transcript.md` inside the
 dated call folder. Pass `--base-dir` to override the search root, `--dry-run` to just
-print the resolved path, and `--name` to disambiguate a second call on the same day.
+print the resolved path, `--slug` for the folder topic, and `--name` for a second file
+in the same folder.
 
 ## Conventions
 
-- **Path:** `<person>/sources/calls/<YYYY-MM-DD>/transcript.md`. The person folder and
-  the dated folder carry the call's identity, so the file is just `transcript.md`.
-  (`calls/` is one channel under `sources/`; see the people repo's `present/CLAUDE.md`.)
+- **Path:** `<person>/about/calls/<YYYY-MM-DD-slug>/transcript.md`. The person folder
+  and the dated folder carry the call's identity, so the file is just `transcript.md`.
+  (`calls/` is one source under `about/`; see the people repo's `present/CLAUDE.md`.)
 - **One file per call.** If the same call was recorded twice, keep the longer one. For
-  two *different* calls with the person on one day, give the later one a `--name`
-  (e.g. `transcript-strategy.md`).
+  two *different* calls with the person on one day, give each its own `--slug`.
 - **Don't summarize.** These are cleaned verbatim transcripts, not notes.
