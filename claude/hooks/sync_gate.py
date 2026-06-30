@@ -6,7 +6,7 @@ people repo: the settings.json command only invokes it when CLAUDE_PROJECT_DIR i
 ~/people, so it never runs for other projects.
 
 Fires before a Read. If the file being read is a Google-Doc *mirror* listed in any
-present person's `present/all/<person>/sync-manifest.json` AND it has not been
+present person's `present/<person>/sync-manifest.json` AND it has not been
 freshness-checked today, it injects a non-blocking note nudging the agent to run the
 sync-drive skill in `--check` mode (one Drive metadata call) and pull only if the
 source actually changed. Otherwise it stays silent.
@@ -47,9 +47,8 @@ def main():
     target = os.path.realpath(fp)
     today = date.today().isoformat()
 
-    # One manifest per present person: present/all/<person>/sync-manifest.json.
-    # (vip/ holds symlinks into all/, so scanning all/ covers every present person.)
-    for manifest_path in sorted(Path(proj).glob("present/all/*/sync-manifest.json")):
+    # One manifest per present person: present/<person>/sync-manifest.json.
+    for manifest_path in sorted(Path(proj).glob("present/*/sync-manifest.json")):
         try:
             manifest = json.loads(manifest_path.read_text())
         except Exception:
