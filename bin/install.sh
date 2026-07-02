@@ -28,9 +28,12 @@ link() {  # link <repo-relative source> <absolute home target>
 echo "Linking dotfiles from $DOTFILES"
 link claude/CLAUDE.md   "$HOME/.claude/CLAUDE.md"
 link claude/skills      "$HOME/.claude/skills"
-link codex/AGENTS.md    "$HOME/.codex/AGENTS.md"
-link codex/config.toml  "$HOME/.codex/config.toml"
+# Codex reads AGENTS.md; point it at the one CLAUDE.md so there's a single source.
+link claude/CLAUDE.md   "$HOME/.codex/AGENTS.md"
 link codex/rules        "$HOME/.codex/rules"
+# codex/config.toml is NOT linked: Codex rewrites it constantly (trust entries,
+# timestamps), so it owns ~/.codex/config.toml directly. codex/config.reference.toml
+# is a tracked snapshot to seed a fresh machine from.
 link shell/zprofile       "$HOME/.zprofile"
 link git/gitconfig        "$HOME/.gitconfig"
 link claude/settings.json "$HOME/.claude/settings.json"

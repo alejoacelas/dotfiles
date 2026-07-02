@@ -1,0 +1,9 @@
+{
+  "name": "namecheap-dns",
+  "private": true,
+  "type": "module",
+  "description": "Playwright helper to point a Namecheap domain at Vercel",
+  "dependencies": {
+    "playwright": "^1.61.0"
+  }
+}

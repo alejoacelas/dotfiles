@@ -49,6 +49,48 @@ trust_level = "trusted"
 [projects."/Users/alejo/thoughts"]
 trust_level = "trusted"
 
+[projects."/Users/alejo/Documents/Codex/2026-06-27/i-want-to-get-my-cloudflare"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/Documents/Codex/2026-06-27/i-am-logging-on-google-chrome"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/Documents/Codex/2026-06-27/can-you-search-documentation-of-computer"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/Documents/Codex/2026-06-27/can-you-use-code-in-browser"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/Documents/Codex/2026-06-28/can-you-use-code-in-browser"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/projects"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/make/art/meals/app"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/Documents/Codex/2026-06-28/i-m-curious-can-you-use"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/friends/places/visa"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/Documents/Codex/2026-06-29/deploy-to-vercel-and-connect-to"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/Documents/Codex/2026-06-29/deploy-to-vercel-and-connect-to-2"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/Documents/Codex/2026-06-29/deploy-to-vercel-and-connect-to-3"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/make/tools"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/make/writing"]
+trust_level = "trusted"
+
 [tui.model_availability_nux]
 "gpt-5.5" = 4
 
@@ -56,12 +98,12 @@ trust_level = "trusted"
 persistence = "save-all"
 
 [marketplaces.openai-bundled]
-last_updated = "2026-06-27T06:38:27Z"
+last_updated = "2026-06-27T20:39:14Z"
 source_type = "local"
 source = "/Users/alejo/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-06-23T09:03:23Z"
+last_updated = "2026-06-27T20:50:26Z"
 source_type = "local"
 source = "/Users/alejo/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -81,6 +123,12 @@ enabled = true
 enabled = true
 
 [plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
 enabled = true
 
 [features]
@@ -106,8 +154,11 @@ BROWSER_USE_CODEX_APP_VERSION = "26.623.42026"
 CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
 
 [desktop]
-conversationDetailMode = "STEPS_PROSE"
+conversationDetailMode = "STEPS_COMMANDS"
 sansFontSize = 14
 codeFontSize = 13
 ambient-suggestions-enabled = true
 followUpQueueMode = "queue"
+localeOverride = "en-US"
+mac-menu-bar-enabled = false
+preventSleepWhileRunning = true

@@ -1,4 +1,6 @@
 .DS_Store
 *.pre-symlink.*
+# Codex owns its own config (constant churn); keep config.reference.toml instead.
+codex/config.toml
 **/__pycache__/
 *.pyc

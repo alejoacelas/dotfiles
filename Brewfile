@@ -1,5 +1,8 @@
+tap "dopplerhq/cli"
 # GitHub command-line tool
 brew "gh"
+# Secrets manager CLI
+brew "dopplerhq/cli/doppler"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Open-source, cross-platform JavaScript runtime environment

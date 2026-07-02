@@ -30,6 +30,7 @@
       "Bash(gh:*)"
     ]
   },
+  "model": "claude-fable-5[1m]",
   "hooks": {
     "PreToolUse": [
       {
@@ -43,8 +44,10 @@
       }
     ]
   },
-  "model": "opus[1m]",
-  "effortLevel": "xhigh",
+  "enabledPlugins": {
+    "vercel@claude-plugins-official": true
+  },
+  "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark"
 }
