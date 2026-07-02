@@ -8,6 +8,10 @@ they keep the workspace tidy and sometimes bake in hard-earned judgment. Editing
 file, consider whether to prompt me to extract an underlying principle, but feel free to
 just add a convention or refine an existing one.
 
+My instructions, skills, and hooks are single files symlinked across tools — CLAUDE.md
+doubles as AGENTS.md. A silently unloaded skill or instruction is worse than none: when
+you touch these, confirm every link still resolves.
+
 ## Write things I want to read
 Everything you write should serve a purpose. When that purpose is communicating — with me
 or an outside audience — convey it clearly and concisely: apply Paul Graham's test, that
