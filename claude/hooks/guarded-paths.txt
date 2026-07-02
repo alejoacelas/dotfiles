@@ -1,0 +1,5 @@
+# Files that hold hard-won judgment. A full-file Write to any of these prompts first.
+# One path or glob per line; ~ and * allowed. Append freely — no need to touch the file.
+# You can also guard a file in place by adding a one-line GUARDED-JUDGMENT marker to it.
+
+~/.claude/CLAUDE.md
