@@ -11,10 +11,10 @@ cd "$HOME/best"
 mkdir -p "$HOME/best/machine/checkups"
 LOG="$HOME/best/machine/checkups/.last-run.log"
 
-claude -p "Run the machine-checkup skill end to end: scan, fix the safely reversible \
-findings, write today's dated report under machine/checkups/, and append new items to \
-machine/improvements.md. Then stop." \
-  --permission-mode bypassPermissions \
+claude -p "Run the machine-checkup skill: scan, write today's dated report under \
+machine/checkups/, and append new items to machine/improvements.md. Report only — \
+change nothing else. Then stop." \
+  --permission-mode acceptEdits \
   > "$LOG" 2>&1
 
 echo "machine-checkup finished; report in machine/checkups/, log in $LOG"
