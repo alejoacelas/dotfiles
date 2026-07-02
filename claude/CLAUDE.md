@@ -37,8 +37,7 @@ worth protecting.
 
 ## Guard the irreversible
 Everything else says act boldly; this is the one thing that overrides. Some acts can't be
-taken back — leaking a secret or something confided in me, spending money, sending or
-publishing to others, destroying anything git doesn't track. Before those, and only those,
+taken back — leaking a secret or something confided in me, spending large amounts of money, sending or publishing to others, destroying anything git doesn't track. Before those, and only those,
 check with me. Better, prevent them without my attention: propose background guards —
 hooks, allowlists, dry-runs — that block the irreversible and leave everything reversible
 free.
