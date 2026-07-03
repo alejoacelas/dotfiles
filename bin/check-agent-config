@@ -1,0 +1,108 @@
+#!/usr/bin/env python3
+"""Make agent-config divergence loud instead of silent.
+
+Two failure modes this catches:
+  HARD  — a symlink that no longer resolves. A dangling skill/instruction link means
+          a tool silently loads nothing. Always a problem. Exit non-zero.
+  DRIFT — a CLAUDE.md and AGENTS.md (or a same-named Claude/Codex skill) that have
+          diverged. NOT an error — you often want them different — but you want to be
+          reminded so you can choose to reconcile. Printed, never fails the run.
+
+Run standalone, or from machine-checkup / the sync-repos check.
+"""
+import hashlib
+import os
+import sys
+
+HOME = os.path.expanduser("~")
+BEST = os.path.join(HOME, "best")
+CLAUDE_SKILLS = os.path.join(BEST, "machine/dotfiles/claude/skills")
+CODEX_SKILLS = os.path.join(HOME, ".codex/skills")
+SKIP_DIRS = {".git", "node_modules", "archive", ".venv", "venv", "__pycache__"}
+
+hard = []   # (path, message) — dangling links, real breakage
+drift = []  # (label, message) — reminders, not failures
+
+
+def digest(path):
+    try:
+        with open(path, "rb") as f:
+            return hashlib.sha256(f.read()).hexdigest()
+    except OSError:
+        return None
+
+
+def check_dangling(root):
+    """Any symlink under root that doesn't resolve = a silent load failure."""
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
+        for name in list(dirnames) + filenames:
+            p = os.path.join(dirpath, name)
+            if os.path.islink(p) and not os.path.exists(os.path.realpath(p)):
+                hard.append((p, f"dangling symlink → {os.readlink(p)}"))
+
+
+def check_instruction_pairs():
+    """CLAUDE.md + AGENTS.md in the same dir: flag when both are real files and differ.
+    A symlinked AGENTS.md (intentional identity) is fine and skipped."""
+    for dirpath, dirnames, filenames in os.walk(BEST):
+        dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
+        if "CLAUDE.md" in filenames and "AGENTS.md" in filenames:
+            c = os.path.join(dirpath, "CLAUDE.md")
+            a = os.path.join(dirpath, "AGENTS.md")
+            if os.path.islink(a) or os.path.islink(c):
+                continue  # one points at the other on purpose
+            if digest(c) != digest(a):
+                rel = os.path.relpath(dirpath, HOME)
+                drift.append((f"~/{rel}", "CLAUDE.md and AGENTS.md differ"))
+
+
+def list_skills(root):
+    out = {}
+    if not os.path.isdir(root):
+        return out
+    for name in os.listdir(root):
+        if name.startswith("."):
+            continue
+        sm = os.path.join(root, name, "SKILL.md")
+        if os.path.isfile(sm):
+            out[name] = sm
+    return out
+
+
+def check_skills():
+    claude = list_skills(CLAUDE_SKILLS)
+    codex = list_skills(CODEX_SKILLS)
+    for name in sorted(set(claude) - set(codex)):
+        drift.append(("skill", f"{name}: in Claude, not in Codex"))
+    for name in sorted(set(codex) - set(claude)):
+        tracked = os.path.realpath(os.path.join(CODEX_SKILLS, name)).startswith(BEST)
+        tag = "" if tracked else " (UNTRACKED — not in any repo)"
+        drift.append(("skill", f"{name}: in Codex, not in Claude{tag}"))
+    for name in sorted(set(claude) & set(codex)):
+        if digest(claude[name]) != digest(codex[name]):
+            drift.append(("skill", f"{name}: Claude and Codex SKILL.md differ"))
+
+
+def main():
+    check_dangling(os.path.join(HOME, ".claude"))
+    check_dangling(CODEX_SKILLS)
+    check_instruction_pairs()
+    check_skills()
+
+    if hard:
+        print("HARD — silent load failures (fix these):")
+        for p, m in hard:
+            print(f"  ✗ {p.replace(HOME, '~')}: {m}")
+    if drift:
+        print("DRIFT — diverged, reconcile if you want (reminder, not an error):")
+        for label, m in drift:
+            print(f"  • {label}: {m}")
+    if not hard and not drift:
+        print("agent-config: all links resolve, no drift.")
+
+    sys.exit(1 if hard else 0)
+
+
+if __name__ == "__main__":
+    main()

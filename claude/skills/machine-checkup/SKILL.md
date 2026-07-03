@@ -26,9 +26,13 @@ irreversible; see *Guard the irreversible* in the global CLAUDE.md.)
 ## 1. Gather the facts
 ```sh
 python3 ~/best/machine/dotfiles/claude/skills/machine-checkup/scripts/scan.py
+~/best/machine/dotfiles/bin/check-agent-config   # instruction/skill drift + dangling links
 ```
-This prints a markdown report of the deterministic findings (repos, symlinks, secret
-hits, instruction-file inventory, brew drift, scheduled jobs). It changes nothing.
+The first prints a markdown report of the deterministic findings (repos, symlinks, secret
+hits, instruction-file inventory, brew drift, scheduled jobs). The second reports where
+paired `CLAUDE.md`/`AGENTS.md` or Claude/Codex skills have diverged (a reminder to
+reconcile, never enforced) and fails loudly on any dangling config symlink. Both change
+nothing.
 
 ## 2. Do the reasoning the script can't
 - **Instruction conflicts:** read the `CLAUDE.md`/`AGENTS.md` files the scan listed
