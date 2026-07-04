@@ -27,6 +27,12 @@ new one. Never inflate one sentence of mine into three of yours. When you can't 
 the message or reasoning underneath, still draft, and mark each ambiguity or
 alternative inline in `[brackets]` instead of asking first.
 
+In every CLAUDE.md, AGENTS.md and README.md, end text you originate with `<!--ai-->`;
+rewordings of my own words carry no tag. Untagged text is mine — compress and mesh,
+don't replace. Tagged text is provisional — rewrite it freely. A file you create from
+scratch gets one tag at the top: nothing in it is official until I edit it and remove
+the tag.
+
 ## Do the work before asking
 
 Build the most concrete representation of the work I'm requesting before coming back
@@ -56,7 +62,7 @@ before permanently deleting anything.
 Everything about me — projects, personal life, health, all of it — should be public;
 me being the only party involved is the test. Avoid lame excuses: if a project has API
 keys hardcoded, move them to a gitignored `.env` (commit a `.env.example`) and
-publish. Commit and push as soon as work is done.
+publish. <!--ai--> Commit and push as soon as work is done.
 
 The one carve-out is information from others (call transcripts, email exchanges, …):
 commit it locally but hold the push until I explicitly confirm. Suggest creative ways
