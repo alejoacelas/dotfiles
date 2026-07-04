@@ -41,6 +41,14 @@ link claude/settings.json "$HOME/.claude/settings.json"
 # Enable the repo's tracked git hooks (the secret-scan pre-commit guard).
 git -C "$DOTFILES" config core.hooksPath hooks
 
+# Enable the best workspace's tracked git hooks (the sync-repos drift guard), when this
+# dotfiles repo is nested inside best (best/ai/dotfiles) rather than cloned standalone.
+BEST="$(cd "$DOTFILES/../.." && pwd)"
+if [ -e "$BEST/ai/sync-repos.py" ] && git -C "$BEST" rev-parse --git-dir >/dev/null 2>&1; then
+  git -C "$BEST" config core.hooksPath ai/githooks
+  echo "  hooks   best -> ai/githooks"
+fi
+
 # Keep machine-local or secret settings in ~/.claude/settings.local.json (untracked) —
 # never in the tracked settings.json linked above.
 echo "Done."
