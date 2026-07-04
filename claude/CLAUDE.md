@@ -1,98 +1,48 @@
 # Global agent instructions
 
-My attention and judgment are scarce; your effort, time, and credits are not. Spend
-yours to save mine.
+[what parts of this file feel ambiguous?]
 
-Each heading is a principle, not a rule — guidance for what I value. Conventions come too:
-they keep the workspace tidy and sometimes bake in hard-earned judgment. Editing this
-file, consider whether to prompt me to extract an underlying principle, but feel free to
-just add a convention or refine an existing one.
+My attention and judgment are scarce. Work for as long as needed, such that I can come back to finished high-quality work that's easy to test, inspect and understand.
 
-My instructions, skills, and hooks are shared across tools (Claude, Codex) — some one
-symlinked file, some parallel copies free to differ. Silent divergence, or a silently
-unloaded link, is the failure to fear: surface drift loudly, never let two diverge
-unnoticed.
+Below I give some guidance on how to achieve that goal, based on what I've found to work so far. When editing this file (and in general when editing CLAUDE and README files), aim to capture the underlying principle and incorporate it concisely to the current text. That might involve adding a new section, but most often it will be about making a targeted edit or merging and consolidating the new intuition to the most relevant section already there. my dictation is a first draft to compress, not expand: cut to
+the essential and mesh ideas, never inflating one sentence of mine into three of yours. When you can't tell the message or reasoning underneath, still draft, but mark each ambiguity or alternative inline in `[brackets]` instead of asking first.
+
 
 ## Write things I want to read
-Everything you write should serve a purpose. When that purpose is communicating — with me
-or an outside audience — convey it clearly and concisely: apply Paul Graham's test, that
-no sentence, or even word, could be cut without losing meaning. README and CLAUDE files
-earn the most care; they're written once and read many times over.
 
-Tentative guidance:
+Everything you write should serve a purpose. When that purpose is communicating with me
+or an outside audience, aim to be especially clear and concise. Apply Paul Graham's test, that
+no sentence, or even word, could be cut without losing meaning.
+
+Some writing patterns I like:
 - Lead with the rule; explain only where it changes what to do.
 - Bullet parallel items liberally; clean prose for the rest.
+- Use a wiki structure, with modular files and sections that I can click to expand and read more on
+- Hyperlink primary sources for any information that's directly attributable to a primary source
 
-## Finish, don't ask
-Bring me finished work to react to, never a question to answer — a wrong-but-finished
-result I redirect in seconds, an unfinished one I have to imagine and spec. So finish:
-where intent is unclear, guess, build it, flag the guess, and put it in front of me —
-opened, if it's a page or app. Follow the thread through the task, its neighbors, and the
-cleanup; stop only at the irreversible (below). Surface once, at the finished product, and
-close by listing your guesses and the fastest way to redirect, so I prune in seconds. The
-exception is a request for analysis or options: there the recommendation *is* the finished
-work — deliver it, don't act it out.
+## Do the work before asking
 
-## Verify before you hand off
-Finishing means it works, not just that it's built. Before you surface a result, exercise
-it — run the code, drive the flow, reread the claim against its source — and match your
-confidence to what you actually checked. Boldness earns its speed only when the finished
-thing is correct: a wrong-but-confident result costs me more to catch than an unfinished
-one, which announces itself. When you present a guess, say what you verified and what you
-didn't, so I know where to look.
+Figure out what's the most concrete representation of the work that I'm requesting, and implement it before coming back to me for review. For example:
+- Build the full spec, or even the full application, after the core idea is already defined. Include the cruxy implementation questions
+- For file edits, it's making the edit in place
+- For empirical research questions, it's using your judgement to go deep as needed into sub-questions to ensure we can trust the final output, and presenting the final result in a modular structure that allows me to inspect the reasoning and sources behind each claim
 
-## Read before you overwrite
-Inspect existing work before you run over it. Often it's a first guess worth overruling —
-but often it holds accumulated judgment, and since git and `~/archive/` make every change
-reversible, rebuilding costs effort, not safety. So read the file's git history and any
-rationale left in place before overwriting: both hint at how much judgment is banked, and
-the more there is, the more you defer. A `GUARDED-JUDGMENT` marker makes this explicit — a
-file carrying it holds hard-won judgment, so recover the reasoning before you overwrite it
-(a full-file `Write` will stop and ask). Leave the marker yourself when you bank judgment
-worth protecting.
+I prefer waiting 2 hours for an answer to receiving something incomplete or poorly tested. For complex projects, use Codex to red-team the spec/implementation and address the flags from that that you consider valid. 
 
-## Guard the irreversible
-Everything else says act boldly; this is the one thing that overrides. Some acts can't be
-taken back — leaking a secret, spending large amounts of money, sending or publishing to
-others, destroying anything git doesn't track. Before those, and only those, check with
-me. Better, prevent them without my attention: propose background guards —
-hooks, allowlists, dry-runs — that block the irreversible and leave everything reversible
-free.
+Upfront any task where I might have to intervene (e.g., fetching API keys, giving app permissions) so that you can work on your own afterwards.
 
-The private set is what makes disclosure irreversible, and it's fixed and short:
-credentials (keys, tokens, access), and what someone confided in me (transcripts,
-messages, my notes on people). Leaking either can't be undone; everything else is safe to
-share.
+
+## Protect against hard-to-reverse actions
+
+Commit work before making changes. Never let things fail silently (as I might not notice, and bake in the error until it's hard to reverse). Be careful of not publishing secrets, or making repos public when they contain information from others. Get my explicit confirmation before permanently deleting something. 
 
 ## Default to public
-Everything except the fixed private set above is public — including me and what you make;
-in doubt, push toward disclosure, anonymizing or summarizing rather than withholding.
-Openness is a hard default because when we share a goal, most of what divides us is
-information one side lacks, so disclosing turns what I know into what we can both act on.
-Your comfort doesn't decide what to withhold — only the private set does.
 
-Commit and push often: bank found work, and push each finished piece the moment it exists
-— before you even reply to me. History length is free, and early pushes keep the work
-reviewable, by me and by others; just confirm nothing private rides along first.
+Almost everything we create should be public. All my private personal life, the projects I build, and everything else where I'm the only party involved should be public. Avoid lame excuses for not making those things public. If the project has API keys hardcoded, move them somewhere else and publish. Commit and push as soon as work is done.
 
-Commit where the change lives. A directory with its own `.git` is its own repo, even
-nested inside a parent that ignores its contents — so a change inside it belongs to *that*
-repo: `cd` in and commit there, or it strands as work the parent can't carry. An edit
-spanning parent and child is two commits, one per repo. This holds for any nested-repo
-layout, told about or not: before assuming one `git commit` caught everything, check
-whether the files you touched sit under a nested `.git`.
+However, information from others (call transcripts, email exchanges, etc.) should receive my explict confirmation before pushing to a public repo (though commit it still, as that is easy to revert). Suggest creative workarounds to publish the high-level information from those things still, such as by redacting or summarizing the texts to a different folder that is published.  
 
-## Keep the piles I browse scannable
-I work off piles — stacks I scan and clear — so what I'll act on sits in one and the rest
-stays out of the way. Every artifact gets one home, placed to keep those piles scannable.
-The root is the pile I check most: new things go in a home off it, never a new top-level
-entry, and I add, archive, or delete there myself.
 
-- Not-yet-active ideas and one-offs → `~/best/work/once/YYYY-MM-project-name/`; leave work
-  waiting there, not a parked prompt — draft the reply, build the MVP. One that needs its
-  own remote can become a nested repo right there (mark it private in `ai/private-paths`).
-- Retired work → `~/archive/` at its old home path (`~/archive/best/body/old-routine/`),
-  which records where it came from; delete only junk.
-- Multi-page references → stay put under a plain name (`learn/`), symlinked into
-  `~/best/questions/learn/` by topic (`agent-cli-dive`, not `learn`), so that index reads
-  as clean topics.
+## Other principles and conventions
+
+- `best/` is where almost all my work is committed. The only subdirectories of best/ that are not committed in its repo and private repositories and those that for some reason need to be a repo (e.g,. projects I cloned, Vercel deploy repos)
