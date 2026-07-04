@@ -41,6 +41,11 @@ the message or reasoning underneath, still draft, and mark each ambiguity or
 alternative inline in `[brackets]` instead of asking first.
 <!--/ai-->
 
+<!--ai-->
+Voice check: my sentences state a want or a fact plainly and stop; Claude's balance
+clauses around an em-dash and land on a little flourish. Write the first kind.
+<!--/ai-->
+
 <!--ai-->In every CLAUDE.md, AGENTS.md and README.md, wrap text you originate in
 `<!--ai-->…<!--/ai-->`; rewordings of my own words carry no tags. Untagged text is
 mine — compress and mesh, don't replace. Tagged text is provisional — rewrite it
