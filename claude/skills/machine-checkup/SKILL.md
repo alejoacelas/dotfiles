@@ -19,14 +19,14 @@ irreversible; see *Guard the irreversible* in the global CLAUDE.md.)
 2. **Instruction conflicts** — contradictions, duplication, or drift across the
    `CLAUDE.md` / `AGENTS.md` files and skills.
 3. **Promote to global** — a local pattern, prompt, config, or one-off skill worth
-   lifting into `machine/dotfiles` or the global `CLAUDE.md` so it applies everywhere.
+   lifting into `ai/dotfiles` or the global `CLAUDE.md` so it applies everywhere.
 4. **Security & what's running** — secret-pattern hits in tracked files, over-broad
    permissions, connectors needing re-auth, and an inventory of cron / LaunchAgents.
 
 ## 1. Gather the facts
 ```sh
-python3 ~/best/machine/dotfiles/claude/skills/machine-checkup/scripts/scan.py
-~/best/machine/dotfiles/bin/check-agent-config   # instruction/skill drift + dangling links
+python3 ~/best/ai/dotfiles/claude/skills/machine-checkup/scripts/scan.py
+~/best/ai/dotfiles/bin/check-agent-config   # instruction/skill drift + dangling links
 ```
 The first prints a markdown report of the deterministic findings (repos, symlinks, secret
 hits, instruction-file inventory, brew drift, scheduled jobs). The second reports where
@@ -51,11 +51,11 @@ and the *proposed action* (with the fastest way to do it), so the user can act i
 seconds — but leave the acting to them. This keeps every run safe to trigger unattended.
 
 ## 4. Write the report and feed the backlog
-- Write a dated report to `~/best/machine/checkups/<YYYY-MM-DD>.md` with two sections:
+- Write a dated report to `~/best/ai/checkups/<YYYY-MM-DD>.md` with two sections:
   **Needs your call** (each finding + proposed action) and **Clean** (what you checked
   that was fine — so a clean run still shows its work).
 - Append any new, actionable items to the **Open** section of
-  `~/best/machine/improvements.md`, so the backlog stays the single to-do list.
+  `~/best/ai/improvements.md`, so the backlog stays the single to-do list.
 - Reply with the short version: the top few things that need a decision.
 
 ## Notes

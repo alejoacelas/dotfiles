@@ -38,7 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ \"$CLAUDE_PROJECT_DIR\" = \"$HOME/people\" ]; then python3 \"$HOME/best/machine/dotfiles/claude/hooks/sync_gate.py\"; fi"
+            "command": "if [ \"$CLAUDE_PROJECT_DIR\" = \"$HOME/people\" ]; then python3 \"$HOME/best/ai/dotfiles/claude/hooks/sync_gate.py\"; fi"
           }
         ]
       },
@@ -47,7 +47,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/best/machine/dotfiles/claude/hooks/guard-judgment.py\""
+            "command": "python3 \"$HOME/best/ai/dotfiles/claude/hooks/guard-judgment.py\""
           }
         ]
       }

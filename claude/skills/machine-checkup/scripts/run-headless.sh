@@ -8,13 +8,13 @@
 set -euo pipefail
 
 cd "$HOME/best"
-mkdir -p "$HOME/best/machine/checkups"
-LOG="$HOME/best/machine/checkups/.last-run.log"
+mkdir -p "$HOME/best/ai/checkups"
+LOG="$HOME/best/ai/checkups/.last-run.log"
 
 claude -p "Run the machine-checkup skill: scan, write today's dated report under \
-machine/checkups/, and append new items to machine/improvements.md. Report only — \
+ai/checkups/, and append new items to ai/improvements.md. Report only — \
 change nothing else. Then stop." \
   --permission-mode acceptEdits \
   > "$LOG" 2>&1
 
-echo "machine-checkup finished; report in machine/checkups/, log in $LOG"
+echo "machine-checkup finished; report in ai/checkups/, log in $LOG"

@@ -81,7 +81,7 @@ def dangling_symlinks():
 
 def instruction_files(base):
     # Only your authored tree. The global ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md
-    # symlink into base/machine/dotfiles, so they're covered here; plugin caches and
+    # symlink into base/ai/dotfiles, so they're covered here; plugin caches and
     # job scratch under ~/.claude are noise and stay out.
     files = {}
     names = {"CLAUDE.md", "AGENTS.md"}

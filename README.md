@@ -25,14 +25,14 @@ Both Claude and Codex read the one `claude/CLAUDE.md`. Codex rewrites its
 
 ## Install (or re-link) on a machine
 
-This repo lives inside the `best` workspace at `~/best/machine/dotfiles`. On a fresh
+This repo lives inside the `best` workspace at `~/best/ai/dotfiles`. On a fresh
 machine, clone `best` first, then this repo into it:
 
 ```sh
 git clone https://github.com/alejoacelas/best ~/best
-git clone https://github.com/alejoacelas/dotfiles ~/best/machine/dotfiles
-~/best/machine/dotfiles/bin/install.sh   # idempotent; backs up anything in the way
-brew bundle --file ~/best/machine/dotfiles/Brewfile
+git clone https://github.com/alejoacelas/dotfiles ~/best/ai/dotfiles
+~/best/ai/dotfiles/bin/install.sh   # idempotent; backs up anything in the way
+brew bundle --file ~/best/ai/dotfiles/Brewfile
 ```
 
 The repo file *is* the live file (via symlink), so edit it here and both the repo and

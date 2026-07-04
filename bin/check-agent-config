@@ -16,7 +16,7 @@ import sys
 
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
-CLAUDE_SKILLS = os.path.join(BEST, "machine/dotfiles/claude/skills")
+CLAUDE_SKILLS = os.path.join(BEST, "ai/dotfiles/claude/skills")
 CODEX_SKILLS = os.path.join(HOME, ".codex/skills")
 SKIP_DIRS = {".git", "node_modules", "archive", ".venv", "venv", "__pycache__"}
 

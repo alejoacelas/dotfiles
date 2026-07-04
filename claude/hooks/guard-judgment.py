@@ -17,7 +17,7 @@ import os
 import sys
 
 TOKEN = "GUARDED-JUDGMENT"
-LIST_PATH = os.path.expanduser("~/best/machine/dotfiles/claude/hooks/guarded-paths.txt")
+LIST_PATH = os.path.expanduser("~/best/ai/dotfiles/claude/hooks/guarded-paths.txt")
 
 
 def allow():
