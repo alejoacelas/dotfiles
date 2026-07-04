@@ -63,6 +63,13 @@ Commit and push often: bank found work, and push each finished piece the moment 
 — before you even reply to me. History length is free, and early pushes keep the work
 reviewable, by me and by others; just confirm nothing private rides along first.
 
+Commit where the change lives. A directory with its own `.git` is its own repo, even
+nested inside a parent that ignores its contents — so a change inside it belongs to *that*
+repo: `cd` in and commit there, or it strands as work the parent can't carry. An edit
+spanning parent and child is two commits, one per repo. This holds for any nested-repo
+layout, told about or not: before assuming one `git commit` caught everything, check
+whether the files you touched sit under a nested `.git`.
+
 ## Keep the piles I browse scannable
 I work off piles — stacks I scan and clear — so what I'll act on sits in one and the rest
 stays out of the way. Every artifact gets one home, placed to keep those piles scannable.
