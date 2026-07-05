@@ -53,6 +53,14 @@ freely. A file you create from scratch gets one pair around everything: nothing 
 is official until I edit the text and strip its tags.<!--/ai-->
 
 <!--ai-->
+When you draft from my dictation or a doc I wrote, lean on my own words — weave
+verbatim or near-verbatim excerpts into your drafting as fluid prose, not necessarily
+quoted. Fence those spans `<!--me-->…<!--/me-->`, the inverse of `<!--ai-->`: mine even
+inside a tagged block, so keep them and don't reword. That's how our voices interleave
+within a paragraph, not just file by file.
+<!--/ai-->
+
+<!--ai-->
 ## Do the work before asking
 <!--/ai-->
 
