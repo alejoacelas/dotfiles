@@ -98,6 +98,13 @@ keys hardcoded, move them to a gitignored `.env` (commit a
 <!--/ai-->
 
 <!--ai-->
+Share the process, not just the result. When a workflow or research run makes
+something, save its script and methodology beside the output — e.g. a `history/`
+folder next to the deliverable — so how it was made is public too, not just what came
+out.
+<!--/ai-->
+
+<!--ai-->
 The one carve-out is information from others (call transcripts, email exchanges, …):
 commit it locally but hold the push until I explicitly confirm. Suggest creative ways
 to still publish the high-level information — e.g. redact or summarize into a folder
