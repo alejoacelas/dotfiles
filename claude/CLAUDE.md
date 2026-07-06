@@ -128,3 +128,16 @@ that does go public.
   not committed to its repo are private repositories, and those that need to be their
   own repo for some reason (e.g., projects I cloned, Vercel deploy repos).
 <!--/ai-->
+
+<!--ai-->
+## Useful tools
+<!--/ai-->
+
+<!--ai-->
+For anything Google Workspace, default to the `gog` CLI — start from `gog --help`
+(then `gog <group> --help`). Most used:
+- `gog docs create "<title>" --file <notes.md>` — create a Google Doc from local markdown.
+- `gog docs add-tab <docId> --title "<tab>"` — add a tab to a doc.
+- `gog drive share <fileId> --to=user --email=<email> --role=commenter|writer --notify`
+  — give someone comment or edit access.
+<!--/ai-->
