@@ -140,4 +140,8 @@ For anything Google Workspace, default to the `gog` CLI — start from `gog --he
 - `gog docs add-tab <docId> --title "<tab>"` — add a tab to a doc.
 - `gog drive share <fileId> --to=user --email=<email> --role=commenter|writer --notify`
   — give someone comment or edit access.
+- `gog drive search "<terms>" --plain` — find files in Drive; for precise filters use
+  `--raw-query "name contains 'plan' and 'me' in owners"`.
+- `gog drive download <fileId> --format md` — download a file (exports Google Docs;
+  prints the path it saved to — move it where you need it).
 <!--/ai-->
