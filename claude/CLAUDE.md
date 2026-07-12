@@ -24,6 +24,11 @@ Some patterns I've liked:
 - Bullet parallel items liberally; clean prose for the rest.
 - For anything longer than a page, use a wiki structure: modular files and sections I
   can click into to read more.
+- When comparing options, lead with the user-visible outcome under explicit
+  assumptions. Give defensible numbers or ranges for time, latency, memory, disk,
+  cost and failure impact; state the threshold where the recommendation changes. If
+  no credible estimate exists, say what to measure instead of substituting qualitative
+  considerations.
 - Hyperlink primary sources.
 <!--/ai-->
 
