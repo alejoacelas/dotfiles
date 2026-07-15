@@ -139,6 +139,11 @@ that does go public.
 <!--/ai-->
 
 <!--ai-->
+Batch related secret-dependent CLI calls into one `secretspec run ... -- sh -c '...'`
+invocation so one fingerprint approval covers the workflow.
+<!--/ai-->
+
+<!--ai-->
 For anything Google Workspace, default to the `gog` CLI — start from `gog --help`
 (then `gog <group> --help`). Most used:
 - `gog docs create "<title>" --file <notes.md>` — create a Google Doc from local markdown.
