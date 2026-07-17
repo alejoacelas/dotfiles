@@ -1,0 +1,11 @@
+{
+  "workspaces": {
+    "80000hours": {
+      "xoxc_token": "xoxc-PASTE-YOUR-TOKEN-HERE",
+      "xoxd_token": "xoxd-PASTE-YOUR-COOKIE-HERE",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+    }
+  },
+  "default_workspace": "80000hours",
+  "link_style": "app"
+}

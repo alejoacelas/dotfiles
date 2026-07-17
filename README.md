@@ -17,6 +17,7 @@ paths each tool reads from. Inspired by [benthamite/dotfiles](https://github.com
 claude/CLAUDE.md         agent instructions (shared)    ->  ~/.claude/CLAUDE.md  &  ~/.codex/AGENTS.md
 claude/settings.json     permissions / model / theme    ->  ~/.claude/settings.json
 claude/skills/           reusable Claude skills         ->  ~/.claude/skills
+codex/skills/            personal and shared skills     ->  ~/.codex/skills/<skill>
 codex/rules/             Codex rules                    ->  ~/.codex/rules
 codex/config.reference.toml  snapshot of Codex settings (Codex owns the live file)
 shell/zprofile           PATH + dev environment         ->  ~/.zprofile

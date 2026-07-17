@@ -1,0 +1,6 @@
+__pycache__/
+config.json
+digest-config.json
+last-digest.json
+session-state.json
+data/

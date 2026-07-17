@@ -1,0 +1,4 @@
+interface:
+  display_name: "80,000 Hours Slack"
+  short_description: "Work with the 80,000 Hours Slack workspace"
+  default_prompt: "Use $slack-80000-hours to check my recent 80,000 Hours Slack activity."
