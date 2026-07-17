@@ -148,8 +148,9 @@ invocation so one fingerprint approval covers the workflow.
 <!--/ai-->
 
 <!--ai-->
-For anything Google Workspace, default to the `gog` CLI — start from `gog --help`
-(then `gog <group> --help`). Most used:
+For Google Workspace, default to the `gog` CLI; use the native Google Drive connector
+when `gog` does not cover the use case. Start from `gog --help` (then
+`gog <group> --help`). Most used:
 - `gog docs create "<title>" --file <notes.md>` — create a Google Doc from local markdown.
 - `gog docs add-tab <docId> --title "<tab>"` — add a tab to a doc.
 - `gog drive share <fileId> --to=user --email=<email> --role=commenter|writer --notify`
