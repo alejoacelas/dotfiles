@@ -24,6 +24,10 @@ Some patterns I've liked:
 - Bullet parallel items liberally; clean prose for the rest.
 - For anything longer than a page, use a wiki structure: modular files and sections I
   can click into to read more.
+- State facts, not verdicts, even on subjective calls; there's almost always
+  something objective underneath ("wrote the field's standard textbook", not "a
+  leading expert"), so give me that and let me judge, saving your opinion for the one
+  sentence where I want it.
 - When comparing options, lead with the user-visible outcome under explicit
   assumptions. Give defensible numbers or ranges for time, latency, memory, disk,
   cost and failure impact; state the threshold where the recommendation changes. If

@@ -30,7 +30,7 @@
       "Bash(gh:*)"
     ]
   },
-  "model": "claude-fable-5[1m]",
+  "model": "fable",
   "hooks": {
     "PreToolUse": [
       {
@@ -58,6 +58,7 @@
   },
   "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
   "theme": "dark",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true
