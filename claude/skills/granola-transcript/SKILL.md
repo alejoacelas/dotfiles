@@ -11,10 +11,20 @@ folder and the date folder carry the identity, so the file is just `transcript.m
 
 ## 1. Connect to Granola
 
-**Use the Granola MCP connector.** This is the chosen connection method (see
-`reference/connection-methods.md` for why, and for the offline fallback). The
-connector exposes these tools (load schemas with ToolSearch
-`select:mcp__claude_ai_Granola__...` if they aren't already available):
+**Use the Granola API first.** Read `reference/api.md`, then use
+`scripts/granola_api.py`. It reads `GRANOLA_ACCESS_TOKEN`; inject that with the
+repository's secret manager rather than printing or persisting it.
+
+```bash
+python3 scripts/granola_api.py meetings --from 2026-07-17 --to 2026-07-17
+python3 scripts/granola_api.py transcript <meeting-id> --format text
+```
+
+The API is the source of truth. Treat authentication failures, unexpected response
+shapes, and empty transcripts as errors; do not silently substitute Granola's
+generated notes.
+
+If API access is unavailable, use the Granola MCP connector. It exposes:
 
 - `mcp__claude_ai_Granola__get_account_info` — confirm which account is connected;
   this tells you who **"me"** is (the note creator / the user). Everyone else is a
@@ -31,17 +41,19 @@ connector exposes these tools (load schemas with ToolSearch
   `query_granola_meetings` — folders, summaries/attendees, and natural-language
   search, when useful.
 
-If the connector is unavailable (e.g. headless/cron, or claude.ai not connected),
-fall back to the local-cache method in `reference/connection-methods.md`.
+Do not attempt to decrypt Granola's local cache. Current builds protect it with an
+app-scoped Keychain key. See `reference/connection-methods.md` for the evidence and
+failure modes.
 
 ## 2. Find the right meetings
 
-1. `get_account_info` to learn who "me" is (note creator email/name).
-2. `list_meetings` over the needed range. Match meetings where the **person** (not
-   "me") appears in the title or `known_participants`. Match on first name /
+1. Run `granola_api.py meetings` over the needed range. Match meetings where the
+   **person** (not "me") appears in the title or `known_participants`. Match on first name /
    nickname too (e.g. a `sam/` folder ↔ "Samantha"), but verify against the
    participant list so you don't grab a different person who shares a name.
-3. For each match, `get_meeting_transcript` to get the raw text.
+2. Run `granola_api.py transcript <id> --format text` for each match. If using the
+   MCP fallback, call `get_account_info`, `list_meetings`, then
+   `get_meeting_transcript` instead.
 
 ## 3. Clean the transcript
 
