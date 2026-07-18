@@ -146,17 +146,3 @@ that does go public.
 Batch related secret-dependent CLI calls into one `secretspec run ... -- sh -c '...'`
 invocation so one fingerprint approval covers the workflow.
 <!--/ai-->
-
-<!--ai-->
-For Google Workspace, default to the `gog` CLI; use the native Google Drive connector
-when `gog` does not cover the use case. Start from `gog --help` (then
-`gog <group> --help`). Most used:
-- `gog docs create "<title>" --file <notes.md>` — create a Google Doc from local markdown.
-- `gog docs add-tab <docId> --title "<tab>"` — add a tab to a doc.
-- `gog drive share <fileId> --to=user --email=<email> --role=commenter|writer --notify`
-  — give someone comment or edit access.
-- `gog drive search "<terms>" --plain` — find files in Drive; for precise filters use
-  `--raw-query "name contains 'plan' and 'me' in owners"`.
-- `gog drive download <fileId> --format md` — download a file (exports Google Docs;
-  prints the path it saved to — move it where you need it).
-<!--/ai-->
