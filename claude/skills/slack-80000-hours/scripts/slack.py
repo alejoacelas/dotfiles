@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Minimal Slack web-session client pinned to the 80,000 Hours workspace."""
+"""Minimal Slack web-session client for explicitly configured EA workspaces."""
 
 import json
 import sys
@@ -11,29 +11,42 @@ from pathlib import Path
 
 SKILL_DIR = Path(__file__).resolve().parent.parent
 CONFIG_PATH = SKILL_DIR / "config.json"
-WORKSPACE = "80000hours"
-EXPECTED_TEAM_ID = "T02GR4NPU"
-EXPECTED_TEAM = "80,000 Hours"
-EXPECTED_URL = "https://80000hours.slack.com/"
 API_ROOT = "https://slack.com/api/"
+WORKSPACES = {
+    "80000hours": {
+        "team_id": "T02GR4NPU",
+        "team": "80,000 Hours",
+        "url": "https://80000hours.slack.com/",
+    },
+    "ai-uplift": {
+        "team_id": "T094GSSSF3M",
+        "team": "AI Uplift for EA",
+        "url": "https://ai-uplift.slack.com/",
+    },
+}
 
 
 class SlackError(RuntimeError):
     pass
 
 
-def load_config() -> tuple[dict, dict]:
+def load_config(workspace: str | None) -> tuple[dict, dict, str]:
     if not CONFIG_PATH.exists():
         raise SlackError(f"Missing config: run {SKILL_DIR / 'scripts' / 'setup.py'}")
     with CONFIG_PATH.open() as handle:
         config = json.load(handle)
-    credentials = config.get("workspaces", {}).get(WORKSPACE)
+    workspace = workspace or config.get("default_workspace") or "80000hours"
+    if workspace not in WORKSPACES:
+        raise SlackError(
+            f"Unknown workspace {workspace!r}; choose one of: {', '.join(WORKSPACES)}"
+        )
+    credentials = config.get("workspaces", {}).get(workspace)
     if not credentials:
-        raise SlackError(f"Config has no {WORKSPACE!r} workspace")
+        raise SlackError(f"Config has no {workspace!r} workspace")
     for key, prefix in (("xoxc_token", "xoxc-"), ("xoxd_token", "xoxd-")):
         if not str(credentials.get(key, "")).startswith(prefix):
             raise SlackError(f"Invalid {key}: expected a value beginning with {prefix}")
-    return config, credentials
+    return config, credentials, workspace
 
 
 class SlackClient:
@@ -93,7 +106,11 @@ def output(value) -> None:
 
 
 def usage() -> str:
-    return """Usage: slack.py COMMAND [ARGS]
+    return """Usage: slack.py [-w WORKSPACE] COMMAND [ARGS]
+
+Workspaces:
+  80000hours (default)
+  ai-uplift
 
 Commands:
   auth
@@ -103,6 +120,7 @@ Commands:
   history CHANNEL_ID [limit]
   replies CHANNEL_ID THREAD_TS
   search QUERY [count]
+  sent-dms [count]
   permalink CHANNEL_ID MESSAGE_TS
   send CHANNEL_ID MESSAGE [THREAD_TS]
 """
@@ -113,25 +131,75 @@ def require_args(args: list[str], minimum: int, command_usage: str) -> None:
         raise SlackError(f"Usage: slack.py {command_usage}")
 
 
+def parse_command(argv: list[str]) -> tuple[str | None, str, list[str]]:
+    workspace = None
+    args = list(argv)
+    if args and args[0] in {"-w", "--workspace"}:
+        if len(args) < 2:
+            raise SlackError("Missing value after --workspace")
+        workspace = args[1]
+        del args[:2]
+    if not args:
+        return workspace, "help", []
+    return workspace, args[0], args[1:]
+
+
+def display_name(member: dict) -> str:
+    profile = member.get("profile", {})
+    return (
+        profile.get("display_name")
+        or profile.get("real_name")
+        or member.get("real_name")
+        or member.get("name")
+        or member.get("id")
+    )
+
+
+def user_lookup(client: SlackClient) -> dict[str, str]:
+    result = client.collect("users.list", "members", limit=200)
+    lookup = {}
+    for member in result["members"]:
+        lookup[member["id"]] = display_name(member)
+    return lookup
+
+
+def resolve_user(client: SlackClient, user_id: str, lookup: dict[str, str]) -> str:
+    if user_id in lookup:
+        return lookup[user_id]
+    try:
+        member = client.call("users.info", user=user_id).get("user", {})
+    except SlackError:
+        return user_id
+    name = display_name(member)
+    lookup[user_id] = name
+    return name
+
+
+def authenticated_identity(client: SlackClient, workspace: str) -> dict:
+    result = client.call("auth.test")
+    expected = WORKSPACES[workspace]
+    identity = (result.get("team_id"), result.get("team"), result.get("url"))
+    expected_identity = (expected["team_id"], expected["team"], expected["url"])
+    if identity != expected_identity:
+        raise SlackError(
+            "Unexpected Slack identity: expected "
+            f"{expected['team']} ({expected['team_id']}, {expected['url']}), got "
+            f"{identity[1]} ({identity[0]}, {identity[2]})"
+        )
+    return result
+
+
 def main() -> None:
-    if len(sys.argv) < 2 or sys.argv[1] in {"-h", "--help", "help"}:
+    workspace_arg, command, args = parse_command(sys.argv[1:])
+    if command in {"-h", "--help", "help"}:
         print(usage())
         return
 
-    config, credentials = load_config()
+    config, credentials, workspace = load_config(workspace_arg)
     client = SlackClient(credentials)
-    command, args = sys.argv[1], sys.argv[2:]
 
     if command == "auth":
-        result = client.call("auth.test")
-        identity = (result.get("team_id"), result.get("team"), result.get("url"))
-        expected = (EXPECTED_TEAM_ID, EXPECTED_TEAM, EXPECTED_URL)
-        if identity != expected:
-            raise SlackError(
-                "Unexpected Slack identity: expected "
-                f"{EXPECTED_TEAM} ({EXPECTED_TEAM_ID}, {EXPECTED_URL}), got "
-                f"{identity[1]} ({identity[0]}, {identity[2]})"
-            )
+        result = authenticated_identity(client, workspace)
         output(
             {
                 "ok": True,
@@ -141,7 +209,7 @@ def main() -> None:
                 "team_id": result.get("team_id"),
                 "user_id": result.get("user_id"),
                 "is_enterprise_install": result.get("is_enterprise_install", False),
-                "_workspace": WORKSPACE,
+                "_workspace": workspace,
             }
         )
     elif command == "channels":
@@ -156,22 +224,10 @@ def main() -> None:
             )
         )
     elif command in {"users", "user-lookup"}:
-        result = client.collect("users.list", "members", limit=200)
         if command == "users":
-            output(result)
+            output(client.collect("users.list", "members", limit=200))
         else:
-            lookup = {}
-            for member in result["members"]:
-                profile = member.get("profile", {})
-                name = (
-                    profile.get("display_name")
-                    or profile.get("real_name")
-                    or member.get("real_name")
-                    or member.get("name")
-                    or member.get("id")
-                )
-                lookup[member["id"]] = name
-            output(lookup)
+            output(user_lookup(client))
     elif command == "history":
         require_args(args, 1, "history CHANNEL_ID [limit]")
         limit = min(int(args[1]) if len(args) > 1 else 50, 100)
@@ -199,6 +255,54 @@ def main() -> None:
                 sort_dir="desc",
             )
         )
+    elif command == "sent-dms":
+        count = min(int(args[0]) if args else 5, 100)
+        if count < 1:
+            raise SlackError("Count must be at least 1")
+        identity = authenticated_identity(client, workspace)
+        lookup = user_lookup(client)
+        direct_messages = client.collect(
+            "conversations.list", "channels", types="im", limit=200
+        )["channels"]
+        recipients = {
+            channel["id"]: channel.get("user")
+            for channel in direct_messages
+            if channel.get("id") and channel.get("user")
+        }
+        found = []
+        page = 1
+        while len(found) < count:
+            result = client.call(
+                "search.messages",
+                query=f"from:{identity['user']}",
+                count=100,
+                page=page,
+                sort="timestamp",
+                sort_dir="desc",
+            )
+            matches = result.get("messages", {}).get("matches", [])
+            for match in matches:
+                channel_id = match.get("channel", {}).get("id")
+                recipient_id = recipients.get(channel_id)
+                if not recipient_id:
+                    continue
+                found.append(
+                    {
+                        "to": resolve_user(client, recipient_id, lookup),
+                        "to_id": recipient_id,
+                        "text": match.get("text", ""),
+                        "ts": match.get("ts"),
+                        "channel_id": channel_id,
+                        "permalink": match.get("permalink"),
+                    }
+                )
+                if len(found) == count:
+                    break
+            paging = result.get("messages", {}).get("paging", {})
+            if not matches or page >= int(paging.get("pages", page)):
+                break
+            page += 1
+        output({"ok": True, "messages": found, "_workspace": workspace})
     elif command == "permalink":
         require_args(args, 2, "permalink CHANNEL_ID MESSAGE_TS")
         output(client.call("chat.getPermalink", channel=args[0], message_ts=args[1]))

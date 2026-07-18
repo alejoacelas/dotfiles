@@ -1,4 +1,4 @@
 interface:
-  display_name: "80,000 Hours Slack"
-  short_description: "Work with the 80,000 Hours Slack workspace"
-  default_prompt: "Use $slack-80000-hours to check my recent 80,000 Hours Slack activity."
+  display_name: "EA Slack Workspaces"
+  short_description: "Work with 80,000 Hours and AI Uplift Slack"
+  default_prompt: "Use $slack-80000-hours to check my recent AI Uplift Slack activity."

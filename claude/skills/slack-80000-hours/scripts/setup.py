@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Securely create the local config for the 80,000 Hours Slack skill."""
+"""Securely configure one supported Slack workspace."""
 
+import argparse
 import getpass
 import json
 import os
@@ -18,6 +19,7 @@ DEFAULT_USER_AGENT = (
     "AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/143.0.0.0 Safari/537.36"
 )
+WORKSPACES = ("80000hours", "ai-uplift")
 
 
 def read_secret(label: str, prefix: str) -> str:
@@ -41,28 +43,38 @@ def write_private_json(path: Path, value: dict) -> None:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-w", "--workspace", choices=WORKSPACES, default="80000hours")
+    args = parser.parse_args()
+
     config = {}
     if CONFIG_PATH.exists():
         with CONFIG_PATH.open() as handle:
             config = json.load(handle)
-        answer = input("Replace the existing 80000hours credentials? [y/N] ").strip().lower()
-        if answer not in {"y", "yes"}:
-            raise SystemExit("Kept the existing config.")
+        if args.workspace in config.get("workspaces", {}):
+            answer = input(
+                f"Replace the existing {args.workspace} credentials? [y/N] "
+            ).strip().lower()
+            if answer not in {"y", "yes"}:
+                raise SystemExit("Kept the existing config.")
 
     xoxc = read_secret("xoxc token", "xoxc-")
     xoxd = read_secret("xoxd cookie", "xoxd-")
     user_agent = input("Chrome user agent [use default]: ").strip() or DEFAULT_USER_AGENT
 
-    config.setdefault("workspaces", {})["80000hours"] = {
+    config.setdefault("workspaces", {})[args.workspace] = {
         "xoxc_token": xoxc,
         "xoxd_token": xoxd,
         "user_agent": user_agent,
     }
-    config["default_workspace"] = "80000hours"
+    config.setdefault("default_workspace", "80000hours")
     config.setdefault("link_style", "app")
     write_private_json(CONFIG_PATH, config)
 
-    result = subprocess.run([sys.executable, str(SLACK), "auth"], check=False)
+    result = subprocess.run(
+        [sys.executable, str(SLACK), "--workspace", args.workspace, "auth"],
+        check=False,
+    )
     if result.returncode:
         raise SystemExit("Saved the config, but Slack authentication failed.")
 
