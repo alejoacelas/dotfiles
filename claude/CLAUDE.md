@@ -132,6 +132,8 @@ that does go public.
 ## Other principles and conventions
 <!--/ai-->
 
+- Folder names are lowercase, with words separated by dashes.
+
 <!--ai-->
 - `best/` is where almost all my work is committed. The only subdirectories of `best/`
   not committed to its repo are private repositories, and those that need to be their
