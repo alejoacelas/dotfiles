@@ -121,11 +121,13 @@ folder next to the deliverable — so how it was made is public too, not just wh
 out.
 <!--/ai-->
 
+Information from others (call transcripts, email exchanges, …) can be pushed as long
+as the repository is private and its README documents the private information it
+contains.
+
 <!--ai-->
-The one carve-out is information from others (call transcripts, email exchanges, …):
-commit it locally but hold the push until I explicitly confirm. Suggest creative ways
-to still publish the high-level information — e.g. redact or summarize into a folder
-that does go public.
+Suggest creative ways to still publish the high-level information — e.g. redact or
+summarize it into a folder that does go public.
 <!--/ai-->
 
 <!--ai-->
