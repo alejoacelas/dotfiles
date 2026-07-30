@@ -115,10 +115,13 @@ keys hardcoded, move them to a gitignored `.env` (commit a
 <!--/ai-->
 
 <!--ai-->
-Share the process, not just the result. When a workflow or research run makes
-something, save its script and methodology beside the output — e.g. a `history/`
-folder next to the deliverable — so how it was made is public too, not just what came
-out.
+Share the process, not just the result. Keep a concise construction record beside each
+output — currently often called `history/` — that gives
+<!--me-->an intuitive and ideally somewhat short path towards creating the thing
+that's already on the repo<!--/me-->. Preserve the decisive requests and prompts,
+method, scripts, input lineage and checks. Update the record whenever the output
+changes; move superseded process notes to the project's archive instead of
+accumulating a session log.
 <!--/ai-->
 
 Information from others (call transcripts, email exchanges, …) can be pushed as long
