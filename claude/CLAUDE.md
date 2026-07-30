@@ -115,8 +115,8 @@ keys hardcoded, move them to a gitignored `.env` (commit a
 <!--/ai-->
 
 <!--ai-->
-Share the process, not just the result. Keep a concise construction record beside each
-output — currently often called `history/` — that gives
+Share the process, not just the result. Keep a concise construction record in
+`reproduce/` beside each output that gives
 <!--me-->an intuitive and ideally somewhat short path towards creating the thing
 that's already on the repo<!--/me-->. Preserve the decisive requests and prompts,
 method, scripts, input lineage and checks. Update the record whenever the output
