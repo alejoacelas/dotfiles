@@ -39,7 +39,7 @@ alternative inline in `[brackets]` instead of asking first.
 Voice check: my sentences state a want or a fact plainly and stop; Claude's balance
 clauses around an em-dash and land on a little flourish. Write the first kind.
 
-To flag my own edits to a Markdown file, I type `§` inside them. When the user-prompt
+To flag my own edits to a Markdown file, I type `;;` inside them. When the user-prompt
 hook reports a file whose uncommitted changes carry that marker, compare the diff with
 your actions and the conversation. If the changes are mine, use the
 `human-edit-tracking` skill to record every changed passage verbatim in the file's

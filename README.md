@@ -25,7 +25,7 @@ Both Claude and Codex read the one `claude/CLAUDE.md`. Codex rewrites its
 `~/.codex/config.toml` constantly, so it owns that file directly (not symlinked);
 `codex/config.reference.toml` is the snapshot to seed a fresh machine from.
 Both tools run the shared human-edit tracker on user prompts; it stays silent unless a
-Markdown file's uncommitted changes carry the `§` marker.
+Markdown file's uncommitted changes carry the `;;` marker.
 
 ## Install (or re-link) on a machine
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inject diffs for dirty Markdown files whose uncommitted changes carry the § marker."""
+"""Inject diffs for dirty Markdown files whose uncommitted changes carry the ;; marker."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ import subprocess
 import sys
 
 
-MARKER = "§"
+MARKER = ";;"
 MAX_CONTEXT_CHARS = 9_000
 FRONT_MATTER = re.compile(r"\A---\r?\n(?P<body>.*?)(?:\r?\n)---(?:\r?\n|\Z)", re.DOTALL)
 
@@ -89,7 +89,7 @@ def file_diff(root: Path, relative_path: str) -> str:
 
 def marker_in_added_lines(diff: str) -> bool:
     """A marker only counts when it is part of the uncommitted change itself, so
-    legacy occurrences (legal citations, old notes) never trigger the hook."""
+    occurrences already committed (code blocks, old notes) never trigger the hook."""
     return any(
         line.startswith("+") and not line.startswith("+++") and MARKER in line
         for line in diff.splitlines()

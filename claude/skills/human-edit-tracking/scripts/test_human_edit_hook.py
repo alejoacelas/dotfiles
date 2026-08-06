@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tests for the §-marker human-edit hook."""
+"""Tests for the ;;-marker human-edit hook."""
 
 from __future__ import annotations
 
@@ -63,7 +63,7 @@ class HookTest(unittest.TestCase):
 
     def test_marked_change_is_reported(self) -> None:
         path = self.commit_file("notes.md", "First line.\n")
-        path.write_text("First line.\nA thought I typed myself. §\n")
+        path.write_text("First line.\nA thought I typed myself. ;;\n")
         context = context_of(run_hook(self.root))
         self.assertIn("notes.md", context)
         self.assertIn("A thought I typed myself.", context)
@@ -74,17 +74,17 @@ class HookTest(unittest.TestCase):
         self.assertIsNone(run_hook(self.root))
 
     def test_clean_file_with_marker_is_silent(self) -> None:
-        self.commit_file("legal.md", "See 17 U.S.C. § 107.\n")
+        self.commit_file("code.md", "```lisp\n;; a committed comment\n```\n")
         self.assertIsNone(run_hook(self.root))
 
     def test_legacy_marker_in_context_lines_is_silent(self) -> None:
-        path = self.commit_file("legal.md", "See 17 U.S.C. § 107.\nOld line.\n")
-        path.write_text("See 17 U.S.C. § 107.\nRewritten line.\n")
+        path = self.commit_file("code.md", "```lisp\n;; a committed comment\n```\nOld line.\n")
+        path.write_text("```lisp\n;; a committed comment\n```\nRewritten line.\n")
         self.assertIsNone(run_hook(self.root))
 
     def test_untracked_file_with_marker_is_reported(self) -> None:
         self.commit_file("seed.md", "seed\n")
-        (self.root / "draft.md").write_text("Fresh draft. §\n")
+        (self.root / "draft.md").write_text("Fresh draft. ;;\n")
         self.assertIn("draft.md", context_of(run_hook(self.root)))
 
     def test_untracked_file_without_marker_is_silent(self) -> None:
@@ -94,7 +94,7 @@ class HookTest(unittest.TestCase):
 
     def test_non_markdown_change_is_silent(self) -> None:
         path = self.commit_file("script.py", "x = 1\n")
-        path.write_text("x = 2  # §\n")
+        path.write_text("x = 2  # ;;\n")
         self.assertIsNone(run_hook(self.root))
 
     def test_tracking_front_matter_is_excluded_from_diff(self) -> None:
@@ -104,7 +104,7 @@ class HookTest(unittest.TestCase):
         path = self.commit_file("README.md", original)
         path.write_text(
             "---\nhuman_edit_tracking:\n  history:\n    - date: 2026-08-05\n---\n"
-            "\nBody.\nMarked addition. §\n"
+            "\nBody.\nMarked addition. ;;\n"
         )
         context = context_of(run_hook(self.root))
         self.assertIn("Marked addition.", context)
@@ -112,7 +112,7 @@ class HookTest(unittest.TestCase):
 
     def test_other_hook_events_are_ignored(self) -> None:
         path = self.commit_file("notes.md", "First line.\n")
-        path.write_text("Changed. §\n")
+        path.write_text("Changed. ;;\n")
         self.assertIsNone(run_hook(self.root, event="PreToolUse"))
 
     def test_outside_git_repository_is_silent(self) -> None:
@@ -121,14 +121,14 @@ class HookTest(unittest.TestCase):
 
     def test_long_diffs_are_truncated(self) -> None:
         path = self.commit_file("notes.md", "First line.\n")
-        path.write_text("First line. §\n" + "filler\n" * 4000)
+        path.write_text("First line. ;;\n" + "filler\n" * 4000)
         context = context_of(run_hook(self.root))
         self.assertLessEqual(len(context), hook.MAX_CONTEXT_CHARS + 200)
         self.assertIn("truncated", context)
 
     def test_show_prints_full_diff(self) -> None:
         path = self.commit_file("notes.md", "First line.\n")
-        path.write_text("First line.\nSecond line. §\n")
+        path.write_text("First line.\nSecond line. ;;\n")
         result = subprocess.run(
             [sys.executable, str(SCRIPT), "--show", str(path)],
             text=True,
@@ -141,13 +141,13 @@ class HookTest(unittest.TestCase):
 
 class MarkerDetectionTest(unittest.TestCase):
     def test_added_line_with_marker(self) -> None:
-        self.assertTrue(hook.marker_in_added_lines("+new text §\n-old\n"))
+        self.assertTrue(hook.marker_in_added_lines("+new text ;;\n-old\n"))
 
     def test_marker_only_in_removed_line(self) -> None:
-        self.assertFalse(hook.marker_in_added_lines("-old text §\n+new\n"))
+        self.assertFalse(hook.marker_in_added_lines("-old text ;;\n+new\n"))
 
     def test_marker_in_file_header_does_not_count(self) -> None:
-        self.assertFalse(hook.marker_in_added_lines("+++ b/§ notes.md\n+plain\n"))
+        self.assertFalse(hook.marker_in_added_lines("+++ b/;; notes.md\n+plain\n"))
 
 
 if __name__ == "__main__":

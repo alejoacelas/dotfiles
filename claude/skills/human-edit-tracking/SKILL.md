@@ -1,17 +1,17 @@
 ---
 name: human-edit-tracking
-description: Preserve Alejo's uncommitted edits to Markdown before an agent continues editing. Use when a UserPromptSubmit hook reports a Markdown file whose uncommitted changes carry the § marker, and when creating or updating a file's human_edit_tracking history.
+description: Preserve Alejo's uncommitted edits to Markdown before an agent continues editing. Use when a UserPromptSubmit hook reports a Markdown file whose uncommitted changes carry the ;; marker, and when creating or updating a file's human_edit_tracking history.
 ---
 
 # Human edit tracking
 
-Alejo types `§` inside his own edits to Markdown files. The user-prompt hook reports
+Alejo types `;;` inside his own edits to Markdown files. The user-prompt hook reports
 any file that is dirty against `HEAD` and whose added lines carry the marker. Treat
 the diff as evidence, not an authorship verdict: compare it with your own actions and
 the conversation.
 
 - If the changes are clearly Alejo's, record every addition, deletion, and replacement
-  verbatim under `human_edit_tracking.history` — without the `§` markers themselves —
+  verbatim under `human_edit_tracking.history` — without the `;;` markers themselves —
   then delete the markers from the file and say what you recorded.
 - If authorship is unclear, ask `Was this change by you?` Do not record it until Alejo
   confirms. If he says no, leave the history unchanged.
