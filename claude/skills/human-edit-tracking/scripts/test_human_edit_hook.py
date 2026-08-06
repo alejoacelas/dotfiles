@@ -183,6 +183,22 @@ class HumanEditHookTest(unittest.TestCase):
         (self.root / "README.md").write_text("New.\n")
         self.assertEqual(self.hook_output({"hook_event_name": "PostToolUse", "cwd": str(self.root)}), "")
 
+    def test_invalid_input_warns_without_injecting_context(self):
+        stdout = io.StringIO()
+        with mock.patch.object(HOOK.sys, "stdin", io.StringIO("not json")), mock.patch.object(
+            HOOK.sys, "stdout", stdout
+        ):
+            self.assertEqual(HOOK.hook_main(), 0)
+        output = json.loads(stdout.getvalue())
+        self.assertIn("hook failed", output["systemMessage"])
+        self.assertNotIn("hookSpecificOutput", output)
+
+    def test_git_failure_warns_without_injecting_context(self):
+        with mock.patch.object(HOOK, "evidence", side_effect=OSError("simulated")):
+            output = json.loads(self.hook_output())
+        self.assertIn("hook failed", output["systemMessage"])
+        self.assertNotIn("hookSpecificOutput", output)
+
     def test_output_is_structured_evidence_without_authorship_claim(self):
         self.commit({"README.md": "Old.\n"})
         (self.root / "README.md").write_text("New.\n")

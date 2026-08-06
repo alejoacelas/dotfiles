@@ -251,6 +251,16 @@ def hook_main() -> int:
             )
         )
     except Exception:
+        print(
+            json.dumps(
+                {
+                    "systemMessage": (
+                        "Human-edit tracking hook failed; no authorship evidence "
+                        "was injected."
+                    )
+                }
+            )
+        )
         return 0
     return 0
 
