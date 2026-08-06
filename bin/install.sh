@@ -30,6 +30,7 @@ link claude/CLAUDE.md   "$HOME/.claude/CLAUDE.md"
 link claude/skills      "$HOME/.claude/skills"
 # Codex reads AGENTS.md; point it at the one CLAUDE.md so there's a single source.
 link claude/CLAUDE.md   "$HOME/.codex/AGENTS.md"
+link codex/hooks.json   "$HOME/.codex/hooks.json"
 link codex/rules        "$HOME/.codex/rules"
 # Codex owns ~/.codex/skills/.system, so link each personal skill without replacing
 # the directory. Shared skills can be symlinked into codex/skills from claude/skills.
@@ -38,6 +39,7 @@ for skill in "$DOTFILES"/codex/skills/*; do
   name="$(basename "$skill")"
   link "codex/skills/$name" "$HOME/.codex/skills/$name"
 done
+link claude/skills/human-edit-tracking "$HOME/.codex/skills/human-edit-tracking"
 # codex/config.toml is NOT linked: Codex rewrites it constantly (trust entries,
 # timestamps), so it owns ~/.codex/config.toml directly. codex/config.reference.toml
 # is a tracked snapshot to seed a fresh machine from.
