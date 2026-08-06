@@ -82,6 +82,12 @@ class MigrateTextTest(unittest.TestCase):
         source = "<!--ai-->\nParagraph.\n\n<!--/ai-->"
         self.assertEqual(MIGRATE.remove_attribution_markers(source), "Paragraph.\n")
 
+    def test_wrappers_do_not_consume_spacing_between_sections(self):
+        source = "<!--ai-->\nFirst.\n<!--/ai-->\n\n<!--ai-->\n## Second\n<!--/ai-->\n"
+        self.assertEqual(
+            MIGRATE.remove_attribution_markers(source), "First.\n\n## Second\n"
+        )
+
     def test_preserves_crlf_and_bom(self):
         source = "\ufeff---\r\ntitle: Test\r\n---\r\n<!--ai-->Body\r\n"
         migrated = MIGRATE.migrate_text(source)

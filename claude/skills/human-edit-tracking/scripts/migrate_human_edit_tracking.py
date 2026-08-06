@@ -14,10 +14,10 @@ from typing import NamedTuple
 DEFAULT_NAMES = {"README.md", "AGENTS.md", "CLAUDE.md"}
 MARKERS = ("<!--ai-->", "<!--/ai-->", "<!--me-->", "<!--/me-->")
 CLOSING_MARKER_LINE = re.compile(
-    r"(?m)(?:^[ \t]*\r?\n)?^[ \t]*(?:(?:<!--/(?:ai|me)-->)\s*)+(?:\r?\n|\Z)"
+    r"(?m)(?:^[ \t]*\r?\n)?^[ \t]*(?:(?:<!--/(?:ai|me)-->)[ \t]*)+(?:\r?\n|\Z)"
 )
 MARKER_ONLY_LINE = re.compile(
-    r"(?m)^[ \t]*(?:(?:<!--/?(?:ai|me)-->)\s*)+(?:\r?\n|\Z)"
+    r"(?m)^[ \t]*(?:(?:<!--/?(?:ai|me)-->)[ \t]*)+(?:\r?\n|\Z)"
 )
 FRONT_MATTER_END = re.compile(r"^---[ \t]*(?:\r?\n|$)", re.MULTILINE)
 FENCE = re.compile(r"^(?P<indent> {0,3})(?P<run>`{3,}|~{3,})(?P<rest>.*)$")
