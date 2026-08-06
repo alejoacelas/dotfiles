@@ -1,0 +1,4 @@
+interface:
+  display_name: "Human Edit Tracking"
+  short_description: "Preserve human edits in tracked Markdown"
+  default_prompt: "Use $human-edit-tracking to inspect and record human edits in a tracked Markdown file."
