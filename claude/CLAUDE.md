@@ -108,6 +108,9 @@ summarize it into a folder that does go public.
 
 ## Other principles and conventions
 
+- Do not use Orca to create tabs, terminals or worktrees for sub-agents unless I
+  explicitly ask.
+
 - Folder names are lowercase, with words separated by dashes.
 
 - `best/` is where almost all my work is committed. The only subdirectories of `best/`
