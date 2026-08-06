@@ -1,6 +1,6 @@
 ---
 name: tidy-project
-description: Reorganize a cluttered project or folder into a small reader-facing root, current implementation and data folders, a maintained construction record, and a dated archive. Use only when the user explicitly asks to tidy, organize, clean up, simplify, prune, regroup, or restructure a project or folder. Do not invoke merely because a project appears messy, difficult to navigate, or would benefit from cleanup.
+description: Reorganize a cluttered project or folder into a small reader-facing root, current implementation and data folders, a maintained construction record, and a dated archive. Activate this skill only when the user explicitly asks to tidy, organize, clean up, simplify, prune, regroup, or restructure a project or folder; do not activate it merely because a project appears messy or would benefit from cleanup. This activation rule does not prohibit suggesting cleanup outside the skill.
 ---
 
 # Tidy a project
@@ -48,6 +48,6 @@ After moving:
 5. Show the final root and explain what moved to the archive.
 6. Commit and push when repository instructions require it.
 
-Do not use this skill to initiate unsolicited cleanup. Once explicitly invoked, make
-reversible structural decisions autonomously unless one of the stop conditions above
-applies.
+Do not activate this skill without an explicit cleanup request. This does not restrict
+ordinary suggestions that a cleanup might help. Once invoked, make reversible structural
+decisions autonomously unless one of the stop conditions above applies.
