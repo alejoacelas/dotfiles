@@ -16,7 +16,7 @@ SPEC.loader.exec_module(MIGRATE)
 
 class MigrateTextTest(unittest.TestCase):
     def test_adds_front_matter_and_removes_prose_markers(self):
-        source = "<!--me-->Mine\n\nTheirs<!--ai-->\n"
+        source = "<!--me-->Mine<!--/me-->\n\n<!--ai-->Theirs<!--/ai-->\n"
         expected = (
             "---\nhuman_edit_tracking:\n  enabled: true\n  history: []\n---\n"
             "Mine\n\nTheirs\n"
@@ -50,7 +50,7 @@ class MigrateTextTest(unittest.TestCase):
 
     def test_preserves_markers_in_fenced_and_inline_code(self):
         source = (
-            "<!--ai-->Text `<!--me-->` and ``x ` <!--ai--> x``.\n"
+            "<!--ai-->Text<!--/ai--> `<!--me--><!--/me-->` and ``x ` <!--ai--><!--/ai--> x``.\n"
             "~~~html\n<!--ai-->\n~~~\n"
             "````\n```\n<!--me-->\n```\n````\n"
             "<!--me-->End\n"
@@ -58,7 +58,7 @@ class MigrateTextTest(unittest.TestCase):
         migrated = MIGRATE.remove_attribution_markers(source)
         self.assertEqual(
             migrated,
-            "Text `<!--me-->` and ``x ` <!--ai--> x``.\n"
+            "Text `<!--me--><!--/me-->` and ``x ` <!--ai--><!--/ai--> x``.\n"
             "~~~html\n<!--ai-->\n~~~\n"
             "````\n```\n<!--me-->\n```\n````\n"
             "End\n",
@@ -73,6 +73,14 @@ class MigrateTextTest(unittest.TestCase):
         source = "Unmatched ` tick <!--ai-->then attribution\n"
         expected = "Unmatched ` tick then attribution\n"
         self.assertEqual(MIGRATE.remove_attribution_markers(source), expected)
+
+    def test_marker_only_lines_do_not_leave_blank_lines(self):
+        source = "<!--ai-->\nParagraph.\n<!--/ai-->\n"
+        self.assertEqual(MIGRATE.remove_attribution_markers(source), "Paragraph.\n")
+
+    def test_closing_marker_at_eof_does_not_create_blank_line(self):
+        source = "<!--ai-->\nParagraph.\n\n<!--/ai-->"
+        self.assertEqual(MIGRATE.remove_attribution_markers(source), "Paragraph.\n")
 
     def test_preserves_crlf_and_bom(self):
         source = "\ufeff---\r\ntitle: Test\r\n---\r\n<!--ai-->Body\r\n"

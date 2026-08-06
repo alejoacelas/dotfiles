@@ -12,7 +12,13 @@ from typing import NamedTuple
 
 
 DEFAULT_NAMES = {"README.md", "AGENTS.md", "CLAUDE.md"}
-MARKERS = ("<!--ai-->", "<!--me-->")
+MARKERS = ("<!--ai-->", "<!--/ai-->", "<!--me-->", "<!--/me-->")
+CLOSING_MARKER_LINE = re.compile(
+    r"(?m)(?:^[ \t]*\r?\n)?^[ \t]*(?:(?:<!--/(?:ai|me)-->)\s*)+(?:\r?\n|\Z)"
+)
+MARKER_ONLY_LINE = re.compile(
+    r"(?m)^[ \t]*(?:(?:<!--/?(?:ai|me)-->)\s*)+(?:\r?\n|\Z)"
+)
 FRONT_MATTER_END = re.compile(r"^---[ \t]*(?:\r?\n|$)", re.MULTILINE)
 FENCE = re.compile(r"^(?P<indent> {0,3})(?P<run>`{3,}|~{3,})(?P<rest>.*)$")
 
@@ -118,6 +124,10 @@ def read_markdown(path: Path) -> str:
 
 
 def _strip_markers_from_noncode(text: str) -> str:
+    # Most legacy wrappers occupy their own lines. Remove those lines rather
+    # than leaving hundreds of artificial blank lines, including at EOF.
+    text = CLOSING_MARKER_LINE.sub("", text)
+    text = MARKER_ONLY_LINE.sub("", text)
     output: list[str] = []
     index = 0
     while index < len(text):
