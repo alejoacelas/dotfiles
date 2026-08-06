@@ -18,7 +18,7 @@
             "type": "command",
             "command": "python3 \"$HOME/best/ai/dotfiles/claude/skills/human-edit-tracking/scripts/human_edit_hook.py\"",
             "timeout": 10,
-            "statusMessage": "Checking tracked Markdown for human edits",
+            "statusMessage": "Checking Markdown for marked human edits",
             "additionalContextLimit": 10000
           },
           {

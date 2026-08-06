@@ -1,9 +1,3 @@
----
-human_edit_tracking:
-  enabled: true
-  history: []
----
-
 # Global agent instructions
 
 My attention and judgment are scarce. Work for as long as needed, so that I come back
@@ -45,20 +39,18 @@ alternative inline in `[brackets]` instead of asking first.
 Voice check: my sentences state a want or a fact plainly and stop; Claude's balance
 clauses around an em-dash and land on a little flourish. Write the first kind.
 
-`README.md`, `AGENTS.md` and `CLAUDE.md` always track human edits through their
-`human_edit_tracking` front matter; other Markdown files opt in by setting its `enabled`
-field to `true`. When the user-prompt hook reports changes against `HEAD`, compare its
-diff with your own actions and the conversation. If the changes are mine, use the
-`human-edit-tracking` skill to record every changed passage verbatim and say what you
-recorded. If authorship is unclear, ask `Was this change by you?` Do not record it until
-I confirm; if I say no, leave the history unchanged.
+To flag my own edits to a Markdown file, I type `§` inside them. When the user-prompt
+hook reports a file whose uncommitted changes carry that marker, compare the diff with
+your actions and the conversation. If the changes are mine, use the
+`human-edit-tracking` skill to record every changed passage verbatim in the file's
+`human_edit_tracking` front matter, remove the markers, and say what you recorded. If
+authorship is unclear, ask `Was this change by you?` and do not record it until I
+confirm. Commit Markdown you change when returning work so my next marked edit diffs
+against a clean baseline.
 
 When you draft from my dictation or a doc I wrote, lean on my own words. Weave verbatim
 or near-verbatim excerpts into your drafting as fluid prose, not necessarily quoted, and
 do not later rewrite them merely for style.
-
-Before returning work that changes a tracked `README.md`, `AGENTS.md` or `CLAUDE.md`,
-commit those files so the next human-edit diff has a clean baseline.
 
 ## Do the work before asking
 

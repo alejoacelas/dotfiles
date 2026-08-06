@@ -1,26 +1,29 @@
 ---
 name: human-edit-tracking
-description: Preserve a person's uncommitted edits to tracked Markdown before an agent continues editing. Use when a UserPromptSubmit hook reports changes to README.md, AGENTS.md, CLAUDE.md, or a Markdown file whose human_edit_tracking.enabled field is true, and when creating or updating those files' full-text human-edit history.
+description: Preserve Alejo's uncommitted edits to Markdown before an agent continues editing. Use when a UserPromptSubmit hook reports a Markdown file whose uncommitted changes carry the § marker, and when creating or updating a file's human_edit_tracking history.
 ---
 
 # Human edit tracking
 
-Treat the hook's diff as evidence, not an authorship verdict. Compare it with your own
-actions and the conversation.
+Alejo types `§` inside his own edits to Markdown files. The user-prompt hook reports
+any file that is dirty against `HEAD` and whose added lines carry the marker. Treat
+the diff as evidence, not an authorship verdict: compare it with your own actions and
+the conversation.
 
 - If the changes are clearly Alejo's, record every addition, deletion, and replacement
-  verbatim under `human_edit_tracking.history`, then say what you recorded.
+  verbatim under `human_edit_tracking.history` — without the `§` markers themselves —
+  then delete the markers from the file and say what you recorded.
 - If authorship is unclear, ask `Was this change by you?` Do not record it until Alejo
   confirms. If he says no, leave the history unchanged.
-- Before returning work that changes a tracked `README.md`, `AGENTS.md`, or `CLAUDE.md`,
-  commit those files so the next diff has a clean baseline.
+- Commit the file after recording so the next marked edit diffs against a clean
+  baseline.
 
-Use this schema:
+Use this schema, adding the front matter when a file records its first entry (an
+`enabled:` field left over from the retired always-on tracker is inert; leave it):
 
 ```yaml
 ---
 human_edit_tracking:
-  enabled: true
   history:
     - date: 2026-08-05
       changes:
@@ -40,8 +43,5 @@ One dated entry may contain changes in many parts of the file. Preserve complete
 passages rather than summarizing them. After adding an entry, keep `history` at or below
 2,000 words by removing the oldest complete entries first. Never truncate the newest entry;
 keep it whole even when it alone exceeds the limit.
-
-`README.md`, `AGENTS.md`, and `CLAUDE.md` are tracked by default. Other Markdown files opt
-in through `human_edit_tracking.enabled: true`.
 
 Run `scripts/human_edit_hook.py --show <file>` when the hook's injected diff was truncated.

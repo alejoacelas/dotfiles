@@ -1,9 +1,3 @@
----
-human_edit_tracking:
-  enabled: true
-  history: []
----
-
 # dotfiles
 
 My machine config in one place: AI-agent instructions, shell, git, and the Homebrew
@@ -31,7 +25,7 @@ Both Claude and Codex read the one `claude/CLAUDE.md`. Codex rewrites its
 `~/.codex/config.toml` constantly, so it owns that file directly (not symlinked);
 `codex/config.reference.toml` is the snapshot to seed a fresh machine from.
 Both tools run the shared human-edit tracker on user prompts; it stays silent unless a
-tracked Markdown file differs from `HEAD`.
+Markdown file's uncommitted changes carry the `§` marker.
 
 ## Install (or re-link) on a machine
 
