@@ -50,6 +50,118 @@
             "command": "python3 \"$HOME/best/ai/dotfiles/claude/hooks/guard-judgment.py\""
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/alejo/.orca/agent-hooks/claude-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/alejo/.orca/agent-hooks/claude-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/alejo/.orca/agent-hooks/claude-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/alejo/.orca/agent-hooks/claude-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/alejo/.orca/agent-hooks/claude-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/alejo/.orca/agent-hooks/claude-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/alejo/.orca/agent-hooks/claude-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/alejo/.orca/agent-hooks/claude-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/alejo/.orca/agent-hooks/claude-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/alejo/.orca/agent-hooks/claude-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10
+          }
+        ]
       }
     ]
   },
@@ -61,5 +173,9 @@
   "skipWorkflowUsageWarning": true,
   "theme": "dark",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "statusLine": {
+    "type": "command",
+    "command": "if [ -f '/Users/alejo/.orca/agent-hooks/claude-statusline.sh' ] && [ -r '/Users/alejo/.orca/agent-hooks/claude-statusline.sh' ] && [ -x '/Users/alejo/.orca/agent-hooks/claude-statusline.sh' ]; then /bin/sh '/Users/alejo/.orca/agent-hooks/claude-statusline.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi"
+  }
 }
