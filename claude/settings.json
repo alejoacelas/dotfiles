@@ -67,6 +67,11 @@
         "hooks": [
           {
             "type": "command",
+            "command": "python3 \"$HOME/best/ai/dotfiles/claude/skills/human-edit-tracking/scripts/human_edit_hook.py\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
             "command": "if [ -f '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/alejo/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/alejo/.orca/agent-hooks/claude-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
             "timeout": 10
           }
