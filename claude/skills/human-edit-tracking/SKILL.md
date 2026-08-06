@@ -24,17 +24,15 @@ human_edit_tracking:
   history:
     - date: 2026-08-05
       changes:
-        - type: addition
-          text: |-
+        - added: |-
             Exact added text.
-        - type: deletion
-          text: |-
+        - removed: |-
             Exact deleted text.
-        - type: replacement
-          before: |-
-            Exact replaced text.
-          after: |-
-            Exact replacement text.
+        - replaced:
+            before: |-
+              Exact replaced text.
+            after: |-
+              Exact replacement text.
 ---
 ```
 

@@ -13,7 +13,7 @@ import sys
 
 
 DEFAULT_NAMES = {"README.md", "AGENTS.md", "CLAUDE.md"}
-MAX_CONTEXT_CHARS = 40_000
+MAX_CONTEXT_CHARS = 9_000
 FRONT_MATTER = re.compile(r"\A---\r?\n(?P<body>.*?)(?:\r?\n)---(?:\r?\n|\Z)", re.DOTALL)
 TRACKING_ENABLED = re.compile(
     r"(?ms)^human_edit_tracking\s*:\s*(?:#.*)?$.*?^\s+enabled\s*:\s*true\s*(?:#.*)?$"
