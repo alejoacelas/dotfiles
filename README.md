@@ -7,7 +7,7 @@ paths each tool reads from. Inspired by [benthamite/dotfiles](https://github.com
 ## Layout
 
 ```
-claude/CLAUDE.md         agent instructions (shared)    ->  ~/.claude/CLAUDE.md  &  ~/.codex/AGENTS.md
+agents/AGENTS.md         agent instructions (shared)    ->  ~/.claude/CLAUDE.md  &  ~/.codex/AGENTS.md
 claude/settings.json     permissions / model / theme    ->  ~/.claude/settings.json
 claude/skills/           reusable Claude skills         ->  ~/.claude/skills
 plugins/                 public Claude plugins enabled by selected projects
@@ -21,10 +21,11 @@ Brewfile                 every Homebrew tap/formula/cask
 bin/install.sh           creates links and refreshes project-skill mirrors
 bin/sync-project-skills  updates/checks private project mirrors
 hooks/pre-commit         blocks secrets and stale project-skill mirrors
-AGENTS.md, CLAUDE.md     links to this README for repo-local agent instructions
+AGENTS.md                link to this README for repo-local agent instructions
+CLAUDE.md                link to AGENTS.md
 ```
 
-Both Claude and Codex read the one `claude/CLAUDE.md`. Codex rewrites its
+Both Claude and Codex read the one `agents/AGENTS.md`. Codex rewrites its
 `~/.codex/config.toml` constantly, so it owns that file directly (not symlinked);
 `codex/config.reference.toml` is the snapshot to seed a fresh machine from.
 Both tools run the shared human-edit tracker on user prompts; it stays silent unless a
@@ -47,8 +48,8 @@ Do not edit the generated mirror or put project-only skills under `claude/skills
 `install.sh` exposes globally. The mirror's ignored `.env` and `.venv` link to the local
 source; generated `data/` remains private to `calls`.
 
-The root `AGENTS.md` and `CLAUDE.md` link to this README, so agents editing this repo see
-the ownership map automatically.
+The root `AGENTS.md` links to this README and `CLAUDE.md` links to `AGENTS.md`, so agents
+editing this repo see the ownership map automatically.
 
 ## Install (or re-link) on a machine
 

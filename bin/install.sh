@@ -26,10 +26,10 @@ link() {  # link <repo-relative source> <absolute home target>
 }
 
 echo "Linking dotfiles from $DOTFILES"
-link claude/CLAUDE.md   "$HOME/.claude/CLAUDE.md"
+link agents/AGENTS.md   "$HOME/.claude/CLAUDE.md"
 link claude/skills      "$HOME/.claude/skills"
-# Codex reads AGENTS.md; point it at the one CLAUDE.md so there's a single source.
-link claude/CLAUDE.md   "$HOME/.codex/AGENTS.md"
+# Both tools read the same canonical agent instructions.
+link agents/AGENTS.md   "$HOME/.codex/AGENTS.md"
 link codex/hooks.json   "$HOME/.codex/hooks.json"
 link codex/rules        "$HOME/.codex/rules"
 # Codex owns ~/.codex/skills/.system, so link each personal skill without replacing
