@@ -10,6 +10,7 @@ paths each tool reads from. Inspired by [benthamite/dotfiles](https://github.com
 claude/CLAUDE.md         agent instructions (shared)    ->  ~/.claude/CLAUDE.md  &  ~/.codex/AGENTS.md
 claude/settings.json     permissions / model / theme    ->  ~/.claude/settings.json
 claude/skills/           reusable Claude skills         ->  ~/.claude/skills
+plugins/                 public Claude plugins enabled by selected projects
 codex/skills/            personal and shared skills     ->  ~/.codex/skills/<skill>
 codex/hooks.json         Codex lifecycle hooks           ->  ~/.codex/hooks.json
 codex/rules/             Codex rules                    ->  ~/.codex/rules
@@ -19,6 +20,7 @@ git/gitconfig            git identity + gh credentials  ->  ~/.gitconfig
 Brewfile                 every Homebrew tap/formula/cask
 bin/install.sh           creates and repairs the symlinks
 hooks/pre-commit         blocks committing obvious secrets
+AGENTS.md, CLAUDE.md     links to this README for repo-local agent instructions
 ```
 
 Both Claude and Codex read the one `claude/CLAUDE.md`. Codex rewrites its
@@ -26,6 +28,27 @@ Both Claude and Codex read the one `claude/CLAUDE.md`. Codex rewrites its
 `codex/config.reference.toml` is the snapshot to seed a fresh machine from.
 Both tools run the shared human-edit tracker on user prompts; it stays silent unless a
 Markdown file's uncommitted changes carry the `;;` marker.
+
+## Project-only plugins
+
+Keep public skills that should not load globally under `plugins/`. Each project enables
+its plugin in `.claude/settings.json`; a local relative symlink can also expose the skill
+at its ordinary project path for immediate edits.
+
+| Public source | Project wiring |
+|---|---|
+| [`plugins/summarize-call/`](plugins/summarize-call/) | `calls/.claude/settings.json` plus `calls/.claude/skills/summarize-call` |
+
+The marketplace at [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
+lets a clean or cloud checkout fetch the plugin from GitHub. Locally, both repos assume
+their documented locations under `~/best`; the calls link resolves directly to the
+plugin's skill folder. Edit through either local path and commit content changes here.
+Do not put project-only skills under `claude/skills/`, which `install.sh` exposes
+globally. A skill's `.env`, `.venv/`, and generated `data/` stay ignored beside its
+public source.
+
+The root `AGENTS.md` and `CLAUDE.md` link to this README, so agents editing this repo see
+the ownership map automatically.
 
 ## Install (or re-link) on a machine
 

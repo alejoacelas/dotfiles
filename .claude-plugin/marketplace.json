@@ -1,0 +1,15 @@
+{
+  "name": "alejo-dotfiles",
+  "owner": {
+    "name": "Alejo Acelas"
+  },
+  "description": "Alejo's public project-scoped Claude plugins",
+  "plugins": [
+    {
+      "name": "summarize-call",
+      "source": "./plugins/summarize-call",
+      "description": "Fetch, clean, summarize, and archive Granola calls",
+      "repository": "https://github.com/alejoacelas/dotfiles"
+    }
+  ]
+}
