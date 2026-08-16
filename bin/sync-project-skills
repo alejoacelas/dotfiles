@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Mirror public project skills into private repos that must work in clean checkouts.
+set -euo pipefail
+
+DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BEST_ROOT="$(cd "$DOTFILES_ROOT/../.." && pwd)"
+SOURCE="$DOTFILES_ROOT/plugins/summarize-call/skills/summarize-call/"
+TARGET="$BEST_ROOT/work/calls/.claude/skills/summarize-call/"
+
+if [ ! -d "$BEST_ROOT/work/calls/.git" ]; then
+  printf 'skip: calls repo is not cloned at %s\n' "$BEST_ROOT/work/calls"
+  exit 0
+fi
+
+RSYNC_ARGS=(
+  -acO --delete --exclude=.env --exclude=.venv --exclude=data/
+  --exclude=__pycache__/
+)
+
+if [ "${1:-}" = "--check" ]; then
+  changes="$(rsync -n --itemize-changes "${RSYNC_ARGS[@]}" "$SOURCE" "$TARGET")"
+  if [ -n "$changes" ]; then
+    printf 'calls summarize-call mirror is stale:\n%s\n' "$changes" >&2
+    printf 'Run %s/bin/sync-project-skills, then commit calls too.\n' "$DOTFILES_ROOT" >&2
+    exit 1
+  fi
+  printf 'ok: calls summarize-call mirror matches dotfiles\n'
+  exit 0
+fi
+
+mkdir -p "$TARGET"
+rsync "${RSYNC_ARGS[@]}" "$SOURCE" "$TARGET"
+
+# Reuse machine-local dependencies and credentials without tracking them in calls.
+for local_path in .env .venv; do
+  if [ -e "$SOURCE$local_path" ] && [ ! -e "$TARGET$local_path" ]; then
+    ln -s "$SOURCE$local_path" "$TARGET$local_path"
+  fi
+done
+
+printf 'synced: %s -> %s\n' "$SOURCE" "$TARGET"

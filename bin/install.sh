@@ -58,6 +58,10 @@ if [ -e "$BEST/ai/sync-repos.py" ] && git -C "$BEST" rev-parse --git-dir >/dev/n
   echo "  hooks   best -> ai/githooks"
 fi
 
+# Keep project-only skills available in clean/cloud checkouts without installing them
+# globally. This is a no-op when the private calls repo is not cloned.
+"$DOTFILES/bin/sync-project-skills"
+
 # Keep machine-local or secret settings in ~/.claude/settings.local.json (untracked) —
 # never in the tracked settings.json linked above.
 echo "Done."

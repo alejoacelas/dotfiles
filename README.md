@@ -18,8 +18,9 @@ codex/config.reference.toml  snapshot of Codex settings (Codex owns the live fil
 shell/zprofile           PATH + dev environment         ->  ~/.zprofile
 git/gitconfig            git identity + gh credentials  ->  ~/.gitconfig
 Brewfile                 every Homebrew tap/formula/cask
-bin/install.sh           creates and repairs the symlinks
-hooks/pre-commit         blocks committing obvious secrets
+bin/install.sh           creates links and refreshes project-skill mirrors
+bin/sync-project-skills  updates/checks private project mirrors
+hooks/pre-commit         blocks secrets and stale project-skill mirrors
 AGENTS.md, CLAUDE.md     links to this README for repo-local agent instructions
 ```
 
@@ -31,21 +32,20 @@ Markdown file's uncommitted changes carry the `;;` marker.
 
 ## Project-only plugins
 
-Keep public skills that should not load globally under `plugins/`. Each project enables
-its plugin in `.claude/settings.json`; a local relative symlink can also expose the skill
-at its ordinary project path for immediate edits.
+Keep public skills that should not load globally under `plugins/`. Projects that must
+work in isolated or cloud checkouts carry a generated mirror.
 
 | Public source | Project wiring |
 |---|---|
-| [`plugins/summarize-call/`](plugins/summarize-call/) | `calls/.claude/settings.json` plus `calls/.claude/skills/summarize-call` |
+| [`plugins/summarize-call/`](plugins/summarize-call/) | `calls/.claude/skills/summarize-call/` |
 
 The marketplace at [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
-lets a clean or cloud checkout fetch the plugin from GitHub. Locally, both repos assume
-their documented locations under `~/best`; the calls link resolves directly to the
-plugin's skill folder. Edit through either local path and commit content changes here.
-Do not put project-only skills under `claude/skills/`, which `install.sh` exposes
-globally. A skill's `.env`, `.venv/`, and generated `data/` stay ignored beside its
-public source.
+also makes the plugin independently installable. Edit the public source here, run
+`bin/sync-project-skills`, then commit and push both repos. The dotfiles pre-commit hook
+blocks source changes while the calls mirror differs; `bin/install.sh` also refreshes it.
+Do not edit the generated mirror or put project-only skills under `claude/skills/`, which
+`install.sh` exposes globally. The mirror's ignored `.env` and `.venv` link to the local
+source; generated `data/` remains private to `calls`.
 
 The root `AGENTS.md` and `CLAUDE.md` link to this README, so agents editing this repo see
 the ownership map automatically.
