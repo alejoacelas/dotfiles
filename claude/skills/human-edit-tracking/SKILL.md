@@ -1,14 +1,15 @@
 ---
 name: human-edit-tracking
-description: Preserve Alejo's uncommitted edits to Markdown before an agent continues editing. Use when a UserPromptSubmit hook reports a Markdown file whose uncommitted changes carry the ;; marker, and when creating or updating a file's human_edit_tracking history.
+description: Preserve Alejo's uncommitted edits to AGENTS.md, CLAUDE.md, and README.md before an agent continues editing; use for other Markdown only when Alejo explicitly asks or a UserPromptSubmit hook reports a new ;; marker. Also use when creating or updating human_edit_tracking history.
 ---
 
 # Human edit tracking
 
-Alejo types `;;` inside his own edits to Markdown files. The user-prompt hook reports
-any file that is dirty against `HEAD` and whose added lines carry the marker. Treat
-the diff as evidence, not an authorship verdict: compare it with your own actions and
-the conversation.
+Human-edit tracking is off by default. Track only `AGENTS.md`, `CLAUDE.md`, and
+`README.md`; files Alejo explicitly asks to track; or files whose new edits contain
+`;;`. Before changing one of the three instruction files, inspect its uncommitted diff.
+For a marked edit, the user-prompt hook reports the diff. Treat the diff as evidence,
+not an authorship verdict: compare it with your own actions and the conversation.
 
 - If the changes are clearly Alejo's, record every addition, deletion, and replacement
   verbatim under `human_edit_tracking.history` — without the `;;` markers themselves —
@@ -18,8 +19,8 @@ the conversation.
 - Commit the file after recording so the next marked edit diffs against a clean
   baseline.
 
-Use this schema, adding the front matter when a file records its first entry (an
-`enabled:` field left over from the retired always-on tracker is inert; leave it):
+Use this schema, adding the front matter only when a file records its first entry.
+Never add or retain an empty tracking block.
 
 ```yaml
 ---

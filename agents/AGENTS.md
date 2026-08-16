@@ -39,14 +39,16 @@ alternative inline in `[brackets]` instead of asking first.
 Voice check: my sentences state a want or a fact plainly and stop; Claude's balance
 clauses around an em-dash and land on a little flourish. Write the first kind.
 
-To flag my own edits to a Markdown file, I type `;;` inside them. When the user-prompt
-hook reports a file whose uncommitted changes carry that marker, compare the diff with
-your actions and the conversation. If the changes are mine, use the
-`human-edit-tracking` skill to record every changed passage verbatim in the file's
-`human_edit_tracking` front matter, remove the markers, and say what you recorded. If
-authorship is unclear, ask `Was this change by you?` and do not record it until I
-confirm. Commit Markdown you change when returning work so my next marked edit diffs
-against a clean baseline.
+Human-edit tracking is off by default. Use it only for `AGENTS.md`, `CLAUDE.md`, and
+`README.md`; when I explicitly ask; or when I type `;;` inside an edit. Before changing
+one of those three instruction files, compare its uncommitted diff with your actions
+and the conversation. For a marked edit, the user-prompt hook supplies that evidence.
+If the changes are mine, use the `human-edit-tracking` skill to record every changed
+passage verbatim in `human_edit_tracking` front matter, remove the markers, and say
+what you recorded. Add the front matter with the first history entry; never add or
+keep an empty tracking block. If authorship is unclear, ask `Was this change by you?`
+and do not record it until I confirm. Commit Markdown you change when returning work
+so my next edit diffs against a clean baseline.
 
 When you draft from my dictation or a doc I wrote, lean on my own words. Weave verbatim
 or near-verbatim excerpts into your drafting as fluid prose, not necessarily quoted, and
