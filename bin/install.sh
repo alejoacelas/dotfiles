@@ -25,9 +25,39 @@ link() {  # link <repo-relative source> <absolute home target>
   ln -s "$src" "$dst"; printf '  linked  %s\n' "${dst/#$HOME/~}"
 }
 
+real_dir() {  # real_dir <absolute path>; replace an old whole-directory link safely
+  local dst="$1"
+  if [ -L "$dst" ]; then
+    local b="$dst.pre-directory.$(date +%Y%m%d%H%M%S)"
+    mv "$dst" "$b"
+    mkdir -p "$dst"
+    printf '  backed  %s\n' "${b/#$HOME/~}"
+  elif [ -e "$dst" ] && [ ! -d "$dst" ]; then
+    local b="$dst.pre-directory.$(date +%Y%m%d%H%M%S)"
+    mv "$dst" "$b"
+    mkdir -p "$dst"
+    printf '  backed  %s\n' "${b/#$HOME/~}"
+  else
+    mkdir -p "$dst"
+  fi
+}
+
 echo "Linking dotfiles from $DOTFILES"
 link agents/AGENTS.md   "$HOME/.claude/CLAUDE.md"
-link claude/skills      "$HOME/.claude/skills"
+# Keep the personal skills directory real. Standard skill installers place their own
+# entries here; tracked dotfiles skills join them as per-skill links.
+real_dir "$HOME/.claude/skills"
+for skill in "$DOTFILES"/claude/skills/*; do
+  [ -e "$skill" ] || continue
+  name="$(basename "$skill")"
+  link "claude/skills/$name" "$HOME/.claude/skills/$name"
+done
+for skill in "$HOME"/.claude/skills/*; do
+  if [ -L "$skill" ] && [ ! -e "$skill" ]; then
+    printf '  broken  %s -> %s\n' "${skill/#$HOME/~}" "$(readlink "$skill")" >&2
+    exit 1
+  fi
+done
 # Both tools read the same canonical agent instructions.
 link agents/AGENTS.md   "$HOME/.codex/AGENTS.md"
 link codex/hooks.json   "$HOME/.codex/hooks.json"

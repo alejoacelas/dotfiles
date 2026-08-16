@@ -9,7 +9,7 @@ paths each tool reads from. Inspired by [benthamite/dotfiles](https://github.com
 ```
 agents/AGENTS.md         agent instructions (shared)    ->  ~/.claude/CLAUDE.md  &  ~/.codex/AGENTS.md
 claude/settings.json     permissions / model / theme    ->  ~/.claude/settings.json
-claude/skills/           reusable Claude skills         ->  ~/.claude/skills
+claude/skills/           tracked skills                 ->  ~/.claude/skills/<skill>
 plugins/                 public Claude plugins enabled by selected projects
 codex/skills/            personal and shared skills     ->  ~/.codex/skills/<skill>
 codex/hooks.json         Codex lifecycle hooks           ->  ~/.codex/hooks.json
@@ -30,6 +30,13 @@ Both Claude and Codex read the one `agents/AGENTS.md`. Codex rewrites its
 `codex/config.reference.toml` is the snapshot to seed a fresh machine from.
 Both tools run the shared human-edit tracker on user prompts; it stays silent unless a
 Markdown file's uncommitted changes carry the `;;` marker.
+
+`~/.claude/skills` remains a real directory so standard installers can add skills to
+it. `bin/install.sh` links each tracked `claude/skills/<name>` into that directory
+individually. Universal installers may also keep canonical sources in
+`~/.agents/skills`; Claude and Codex both follow the per-agent links they create.
+For example, `orca skills install --skill orca-cli` uses the community installer to
+target Claude Code, Codex, and the universal registry together.
 
 ## Project-only plugins
 

@@ -16,8 +16,11 @@ import sys
 
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
-CLAUDE_SKILLS = os.path.join(BEST, "ai/dotfiles/claude/skills")
-CODEX_SKILLS = os.path.join(HOME, ".codex/skills")
+CLAUDE_SKILLS = os.path.join(HOME, ".claude/skills")
+CODEX_SKILL_ROOTS = [
+    os.path.join(HOME, ".agents/skills"),
+    os.path.join(HOME, ".codex/skills"),
+]
 SKIP_DIRS = {".git", "node_modules", "archive", ".venv", "venv", "__pycache__"}
 
 hard = []   # (path, message) — dangling links, real breakage
@@ -57,36 +60,40 @@ def check_instruction_pairs():
                 drift.append((f"~/{rel}", "CLAUDE.md and AGENTS.md differ"))
 
 
-def list_skills(root):
+def list_skills(*roots):
     out = {}
-    if not os.path.isdir(root):
-        return out
-    for name in os.listdir(root):
-        if name.startswith("."):
+    for root in roots:
+        if not os.path.isdir(root):
             continue
-        sm = os.path.join(root, name, "SKILL.md")
-        if os.path.isfile(sm):
-            out[name] = sm
+        for name in os.listdir(root):
+            if name.startswith("."):
+                continue
+            sm = os.path.join(root, name, "SKILL.md")
+            if os.path.isfile(sm):
+                out.setdefault(name, []).append(sm)
     return out
 
 
 def check_skills():
     claude = list_skills(CLAUDE_SKILLS)
-    codex = list_skills(CODEX_SKILLS)
+    codex = list_skills(*CODEX_SKILL_ROOTS)
     for name in sorted(set(claude) - set(codex)):
         drift.append(("skill", f"{name}: in Claude, not in Codex"))
     for name in sorted(set(codex) - set(claude)):
-        tracked = os.path.realpath(os.path.join(CODEX_SKILLS, name)).startswith(BEST)
+        tracked = any(os.path.realpath(path).startswith(BEST) for path in codex[name])
         tag = "" if tracked else " (UNTRACKED — not in any repo)"
         drift.append(("skill", f"{name}: in Codex, not in Claude{tag}"))
     for name in sorted(set(claude) & set(codex)):
-        if digest(claude[name]) != digest(codex[name]):
+        claude_digests = {digest(path) for path in claude[name]}
+        codex_digests = {digest(path) for path in codex[name]}
+        if claude_digests.isdisjoint(codex_digests):
             drift.append(("skill", f"{name}: Claude and Codex SKILL.md differ"))
 
 
 def main():
     check_dangling(os.path.join(HOME, ".claude"))
-    check_dangling(CODEX_SKILLS)
+    for root in CODEX_SKILL_ROOTS:
+        check_dangling(root)
     check_instruction_pairs()
     check_skills()
 
