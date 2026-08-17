@@ -1,6 +1,6 @@
 ---
 name: call-wiki
-description: Turn a call's "I looked into X" / "I'm not sure about Y" moments into grounded wiki entries under the archive's wiki/ folder — modular ~500-word explainers with every claim traced to a primary source, linked from the call summary. Use after filing a call, or when the user asks to "build the wiki" for a call or research a call's open questions.
+description: Turn a call's "I looked into X" / "I'm not sure about Y" moments into grounded wiki entries under the archive's wiki/ folder — modular ~300-word explainers with every claim traced to a primary source and tagged by confidence, linked from the call summary. Use after filing a call, or when the user asks to "build the wiki" for a call or research a call's open questions.
 ---
 
 # Call wiki — ground what was said on calls
@@ -32,14 +32,14 @@ of preference, and anything only a specific human can answer.
 ## Step 2: Check for an existing entry
 
 `ls wiki/` and grep for the topic. If an entry exists, update it — recheck its
-claims if the Checked date is old, append the new call to its footer — instead
-of writing a near-duplicate. Slugs follow the archive rule: distinctive across
+claims if its Last-updated date is old, append the new call to its
+frontmatter — instead of writing a near-duplicate. Slugs follow the archive rule: distinctive across
 the whole wiki, no generic names.
 
 ## Step 3: Research and write
 
-One entry per topic, `wiki/<topic-slug>.md`, ≤500 words, in the house wiki
-style (the model is `~/best/80k/08-10-mcp-ops-session/wiki/`):
+One entry per topic, `wiki/<topic-slug>.md`, roughly 250–350 words plus the
+Sources list:
 
 ```markdown
 ---
@@ -50,16 +50,24 @@ calls:
   - "[<YYYY-MM-DD> <Person> <slug>](../once/<org-name>/<file>-sum.md)"
 ---
 
+*Last updated <YYYY-MM-DD> · Confidence: <one sentence — where the facts come
+from and the page's default rung, e.g. "documented — from Slack's help center
+read that day; inferred claims tagged inline".>*
+
 <One-line answer a reader could act on without reading further.>
 
-<Body: short sections headed by the reader's next question. Facts with the
-primary source hyperlinked inline in prose — never a bare URL or footnote
-list. Where docs don't answer, prescribe the experiment instead of hedging.
+<Body: short sections. Facts with the primary source hyperlinked inline in
+prose. Where docs don't answer, prescribe the experiment instead of hedging.
 Weave cross-links to other entries into sentences, as [text](<slug>.md).>
 
----
-*Checked <YYYY-MM-DD> — <docs read; what was verified live; what stays
-inferred>.*
+## Q&A from calls
+
+<Only when the page generalizes past the call's question — see framing
+rules. **The question as asked.** The direct answer.>
+
+## Sources
+
+- <the pages read, as links, grouped by site>
 ```
 
 Frontmatter rules:
@@ -74,7 +82,49 @@ Frontmatter rules:
   create a new one only when none does, and name any new category in your
   wrap-up so Alejo can review the grouping.
 - An updated entry appends the new call to `calls:` and refreshes the
-  Checked line.
+  Last-updated line.
+
+Framing rules:
+
+- Write for the underlying problem, not the literal question. When the
+  literal answer is thin or a dead end, go up one level of abstraction to
+  the page a broader audience would search for ("Granola vs Fireflies", not
+  "where is Granola's auto-join setting") — and still answer the call's
+  question explicitly, in the `## Q&A from calls` section when it no longer
+  fits the main narrative.
+- The lead paragraph headlines what solves the problem, not the dead end:
+  "Cowork only schedules, but routines take event triggers" — never "no,
+  scheduled tasks only".
+- Section headings must be self-explanatory standing alone: a short category
+  label ("Sources") or a TLDR of the section ("Cowork: scheduled tasks,
+  hourly at most"). Never a phrase the reader needs the section to decode.
+
+Style rules:
+
+- Short paragraphs, 1–3 sentences, one idea each.
+- Link over quote: when a short, targeted source carries the detail, state
+  the conclusion and link. Quote only where the exact wording is the
+  evidence. Cut plan tiers, beta labels, and platform footnotes unless they
+  change what the reader does.
+- No recommendations unless Alejo made one on the call — then attribute it
+  ("Alejo recommends…"). Otherwise describe features neutrally: no "worth
+  it", "best", or "bottom line" verdicts. Alejo is the one name allowed in
+  a body; call participants never appear.
+
+Confidence ladder — every claim sits on a rung:
+
+- `tried` — someone ran it recently and it worked: verified live this
+  session, or a dated first-hand report from the user or a call participant.
+- `reported` — a dated first-hand account from someone else (forum thread,
+  issue tracker).
+- `documented` — the vendor's current docs state it.
+- `inferred` — stated nowhere; follows from documented behavior. Always
+  pair with the test that settles it: "(inferred — a one-minute test
+  reminder settles it)".
+
+State the page's default rung in the Last-updated line; tag inline, in
+parentheses, only the claims that deviate. (The published site should some
+day show these as a visual cue — noted in `wiki-site/README.md`, not built.)
 
 Research rules:
 
@@ -82,8 +132,8 @@ Research rules:
   session (official docs, changelogs, help centers) or is marked unverified
   with the concrete check that would settle it.
 - For claims about UI — where a setting lives, what a screen shows — verify in
-  the live product with the browser tools when available, and say so in the
-  Checked line. Docs lag interfaces.
+  the live product with the browser tools when available — that claim earns
+  the `tried` rung. Docs lag interfaces.
 - Self-contained: a reader landing on any entry needs other pages only to go
   deeper, not to act.
 - No names or personal information anywhere in the body — general-purpose
