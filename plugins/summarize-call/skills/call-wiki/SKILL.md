@@ -67,8 +67,10 @@ Research rules:
   Checked line. Docs lag interfaces.
 - Self-contained: a reader landing on any entry needs other pages only to go
   deeper, not to act.
-- Keep the body free of call content beyond the question itself. Entries are
-  person-independent and safe to paste to the other participant.
+- No names or personal information anywhere in the body — general-purpose
+  wording only, even when describing the question a call raised. Provenance
+  lives solely in the `Calls:` footer line, which stays in the private repo
+  and is stripped before publishing.
 
 Dispatch one research subagent per topic (they run in parallel); give each the
 question, the claim made on the call, the format above, and the research rules
@@ -82,3 +84,10 @@ verbatim. Then edit their drafts into one voice and spot-check the links.
   to each question that now has an entry. Claims verified wrong get a
   correction in the summary text itself, not just a link.
 - Commit `wiki/` together with the call files.
+
+## Step 5: Publish
+
+Run `wiki-site/publish` (archive root). It sanitizes every entry — stripping
+the `Calls:` footers so no names or archive links go public — rebuilds the
+site, and deploys to Vercel. The published URL is what you paste to the other
+participant.
