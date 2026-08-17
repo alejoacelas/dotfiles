@@ -42,20 +42,39 @@ One entry per topic, `wiki/<topic-slug>.md`, ≤500 words, in the house wiki
 style (the model is `~/best/80k/08-10-mcp-ops-session/wiki/`):
 
 ```markdown
-# <The question, as a question>
+---
+title: <The question, as a question>
+sidebar: <short sidebar name, 2–3 words, distinct within its category>
+category: <group slug — see below>
+calls:
+  - "[<YYYY-MM-DD> <Person> <slug>](../once/<org-name>/<file>-sum.md)"
+---
 
 <One-line answer a reader could act on without reading further.>
 
 <Body: short sections headed by the reader's next question. Facts with the
 primary source hyperlinked inline in prose — never a bare URL or footnote
 list. Where docs don't answer, prescribe the experiment instead of hedging.
-Weave cross-links to other entries into sentences.>
+Weave cross-links to other entries into sentences, as [text](<slug>.md).>
 
 ---
-Calls: [<YYYY-MM-DD> <Person> <slug>](../once/<org-name>/<file>-sum.md)
 *Checked <YYYY-MM-DD> — <docs read; what was verified live; what stays
-inferred>.* ← [Index](README.md)
+inferred>.*
 ```
+
+Frontmatter rules:
+
+- `title`, `sidebar`, and `category` are the only fields that go public;
+  everything else — `calls` provenance included — stays in the private repo
+  (the publish step drops unknown fields by default, so new metadata is safe
+  to add).
+- `category` drives the published sidebar's groups and the URL
+  (`alejo.wiki/<category>/<slug>/`). List the existing ones
+  (`grep -h '^category:' wiki/*.md | sort -u`) and reuse the group that fits;
+  create a new one only when none does, and name any new category in your
+  wrap-up so Alejo can review the grouping.
+- An updated entry appends the new call to `calls:` and refreshes the
+  Checked line.
 
 Research rules:
 
@@ -69,8 +88,8 @@ Research rules:
   deeper, not to act.
 - No names or personal information anywhere in the body — general-purpose
   wording only, even when describing the question a call raised. Provenance
-  lives solely in the `Calls:` footer line, which stays in the private repo
-  and is stripped before publishing.
+  lives solely in the `calls:` frontmatter, which never leaves the private
+  repo.
 
 Dispatch one research subagent per topic (they run in parallel); give each the
 question, the claim made on the call, the format above, and the research rules
@@ -79,7 +98,8 @@ verbatim. Then edit their drafts into one voice and spot-check the links.
 ## Step 4: Link the entries
 
 - `wiki/README.md` (create if missing; first line is the folder's standing
-  question): one line per entry — `- [Question](slug.md) — one-line answer`.
+  question): one line per entry — `- [slug.md](slug.md) — one-line answer` —
+  under a `## <Category>` heading matching the entry's category.
 - In the call summary's Appendix 1, append ` → [wiki](../../wiki/<slug>.md)`
   to each question that now has an entry. Claims verified wrong get a
   correction in the summary text itself, not just a link.
@@ -87,7 +107,7 @@ verbatim. Then edit their drafts into one voice and spot-check the links.
 
 ## Step 5: Publish
 
-Run `wiki-site/publish` (archive root). It sanitizes every entry — stripping
-the `Calls:` footers so no names or archive links go public — rebuilds the
-site, and deploys to Vercel. The published URL is what you paste to the other
-participant.
+Run `wiki-site/publish` (archive root). It sanitizes every entry — keeping
+private frontmatter and names off the public site — rebuilds the Astro site,
+and deploys to [alejo.wiki](https://alejo.wiki). The published URL
+(`alejo.wiki/<category>/<slug>/`) is what you paste to the other participant.
