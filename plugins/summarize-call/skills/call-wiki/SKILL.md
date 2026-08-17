@@ -38,20 +38,23 @@ the whole wiki, no generic names.
 
 ## Step 3: Research and write
 
-One entry per topic, `wiki/<topic-slug>.md`, ≤500 words:
+One entry per topic, `wiki/<topic-slug>.md`, ≤500 words, in the house wiki
+style (the model is `~/best/80k/08-10-mcp-ops-session/wiki/`):
 
 ```markdown
 # <The question, as a question>
 
-<One-line answer.>
+<One-line answer a reader could act on without reading further.>
 
-<Body: facts with inline links to the primary source behind each claim.
-Where docs don't answer, prescribe the experiment instead of hedging.>
+<Body: short sections headed by the reader's next question. Facts with the
+primary source hyperlinked inline in prose — never a bare URL or footnote
+list. Where docs don't answer, prescribe the experiment instead of hedging.
+Weave cross-links to other entries into sentences.>
 
 ---
 Calls: [<YYYY-MM-DD> <Person> <slug>](../once/<org-name>/<file>-sum.md)
-Related: [<other-entry>.md](<other-entry>.md)
-Checked: <YYYY-MM-DD> — <which docs were read; what was verified live>
+*Checked <YYYY-MM-DD> — <docs read; what was verified live; what stays
+inferred>.* ← [Index](README.md)
 ```
 
 Research rules:
@@ -62,9 +65,10 @@ Research rules:
 - For claims about UI — where a setting lives, what a screen shows — verify in
   the live product with the browser tools when available, and say so in the
   Checked line. Docs lag interfaces.
+- Self-contained: a reader landing on any entry needs other pages only to go
+  deeper, not to act.
 - Keep the body free of call content beyond the question itself. Entries are
   person-independent and safe to paste to the other participant.
-- Drop the Related line when nothing relates; link liberally when it does.
 
 Dispatch one research subagent per topic (they run in parallel); give each the
 question, the claim made on the call, the format above, and the research rules
