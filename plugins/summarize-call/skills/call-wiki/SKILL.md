@@ -107,7 +107,14 @@ verbatim. Then edit their drafts into one voice and spot-check the links.
 
 ## Step 5: Publish
 
-Run `wiki-site/publish` (archive root). It sanitizes every entry — keeping
-private frontmatter and names off the public site — rebuilds the Astro site,
-and deploys to [alejo.wiki](https://alejo.wiki). The published URL
-(`alejo.wiki/<category>/<slug>/`) is what you paste to the other participant.
+First make sure the call's participant has a row in `wiki-site/people.yaml`
+— slug is their first name plus last-name initial (e.g. `katym`), `folders`
+their archive folders. That gives them a public short link,
+`alejo.wiki/<person-slug>`, listing every entry derived from calls with them
+(first name only appears on the page; it stays out of the sidebar and site
+search).
+
+Then run `wiki-site/publish` (archive root). It sanitizes every entry —
+keeping private frontmatter and names off the public site — rebuilds the
+Astro site, and deploys to [alejo.wiki](https://alejo.wiki). End the wrap-up
+with the person's short link — that's what to send them.
