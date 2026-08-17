@@ -4,8 +4,8 @@ set -euo pipefail
 
 DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BEST_ROOT="$(cd "$DOTFILES_ROOT/../.." && pwd)"
-SOURCE="$DOTFILES_ROOT/plugins/summarize-call/skills/summarize-call/"
-TARGET="$BEST_ROOT/work/calls/.claude/skills/summarize-call/"
+SOURCE_ROOT="$DOTFILES_ROOT/plugins/summarize-call/skills"
+TARGET_ROOT="$BEST_ROOT/work/calls/.claude/skills"
 
 if [ ! -d "$BEST_ROOT/work/calls/.git" ]; then
   printf 'skip: calls repo is not cloned at %s\n' "$BEST_ROOT/work/calls"
@@ -18,24 +18,35 @@ RSYNC_ARGS=(
 )
 
 if [ "${1:-}" = "--check" ]; then
-  changes="$(rsync -n --itemize-changes "${RSYNC_ARGS[@]}" "$SOURCE" "$TARGET")"
-  if [ -n "$changes" ]; then
-    printf 'calls summarize-call mirror is stale:\n%s\n' "$changes" >&2
+  stale=0
+  for source in "$SOURCE_ROOT"/*/; do
+    skill="$(basename "$source")"
+    changes="$(rsync -n --itemize-changes "${RSYNC_ARGS[@]}" "$source" "$TARGET_ROOT/$skill/")"
+    if [ -n "$changes" ]; then
+      printf 'calls %s mirror is stale:\n%s\n' "$skill" "$changes" >&2
+      stale=1
+    fi
+  done
+  if [ "$stale" -eq 1 ]; then
     printf 'Run %s/bin/sync-project-skills, then commit calls too.\n' "$DOTFILES_ROOT" >&2
     exit 1
   fi
-  printf 'ok: calls summarize-call mirror matches dotfiles\n'
+  printf 'ok: calls skill mirrors match dotfiles\n'
   exit 0
 fi
 
-mkdir -p "$TARGET"
-rsync "${RSYNC_ARGS[@]}" "$SOURCE" "$TARGET"
+for source in "$SOURCE_ROOT"/*/; do
+  skill="$(basename "$source")"
+  target="$TARGET_ROOT/$skill/"
+  mkdir -p "$target"
+  rsync "${RSYNC_ARGS[@]}" "$source" "$target"
 
-# Reuse machine-local dependencies and credentials without tracking them in calls.
-for local_path in .env .venv; do
-  if [ -e "$SOURCE$local_path" ] && [ ! -e "$TARGET$local_path" ]; then
-    ln -s "$SOURCE$local_path" "$TARGET$local_path"
-  fi
+  # Reuse machine-local dependencies and credentials without tracking them in calls.
+  for local_path in .env .venv; do
+    if [ -e "$source$local_path" ] && [ ! -e "$target$local_path" ]; then
+      ln -s "$source$local_path" "$target$local_path"
+    fi
+  done
+
+  printf 'synced: %s -> %s\n' "$source" "$target"
 done
-
-printf 'synced: %s -> %s\n' "$SOURCE" "$TARGET"

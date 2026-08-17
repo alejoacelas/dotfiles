@@ -166,6 +166,14 @@ for the canonical rules):
    `gdoc cat <id> > /dev/null && gdoc write <id> NOTES.md`. Never recreate the
    doc — the link must stay stable.
 
+### Step 9: Wiki pass
+
+Follow the `call-wiki` skill (sibling to this one): harvest the call's "I
+looked into / I'm not sure" moments, research each against primary sources,
+and file grounded entries in the archive's `wiki/`, linked from the summary's
+open questions. Runs last so the Google Doc snapshot stays free of
+repo-relative links.
+
 ## Filing rule
 
 ```
@@ -191,5 +199,6 @@ For a batch, dispatch one subagent per call so cleaning stays off the main
 context. Give each: the doc id, the confirmed participant names, the full
 contents of both reference files (subagents can also Read them from this
 skill folder), and the exact output paths. Each agent runs its own Steps 4–6
-(earlier same-person calls are already committed); run Steps 7–8 once at the
-end, over the whole batch — parallel agents can't see each other's slugs.
+(earlier same-person calls are already committed); run Steps 7–9 once at the
+end, over the whole batch — parallel agents can't see each other's slugs, and
+the wiki pass must dedupe topics across the batch's calls.
