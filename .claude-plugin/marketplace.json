@@ -6,8 +6,8 @@
   "description": "Alejo's public project-scoped Claude plugins",
   "plugins": [
     {
-      "name": "summarize-call",
-      "source": "./plugins/summarize-call",
+      "name": "calls",
+      "source": "./plugins/calls",
       "description": "Fetch, clean, summarize, and archive Granola calls",
       "repository": "https://github.com/alejoacelas/dotfiles"
     }

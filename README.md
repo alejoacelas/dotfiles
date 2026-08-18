@@ -43,9 +43,13 @@ target Claude Code, Codex, and the universal registry together.
 Keep public skills that should not load globally under `plugins/`. Projects that must
 work in isolated or cloud checkouts carry a generated mirror.
 
+Name each plugin for the whole package, normally with a concise noun; name its skills
+for their individual actions. For example, `calls` contains `summarize-call` and
+`call-wiki`.
+
 | Public source | Project wiring |
 |---|---|
-| [`plugins/summarize-call/`](plugins/summarize-call/) | `calls/.claude/skills/summarize-call/` |
+| [`plugins/calls/`](plugins/calls/) | `calls/.claude/skills/{call-wiki,summarize-call}/` |
 
 The marketplace at [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
 also makes the plugin independently installable. Edit the public source here, run

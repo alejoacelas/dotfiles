@@ -1,9 +1,9 @@
-# Project-only skill link
+# Project-only call skills
 
-The public `summarize-call` source moved from the private calls repo to
-`plugins/summarize-call/skills/summarize-call/`. `bin/sync-project-skills` mirrors its
-tracked files into `calls/.claude/skills/summarize-call/`; the dotfiles pre-commit hook
-blocks source commits while that mirror differs.
+The public `calls` plugin contains the `summarize-call` and `call-wiki` skills.
+`bin/sync-project-skills` mirrors their tracked files into
+`calls/.claude/skills/`; the dotfiles pre-commit hook blocks source commits while
+either mirror differs. The plugin uses the package noun; each skill names its action.
 
 Checks:
 

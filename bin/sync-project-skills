@@ -4,7 +4,7 @@ set -euo pipefail
 
 DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BEST_ROOT="$(cd "$DOTFILES_ROOT/../.." && pwd)"
-SOURCE_ROOT="$DOTFILES_ROOT/plugins/summarize-call/skills"
+SOURCE_ROOT="$DOTFILES_ROOT/plugins/calls/skills"
 TARGET_ROOT="$BEST_ROOT/work/calls/.claude/skills"
 
 if [ ! -d "$BEST_ROOT/work/calls/.git" ]; then
@@ -43,8 +43,12 @@ for source in "$SOURCE_ROOT"/*/; do
 
   # Reuse machine-local dependencies and credentials without tracking them in calls.
   for local_path in .env .venv; do
-    if [ -e "$source$local_path" ] && [ ! -e "$target$local_path" ]; then
-      ln -s "$source$local_path" "$target$local_path"
+    if [ -e "$source$local_path" ]; then
+      if [ -L "$target$local_path" ]; then
+        ln -sfn "$source$local_path" "$target$local_path"
+      elif [ ! -e "$target$local_path" ]; then
+        ln -s "$source$local_path" "$target$local_path"
+      fi
     fi
   done
 

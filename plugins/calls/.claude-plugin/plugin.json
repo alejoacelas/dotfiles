@@ -1,7 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "summarize-call",
-  "displayName": "Summarize Call",
+  "name": "calls",
+  "version": "1.0.0",
+  "displayName": "Calls",
   "description": "Fetch, clean, summarize, and archive Granola calls",
   "author": {
     "name": "Alejo Acelas",
