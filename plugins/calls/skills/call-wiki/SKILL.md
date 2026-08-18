@@ -171,6 +171,17 @@ verbatim. Then edit their drafts into one voice and spot-check the links.
   correction in the summary text itself, not just a link.
 - Commit `wiki/` together with the call files.
 
+## Feedback log
+
+`wiki/feedback-log.md` (private; the publish step skips it) collects Alejo's
+feedback on existing wiki pages and what changed in response — the raw
+material for improving this skill. Whenever he critiques a page ("not general
+enough", "too dense"), append an entry as part of acting on it: date and
+scope heading, his comment **verbatim** (never paraphrased), one line on what
+changed, and the diff trimmed to the hunks the feedback caused. One entry per
+comment, chronological. When a pattern recurs across entries, promote it into
+this skill's rules and note the promotion in the entry.
+
 ## Step 5: Publish
 
 First make sure the call's participant has a row in `wiki-site/people.yaml`
