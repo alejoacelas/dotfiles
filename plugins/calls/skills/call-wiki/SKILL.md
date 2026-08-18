@@ -162,8 +162,10 @@ verbatim. Then edit their drafts into one voice and spot-check the links.
 ## Step 4: Link the entries
 
 - `wiki/README.md` (create if missing; first line is the folder's standing
-  question): one line per entry — `- [slug.md](slug.md) — one-line answer` —
-  under a `## <Category>` heading matching the entry's category.
+  question): one line per entry — `- [<sidebar name>](<slug>.md) — <one-line
+  answer>` — under a `## <Category>` heading matching the entry's category.
+  Never use a filename as link text: everywhere a reader sees an entry it
+  goes by its `sidebar` name (same rule as cross-links).
 - In the call summary's Appendix 1, append ` → [wiki](../../wiki/<slug>.md)`
   to each question that now has an entry. Claims verified wrong get a
   correction in the summary text itself, not just a link.
