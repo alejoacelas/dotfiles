@@ -50,9 +50,9 @@ calls:
   - "[<YYYY-MM-DD> <Person> <slug>](../once/<org-name>/<file>-sum.md)"
 ---
 
-*Last updated <YYYY-MM-DD> · Confidence: <one sentence — where the facts come
-from and the page's default rung, e.g. "documented — from Slack's help center
-read that day; inferred claims tagged inline".>*
+*Last updated <YYYY-MM-DD> · Confidence: <rung> — <short provenance clause;
+name any deviating claims, e.g. "documented — Slack's help center and
+developer docs; the channel-reminder silence is inferred">.*
 
 <One-line answer a reader could act on without reading further.>
 
@@ -130,8 +130,10 @@ Confidence ladder — every claim sits on a rung:
   reminder settles it)".
 
 State the page's default rung in the Last-updated line; tag inline, in
-parentheses, only the claims that deviate. (The published site should some
-day show these as a visual cue — noted in `wiki-site/README.md`, not built.)
+parentheses, only the claims that deviate — exactly `(inferred — <note>)` or
+`(reported — <note>)`, since the publish step turns that pattern into a
+hover-underline on the claim and rung words in the header line into pills
+linking the /confidence/ ladder page (`wiki-site/pages/confidence.md`).
 
 Research rules:
 
