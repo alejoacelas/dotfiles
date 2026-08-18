@@ -67,7 +67,7 @@ rules. **The question as asked.** The direct answer.>
 
 ## Sources
 
-- <the pages read, as links, grouped by site>
+- <one bullet per page read: [<page title>](<url>) — <site>>
 ```
 
 Frontmatter rules:
@@ -102,6 +102,13 @@ Framing rules:
 Style rules:
 
 - Short paragraphs, 1–3 sentences, one idea each.
+- Three or more parallel items — triggers, source pages, feature lists — are
+  bullets, one item per bullet, never a comma-run in prose.
+- Say each fact once. In a ~300-word page nothing repeats; at most a
+  one-line recap at the end.
+- Cross-link text is the target entry's `sidebar` name or a natural phrase,
+  never the filename: "see [Event triggers](claude-event-triggers.md)", not
+  "see claude-event-triggers.md".
 - Link over quote: when a short, targeted source carries the detail, state
   the conclusion and link. Quote only where the exact wording is the
   evidence. Cut plan tiers, beta labels, and platform footnotes unless they
@@ -128,6 +135,11 @@ day show these as a visual cue — noted in `wiki-site/README.md`, not built.)
 
 Research rules:
 
+- Before drafting, skim the existing wiki entries to calibrate scope and
+  level of detail against neighbors and catch overlaps. For pages comparing
+  products or surfaces, also pull the vendor's own feature list — a
+  comparison that misses a major feature (a whole browser extension, say)
+  fails review.
 - No claim from memory. Every fact traces to a page actually fetched this
   session (official docs, changelogs, help centers) or is marked unverified
   with the concrete check that would settle it.
