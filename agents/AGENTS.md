@@ -102,6 +102,12 @@ summarize it into a folder that does go public.
 
 ## Other principles and conventions
 
+- When writing Markdown for Orca, use collapsibles only as
+  `<details class="orca-details">` with a plain `<summary>` and a Markdown body;
+  never nest them. Escape HTML-like strings inside collapsible code blocks. Split
+  HTML-bearing files before 50,000 characters. See
+  [Orca Markdown collapsibles](../reproduce/orca-markdown-collapsibles.md).
+
 - Do not use Orca to create tabs, terminals or worktrees for sub-agents unless I
   explicitly ask.
 
