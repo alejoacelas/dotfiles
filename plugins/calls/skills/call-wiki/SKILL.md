@@ -133,7 +133,9 @@ State the page's default rung in the Last-updated line; tag inline, in
 parentheses, only the claims that deviate — exactly `(inferred — <note>)` or
 `(reported — <note>)`, since the publish step turns that pattern into a
 hover-underline on the claim and rung words in the header line into pills
-linking the /confidence/ ladder page (`wiki-site/pages/confidence.md`).
+linking the /confidence/ ladder page (`wiki-site/pages/confidence.md`). The
+publish step also colors the date by age (amber past one month, red past
+two), so refreshing a rechecked entry's date matters.
 
 Research rules:
 
