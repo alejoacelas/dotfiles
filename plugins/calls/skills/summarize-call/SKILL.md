@@ -145,8 +145,8 @@ Mirror the call into Drive and record it in the folder index (see the archive
 for the canonical rules):
 
 1. Create one combined Google Doc with `gog docs create "<title>" --file <tmp.md>`
-   (concatenate a leading `# Summary`, the summary, a `# Transcript` heading, then the
-   transcript into a temp file first), titled
+   (concatenate a leading `# Summary`, the summary minus its frontmatter, a
+   `# Transcript` heading, then the transcript into a temp file first), titled
    `<YYYY-MM-DD> Alejo-<Other> <Two Word Slug>` — names capitalized, dash between
    (e.g. `Alejo-Jørgen`), slug in Title Case. One doc, two sections — the API can't
    make true Docs tabs. Never use the Google Drive MCP `create_file` tool for archive

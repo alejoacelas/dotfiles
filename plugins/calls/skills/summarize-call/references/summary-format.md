@@ -5,6 +5,10 @@ Create comprehensive, chronological summaries that help the user re-envision and
 ## Document structure
 
 ```markdown
+---
+kind: coaching
+---
+
 # Meeting summary: [Title]
 
 **Date:** YYYY-MM-DD
@@ -68,6 +72,17 @@ Create comprehensive, chronological summaries that help the user re-envision and
 
 **[Dynamic 2]:** Explanation...
 ```
+
+## Frontmatter
+
+Every summary opens with YAML frontmatter carrying `kind:` — one lowercase
+word for what the call was. `coaching` is the one that matters downstream
+(the wiki's intro articles are mined from coaching calls): use it when the
+user is walking the other person through AI tooling on their work. Otherwise
+pick the plain word that fits — `advice`, `hiring`, `collab`, `intro`, … —
+inventing a new one only when none of the existing kinds
+(`grep -rh '^kind:' once/*/ many/*/ | sort -u`) fits. Frontmatter is
+private: strip it when concatenating the summary into the Google Doc.
 
 ## Formatting guidelines
 
