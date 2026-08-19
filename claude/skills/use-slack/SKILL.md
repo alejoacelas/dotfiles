@@ -1,5 +1,5 @@
 ---
-name: slack-80000-hours
+name: use-slack
 description: Connect to and work with the 80,000 Hours and AI Uplift for EA Slack workspaces using the signed-in user's Slack web-session credentials. Use for either workspace's setup, authentication checks, channel and DM lookup, message search and history, thread retrieval, permalinks, or user-approved message sending.
 ---
 
