@@ -9,9 +9,9 @@ paths each tool reads from. Inspired by [benthamite/dotfiles](https://github.com
 ```
 agents/AGENTS.md         agent instructions (shared)    ->  ~/.claude/CLAUDE.md  &  ~/.codex/AGENTS.md
 claude/settings.json     permissions / model / theme    ->  ~/.claude/settings.json
-claude/skills/           tracked skills                 ->  ~/.claude/skills/<skill>
+claude/skills/           Claude-compatible skills       ->  ~/.claude/skills/<skill>
 plugins/                 public Claude plugins enabled by selected projects
-codex/skills/            personal and shared skills     ->  ~/.codex/skills/<skill>
+codex/skills/            Codex-compatible skills        ->  ~/.agents/skills/<skill> & ~/.codex/skills/<skill>
 codex/hooks.json         Codex lifecycle hooks           ->  ~/.codex/hooks.json
 codex/rules/             Codex rules                    ->  ~/.codex/rules
 codex/config.reference.toml  snapshot of Codex settings (Codex owns the live file)
@@ -31,12 +31,19 @@ Both Claude and Codex read the one `agents/AGENTS.md`. Codex rewrites its
 Both tools run the shared human-edit tracker on user prompts; it stays silent unless a
 Markdown file's uncommitted changes carry the `;;` marker.
 
-`~/.claude/skills` remains a real directory so standard installers can add skills to
-it. `bin/install.sh` links each tracked `claude/skills/<name>` into that directory
-individually. Universal installers may also keep canonical sources in
-`~/.agents/skills`; Claude and Codex both follow the per-agent links they create.
-For example, `orca skills install --skill orca-cli` uses the community installer to
-target Claude Code, Codex, and the universal registry together.
+The product directories are compatibility lists, not necessarily canonical sources.
+A shared skill may live under `claude/skills` and have a relative link under
+`codex/skills`; `use-slack` does this. Put a skill in both lists only after it
+works in both agents. `bin/check-agent-config` reports one-sided skills and fails if a
+Codex-compatible skill is absent from either Codex registry.
+
+`~/.claude/skills`, `~/.agents/skills`, and `~/.codex/skills` remain real directories
+so standard installers can add entries. `bin/install.sh` links Claude-compatible
+skills into the first and Codex-compatible skills into both Codex registries. The
+universal registry matters when a host such as Orca gives Codex an account-specific
+home instead of `~/.codex`. For example, `orca skills install --skill orca-cli` uses
+the community installer to target Claude Code, Codex, and the universal registry.
+The installer also removes dangling dotfiles-owned links left by skill renames.
 
 ## Project-only plugins
 

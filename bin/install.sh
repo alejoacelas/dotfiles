@@ -42,6 +42,23 @@ real_dir() {  # real_dir <absolute path>; replace an old whole-directory link sa
   fi
 }
 
+prune_stale_dotfiles_skill_links() {  # prune_stale_dotfiles_skill_links <registry>
+  local root="$1" skill target
+  [ -d "$root" ] || return
+  for skill in "$root"/*; do
+    [ -L "$skill" ] || continue
+    target="$(readlink "$skill")"
+    case "$target" in
+      "$DOTFILES"/claude/skills/*|"$DOTFILES"/codex/skills/*)
+        if [ ! -e "$skill" ]; then
+          unlink "$skill"
+          printf '  pruned  %s (stale dotfiles skill)\n' "${skill/#$HOME/~}"
+        fi
+        ;;
+    esac
+  done
+}
+
 echo "Linking dotfiles from $DOTFILES"
 link agents/AGENTS.md   "$HOME/.claude/CLAUDE.md"
 # Keep the personal skills directory real. Standard skill installers place their own
@@ -62,14 +79,24 @@ done
 link agents/AGENTS.md   "$HOME/.codex/AGENTS.md"
 link codex/hooks.json   "$HOME/.codex/hooks.json"
 link codex/rules        "$HOME/.codex/rules"
-# Codex owns ~/.codex/skills/.system, so link each personal skill without replacing
-# the directory. Shared skills can be symlinked into codex/skills from claude/skills.
+# Codex owns ~/.codex/skills/.system, so link each compatible skill without replacing
+# the directory. ~/.agents/skills is the universal root used by account-scoped Codex
+# runtimes such as Orca. Shared skills can be symlinked into codex/skills from
+# claude/skills; that entry is the explicit compatibility decision.
+real_dir "$HOME/.agents/skills"
 for skill in "$DOTFILES"/codex/skills/*; do
   [ -e "$skill" ] || continue
   name="$(basename "$skill")"
+  link "codex/skills/$name" "$HOME/.agents/skills/$name"
   link "codex/skills/$name" "$HOME/.codex/skills/$name"
 done
 link claude/skills/human-edit-tracking "$HOME/.codex/skills/human-edit-tracking"
+prune_stale_dotfiles_skill_links "$HOME/.claude/skills"
+prune_stale_dotfiles_skill_links "$HOME/.agents/skills"
+prune_stale_dotfiles_skill_links "$HOME/.codex/skills"
+for root in "$HOME"/Library/Application\ Support/orca/codex-accounts/*/home/skills; do
+  prune_stale_dotfiles_skill_links "$root"
+done
 # codex/config.toml is NOT linked: Codex rewrites it constantly (trust entries,
 # timestamps), so it owns ~/.codex/config.toml directly. codex/config.reference.toml
 # is a tracked snapshot to seed a fresh machine from.

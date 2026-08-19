@@ -119,5 +119,11 @@ summarize it into a folder that does go public.
 
 ## Useful tools
 
+- Before saying a skill is unavailable, search
+  `~/best/ai/dotfiles/{claude,codex}/skills` and
+  `~/{.agents,.claude,.codex}/skills`. `codex/skills` is the explicit list of
+  Codex-compatible dotfiles skills; its entries may point to canonical sources under
+  `claude/skills`.
+
 Batch related secret-dependent CLI calls into one `secretspec run ... -- sh -c '...'`
 invocation so one fingerprint approval covers the workflow.

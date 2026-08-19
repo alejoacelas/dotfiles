@@ -11,16 +11,22 @@ Two failure modes this catches:
 Run standalone, or from machine-checkup / the sync-repos check.
 """
 import hashlib
+import glob
 import os
 import sys
 
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
+DOTFILES = os.path.join(BEST, "ai/dotfiles")
 CLAUDE_SKILLS = os.path.join(HOME, ".claude/skills")
+TRACKED_CODEX_SKILLS = os.path.join(DOTFILES, "codex/skills")
 CODEX_SKILL_ROOTS = [
     os.path.join(HOME, ".agents/skills"),
     os.path.join(HOME, ".codex/skills"),
 ]
+ORCA_CODEX_SKILL_ROOTS = glob.glob(
+    os.path.join(HOME, "Library/Application Support/orca/codex-accounts/*/home/skills")
+)
 SKIP_DIRS = {".git", "node_modules", "archive", ".venv", "venv", "__pycache__"}
 
 hard = []   # (path, message) — dangling links, real breakage
@@ -90,12 +96,24 @@ def check_skills():
             drift.append(("skill", f"{name}: Claude and Codex SKILL.md differ"))
 
 
+def check_tracked_codex_installation():
+    """Every explicitly Codex-compatible skill must reach both Codex registries."""
+    tracked = list_skills(TRACKED_CODEX_SKILLS)
+    for root in CODEX_SKILL_ROOTS:
+        installed = list_skills(root)
+        for name in sorted(set(tracked) - set(installed)):
+            hard.append((root, f"missing tracked Codex skill {name}"))
+
+
 def main():
     check_dangling(os.path.join(HOME, ".claude"))
     for root in CODEX_SKILL_ROOTS:
         check_dangling(root)
+    for root in ORCA_CODEX_SKILL_ROOTS:
+        check_dangling(root)
     check_instruction_pairs()
     check_skills()
+    check_tracked_codex_installation()
 
     if hard:
         print("HARD — silent load failures (fix these):")

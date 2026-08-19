@@ -50,3 +50,37 @@ left the already-current `orchestration` unchanged. Afterward:
   dangling.
 
 This exercises a real replacement, not only a reinstall or dry run.
+
+## Account-scoped Codex homes
+
+On 2026-08-19, an Orca-hosted Codex session could not see the Slack skill even though
+its links under `~/.claude/skills` and `~/.codex/skills` resolved. Orca had given that account its own
+Codex home, so the session loaded that account's `skills/` plus the universal
+`~/.agents/skills` registry, not the user's `~/.codex/skills` registry.
+
+The failure had three layers:
+
+- The canonical skill existed under `claude/skills`.
+- Its link under `codex/skills` already marked it Codex-compatible.
+- `bin/install.sh` installed that link only into `~/.codex/skills`, outside the
+  runtime's discovery roots.
+
+`bin/install.sh` now installs every entry in `codex/skills` into both
+`~/.agents/skills` and `~/.codex/skills`. `bin/check-agent-config` treats a missing
+tracked skill in either registry as a hard error. Global agent instructions also
+require searching the canonical and installed skill roots before declaring a skill
+unavailable.
+
+The skill was renamed to `use-slack` during validation. That left the former installed
+links dangling and exposed a second silent-failure path. The installer now removes a
+dangling registry link only when its target is inside this dotfiles repo; the checker
+also scans Orca account skill roots for dangling links.
+
+The compatibility lists remain asymmetric on purpose. The checker reports a
+Claude-only or Codex-only skill as drift so it is visible without loading untested
+instructions into the other agent.
+
+Validation used a fresh Codex CLI 0.147.0 app-server process and
+`skills/list` with `forceReload: true`. It returned `use-slack` from the canonical
+dotfiles path. The skill's `auth` command also resolved the expected 80,000 Hours
+workspace through `~/.agents/skills/use-slack`.
