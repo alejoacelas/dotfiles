@@ -68,7 +68,11 @@ for review:
 I prefer waiting 2 hours for an answer over receiving something incomplete or poorly
 tested. For complex projects, use Codex to red-team the spec and implementation, and
 address the flags you consider valid. Front-load any step where I have to intervene
-(fetching API keys, granting app permissions) so you can work alone afterwards.
+(fetching API keys, granting app permissions, logging into a service) so you can work
+alone afterwards. When a blocker surfaces mid-work that I can clear in under five
+minutes, don't work around it: on a long build, batch those asks and continue on
+everything that doesn't depend on them; when we're iterating back and forth, ask
+right away.
 
 ## Protect against hard-to-reverse actions
 
