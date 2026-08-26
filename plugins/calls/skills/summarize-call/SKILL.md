@@ -95,7 +95,30 @@ The transcript only labels speakers `Me`/`Other`. Take the other participant's
 name from the meeting title when it's clearly there; if the title is generic
 ("Weekly sync"), ask the user. **Never guess names.**
 
-### Step 4: Garble inventory, then tidied transcript
+### Step 4: Create the Google Doc and hand over the link
+
+Create the mirror doc *before* cleaning anything, so the link can be shared
+while the transcript and summary are still being written. Title it
+`<YYYY-MM-DD> Alejo-<Other> <Two Word Slug>` — names capitalized, dash between
+(e.g. `Alejo-Jørgen`), slug in Title Case; pick a provisional slug from the
+meeting title and a skim of the transcript (Step 8 may rename it).
+
+```bash
+printf 'Being written — check back shortly.\n' > /tmp/placeholder.md
+gdoc --json new "<title>" --file /tmp/placeholder.md      # → id, url
+gdoc --json add-tab <id> "Transcript"
+GDOC_PY=$(head -1 "$(which gdoc)" | cut -c3-)             # gdoc's interpreter
+$GDOC_PY scripts/rename_tab.py <id> t.0 "Summary"        # first tab is born "Tab 1"
+```
+
+Post the doc URL (`.../document/d/<id>/edit`) in the reply as soon as it
+exists, before continuing. Two tabs, **Summary** then **Transcript** — the
+Docs API supports tabs now, so no more two-section single body. `gdoc` uses the
+personal account (`gdoc config` → `default_account`); never use the Google
+Drive MCP `create_file` tool for archive docs — it authenticates as the 80k
+contractor account, and `gdoc diff`/`write` then fail on a doc it doesn't own.
+
+### Step 5: Garble inventory, then tidied transcript
 
 Before writing the transcript, write a temporary garble inventory to
 `data/garbles/<YYYY-MM-DD>-<person>.md`: one line per span where the
@@ -112,14 +135,14 @@ garbles are fixed silently — no bracket note; only unresolved ones stay marked
 
 Save to the filing path below with the `-trans.md` suffix.
 
-### Step 5: Summary
+### Step 6: Summary
 
 Write a chronological summary following
 [`references/summary-format.md`](references/summary-format.md).
 
 Save next to the transcript with the `-sum.md` suffix.
 
-### Step 6: Cross-call clarification pass
+### Step 7: Cross-call clarification pass
 
 Reread the finished transcript and summary against the garble inventory and
 try to resolve what the single call couldn't — by reading previous calls with
@@ -129,29 +152,31 @@ people; the wider archive may only confirm the spelling of a name or tool
 already spoken in this call. Remove `[unclear]` markers as garbles resolve
 (no resolution note — just the fixed text), then delete the inventory file.
 
-### Step 7: Check slug distinctiveness
+### Step 8: Check slug distinctiveness
 
 After writing, list every call file in the archive (`ls once/*/ many/*/`). If
 the new slug is generic ("intro-call", "uplift-consulting") or overlaps too
 much with an earlier call's slug — in any folder — rename the new pair to
 something more distinctive of this call's content, and consider renaming the
 earlier colliding pair too (use `git mv` when the old files are committed).
-The test: from the slug alone, could you tell the calls apart?
+The test: from the slug alone, could you tell the calls apart? If the slug
+changed, retitle the doc: `gdoc rename <id> "<new title>"`.
 
-### Step 8: Google Doc + folder index + NOTES.md
+### Step 9: Fill the Google Doc + folder index + NOTES.md
 
-Mirror the call into Drive and record it in the folder index (see the archive
-`CLAUDE.md` → **Folder index + Google Doc mirror** and **Per-person NOTES.md**
-for the canonical rules):
+Push the finished files into the doc from Step 4 and record the call in the
+folder index (see the archive `CLAUDE.md` → **Folder index + Google Doc
+mirror** and **Per-person NOTES.md** for the canonical rules):
 
-1. Create one combined Google Doc with `gog docs create "<title>" --file <tmp.md>`
-   (concatenate a leading `# Summary`, the summary minus its frontmatter, a
-   `# Transcript` heading, then the transcript into a temp file first), titled
-   `<YYYY-MM-DD> Alejo-<Other> <Two Word Slug>` — names capitalized, dash between
-   (e.g. `Alejo-Jørgen`), slug in Title Case. One doc, two sections — the API can't
-   make true Docs tabs. Never use the Google Drive MCP `create_file` tool for archive
-   docs: it authenticates as the 80k contractor account, while every archive doc must
-   be owned by the personal account `gog`/`gdoc` use, or later `gdoc diff`/`write` fail.
+1. Fill both tabs (`write` strips YAML frontmatter itself; `--tab` leaves the
+   sibling tab alone; `cat` sets the read baseline `write` requires). The tab
+   title already names the section, so don't prepend a `# Summary` /
+   `# Transcript` heading:
+   ```bash
+   gdoc cat <id> > /dev/null
+   gdoc write <id> <sum.md>   --tab Summary
+   gdoc write <id> <trans.md> --tab Transcript
+   ```
 2. Add a bullet to the person's folder `CLAUDE.md` (create it on the first call):
    `**<date> · <slug>**` + a `[gdoc]` link (`.../document/d/<id>/edit`, by ID so a
    rename can't break it) + a one-or-two-sentence gist, newest first.
@@ -159,20 +184,21 @@ for the canonical rules):
    `## <YYYY-MM-DD> <Slug In Title Case>` section, newest first, with 3–10 bullets
    of under 12 words each — written for the people who were on the call, so each
    bullet brings back a moment rather than explains itself. Then sync its mirror
-   doc: on first creation, `gog docs create "Alejo-<Other> Call Notes" --file
+   doc: on first creation, `gdoc new "Alejo-<Other> Call Notes" --file
    NOTES.md`, append `---` + `Google Doc: <link>` to the file, and push once so
    the doc includes the footer; on later calls, `gdoc diff <id> NOTES.md` first
    and fold any remote edits into the local file, then
    `gdoc cat <id> > /dev/null && gdoc write <id> NOTES.md`. Never recreate the
    doc — the link must stay stable.
 
-### Step 9: Wiki pass
+### Step 10 (off by default): Wiki pass
 
-Follow the `call-wiki` skill (sibling to this one): harvest the call's "I
-looked into / I'm not sure" moments, research each against primary sources,
-and file grounded entries in the archive's `wiki/`, linked from the summary's
-open questions. Runs last so the Google Doc snapshot stays free of
-repo-relative links.
+Do **not** run this unless the user asks for a wiki pass. Kept here so it can
+be re-enabled later: follow the `call-wiki` skill (sibling to this one) —
+harvest the call's "I looked into / I'm not sure" moments, research each
+against primary sources, and file grounded entries in the archive's `wiki/`,
+linked from the summary's open questions. It runs last so the Google Doc
+snapshot stays free of repo-relative links.
 
 ## Filing rule
 
@@ -198,7 +224,8 @@ people/work/<once|many>/<org-firstname>/<YYYY-MM-DD>-<two-word-slug>-sum.md
 For a batch, dispatch one subagent per call so cleaning stays off the main
 context. Give each: the doc id, the confirmed participant names, the full
 contents of both reference files (subagents can also Read them from this
-skill folder), and the exact output paths. Each agent runs its own Steps 4–6
-(earlier same-person calls are already committed); run Steps 7–9 once at the
-end, over the whole batch — parallel agents can't see each other's slugs, and
-the wiki pass must dedupe topics across the batch's calls.
+skill folder), and the exact output paths. Create every doc (Step 4) and post
+all links first, then have each agent run its own Steps 5–7 (earlier
+same-person calls are already committed); run Steps 8–9 once at the end, over
+the whole batch — parallel agents can't see each other's slugs. A wiki pass,
+if requested, must dedupe topics across the batch's calls.
