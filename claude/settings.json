@@ -228,7 +228,8 @@
     "vercel@claude-plugins-official": true,
     "codex@codex-plugin-cc": true,
     "hive@alignment-hive": true,
-    "model-router-aarch64-apple-darwin@alignment-hive": true
+    "model-router-aarch64-apple-darwin@alignment-hive": true,
+    "llms-fetch-mcp@alignment-hive": true
   },
   "extraKnownMarketplaces": {
     "codex-plugin-cc": {
