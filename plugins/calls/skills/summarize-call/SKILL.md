@@ -112,9 +112,29 @@ $GDOC_PY scripts/rename_tab.py <id> t.0 "Summary"        # first tab is born "Ta
 ```
 
 Post the doc URL (`.../document/d/<id>/edit`) in the reply as soon as it
-exists, before continuing. Two tabs, **Summary** then **Transcript** — the
-Docs API supports tabs now, so no more two-section single body. `gdoc` uses the
-personal account (`gdoc config` → `default_account`); never use the Google
+exists, before continuing.
+
+Then share it with the other participant, finding their email in this order
+and stopping at the first hit:
+
+1. The calendar event for the call — its attendees' emails. The 80k calendar
+   is reachable through the Google Calendar MCP (`search_events` /
+   `list_events` around the call time); the personal one through
+   `gog -a default -j calendar events --from <iso> --to <iso>`.
+2. Recent email with them — Gmail MCP `search_threads` (80k) or
+   `gog -a default -j gmail search "<first> <last>"` (personal); take the
+   address the person actually wrote from.
+
+```bash
+gdoc share <id> <email> --role writer
+```
+
+Say in the reply who the doc was shared with. If neither source yields an
+email, say so and skip sharing — never guess an address. (Mirror docs are
+shared, never emailed: the link in the reply is for Alejo to send.)
+
+Two tabs, **Summary** then **Transcript** — the Docs API supports tabs now, so
+no more two-section single body. `gdoc` uses the personal account (`gdoc config` → `default_account`); never use the Google
 Drive MCP `create_file` tool for archive docs — it authenticates as the 80k
 contractor account, and `gdoc diff`/`write` then fail on a doc it doesn't own.
 
