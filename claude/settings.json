@@ -27,7 +27,21 @@
       "Bash(python3:*)",
       "Bash(pip3:*)",
       "Bash(pip:*)",
-      "Bash(gh:*)"
+      "Bash(gh:*)",
+      "Bash(codex-companion)",
+      "Bash(codex-companion help)",
+      "Bash(codex-companion help *)",
+      "Bash(codex-companion review)",
+      "Bash(codex-companion review *)",
+      "Bash(codex-companion adversarial-review)",
+      "Bash(codex-companion adversarial-review *)",
+      "Bash(codex-companion plan-review *)",
+      "Bash(codex-companion status)",
+      "Bash(codex-companion status *)",
+      "Bash(codex-companion result)",
+      "Bash(codex-companion result *)",
+      "Bash(codex-companion cancel)",
+      "Bash(codex-companion cancel *)"
     ]
   },
   "model": "fable",
@@ -58,6 +72,27 @@
             "type": "command",
             "command": "if [ -z \"${HOME-}\" ]; then { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; else case \"${OSTYPE-}\" in msys*|cygwin*|win32*) if [ -f \"$HOME/.orca/agent-hooks/claude-hook.cmd\" ]; then case \"$HOME\" in *\\&*|*\\^*|*\\(*|*\\)*|*\\;*|*,*|*=*|*%*|*\\!*) if [ -f \"$SYSTEMROOT/System32/WindowsPowerShell/v1.0/powershell.exe\" ]; then \"$SYSTEMROOT/System32/WindowsPowerShell/v1.0/powershell.exe\" -NoProfile -ExecutionPolicy Bypass -EncodedCommand JABoAG8AbQBlAFAAYQB0AGgAIAA9ACAAJABlAG4AdgA6AEgATwBNAEUAIAAtAHIAZQBwAGwAYQBjAGUAIAAnAF4ALwAoAFsAQQAtAFoAYQAtAHoAXQApAC8AJwAsACAAJwAkADEAOgAvACcAOwAgACQAcwBjAHIAaQBwAHQAUABhAHQAaAAgAD0AIABKAG8AaQBuAC0AUABhAHQAaAAgACQAaABvAG0AZQBQAGEAdABoACAAJwAuAG8AcgBjAGEAXABhAGcAZQBuAHQALQBoAG8AbwBrAHMAXABjAGwAYQB1AGQAZQAtAGgAbwBvAGsALgBjAG0AZAAnADsAIABpAGYAIAAoAFQAZQBzAHQALQBQAGEAdABoACAALQBMAGkAdABlAHIAYQBsAFAAYQB0AGgAIAAkAHMAYwByAGkAcAB0AFAAYQB0AGgAIAAtAFAAYQB0AGgAVAB5AHAAZQAgAEwAZQBhAGYAKQAgAHsAIAAmACAAJABzAGMAcgBpAHAAdABQAGEAdABoADsAIABlAHgAaQB0ACAAJABMAEEAUwBUAEUAWABJAFQAQwBPAEQARQAgAH0AOwAgAFsAQwBvAG4AcwBvAGwAZQBdADoAOgBJAG4ALgBSAGUAYQBkAFQAbwBFAG4AZAAoACkAIAB8ACAATwB1AHQALQBOAHUAbABsADsAIABlAHgAaQB0ACAAMAA=; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi ;; *) \"$HOME/.orca/agent-hooks/claude-hook.cmd\" ;; esac; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi ;; *) if [ -f \"$HOME/.orca/agent-hooks/claude-hook.sh\" ] && [ -r \"$HOME/.orca/agent-hooks/claude-hook.sh\" ] && [ -x \"$HOME/.orca/agent-hooks/claude-hook.sh\" ]; then /bin/sh \"$HOME/.orca/agent-hooks/claude-hook.sh\"; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi ;; esac; fi",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Write(*/.claude/plans/*.md)",
+            "command": "node \"$HOME/best/ai/dotfiles/claude/hooks/codex/plan-write-reminder.mjs\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/best/ai/dotfiles/claude/hooks/codex/code-review-reminder.mjs\"",
+            "timeout": 5
           }
         ]
       }
@@ -185,17 +220,29 @@
       }
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "if [ -z \"${HOME-}\" ]; then { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; else case \"${OSTYPE-}\" in msys*|cygwin*|win32*) if [ -f \"$HOME/.orca/agent-hooks/claude-statusline.cmd\" ]; then case \"$HOME\" in *\\&*|*\\^*|*\\(*|*\\)*|*\\;*|*,*|*=*|*%*|*\\!*) if [ -f \"$SYSTEMROOT/System32/WindowsPowerShell/v1.0/powershell.exe\" ]; then \"$SYSTEMROOT/System32/WindowsPowerShell/v1.0/powershell.exe\" -NoProfile -ExecutionPolicy Bypass -EncodedCommand JABoAG8AbQBlAFAAYQB0AGgAIAA9ACAAJABlAG4AdgA6AEgATwBNAEUAIAAtAHIAZQBwAGwAYQBjAGUAIAAnAF4ALwAoAFsAQQAtAFoAYQAtAHoAXQApAC8AJwAsACAAJwAkADEAOgAvACcAOwAgACQAcwBjAHIAaQBwAHQAUABhAHQAaAAgAD0AIABKAG8AaQBuAC0AUABhAHQAaAAgACQAaABvAG0AZQBQAGEAdABoACAAJwAuAG8AcgBjAGEAXABhAGcAZQBuAHQALQBoAG8AbwBrAHMAXABjAGwAYQB1AGQAZQAtAHMAdABhAHQAdQBzAGwAaQBuAGUALgBjAG0AZAAnADsAIABpAGYAIAAoAFQAZQBzAHQALQBQAGEAdABoACAALQBMAGkAdABlAHIAYQBsAFAAYQB0AGgAIAAkAHMAYwByAGkAcAB0AFAAYQB0AGgAIAAtAFAAYQB0AGgAVAB5AHAAZQAgAEwAZQBhAGYAKQAgAHsAIAAmACAAJABzAGMAcgBpAHAAdABQAGEAdABoADsAIABlAHgAaQB0ACAAJABMAEEAUwBUAEUAWABJAFQAQwBPAEQARQAgAH0AOwAgAFsAQwBvAG4AcwBvAGwAZQBdADoAOgBJAG4ALgBSAGUAYQBkAFQAbwBFAG4AZAAoACkAIAB8ACAATwB1AHQALQBOAHUAbABsADsAIABlAHgAaQB0ACAAMAA=; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi ;; *) \"$HOME/.orca/agent-hooks/claude-statusline.cmd\" ;; esac; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi ;; *) if [ -f \"$HOME/.orca/agent-hooks/claude-statusline.sh\" ] && [ -r \"$HOME/.orca/agent-hooks/claude-statusline.sh\" ] && [ -x \"$HOME/.orca/agent-hooks/claude-statusline.sh\" ]; then /bin/sh \"$HOME/.orca/agent-hooks/claude-statusline.sh\"; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi ;; esac; fi"
+  },
   "enabledPlugins": {
-    "vercel@claude-plugins-official": true
+    "vercel@claude-plugins-official": true,
+    "codex@codex-plugin-cc": true
+  },
+  "extraKnownMarketplaces": {
+    "codex-plugin-cc": {
+      "source": {
+        "source": "github",
+        "repo": "Crazytieguy/codex-plugin-cc"
+      }
+    }
   },
   "effortLevel": "high",
+  "remote": {
+    "defaultEnvironmentId": "env_019kvNdUFTaAbmz1F44nmPSN"
+  },
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
   "theme": "dark",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true,
-  "statusLine": {
-    "type": "command",
-    "command": "if [ -z \"${HOME-}\" ]; then { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; else case \"${OSTYPE-}\" in msys*|cygwin*|win32*) if [ -f \"$HOME/.orca/agent-hooks/claude-statusline.cmd\" ]; then case \"$HOME\" in *\\&*|*\\^*|*\\(*|*\\)*|*\\;*|*,*|*=*|*%*|*\\!*) if [ -f \"$SYSTEMROOT/System32/WindowsPowerShell/v1.0/powershell.exe\" ]; then \"$SYSTEMROOT/System32/WindowsPowerShell/v1.0/powershell.exe\" -NoProfile -ExecutionPolicy Bypass -EncodedCommand JABoAG8AbQBlAFAAYQB0AGgAIAA9ACAAJABlAG4AdgA6AEgATwBNAEUAIAAtAHIAZQBwAGwAYQBjAGUAIAAnAF4ALwAoAFsAQQAtAFoAYQAtAHoAXQApAC8AJwAsACAAJwAkADEAOgAvACcAOwAgACQAcwBjAHIAaQBwAHQAUABhAHQAaAAgAD0AIABKAG8AaQBuAC0AUABhAHQAaAAgACQAaABvAG0AZQBQAGEAdABoACAAJwAuAG8AcgBjAGEAXABhAGcAZQBuAHQALQBoAG8AbwBrAHMAXABjAGwAYQB1AGQAZQAtAHMAdABhAHQAdQBzAGwAaQBuAGUALgBjAG0AZAAnADsAIABpAGYAIAAoAFQAZQBzAHQALQBQAGEAdABoACAALQBMAGkAdABlAHIAYQBsAFAAYQB0AGgAIAAkAHMAYwByAGkAcAB0AFAAYQB0AGgAIAAtAFAAYQB0AGgAVAB5AHAAZQAgAEwAZQBhAGYAKQAgAHsAIAAmACAAJABzAGMAcgBpAHAAdABQAGEAdABoADsAIABlAHgAaQB0ACAAJABMAEEAUwBUAEUAWABJAFQAQwBPAEQARQAgAH0AOwAgAFsAQwBvAG4AcwBvAGwAZQBdADoAOgBJAG4ALgBSAGUAYQBkAFQAbwBFAG4AZAAoACkAIAB8ACAATwB1AHQALQBOAHUAbABsADsAIABlAHgAaQB0ACAAMAA=; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi ;; *) \"$HOME/.orca/agent-hooks/claude-statusline.cmd\" ;; esac; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi ;; *) if [ -f \"$HOME/.orca/agent-hooks/claude-statusline.sh\" ] && [ -r \"$HOME/.orca/agent-hooks/claude-statusline.sh\" ] && [ -x \"$HOME/.orca/agent-hooks/claude-statusline.sh\" ]; then /bin/sh \"$HOME/.orca/agent-hooks/claude-statusline.sh\"; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi ;; esac; fi"
-  }
+  "agentPushNotifEnabled": true
 }
