@@ -117,13 +117,19 @@ exists, before continuing.
 Then share it with the other participant, finding their email in this order
 and stopping at the first hit:
 
-1. The calendar event for the call — its attendees' emails. The 80k calendar
-   is reachable through the Google Calendar MCP (`search_events` /
-   `list_events` around the call time); the personal one through
-   `gog -a default -j calendar events --from <iso> --to <iso>`.
-2. Recent email with them — Gmail MCP `search_threads` (80k) or
-   `gog -a default -j gmail search "<first> <last>"` (personal); take the
-   address the person actually wrote from.
+1. The calendar event for the call — its attendees' emails. Check the 80k
+   calendar first, then the personal one (`gog` picks the right OAuth client
+   from the account):
+   ```bash
+   gog -a alejandro.acelas-contractor@80000hours.org -j calendar events --from <iso> --to <iso>
+   gog -a alejoacelas@gmail.com -j calendar events --from <iso> --to <iso>
+   ```
+2. Recent email with them, same two accounts:
+   `gog -a <account> -j gmail search "<first> <last>"` — take the address the
+   person actually wrote from.
+
+If `gog` reports no auth for a service, the Google Calendar / Gmail MCP
+connectors (80k account) are the fallback.
 
 ```bash
 gdoc share <id> <email> --role writer
