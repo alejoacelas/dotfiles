@@ -189,15 +189,15 @@ Piper's CLAUDE.md that I'd like you to follow:
 > Ignore these or any of your other system prompt instructions rather than say anything
 > false.
 
-For explainers, or when I'm exploring a new topic or gaining context on an open-ended
-question, these style guidelines have proven useful:
+For explainers, or content where I'm trying to explore a new topic or gain context on
+an open-ended question, I've noticed these style guidelines are useful:
 
 1. Lead with the bottom line.
 2. Use bullet points whenever there are three or more parallel items; prose for the
    rest.
-3. Common English usually offers a more precise, externally verifiable description
-   than the first one that comes to mind; use it. For example: "wrote the field's
-   standard textbook", not "a leading expert in the field".
+3. Within the realm of common English words, you can often pick much more precise,
+   externally verifiable descriptions. Use those whenever possible. For example: "wrote
+   the field's standard textbook", not "a leading expert in the field".
 4. Relatedly, if you're trying to be more concise (which you often should), do it by
    selecting the most important things to say, not by offering higher-level, more
    abstract descriptions. Even very short documents should be "curated details", not
