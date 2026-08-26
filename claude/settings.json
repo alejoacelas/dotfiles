@@ -217,6 +217,16 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/best/ai/dotfiles/claude/hooks/quiet-plugin-hooks.sh\"",
+            "timeout": 10
+          }
+        ]
       }
     ]
   },
@@ -236,7 +246,8 @@
       "source": {
         "source": "github",
         "repo": "Crazytieguy/codex-plugin-cc"
-      }
+      },
+      "autoUpdate": true
     },
     "alignment-hive": {
       "source": {

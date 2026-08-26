@@ -9,6 +9,7 @@ paths each tool reads from. Inspired by [benthamite/dotfiles](https://github.com
 ```
 agents/AGENTS.md         agent instructions (shared)    ->  ~/.claude/CLAUDE.md  &  ~/.codex/AGENTS.md
 claude/settings.json     permissions / model / theme    ->  ~/.claude/settings.json
+claude/hooks/            Claude hook scripts (referenced by settings.json)
 claude/skills/           Claude-compatible skills       ->  ~/.claude/skills/<skill>
 plugins/                 public Claude plugins enabled by selected projects
 codex/skills/            Codex-compatible skills        ->  ~/.agents/skills/<skill> & ~/.codex/skills/<skill>
