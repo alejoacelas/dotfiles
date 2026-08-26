@@ -200,11 +200,14 @@ mirror** and **Per-person NOTES.md** for the canonical rules):
 1. Fill both tabs (`write` strips YAML frontmatter itself; `--tab` leaves the
    sibling tab alone; `cat` sets the read baseline `write` requires). The tab
    title already names the section, so don't prepend a `# Summary` /
-   `# Transcript` heading:
+   `# Transcript` heading. The Summary tab opens with one attribution line
+   linking this skill (update the URL if the repo moves):
    ```bash
+   ATTR='*Summary and transcript created with the Claude skill available [here](https://github.com/alejoacelas/dotfiles/blob/main/plugins/calls/skills/summarize-call/SKILL.md).*'
+   { printf '%s\n\n' "$ATTR"; awk 'NR==1&&/^---$/{f=1;next} f&&/^---$/{f=0;next} !f' <sum.md>; } > /tmp/sum-doc.md  # frontmatter must not sit below the line
    gdoc cat <id> > /dev/null
-   gdoc write <id> <sum.md>   --tab Summary
-   gdoc write <id> <trans.md> --tab Transcript
+   gdoc write <id> /tmp/sum-doc.md --tab Summary
+   gdoc write <id> <trans.md>      --tab Transcript
    ```
 2. Add a bullet to the person's folder `CLAUDE.md` (create it on the first call):
    `**<date> · <slug>**` + a `[gdoc]` link (`.../document/d/<id>/edit`, by ID so a
