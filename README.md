@@ -26,6 +26,12 @@ AGENTS.md                link to this README for repo-local agent instructions
 CLAUDE.md                link to AGENTS.md
 ```
 
+Claude Code saves settings by replacing the file, which turns the `~/.claude/settings.json`
+symlink into a plain copy. `claude/hooks/relink-settings.sh` runs at every session start:
+if the link is gone it copies the live file into the repo, relinks, and prints a message
+telling you to commit. Don't edit `claude/settings.json` from a session without checking
+`ls -l ~/.claude/settings.json` is still a link.
+
 Both Claude and Codex read the one `agents/AGENTS.md`. Codex rewrites its
 `~/.codex/config.toml` constantly, so it owns that file directly (not symlinked);
 `codex/config.reference.toml` is the snapshot to seed a fresh machine from.

@@ -223,6 +223,11 @@
         "hooks": [
           {
             "type": "command",
+            "command": "bash \"$HOME/best/ai/dotfiles/claude/hooks/relink-settings.sh\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
             "command": "bash \"$HOME/best/ai/dotfiles/claude/hooks/quiet-plugin-hooks.sh\"",
             "timeout": 10
           }
