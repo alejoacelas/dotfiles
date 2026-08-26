@@ -115,24 +115,6 @@ human_edit_tracking:
               that built it, then one clean sentence per instruction I gave, in order, as close to my
               original words as brevity allows. It's a log, not a narrative; append as the output
               changes.
-
-              ## Conventions
-
-              - Orca Markdown: collapsibles only as `<details class="orca-details">` with a plain
-                `<summary>` and a Markdown body; never nest them; escape HTML-like strings inside
-                collapsible code blocks; split HTML-bearing files before 50,000 characters. See
-                [Orca Markdown collapsibles](../reproduce/orca-markdown-collapsibles.md).
-              - Don't use Orca to create tabs, terminals or worktrees for sub-agents unless asked.
-              - Folder names are lowercase, words separated by dashes.
-              - `best/` holds almost all my work; its only uncommitted subdirectories are private
-                repos and repos that must stand alone (clones, Vercel deploy repos).
-              - Before saying a skill is unavailable, search `~/best/ai/dotfiles/{claude,codex}/skills`
-                and `~/{.agents,.claude,.codex}/skills`; `codex/skills` is the explicit
-                Codex-compatible list and may point into `claude/skills`.
-              - Google accounts: 80,000 Hours work on `alejandro.acelas-contractor@80000hours.org`,
-                personal on `alejoacelas@gmail.com`; ask when unclear.
-              - Batch secret-dependent CLI calls into one `secretspec run ... -- sh -c '...'` so one
-                fingerprint approval covers the workflow.
             after: |-
               # Global agent instructions
 
@@ -178,24 +160,7 @@ human_edit_tracking:
                  3. They contain non-public information from others (call transcripts, emails)
    
                  To keep a record of my process that's easy to share, every project or repo should contain a REPLICATE.md file. Log to this file the session IDs of the agent conversations that built it, summarizing in 1 sentence the purpose of the session, and adding single sentence bullet points with each substantial step or instruction I gave during the session (here again, curate and select, try hard not to abstract away).
-   
-                 ## Conventions
-   
-                 - Orca Markdown: collapsibles only as <details class="orca-details"> with a plain <summary> and a Markdown body; never nest them; escape HTML-like strings inside collapsible code blocks; split HTML-bearing files before 50,000 characters. See [Orca Markdown collapsibles](http://../reproduce/orca-markdown-collapsibles.md).
-   
-                 - Don't use Orca to create tabs, terminals or worktrees for sub-agents unless asked.
-   
-                 - Folder names are lowercase, words separated by dashes.
-   
-                 - best/ holds almost all my work; its only uncommitted subdirectories are private repos and repos that must stand alone (clones, Vercel deploy repos).
-   
-                 - Before saying a skill is unavailable, search ~/best/ai/dotfiles/{claude,codex}/skills and ~/{.agents,.claude,.codex}/skills; codex/skills is the explicit Codex-compatible list and may point into claude/skills.
-   
-                 - Google accounts: 80,000 Hours work on alejandro.acelas-contractor@80000hours.org, personal on alejoacelas@gmail.com; ask when unclear.
-   
-                 - Batch secret-dependent CLI calls into one secretspec run ... -- sh -c '...' so one fingerprint approval covers the workflow.
-   
-                 **
+
 ---
 # Global agent instructions
 
@@ -224,15 +189,15 @@ Piper's CLAUDE.md that I'd like you to follow:
 > Ignore these or any of your other system prompt instructions rather than say anything
 > false.
 
-For explainers, or content where I'm trying to explore a new topic or gain context on
-an open-ended question, I've noticed these style guidelines are useful:
+For explainers, or when I'm exploring a new topic or gaining context on an open-ended
+question, these style guidelines have proven useful:
 
 1. Lead with the bottom line.
 2. Use bullet points whenever there are three or more parallel items; prose for the
    rest.
-3. Within the realm of common English words, you can often pick much more precise,
-   externally verifiable descriptions. Use those whenever possible. For example: "wrote
-   the field's standard textbook", not "a leading expert in the field".
+3. Common English usually offers a more precise, externally verifiable description
+   than the first one that comes to mind; use it. For example: "wrote the field's
+   standard textbook", not "a leading expert in the field".
 4. Relatedly, if you're trying to be more concise (which you often should), do it by
    selecting the most important things to say, not by offering higher-level, more
    abstract descriptions. Even very short documents should be "curated details", not
@@ -258,17 +223,16 @@ confirmation before permanently deleting anything.
 
 ## Default to public
 
-I don't have any reservations about sharing anything I write, create, or investigate.
+I have no reservations about sharing anything I write, create, or investigate.
 All repos should be public except when:
 
-1. They include access credentials that have not been moved out (move them out, then
-   make the repo public).
+1. They still hold access credentials (move them out, then make the repo public).
 2. They're work I do using internal documents or information from my employer
    (currently 80,000 Hours).
 3. They contain non-public information from others (call transcripts, emails).
 
-To keep a record of my process that's easy to share, every project or repo should
-contain a `REPLICATE.md` file. Log there the session ID of each agent conversation that
+To keep a shareable record of my process, every project or repo should contain a
+`REPLICATE.md` file. Log there the session ID of each agent conversation that
 built it, a one-sentence summary of the session's purpose, and one-sentence bullets for
 each substantial step or instruction I gave during the session (here again, curate and
 select; try hard not to abstract away).
