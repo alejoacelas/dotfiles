@@ -129,5 +129,10 @@ summarize it into a folder that does go public.
   Codex-compatible dotfiles skills; its entries may point to canonical sources under
   `claude/skills`.
 
+`gdoc` and `gog` hold several Google accounts. Before creating or sharing
+anything, pick the account from the work's context — 80,000 Hours work goes on
+`alejandro.acelas-contractor@80000hours.org`, personal on `alejoacelas@gmail.com`
+— and ask when it isn't clear.
+
 Batch related secret-dependent CLI calls into one `secretspec run ... -- sh -c '...'`
 invocation so one fingerprint approval covers the workflow.

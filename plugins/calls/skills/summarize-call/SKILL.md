@@ -140,9 +140,12 @@ email, say so and skip sharing — never guess an address. (Mirror docs are
 shared, never emailed: the link in the reply is for Alejo to send.)
 
 Two tabs, **Summary** then **Transcript** — the Docs API supports tabs now, so
-no more two-section single body. `gdoc` uses the personal account (`gdoc config` → `default_account`); never use the Google
-Drive MCP `create_file` tool for archive docs — it authenticates as the 80k
-contractor account, and `gdoc diff`/`write` then fail on a doc it doesn't own.
+no more two-section single body. Pass `--account <email>` to every `gdoc` call
+(and `GDOC_ACCOUNT=<email>` to `rename_tab.py`), choosing by the call's context:
+80,000 Hours work → `alejandro.acelas-contractor@80000hours.org`, personal →
+`alejoacelas@gmail.com`; ask if unclear. Never use the Google Drive MCP
+`create_file` tool for archive docs — `gdoc diff`/`write` need a doc the chosen
+`gdoc` account owns.
 
 ### Step 5: Garble inventory, then tidied transcript
 
