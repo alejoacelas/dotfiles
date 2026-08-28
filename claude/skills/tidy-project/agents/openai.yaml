@@ -1,4 +1,0 @@
-interface:
-  display_name: "Tidy Project"
-  short_description: "Reorganize a project after an explicit request"
-  default_prompt: "Use $tidy-project to reorganize this project into a clear current workflow and archive superseded work."
