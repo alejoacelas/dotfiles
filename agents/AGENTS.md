@@ -231,11 +231,18 @@ All repos should be public except when:
    (currently 80,000 Hours).
 3. They contain non-public information from others (call transcripts, emails).
 
-To keep a shareable record of my process, every project or repo should contain a
-`REPLICATE.md` file. Log there the session ID of each agent conversation that
-built it, a one-sentence summary of the session's purpose, and one-sentence bullets for
-each substantial step or instruction I gave during the session (here again, curate and
-select; try hard not to abstract away).
+Use `REPLICATE.md` as a readable record of what substantial agent sessions accomplished.
+Group related work under short titles. Open each entry with one sentence stating what the
+human wanted, then add a few bullets that pair concrete work with what it found, changed,
+or produced.
+
+Keep roadblocks that changed the approach or still limit the result. Use numbers when
+they convey scale or improvement, not merely because they are available. Omit routine
+steps. End each entry with `Agent session [session ID] · Commits [commit hash]`.
+
+Commit the substantive change first, then record its hash in a metadata-only follow-up
+commit. List every change hash when a step needs several commits; label hashes by
+repository when it spans nested repositories. Do not backfill old entries.
 
 ## Conventions
 
