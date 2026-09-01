@@ -97,9 +97,8 @@ prune_stale_dotfiles_skill_links "$HOME/.codex/skills"
 for root in "$HOME"/Library/Application\ Support/orca/codex-accounts/*/home/skills; do
   prune_stale_dotfiles_skill_links "$root"
 done
-# codex/config.toml is NOT linked: Codex rewrites it constantly (trust entries,
-# timestamps), so it owns ~/.codex/config.toml directly. codex/config.reference.toml
-# is a tracked snapshot to seed a fresh machine from.
+# The app owns config.toml; CLI-only overrides live in the explicit cli profile.
+link codex/cli.config.toml "$HOME/.codex/cli.config.toml"
 link shell/zprofile       "$HOME/.zprofile"
 link git/gitconfig        "$HOME/.gitconfig"
 link claude/settings.json "$HOME/.claude/settings.json"

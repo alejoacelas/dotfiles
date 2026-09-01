@@ -15,7 +15,7 @@ plugins/                 public Claude plugins enabled by selected projects
 codex/skills/            Codex-compatible skills        ->  ~/.agents/skills/<skill> & ~/.codex/skills/<skill>
 codex/hooks.json         Codex lifecycle hooks           ->  ~/.codex/hooks.json
 codex/rules/             Codex rules                    ->  ~/.codex/rules
-codex/config.reference.toml  snapshot of Codex settings (Codex owns the live file)
+codex/cli.config.toml     CLI-only settings used with `codex --profile cli`
 shell/zprofile           PATH + dev environment         ->  ~/.zprofile
 git/gitconfig            git identity + gh credentials  ->  ~/.gitconfig
 Brewfile                 every Homebrew tap/formula/cask
@@ -32,9 +32,9 @@ if the link is gone it copies the live file into the repo, relinks, and prints a
 telling you to commit. Don't edit `claude/settings.json` from a session without checking
 `ls -l ~/.claude/settings.json` is still a link.
 
-Both Claude and Codex read the one `agents/AGENTS.md`. Codex rewrites its
-`~/.codex/config.toml` constantly, so it owns that file directly (not symlinked);
-`codex/config.reference.toml` is the snapshot to seed a fresh machine from.
+Both Claude and Codex read the one `agents/AGENTS.md`. The Codex app owns
+`~/.codex/config.toml`; keep it free of CLI overrides. `codex/cli.config.toml` links to
+`~/.codex/cli.config.toml` and loads only when Codex starts with `--profile cli`.
 Both tools run the shared human-edit tracker on user prompts; it stays silent unless a
 Markdown file's uncommitted changes carry the `;;` marker.
 
