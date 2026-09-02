@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deploy to Fly"
+  short_description: "Deploy to the correct personal or work account"
+  default_prompt: "Use $deploy-fly to deploy this project to the appropriate Fly account."
