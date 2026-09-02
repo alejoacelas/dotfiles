@@ -257,6 +257,7 @@ repository when it spans nested repositories. Do not backfill old entries.
 - Before saying a skill is unavailable, search `~/best/ai/dotfiles/{claude,codex}/skills`
   and `~/{.agents,.claude,.codex}/skills`; `codex/skills` is the explicit
   Codex-compatible list and may point into `claude/skills`.
+- For Google Docs and Drive, default to the `gdoc` CLI; start with `gdoc --help`.
 - Google accounts: 80,000 Hours work on `alejandro.acelas-contractor@80000hours.org`,
   personal on `alejoacelas@gmail.com`; ask when unclear.
 - Batch secret-dependent CLI calls into one `secretspec run ... -- sh -c '...'` so one
