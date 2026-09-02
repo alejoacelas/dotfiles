@@ -23,3 +23,15 @@ the `gdoc` CLI.
   receives it through its existing symlink.
 
 Agent session unavailable · Commits 0eb16df
+
+## Delegate tasks to Claude Cloud
+
+The human wanted a very small global skill that lets Codex or Claude Code delegate a
+task to Claude Cloud.
+
+- Added one shared skill that commits and pushes the target repository, then runs
+  `claude --cloud "<task>"` from an interactive terminal or PTY.
+- Linked the skill into the global Claude, Codex, and universal skill registries and
+  validated its metadata and cross-agent availability.
+
+Agent session unavailable · Commits a351c7f
