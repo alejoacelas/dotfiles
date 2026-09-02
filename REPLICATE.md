@@ -13,3 +13,13 @@ settings behind `codex --profile cli`.
   Developer Docs MCP remained available as a built-in default without an override.
 
 Agent session 01a05d9c-7599-7c63-9113-11721e0a764f · Commits b4acf91
+
+## Default Google Docs work to gdoc
+
+The human wanted the global Codex instructions to default Google Docs interactions to
+the `gdoc` CLI.
+
+- Added the `gdoc` default to the canonical global `AGENTS.md`; `~/.codex/AGENTS.md`
+  receives it through its existing symlink.
+
+Agent session unavailable · Commits 0eb16df
