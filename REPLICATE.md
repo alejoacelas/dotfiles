@@ -35,3 +35,12 @@ task to Claude Cloud.
   validated its metadata and cross-agent availability.
 
 Agent session unavailable · Commits a351c7f
+
+## Route Fly deployments by account
+
+The human wanted a minimal skill that selects the personal or 80,000 Hours Fly account without replacing the cached login.
+
+- Added account inference, cross-account deployment discovery, migration-preservation, and health-verification instructions.
+- Declared separate personal and work Fly tokens backed by the 1Password Developer-Credentials vault through Secretspec.
+
+Agent session 01a062e9-f966-7570-81f2-cb3923baf5c4 · Commits d270134
