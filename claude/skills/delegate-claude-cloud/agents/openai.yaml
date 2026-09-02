@@ -1,0 +1,4 @@
+interface:
+  display_name: "Delegate to Claude Cloud"
+  short_description: "Commit, push, and start a Claude Cloud task"
+  default_prompt: "Use $delegate-claude-cloud to delegate this task to Claude Cloud."
