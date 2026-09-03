@@ -1,6 +1,6 @@
 ---
 name: namecheap-vercel-domain
-description: Configure and verify Namecheap BasicDNS for Vercel deployments. Use when the user asks to connect, deploy, repeat, or troubleshoot a Vercel custom domain whose DNS is managed in Namecheap, including adding domains with the Vercel CLI, extracting Vercel's required A/CNAME records, changing Namecheap host records in the dashboard, removing Namecheap parking or redirect records, and validating HTTP/HTTPS.
+description: Connect and verify a Vercel deployment on a custom domain using Namecheap BasicDNS. Use whenever a Vercel deployment request includes or suggests a domain name, even if the user does not mention Namecheap, and when connecting or troubleshooting an existing Vercel custom domain. Confirm that Namecheap hosts the domain's DNS before changing records; use deploy-vercel first when the production deployment is not yet live.
 ---
 
 # Namecheap Vercel Domain
@@ -9,17 +9,19 @@ description: Configure and verify Namecheap BasicDNS for Vercel deployments. Use
 
 Use Vercel as the source of truth for DNS records. Do not guess the required A or CNAME values when `vercel domains verify` can report them.
 
+This skill owns the custom-domain stage. If the project is not deployed yet, use
+`deploy-vercel` first and return here after its production alias works.
+
 ## Tools
 
-- Use the Vercel CLI for deploys, project linking, domain attachment, and verification.
+- Use the Vercel CLI for domain attachment and verification.
 - Use browser control for Namecheap. If the user is not logged in, ask them to log in; do not enter or store credentials.
 - Use `dig`, `curl`, and the bundled verifier script for outside-the-dashboard checks.
 
 ## Vercel
 
-1. Deploy or identify the production Vercel project.
-   - New static folder: `npx --yes vercel@latest deploy <path> --prod --yes`
-   - Existing linked project: run from the project directory or pass `--cwd`.
+1. Identify the live production Vercel project and its verified production alias.
+   - If it is not live, invoke `deploy-vercel`; do not duplicate its deployment workflow here.
 2. Add the apex and `www` domains unless the user asks for only one host.
    - `npx --yes vercel@latest domains add example.com <project>`
    - `npx --yes vercel@latest domains add www.example.com <project>`
