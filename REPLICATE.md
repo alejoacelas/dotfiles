@@ -1,18 +1,18 @@
 # REPLICATE
 
-## Split Vercel deployment from custom-domain setup
+## Merge Vercel deployment and custom-domain setup
 
-The human wanted every Vercel deployment to use one deployment skill and any request
-that mentions a domain to continue through the Namecheap domain skill.
+The human wanted every Vercel deployment and its optional Namecheap domain setup handled
+by one skill.
 
-- Replaced the combined, hardcoded workflow with `deploy-vercel`, which deploys and
-  verifies the production alias before handing off domain work.
-- Made `namecheap-vercel-domain` trigger whenever a Vercel request includes a domain,
-  while requiring confirmation that Namecheap hosts the DNS before editing records.
-- Exposed both skills to Claude and Codex, removed the obsolete live skill link, and
-  validated both packages.
+- Made `deploy-vercel` trigger for every Vercel deployment and route requests containing
+  a domain into a directly linked Namecheap reference after the production alias works.
+- Moved domain attachment, live-record lookup, BasicDNS edits, HTTPS checks, and the
+  verifier script into the deployment skill's progressively loaded resources.
+- Exposed the consolidated skill to Claude and Codex, removed both obsolete skill names,
+  and preserved the old browser cache outside the discovery registries.
 
-Agent session unavailable · Commits c188695
+Agent session unavailable · Commits c188695, 55dff99, b4c9637
 
 ## Isolate Codex CLI configuration
 
