@@ -246,6 +246,11 @@ repository when it spans nested repositories. Do not backfill old entries.
 
 ## Conventions
 
+- Keep shared project instructions in `AGENTS.md`. Make the project's `CLAUDE.md`
+  contain `@AGENTS.md` so Claude Code imports the same instructions. Do not maintain
+  duplicate instruction text in both files.
+- Keep `README.md` for the human-facing project overview. Put agent behavior and
+  workflow requirements in `AGENTS.md`, even when the README also explains the project.
 - Orca Markdown: collapsibles only as `<details class="orca-details">` with a plain
   `<summary>` and a Markdown body; never nest them; escape HTML-like strings inside
   collapsible code blocks; split HTML-bearing files before 50,000 characters. See
