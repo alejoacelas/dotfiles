@@ -44,3 +44,14 @@ The human wanted a minimal skill that selects the personal or 80,000 Hours Fly a
 - Declared separate personal and work Fly tokens backed by the 1Password Developer-Credentials vault through Secretspec.
 
 Agent session 01a062e9-f966-7570-81f2-cb3923baf5c4 · Commits d270134
+
+## Standardize shared project instructions
+
+The human wanted new project guidance to default to `AGENTS.md` while remaining
+available to Claude Code.
+
+- Added a global convention that `AGENTS.md` is the project instruction source and
+  `CLAUDE.md` imports it with `@AGENTS.md` instead of duplicating it.
+- Kept human-facing overviews in README files and agent behavior in `AGENTS.md`.
+
+Agent session 01a066be-9d3f-7272-a7fd-c9ca1c982a6e · Commits 71449f8
