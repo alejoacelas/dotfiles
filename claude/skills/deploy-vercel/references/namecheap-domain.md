@@ -1,16 +1,11 @@
----
-name: namecheap-vercel-domain
-description: Connect and verify a Vercel deployment on a custom domain using Namecheap BasicDNS. Use whenever a Vercel deployment request includes or suggests a domain name, even if the user does not mention Namecheap, and when connecting or troubleshooting an existing Vercel custom domain. Confirm that Namecheap hosts the domain's DNS before changing records; use deploy-vercel first when the production deployment is not yet live.
----
-
-# Namecheap Vercel Domain
+# Namecheap custom domain
 
 ## Rule
 
 Use Vercel as the source of truth for DNS records. Do not guess the required A or CNAME values when `vercel domains verify` can report them.
 
-This skill owns the custom-domain stage. If the project is not deployed yet, use
-`deploy-vercel` first and return here after its production alias works.
+Use this procedure only after the project's production alias works. It owns the
+custom-domain stage of `deploy-vercel`.
 
 ## Tools
 
@@ -56,7 +51,7 @@ This skill owns the custom-domain stage. If the project is not deployed yet, use
 Run the bundled verifier after Namecheap changes:
 
 ```bash
-/Users/alejo/.codex/skills/namecheap-vercel-domain/scripts/verify-vercel-namecheap-domain.sh example.com
+scripts/verify-namecheap-domain.sh example.com
 ```
 
 Also run the direct Vercel checks:
@@ -87,5 +82,5 @@ If DNS verifies but HTTPS fails, treat it as certificate provisioning until prov
 - **Namecheap login page:** ask the user to log in in the browser and tell you when ready.
 - **Codex Chrome Extension unavailable:** use the in-app browser if the user is logged in there; otherwise ask the user to enable the extension or sign in where browser control works.
 - **`Failed to retrieve the record!` deleting a URL redirect:** remove the redirect on the Domain tab, then return to Advanced DNS.
-- **Vercel project not linked:** run `vercel link --cwd <dir> --yes` or pass the project name explicitly.
+- **Vercel project not live:** return to the deployment workflow in `SKILL.md`.
 - **Git or repo state is irrelevant to DNS:** keep source/deploy commits tidy if code changed, but do not block DNS work on repository metadata.

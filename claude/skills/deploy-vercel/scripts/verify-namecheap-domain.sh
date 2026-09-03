@@ -4,7 +4,7 @@ set -u
 domain="${1:-}"
 if [[ -z "$domain" || "$domain" == "-h" || "$domain" == "--help" ]]; then
   cat <<'USAGE'
-Usage: verify-vercel-namecheap-domain.sh <domain>
+Usage: verify-namecheap-domain.sh <domain>
 
 Checks authoritative DNS, Vercel domain verification, and HTTP/HTTPS reachability
 for an apex domain plus its www host.

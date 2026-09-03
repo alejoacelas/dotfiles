@@ -1,12 +1,12 @@
 ---
 name: deploy-vercel
-description: Deploy or redeploy a site, app, or folder to Vercel production and verify the production URL. Use for every Vercel deployment, whether or not the user asks for a custom domain. When the request includes or suggests a domain name, also use the namecheap-vercel-domain skill after deployment.
+description: Deploy or redeploy a site, app, or folder to Vercel production and verify the production URL. Use for every Vercel deployment. When the request includes or suggests a custom domain, also attach it, configure its Namecheap BasicDNS records when Namecheap hosts its DNS, and verify DNS and HTTPS.
 ---
 
 # Deploy to Vercel
 
-Deploy the requested project to Vercel production. Keep custom-domain configuration in
-`namecheap-vercel-domain`; this skill owns the deployment itself.
+Deploy the requested project to Vercel production, then configure any requested custom
+domain.
 
 ## Deploy
 
@@ -37,8 +37,10 @@ as an incomplete deployment. Report the exact failure instead of describing it a
 ## Custom domains
 
 If the user names or proposes a domain anywhere in the request, continue with
-`namecheap-vercel-domain` after the production alias works. Pass it the deployed project,
-domain, and verified production URL. Do not guess DNS records inside this skill.
+[`references/namecheap-domain.md`](references/namecheap-domain.md) after the production
+alias works. Read the reference before attaching the domain or changing DNS; it contains
+the complete workflow, boundaries, verification, and recovery steps. Do not guess DNS
+records.
 
 ## Boundaries
 
@@ -46,4 +48,3 @@ domain, and verified production URL. Do not guess DNS records inside this skill.
   unless the user asks to change them.
 - Keep `.vercel/` and `.env.local` out of public repositories.
 - Do not enter account credentials. If Vercel requires login, ask the user to complete it.
-

@@ -1,5 +1,4 @@
 interface:
   display_name: "Deploy to Vercel"
-  short_description: "Deploy and verify a Vercel production site"
-  default_prompt: "Use $deploy-vercel to deploy this project to Vercel production and verify the live URL."
-
+  short_description: "Deploy to Vercel with optional custom DNS"
+  default_prompt: "Use $deploy-vercel to deploy this project to Vercel production, configure any custom domain I provide, and verify the live URLs."
