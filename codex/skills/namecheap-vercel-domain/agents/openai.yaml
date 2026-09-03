@@ -1,4 +1,0 @@
-interface:
-  display_name: "Namecheap Vercel Domain"
-  short_description: "Configure Namecheap DNS for Vercel"
-  default_prompt: "Use $namecheap-vercel-domain after $deploy-vercel to connect the production deployment to my custom domain and verify DNS and HTTPS."
