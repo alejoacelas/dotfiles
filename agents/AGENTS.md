@@ -263,7 +263,11 @@ repository when it spans nested repositories. Do not backfill old entries.
   and `~/{.agents,.claude,.codex}/skills`; `codex/skills` is the explicit
   Codex-compatible list and may point into `claude/skills`.
 - For Google Docs and Drive, default to the `gdoc` CLI; start with `gdoc --help`.
-- Google accounts: 80,000 Hours work on `alejandro.acelas-contractor@80000hours.org`,
-  personal on `alejoacelas@gmail.com`; ask when unclear.
+- `gcloud`, `gdoc`, `gog` and Fly have both personal and 80,000 Hours identities. Infer
+  the right one from the project, verify it before every write and select it explicitly;
+  never rely on the cached active account.
+- Use `gcloud --configuration` and `--project`, `gdoc --account`, `gog --account`, and
+  `FLY_80K_TOKEN` or `FLY_PERSONAL_TOKEN`. Google accounts are
+  `alejandro.acelas-contractor@80000hours.org` and `alejoacelas@gmail.com`.
 - Batch secret-dependent CLI calls into one `secretspec run ... -- sh -c '...'` so one
   fingerprint approval covers the workflow.
