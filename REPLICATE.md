@@ -69,3 +69,17 @@ available to Claude Code.
 - Kept human-facing overviews in README files and agent behavior in `AGENTS.md`.
 
 Agent session 01a066be-9d3f-7272-a7fd-c9ca1c982a6e · Commits 71449f8
+
+## Ordinary folders and session-start context
+
+The human wanted a smaller folder and shared-instruction system, preserving handwriting and leaving active sessions alone.
+
+- Made best an ordinary container; moved dotfiles to its root, writing sites into me, reference material into wiki, and the requested collections into others. One-offs receive individual repositories and remotes.
+- Consolidated safe-to-move retired work under best/archive. Preserved original Git history in private local recovery storage; active tools, once, 80k and calls migrations are deferred to a temporary Orca monitor.
+- Installed one context script on SessionStart for Claude and both Codex configurations. Ordered YAML groups refresh automatically; edited generated text blocks overwrites, and local project wording stays editable.
+- Moved global handwritten-edit history verbatim out of routinely loaded instructions. Added separate marked-edit evidence and explicit destination-instruction reading.
+- Passed 15 tests, full installation and fresh-context probes through both Codex configurations, Claude and the Codex app-server protocol. Desktop UI clicks were not tested.
+
+Project-specific commits are recorded in their REPLICATE files. The complete migration ledger is in ~/.local/share/agent-context/private/migration/COMMITS.md.
+
+Agent session 01a072fe-84d6-73f3-b37e-3bb912088c38 · Commits dotfiles: 1a4a26b, cd85a78, f64a22e, b44c5f1
