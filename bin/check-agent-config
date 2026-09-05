@@ -17,7 +17,7 @@ import sys
 
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
-DOTFILES = os.path.join(BEST, "ai/dotfiles")
+DOTFILES = os.path.join(BEST, "dotfiles")
 CLAUDE_SKILLS = os.path.join(HOME, ".claude/skills")
 TRACKED_CODEX_SKILLS = os.path.join(DOTFILES, "codex/skills")
 CODEX_SKILL_ROOTS = [
@@ -61,7 +61,7 @@ def check_instruction_pairs():
             a = os.path.join(dirpath, "AGENTS.md")
             if os.path.islink(a) or os.path.islink(c):
                 continue  # one points at the other on purpose
-            if digest(c) != digest(a):
+            if open(c).read().strip() != "@AGENTS.md" and digest(c) != digest(a):
                 rel = os.path.relpath(dirpath, HOME)
                 drift.append((f"~/{rel}", "CLAUDE.md and AGENTS.md differ"))
 

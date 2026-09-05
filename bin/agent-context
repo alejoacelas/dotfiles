@@ -1,0 +1,350 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["PyYAML==6.0.2"]
+# ///
+"""Session-start context sync. Explicit groups, guarded writes, separate edit evidence."""
+from __future__ import annotations
+import argparse
+import difflib
+import fcntl
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import sys
+import tempfile
+import yaml
+
+DOTFILES = Path(__file__).resolve().parents[1]
+STATE = Path.home() / '.local/state/agent-context'
+BEGIN = re.compile(r'<!-- agent-context:begin sha256=([a-f0-9]{64}) -->\n')
+END = '<!-- agent-context:end -->\n'
+NAME = re.compile(r'[a-z0-9][a-z0-9-]*\Z')
+
+
+def digest(data):
+    return hashlib.sha256(data.encode()).hexdigest()
+
+
+def atomic(path, content, before=None):
+    """Compare immediately before replacing; refuse symlink outputs."""
+    if path.is_symlink():
+        raise ValueError(f'{path}: output is a symlink; adopt the real file explicitly')
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temp = tempfile.mkstemp(prefix='.' + path.name + '.', dir=path.parent)
+    try:
+        with os.fdopen(fd, 'w') as f:
+            f.write(content)
+            f.flush()
+            os.fsync(f.fileno())
+        if path.exists():
+            os.chmod(temp, path.stat().st_mode & 0o777)
+        if before is not None and (not path.exists() or path.read_text() != before):
+            raise ValueError(f'{path}: changed during sync; retry next session')
+        os.replace(temp, path)
+    finally:
+        if os.path.exists(temp):
+            os.unlink(temp)
+
+
+def split(text):
+    if not text.startswith('---\n'):
+        return {}, '', text
+    stop = text.find('\n---\n', 4)
+    if stop == -1:
+        raise ValueError('Unclosed YAML front matter')
+    header = text[:stop + 5]
+    data = yaml.safe_load(text[4:stop]) or {}
+    if not isinstance(data, dict):
+        raise ValueError('Front matter must be a mapping')
+    return data, header, text[stop + 5:]
+
+
+def declaration(path):
+    data, _, _ = split(path.read_text())
+    return data.get('agent_context')
+
+
+def locate(cwd):
+    """Find a declaration without crossing a repository boundary."""
+    for root in [cwd, *cwd.parents]:
+        path = root / 'AGENTS.md'
+        if path.is_file() and declaration(path) is not None:
+            return path
+        if (root / '.git').exists():
+            break
+    return None
+
+
+def sync_project(path, check=False):
+    old = path.read_text()
+    data, header, body = split(old)
+    config = data.get('agent_context')
+    if not isinstance(config, dict) or config.get('version') != 1:
+        raise ValueError(f'{path}: agent_context.version must be 1')
+    groups = config.get('groups')
+    visibility = config.get('visibility')
+    if not isinstance(groups, list) or not all(isinstance(x, str) and NAME.fullmatch(x) for x in groups):
+        raise ValueError(f'{path}: groups must be a list of lowercase names')
+    if len(groups) != len(set(groups)) or visibility not in ('public', 'private'):
+        raise ValueError(f'{path}: duplicate groups or missing visibility')
+    pieces = []
+    for group in groups:
+        public = DOTFILES / 'agents/groups' / (group + '.md')
+        private = Path.home() / '.local/share/agent-context/private/groups' / (group + '.md')
+        if public.exists() and private.exists():
+            raise ValueError(f'Ambiguous public and private group: {group}')
+        source = public if public.exists() else private
+        if source == private and visibility != 'private':
+            raise ValueError(f'{path}: private group {group} requires a private project')
+        if not source.is_file():
+            raise ValueError(f'Missing shared group: {group}')
+        _, _, content = split(source.read_text())
+        pieces.append(f'<!-- shared group: {group} -->\n' + content.rstrip() + '\n')
+    generated = '\n'.join(pieces)
+    if len(generated.encode()) > 24000:
+        raise ValueError(f'{path}: shared context exceeds 24 KB; reduce the groups')
+    starts = list(BEGIN.finditer(body))
+    if len(starts) != 1 or body.count(END) != 1:
+        raise ValueError(f'{path}: generated boundaries missing or duplicated; explicit adoption required')
+    start = starts[0]
+    stop = body.index(END)
+    if stop < start.end() or digest(body[start.end():stop]) != start.group(1):
+        raise ValueError(f'{path}: generated text was edited; preserve it and reconcile with its shared source')
+    replacement = f'<!-- agent-context:begin sha256={digest(generated)} -->\n' + generated + END
+    desired = header + body[:start.start()] + replacement + body[stop + len(END):]
+    changed = desired != old
+    if changed and not check:
+        atomic(path, desired, old)
+    return changed, generated
+
+
+def adopt(path, groups, visibility):
+    old = path.read_text() if path.exists() else ''
+    data, _, body = split(old)
+    if 'agent_context' in data or 'agent-context:begin' in body:
+        raise ValueError('Already adopted; edit the YAML declaration instead')
+    data['agent_context'] = {'version': 1, 'groups': groups, 'visibility': visibility}
+    initial = ('---\n' + yaml.safe_dump(data, sort_keys=False) + '---\n' +
+               f'<!-- agent-context:begin sha256={digest("")} -->\n{END}\n' + body)
+    # Validate all group sources before changing the user's file.
+    with tempfile.TemporaryDirectory() as tmp:
+        probe = Path(tmp) / 'AGENTS.md'
+        probe.write_text(initial)
+        sync_project(probe)
+        desired = probe.read_text()
+    atomic(path, desired, old if path.exists() else None)
+
+
+def capture_edits(root):
+    """Save marked diffs as evidence, without claiming authorship or removing markers."""
+    def git(*args):
+        return subprocess.run(['git', '-C', str(root), *args], text=True,
+                              capture_output=True, timeout=20)
+    top = git('rev-parse', '--show-toplevel')
+    is_repo = top.returncode == 0 and Path(top.stdout.strip()).resolve() == root.resolve()
+    if is_repo:
+        has_head = git('rev-parse', '--verify', 'HEAD').returncode == 0
+        changed = git('diff', '--name-only', '-z', *(['HEAD'] if has_head else []), '--', '*.md')
+        untracked = git('ls-files', '--others', '--exclude-standard', '-z', '--', '*.md')
+        if changed.returncode or untracked.returncode:
+            raise ValueError(f'{root}: cannot inspect marked edits')
+        names = sorted(set(filter(None, (changed.stdout + untracked.stdout).split('\0'))))
+    else:
+        names = [p.name for p in root.glob('*.md') if not p.is_symlink()]
+    records = []
+    for name in names:
+        if '.agent-history' in Path(name).parts:
+            continue
+        path = root / name
+        if path.is_symlink() or not path.is_file() or path.stat().st_size > 2_000_000:
+            continue
+        after = path.read_text()
+        snapshot = STATE / 'snapshots' / (digest(str(path.resolve())) + '.txt')
+        if is_repo:
+            result = git('show', 'HEAD:' + name)
+            before = result.stdout if result.returncode == 0 else ''
+        else:
+            before = snapshot.read_text() if snapshot.exists() else ''
+            atomic(snapshot, after)
+        diff = ''.join(difflib.unified_diff(before.splitlines(True), after.splitlines(True),
+                                          fromfile='before/' + name, tofile='after/' + name))
+        if any(line.startswith('+') and not line.startswith('+++') and ';;' in line for line in diff.splitlines()):
+            target = root / '.agent-history/observed' / (digest(name + diff) + '.json')
+            if not target.exists():
+                atomic(target, json.dumps({'file': name, 'kind': 'marked-edit-evidence',
+                       'authorship': 'unconfirmed', 'diff': diff}, indent=2) + '\n')
+            records.append(str(target))
+    return records
+
+
+def trust_codex_hook(home, command):
+    """Trust only this installer's exact handler through Codex's config API."""
+    import queue
+    import threading
+    env = os.environ.copy()
+    env['CODEX_HOME'] = str(home)
+    proc = subprocess.Popen(['codex', 'app-server', '--listen', 'stdio://'],
+                            stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                            stderr=subprocess.DEVNULL, text=True, env=env)
+    messages = queue.Queue()
+    def read():
+        for line in proc.stdout:
+            try:
+                messages.put(json.loads(line))
+            except ValueError:
+                pass
+    threading.Thread(target=read, daemon=True).start()
+    serial = 0
+    def rpc(method, params):
+        nonlocal serial
+        serial += 1
+        proc.stdin.write(json.dumps({'id': serial, 'method': method, 'params': params}) + '\n')
+        proc.stdin.flush()
+        while True:
+            result = messages.get(timeout=20)
+            if result.get('id') == serial:
+                if 'error' in result:
+                    raise ValueError(str(result['error']))
+                return result['result']
+    try:
+        rpc('initialize', {'clientInfo': {'name': 'agent_context_installer', 'version': '1'},
+                           'capabilities': {'experimentalApi': True}})
+        proc.stdin.write('{"method":"initialized"}\n')
+        proc.stdin.flush()
+        listing = rpc('hooks/list', {'cwds': [str(DOTFILES)]})
+        owned = [h for entry in listing['data'] for h in entry['hooks']
+                 if h.get('command') == command and h.get('eventName') == 'sessionStart'
+                 and h.get('source') == 'user' and Path(h['sourcePath']) == home / 'hooks.json']
+        if len(owned) != 1:
+            raise ValueError(f'{home}: expected exactly one owned SessionStart hook')
+        hook = owned[0]
+        if hook['trustStatus'] != 'trusted' or not hook['enabled']:
+            config = home / 'config.toml'
+            if config.exists():
+                atomic(STATE / 'config-backups' / (digest(str(config) + config.read_text()) + '.toml'), config.read_text())
+            rpc('config/value/write', {'keyPath': 'hooks.state.' + json.dumps(hook['key']),
+                'value': {'enabled': True, 'trusted_hash': hook['currentHash']}, 'mergeStrategy': 'upsert'})
+        print(f'Trusted only the installed context hook: {home}')
+    finally:
+        proc.terminate()
+        proc.wait(timeout=10)
+
+
+def install():
+    """Merge one owned hook into existing configs, including Orca account homes."""
+    import shlex
+    command = shlex.quote(sys.executable) + ' ' + shlex.quote(str(DOTFILES / 'bin/agent-context')) + ' hook'
+    homes = [Path.home() / '.codex']
+    homes += list((Path.home() / 'Library/Application Support/orca/codex-accounts').glob('*/home'))
+    if os.environ.get('CODEX_HOME'):
+        homes.append(Path(os.environ['CODEX_HOME']))
+    configs = [(Path.home() / '.claude/settings.json', False)]
+    configs += [(h / 'hooks.json', True) for h in homes]
+    configs += [(DOTFILES / 'codex/hooks.json', True), (DOTFILES / 'claude/settings.json', False)]
+    seen = set()
+    for config, codex in configs:
+        target = config.resolve()
+        if target in seen:
+            continue
+        seen.add(target)
+        old = target.read_text() if target.exists() else '{}'
+        data = json.loads(old)
+        hooks = data.setdefault('hooks', {})
+        for event, groups in list(hooks.items()):
+            retained = []
+            for group in groups:
+                handlers = [h for h in group.get('hooks', []) if
+                            'human_edit_hook.py' not in h.get('command', '') and
+                            '/bin/agent-context' not in h.get('command', '')]
+                if handlers:
+                    retained.append(dict(group, hooks=handlers))
+            hooks[event] = retained
+        handler = {'type': 'command', 'command': command, 'timeout': 30}
+        if codex:
+            handler['additionalContextLimit'] = 30000
+        hooks.setdefault('SessionStart', []).append({'hooks': [handler]})
+        text = json.dumps(data, indent=2) + '\n'
+        if text != old:
+            backup = STATE / 'config-backups' / (digest(str(target) + old) + '.json')
+            if not backup.exists():
+                atomic(backup, old)
+            atomic(target, text, old if target.exists() else None)
+        print(f'Installed SessionStart hook: {config}')
+    for home in set(homes):
+        home.mkdir(parents=True, exist_ok=True)
+        target = home / 'AGENTS.md'
+        source = DOTFILES / 'agents/AGENTS.md'
+        if target.is_symlink() and target.resolve() == source:
+            continue
+        if target.exists() or target.is_symlink():
+            backup = STATE / 'config-backups' / ('AGENTS-' + digest(str(target)))
+            if backup.exists():
+                raise ValueError(f'Existing backup prevents replacing {target}')
+            target.rename(backup)
+        target.symlink_to(source)
+    for home in set(homes):
+        trust_codex_hook(home, command)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('command', choices=['hook', 'sync', 'check', 'adopt', 'install'])
+    parser.add_argument('path', nargs='?', default='.')
+    parser.add_argument('--groups', nargs='*', default=[])
+    parser.add_argument('--visibility', choices=['public', 'private'], default='public')
+    args = parser.parse_args()
+    STATE.mkdir(parents=True, exist_ok=True)
+    os.chmod(STATE, 0o700)
+    if args.command == 'install':
+        install()
+        return 0
+    payload = json.load(sys.stdin) if args.command == 'hook' else {}
+    cwd = Path(payload.get('cwd', args.path)).expanduser().resolve()
+    path = cwd if cwd.name == 'AGENTS.md' else locate(cwd)
+    root = path.parent if path else cwd
+    lock = STATE / (digest(str(root)) + '.lock')
+    with lock.open('w') as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        if args.command == 'adopt':
+            path = cwd if cwd.name == 'AGENTS.md' else cwd / 'AGENTS.md'
+            adopt(path, args.groups, args.visibility)
+            print(f'Adopted {path}: {", ".join(args.groups) or "no shared groups"}')
+            return 0
+        changed, generated = sync_project(path, args.command == 'check') if path else (False, '')
+        if args.command != 'hook':
+            print(f'{path}: ' + ('stale' if changed and args.command == 'check' else 'updated' if changed else 'current') if path else 'No project declaration')
+            return int(changed and args.command == 'check')
+        if payload.get('hook_event_name', 'SessionStart') != 'SessionStart':
+            return 0
+        records = capture_edits(root)
+        context = []
+        if path:
+            # Always inject on startup: files may have been loaded before this hook ran.
+            context.append(f'Current shared instructions for {path} (revision {digest(generated)[:12]}):\n{generated}')
+            context.append('Before editing instruction files, consult their human_edit_history reference and any .agent-history records. Preserve handwritten wording.')
+        if records:
+            context.append('Marked edits preserved as evidence. Use human-edit-tracking before editing these passages:\n' + '\n'.join(records))
+        if context:
+            print(json.dumps({'systemMessage': f'Agent context: {"updated" if changed else "current"}; {len(records)} marked edit record(s).',
+                              'hookSpecificOutput': {'hookEventName': 'SessionStart', 'additionalContext': '\n\n'.join(context)}}))
+    return 0
+
+
+if __name__ == '__main__':
+    try:
+        raise SystemExit(main())
+    except Exception as exc:
+        message = f'Agent context failed: {exc}'
+        STATE.mkdir(parents=True, exist_ok=True)
+        with (STATE / 'errors.log').open('a') as log:
+            log.write(message + '\n')
+        if len(sys.argv) > 1 and sys.argv[1] == 'hook':
+            print(json.dumps({'systemMessage': message, 'hookSpecificOutput': {
+                'hookEventName': 'SessionStart', 'additionalContext': message + '. Shared instructions may be stale; resolve before relying on them.'}}))
+        else:
+            print(message, file=sys.stderr)
+        raise SystemExit(1)

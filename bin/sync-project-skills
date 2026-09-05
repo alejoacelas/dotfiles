@@ -3,12 +3,12 @@
 set -euo pipefail
 
 DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BEST_ROOT="$(cd "$DOTFILES_ROOT/../.." && pwd)"
+BEST_ROOT="$(cd "$DOTFILES_ROOT/.." && pwd)"
 SOURCE_ROOT="$DOTFILES_ROOT/plugins/calls/skills"
-TARGET_ROOT="$BEST_ROOT/work/calls/.claude/skills"
+TARGET_ROOT="$BEST_ROOT/calls/.claude/skills"
 
-if [ ! -d "$BEST_ROOT/work/calls/.git" ]; then
-  printf 'skip: calls repo is not cloned at %s\n' "$BEST_ROOT/work/calls"
+if [ ! -d "$BEST_ROOT/calls/.git" ]; then
+  printf 'skip: calls repo is not cloned at %s\n' "$BEST_ROOT/calls"
   exit 0
 fi
 

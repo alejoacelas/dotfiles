@@ -1,14 +1,14 @@
 {
   "hooks": {
-    "UserPromptSubmit": [
+    "UserPromptSubmit": [],
+    "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/best/ai/dotfiles/claude/skills/human-edit-tracking/scripts/human_edit_hook.py\"",
-            "timeout": 10,
-            "statusMessage": "Checking Markdown for marked human edits",
-            "additionalContextLimit": 10000
+            "command": "/Users/alejo/.local/share/agent-context/venv/bin/python /Users/alejo/best/dotfiles/bin/agent-context hook",
+            "timeout": 30,
+            "additionalContextLimit": 30000
           }
         ]
       }

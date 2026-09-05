@@ -106,17 +106,48 @@ link claude/settings.json "$HOME/.claude/settings.json"
 # Enable the repo's tracked git hooks (the secret-scan pre-commit guard).
 git -C "$DOTFILES" config core.hooksPath hooks
 
-# Enable the best workspace's tracked git hooks (the sync-repos drift guard), when this
-# dotfiles repo is nested inside best (best/ai/dotfiles) rather than cloned standalone.
-BEST="$(cd "$DOTFILES/../.." && pwd)"
-if [ -e "$BEST/ai/sync-repos.py" ] && git -C "$BEST" rev-parse --git-dir >/dev/null 2>&1; then
-  git -C "$BEST" config core.hooksPath ai/githooks
-  echo "  hooks   best -> ai/githooks"
-fi
+# Session-start synchronization uses one pinned YAML dependency in an isolated environment.
+uv venv --allow-existing "$HOME/.local/share/agent-context/venv"
+uv pip install --python "$HOME/.local/share/agent-context/venv/bin/python" PyYAML==6.0.2
+"$HOME/.local/share/agent-context/venv/bin/python" "$DOTFILES/bin/agent-context" install
+link bin/agent-context "$HOME/.local/bin/agent-context"
 
-# Keep project-only skills available in clean/cloud checkouts without installing them
-# globally. This is a no-op when the private calls repo is not cloned.
-"$DOTFILES/bin/sync-project-skills"
+# Ordinary container configuration lives here; existing repositories keep their own files.
+BEST_ROOT="$HOME/best"
+mkdir -p "$BEST_ROOT"
+link workspace/AGENTS.md "$BEST_ROOT/AGENTS.md"
+link workspace/README.md "$BEST_ROOT/README.md"
+# Keep imports as real files so their relative AGENTS.md target is unambiguous.
+if [ -L "$BEST_ROOT/CLAUDE.md" ] || [ ! -f "$BEST_ROOT/CLAUDE.md" ] || [ "$(cat "$BEST_ROOT/CLAUDE.md")" != '@AGENTS.md' ]; then
+  if [ -e "$BEST_ROOT/CLAUDE.md" ] || [ -L "$BEST_ROOT/CLAUDE.md" ]; then
+    mv "$BEST_ROOT/CLAUDE.md" "$HOME/.local/state/agent-context/root-CLAUDE.pre-install.$(date +%s)"
+  fi
+  cp "$DOTFILES/workspace/CLAUDE.md" "$BEST_ROOT/CLAUDE.md"
+fi
+link REPLICATE.md "$BEST_ROOT/REPLICATE.md"
+for folder in me others archive wiki people; do
+  mkdir -p "$BEST_ROOT/$folder"
+done
+# Avoid changing temporary compatibility links or still-active parent repositories.
+if [ ! -L "$BEST_ROOT/once" ] && [ ! -e "$BEST_ROOT/once/.git" ]; then
+  mkdir -p "$BEST_ROOT/once"
+  link workspace/once-AGENTS.md "$BEST_ROOT/once/AGENTS.md"
+    if [ ! -e "$BEST_ROOT/once/CLAUDE.md" ]; then
+    cp "$DOTFILES/workspace/CLAUDE.md" "$BEST_ROOT/once/CLAUDE.md"
+  fi
+fi
+for source in "$DOTFILES"/workspace/containers/*/README.md "$DOTFILES"/workspace/containers/*/*/*.md; do
+  [ -f "$source" ] || continue
+  relative="${source#"$DOTFILES/workspace/containers/"}"
+  link "workspace/containers/$relative" "$BEST_ROOT/$relative"
+done
+# Personal/private sources are separate clones; no private files are copied into dotfiles.
+if [ -f "$HOME/.local/share/agent-context/private/archive/REPLICATE.md" ]; then
+  target="$BEST_ROOT/archive/REPLICATE.md"
+  if [ ! -e "$target" ] && [ ! -L "$target" ]; then
+    ln -s "$HOME/.local/share/agent-context/private/archive/REPLICATE.md" "$target"
+  fi
+fi
 
 # Keep machine-local or secret settings in ~/.claude/settings.local.json (untracked) —
 # never in the tracked settings.json linked above.

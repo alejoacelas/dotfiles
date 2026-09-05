@@ -3,7 +3,7 @@
 # settings by replacing the file, which drops the link. If that happened, take the
 # live copy as truth, put it in the repo, relink, and tell the user to commit.
 set -u
-repo="$HOME/best/ai/dotfiles/claude/settings.json"
+repo="$HOME/best/dotfiles/claude/settings.json"
 live="$HOME/.claude/settings.json"
 [ -L "$live" ] && exit 0
 cp "$live" "$repo" && ln -sf "$repo" "$live" || {
