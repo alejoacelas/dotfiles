@@ -1,6 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 36500,
+  "env": {
+    "ANTHROPIC_BASE_URL": "http://127.0.0.1:8787/t/11d8c38b7eee9c20c5ba9d2a5ccaee14",
+    "_CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL": "1",
+    "ENABLE_TOOL_SEARCH": "true",
+    "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "258400",
+    "ANTHROPIC_CUSTOM_MODEL_OPTION": "gpt-5.6-sol",
+    "ANTHROPIC_CUSTOM_MODEL_OPTION_NAME": "GPT-5.6 Sol"
+  },
   "permissions": {
     "allow": [
       "Bash(brew install:*)",
@@ -44,7 +52,7 @@
       "Bash(codex-companion cancel *)"
     ]
   },
-  "model": "fable",
+  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
@@ -273,6 +281,11 @@
     }
   },
   "effortLevel": "high",
+  "modelSettings": {
+    "claude-sonnet-5": {
+      "effortLevel": "xhigh"
+    }
+  },
   "remote": {
     "defaultEnvironmentId": "env_019kvNdUFTaAbmz1F44nmPSN"
   },
@@ -280,13 +293,5 @@
   "skipWorkflowUsageWarning": true,
   "theme": "dark",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true,
-  "env": {
-    "ANTHROPIC_BASE_URL": "http://127.0.0.1:8787/t/11d8c38b7eee9c20c5ba9d2a5ccaee14",
-    "_CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL": "1",
-    "ENABLE_TOOL_SEARCH": "true",
-    "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "258400",
-    "ANTHROPIC_CUSTOM_MODEL_OPTION": "gpt-5.6-sol",
-    "ANTHROPIC_CUSTOM_MODEL_OPTION_NAME": "GPT-5.6 Sol"
-  }
+  "agentPushNotifEnabled": true
 }
