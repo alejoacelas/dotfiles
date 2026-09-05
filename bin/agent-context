@@ -342,9 +342,8 @@ if __name__ == '__main__':
         STATE.mkdir(parents=True, exist_ok=True)
         with (STATE / 'errors.log').open('a') as log:
             log.write(message + '\n')
+        print(message, file=sys.stderr)
         if len(sys.argv) > 1 and sys.argv[1] == 'hook':
             print(json.dumps({'systemMessage': message, 'hookSpecificOutput': {
                 'hookEventName': 'SessionStart', 'additionalContext': message + '. Shared instructions may be stale; resolve before relying on them.'}}))
-        else:
-            print(message, file=sys.stderr)
         raise SystemExit(1)

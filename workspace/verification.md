@@ -2,6 +2,10 @@
 
 Validated on this Mac on 2026-09-05 with Codex 0.153.0 and Claude Code 2.1.261.
 
+- The full installer completed successfully; the configuration check reports no hard failures.
+  Existing differences inside deferred projects remain for their later migration.
+- All 3,293 entries in the original best Git tree have a live destination or an explicit
+  preservation location. Original human-edit history is preserved verbatim, including whitespace.
 - Fifteen tests cover context composition, local-text preservation, edited generated text,
   missing sources, private-source refusal, folder moves, atomic replacement checks and
   marked-edit evidence in ordinary and newly initialized Git folders.

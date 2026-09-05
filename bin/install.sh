@@ -129,10 +129,13 @@ for folder in me others archive wiki people; do
   mkdir -p "$BEST_ROOT/$folder"
 done
 # Avoid changing temporary compatibility links or still-active parent repositories.
+if [ ! -e "$BEST_ROOT/tools" ] && [ ! -L "$BEST_ROOT/tools" ]; then
+  mkdir -p "$BEST_ROOT/tools/active" "$BEST_ROOT/tools/upcoming" "$BEST_ROOT/tools/stable"
+fi
 if [ ! -L "$BEST_ROOT/once" ] && [ ! -e "$BEST_ROOT/once/.git" ]; then
   mkdir -p "$BEST_ROOT/once"
   link workspace/once-AGENTS.md "$BEST_ROOT/once/AGENTS.md"
-    if [ ! -e "$BEST_ROOT/once/CLAUDE.md" ]; then
+  if [ ! -e "$BEST_ROOT/once/CLAUDE.md" ]; then
     cp "$DOTFILES/workspace/CLAUDE.md" "$BEST_ROOT/once/CLAUDE.md"
   fi
 fi

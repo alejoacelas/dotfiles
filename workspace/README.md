@@ -10,6 +10,7 @@ This folder is not a Git repository. Projects and coherent note collections own 
 - `wiki/` — reusable explanations and reference material.
 - `me/` — personal material, blog and website.
 - `people/` — people to learn from, meet and know.
+- `calls/` — private call transcripts and related work.
 - `others/` — consequentialist, travel, art, advice and plans.
 - `archive/` — the single destination for inactive work.
 
