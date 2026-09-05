@@ -99,6 +99,7 @@ repository when it spans nested repositories. Do not backfill old entries.
 - `best/` is an ordinary container. Give projects or coherent note collections their
   own repositories; do not make lifecycle or project-group containers repositories.
 - Every one-off gets its own repository and GitHub remote. Apply the privacy rules above.
+- Before moving or creating something in another folder, read its `AGENTS.md` if present.
 - Archive things in `~/best/archive/`. Record what moved, its previous location, and
   why in the archive's `REPLICATE.md`.
 - When creating a project, declare its shared groups in `AGENTS.md` using
