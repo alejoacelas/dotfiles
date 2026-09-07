@@ -10,6 +10,8 @@ The plan remains authoritative. The overview is a short, concrete map of the pla
 
 ## Writing rules
 
+Give each distinct action its own bullet. Watch for sentences that hide several actions inside a list of nouns, such as "handle validation, scheduling, and reporting." Rewrite each action with a concrete verb, and split actions that can be completed or reviewed separately. Keep lists together when they name inputs or examples for one action, such as "compare the title, date, and author."
+
 - Use bullets for the substantive content, with one sentence per bullet.
 - Use numbered lists for multi-item sections and lowercase `a.`, `b.`, `c.` labels for nested items so every item is easy to reference.
 - Keep each stage goal as one unnumbered bullet by default, and do not number section titles within a stage.
