@@ -13,6 +13,7 @@ The plan remains authoritative. The overview is a short, concrete map of the pla
 - Use bullets for the substantive content, with one sentence per bullet.
 - Use concrete verbs and named objects; avoid abstract process language.
 - Give stages descriptive titles that say what they accomplish.
+- List each run goal separately; give each stage one goal unless it genuinely needs more.
 - Write times as `m` and `h`, without decimals.
 - Prefix every step with its estimated elapsed clock time, such as `[20m]`, `[1h]`, or `[1–2h]`.
 - Add the literal `[optional]` tag after the time only when the run can deliver its intended result without that step.
@@ -29,9 +30,10 @@ Use this shape, omitting sections that genuinely add nothing:
 
 The [main plan](PLAN.md) defines the execution rules.
 
-## Goal of the run
+## Goals of the run
 
-- <Concrete result the run should produce.>
+- <One concrete result the run should produce.>
+- <Another concrete result the run should produce.>
 
 ## Stage 1: <Descriptive accomplishment> [<total time>]
 
@@ -80,4 +82,3 @@ Create the log with the overview's stages and unchecked steps before execution, 
 - Add `Unexpected:` only for a material surprise, deviation, failure, or new piece of work.
 - Preserve the original estimates so the user can see where the run took longer or less time than planned.
 - Keep the log short enough to understand from the checked steps, output links, and unexpected events.
-
