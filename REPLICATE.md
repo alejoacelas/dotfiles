@@ -1,5 +1,16 @@
 # REPLICATE
 
+## Make large-run plans easy to inspect
+
+The human wanted a short overview before large runs and a live record of what the run actually did.
+
+- Added `run-overview`, which keeps the detailed plan authoritative while summarizing each stage with a concrete goal, linked guidance, timed steps, likely review artifacts and prerequisites.
+- Limited step annotations to elapsed-time estimates and the literal `[optional]` tag, with descriptive stage titles and one sentence per bullet.
+- Added a matching `RUN-LOG.md` format that checks off work, compares estimated and actual clock time, links outputs and records unexpected developments.
+- Exposed the same canonical skill to Claude Code and both Codex skill registries.
+
+Agent session unavailable · Commits b6d8bed
+
 ## Finish the ready 80k migration batch
 
 The human wanted deferred workspace moves completed only after their live sessions closed.
