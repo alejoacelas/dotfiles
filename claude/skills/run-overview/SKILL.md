@@ -2,7 +2,6 @@
 name: run-overview
 description: Create a concise OVERVIEW.md and live RUN-LOG.md before a substantial, long-running, autonomous, multi-stage, or multi-agent run. Use when the user wants a large plan made easy to inspect without replacing the main implementation plan. Do not use for ordinary short tasks.
 ---
-
 # Run overview
 
 Create `OVERVIEW.md` before the run starts and keep `RUN-LOG.md` updated while it runs. Put them beside the main plan unless the project already has a clear location for run documents.
@@ -18,7 +17,7 @@ The plan remains authoritative. The overview is a short, concrete map of the pla
 - Prefix every step with its estimated elapsed clock time, such as `[20m]`, `[1h]`, or `[1–2h]`.
 - Add the literal `[optional]` tag after the time only when the run can deliver its intended result without that step.
 - Add the step estimates to produce the total time shown in each stage title.
-- Nest links to generated artifacts beneath the step that produces them, using `link — contents` without phrases such as “will contain.”
+- Nest links to generated artifacts beneath the step that produces them, using `link — contents`
 - Focus artifact descriptions on the parts most likely to deserve the user's attention, without telling the user how to review them.
 
 ## `OVERVIEW.md`
@@ -81,3 +80,4 @@ Create the log with the overview's stages and unchecked steps before execution, 
 - Add `Unexpected:` only for a material surprise, deviation, failure, or new piece of work.
 - Preserve the original estimates so the user can see where the run took longer or less time than planned.
 - Keep the log short enough to understand from the checked steps, output links, and unexpected events.
+
