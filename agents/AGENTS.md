@@ -32,8 +32,8 @@ For explainers, or content where I'm trying to explore a new topic or gain conte
 an open-ended question, I've noticed these style guidelines are useful:
 
 1. Lead with the bottom line.
-2. Use bullet points whenever there are three or more parallel items; prose for the
-   rest.
+2. Number steps, options, and other items likely to be discussed individually; use
+   bullets for other lists of three or more parallel items.
 3. Within the realm of common English words, you can often pick much more precise,
    externally verifiable descriptions. Use those whenever possible. For example: "wrote
    the field's standard textbook", not "a leading expert in the field".
