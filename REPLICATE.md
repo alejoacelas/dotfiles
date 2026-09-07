@@ -105,3 +105,12 @@ The human wanted a smaller folder and shared-instruction system, preserving hand
 Project-specific commits are recorded in their REPLICATE files. The complete migration ledger is in ~/.local/share/agent-context/private/migration/COMMITS.md.
 
 Agent session 01a072fe-84d6-73f3-b37e-3bb912088c38 · Commits dotfiles: 1a4a26b, cd85a78, f64a22e, b44c5f1
+
+## Give each overview action its own bullet
+
+The human wanted run overviews to stop compressing several processes into noun lists.
+
+- Added the agreed writing rule to the shared run-overview skill, distinguishing independently reviewable actions from multiple inputs to one action.
+- Preserved the existing timing and formatting rules and passed skill validation and the whitespace check.
+
+Agent session 01a07bce-4d78-75c1-a3f9-aa21c8e26f6a · Commits dc7582b
