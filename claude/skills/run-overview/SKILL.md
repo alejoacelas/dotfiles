@@ -11,6 +11,8 @@ The plan remains authoritative. The overview is a short, concrete map of the pla
 ## Writing rules
 
 - Use bullets for the substantive content, with one sentence per bullet.
+- Use numbered lists for multi-item sections and lowercase `a.`, `b.`, `c.` labels for nested items so every item is easy to reference.
+- Keep each stage goal as one unnumbered bullet by default, and do not number section titles within a stage.
 - Use concrete verbs and named objects; avoid abstract process language.
 - Give stages descriptive titles that say what they accomplish.
 - List each run goal separately; give each stage one goal unless it genuinely needs more.
@@ -32,8 +34,8 @@ The [main plan](PLAN.md) defines the execution rules.
 
 ## Goals of the run
 
-- <One concrete result the run should produce.>
-- <Another concrete result the run should produce.>
+1. <One concrete result the run should produce.>
+2. <Another concrete result the run should produce.>
 
 ## Stage 1: <Descriptive accomplishment> [<total time>]
 
@@ -43,22 +45,22 @@ The [main plan](PLAN.md) defines the execution rules.
 
 ### Plan and guidance
 
-- [<Plan file>](<path>) — <Relevant instructions.>
+1. [<Plan file>](<path>) — <Relevant instructions.>
 
 ### Steps
 
-- [30m] <Concrete action.>
-  - [<Artifact>](<path>) — <Contents most likely to deserve attention.>
-- [1h] [optional] <Concrete action that is not required for the intended result.>
-  - [<Artifact>](<path>) — <Contents most likely to deserve attention.>
+1. [30m] <Concrete action.>
+   a. [<Artifact>](<path>) — <Contents most likely to deserve attention.>
+2. [1h] [optional] <Concrete action that is not required for the intended result.>
+   a. [<Artifact>](<path>) — <Contents most likely to deserve attention.>
 
 ### Assumptions and prerequisites
 
-- <Condition that must hold or problem that could prevent the stage from finishing as planned.>
+1. <Condition that must hold or problem that could prevent the stage from finishing as planned.>
 
 ## Expected outcome
 
-- <Concrete thing the user can inspect, use, or decide after the run.>
+1. <Concrete thing the user can inspect, use, or decide after the run.>
 ```
 
 ## `RUN-LOG.md`
@@ -70,10 +72,10 @@ Create the log with the overview's stages and unchecked steps before execution, 
 
 ## Stage 1: <Descriptive accomplishment> [est 2h | actual 3h]
 
-- [x] [est 30m | actual 42m] <Completed step.>
-  - [<Output>](<path>) — <Contents most likely to deserve attention.>
-  - Unexpected: <Material surprise, deviation, failure, or new work.>
-- [ ] [est 90m | actual —] <Pending step.>
+1. [x] [est 30m | actual 42m] <Completed step.>
+   a. [<Output>](<path>) — <Contents most likely to deserve attention.>
+   b. Unexpected: <Material surprise, deviation, failure, or new work.>
+2. [ ] [est 90m | actual —] <Pending step.>
 ```
 
 - Keep the initial estimate beside the actual elapsed clock time.
