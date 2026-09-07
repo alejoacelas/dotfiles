@@ -1,5 +1,16 @@
 # REPLICATE
 
+## Finish the ready 80k migration batch
+
+The human wanted deferred workspace moves completed only after their live sessions closed.
+
+- Flattened the private 80k lifecycle folders and moved 14 inactive units into the shared archive with preserved Git history.
+- Created 11 missing private remotes, retained three existing archive remotes, and repaired project paths and instruction imports.
+- Verified 206,844 inventoried entries, 20 Git repositories, remote parity, symlinks and process working directories; no work was missing or unexpectedly changed.
+- Left `tools` and `once` pending because live sessions still use them. The temporary automation remains enabled until that list is empty.
+
+Agent session 01a07b94-25c7-7301-b3b3-fbf948e76581 · Commits 80k: 4fd52e3, 8a04923, 50a6034; agent-context-private: 711c35b, 267a3a8; archived and nested repositories: `~/.local/share/agent-context/private/migration/COMMITS.md`
+
 ## Merge Vercel deployment and custom-domain setup
 
 The human wanted every Vercel deployment and its optional Namecheap domain setup handled
