@@ -10,60 +10,38 @@ The plan remains authoritative. The overview is a short, concrete map of the pla
 
 ## Writing rules
 
-Give each distinct action its own bullet. Watch for sentences that hide several actions inside a list of nouns, such as "handle validation, scheduling, and reporting." Rewrite each action with a concrete verb, and split actions that can be completed or reviewed separately. Keep lists together when they name inputs or examples for one action, such as "compare the title, date, and author."
+Write every substantive goal and step as one clear sentence.
 
-- Use bullets for the substantive content, with one sentence per bullet.
+Treat a step as a meaningful unit of work, not as a single verb or atomic action. Keep related actions together when they produce the same immediate result or naturally happen in one working period. Split them when they can usefully be scheduled, completed, reviewed, or discussed independently.
+
+- Give each sentence enough context to be understood without reconstructing its relationship to nearby items.
+- Use concrete verbs and named objects, while preserving conjunctions and subordinate clauses that explain how actions relate.
 - Use numbered lists for multi-item sections and lowercase `a.`, `b.`, `c.` labels for nested items so every item is easy to reference.
 - Keep each stage goal as one unnumbered bullet by default, and do not number section titles within a stage.
-- Use concrete verbs and named objects; avoid abstract process language.
 - Give stages descriptive titles that say what they accomplish.
 - List each run goal separately; give each stage one goal unless it genuinely needs more.
 - Write times as `m` and `h`, without decimals.
 - Prefix every step with its estimated elapsed clock time, such as `[20m]`, `[1h]`, or `[1–2h]`.
 - Add the literal `[optional]` tag after the time only when the run can deliver its intended result without that step.
-- Add the step estimates to produce the total time shown in each stage title.
+- Add serial step estimates to produce the total shown in the stage title; explain when steps overlap rather than adding their times.
 - Nest links to generated artifacts beneath the step that produces them, using `link — contents`
 - Focus artifact descriptions on the parts most likely to deserve the user's attention, without telling the user how to review them.
 
 ## `OVERVIEW.md`
 
-Use this shape, omitting sections that genuinely add nothing:
+Begin with an “at a glance” title and a link to the authoritative plan. State the run's concrete goals, then divide the work into stages.
 
-```markdown
-# <Run name> at a glance
+Give each stage:
 
-The [main plan](PLAN.md) defines the execution rules.
+1. A descriptive title and total time estimate.
+2. One clear goal.
+3. A numbered list of meaningful steps.
+4. Links to relevant plan sections or generated artifacts where they help explain the work.
+5. Assumptions or prerequisites that materially affect whether the stage can proceed as described.
 
-## Goals of the run
+Omit headings that add no useful information, but retain the distinction between the stage's intended result and the work used to achieve it.
 
-1. <One concrete result the run should produce.>
-2. <Another concrete result the run should produce.>
-
-## Stage 1: <Descriptive accomplishment> [<total time>]
-
-### Goal
-
-- <Concrete result of this stage.>
-
-### Plan and guidance
-
-1. [<Plan file>](<path>) — <Relevant instructions.>
-
-### Steps
-
-1. [30m] <Concrete action.>
-   a. [<Artifact>](<path>) — <Contents most likely to deserve attention.>
-2. [1h] [optional] <Concrete action that is not required for the intended result.>
-   a. [<Artifact>](<path>) — <Contents most likely to deserve attention.>
-
-### Assumptions and prerequisites
-
-1. <Condition that must hold or problem that could prevent the stage from finishing as planned.>
-
-## Expected outcome
-
-1. <Concrete thing the user can inspect, use, or decide after the run.>
-```
+End with the concrete things the user will be able to inspect, use, or decide after the run.
 
 ## `RUN-LOG.md`
 
