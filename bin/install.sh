@@ -139,11 +139,17 @@ if [ ! -L "$BEST_ROOT/once" ] && [ ! -e "$BEST_ROOT/once/.git" ]; then
     cp "$DOTFILES/workspace/CLAUDE.md" "$BEST_ROOT/once/CLAUDE.md"
   fi
 fi
-for source in "$DOTFILES"/workspace/containers/*/README.md "$DOTFILES"/workspace/containers/*/*/*.md; do
-  [ -f "$source" ] || continue
+while IFS= read -r source; do
   relative="${source#"$DOTFILES/workspace/containers/"}"
   link "workspace/containers/$relative" "$BEST_ROOT/$relative"
-done
+done < <(rg --files --hidden "$DOTFILES/workspace/containers" -g '!**/.codex/**')
+link workspace/containers/tools/.codex "$BEST_ROOT/tools/.codex"
+if [ -d "$HOME/.local/share/agent-context/private/workspace/once/.agents" ] && [ ! -e "$BEST_ROOT/once/.agents" ]; then
+  ln -s "$HOME/.local/share/agent-context/private/workspace/once/.agents" "$BEST_ROOT/once/.agents"
+fi
+if [ -d "$HOME/.local/share/agent-context/private/workspace/tools/.claude" ] && [ ! -e "$BEST_ROOT/tools/.claude" ]; then
+  ln -s "$HOME/.local/share/agent-context/private/workspace/tools/.claude" "$BEST_ROOT/tools/.claude"
+fi
 # Personal/private sources are separate clones; no private files are copied into dotfiles.
 if [ -f "$HOME/.local/share/agent-context/private/archive/REPLICATE.md" ]; then
   target="$BEST_ROOT/archive/REPLICATE.md"

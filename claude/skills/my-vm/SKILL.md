@@ -1,6 +1,6 @@
 ---
 name: my-vm
-description: Delegate long or heavy work to my Hetzner box via the `my-vm` CLI (~/best/work/tools/my-vm). Use when a job would run for many minutes, needs to survive the laptop sleeping, needs Linux, or should run in parallel with local work — builds, scrapes, batch LLM calls, test suites, agent runs.
+description: Delegate long or heavy work to my Hetzner box via the `my-vm` CLI (~/best/tools/active/my-vm). Use when a job would run for many minutes, needs to survive the laptop sleeping, needs Linux, or should run in parallel with local work — builds, scrapes, batch LLM calls, test suites, agent runs.
 ---
 
 # my-vm — my cloud box

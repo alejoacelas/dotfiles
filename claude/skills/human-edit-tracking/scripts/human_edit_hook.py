@@ -134,7 +134,7 @@ def render_context(root: Path, items: list[tuple[str, str]]) -> str:
         + "\n[Diff context truncated. Run "
         + str(
             Path.home()
-            / "best/ai/dotfiles/claude/skills/human-edit-tracking/scripts/human_edit_hook.py"
+            / "best/dotfiles/claude/skills/human-edit-tracking/scripts/human_edit_hook.py"
         )
         + " --show <file> for a complete diff.]"
     )

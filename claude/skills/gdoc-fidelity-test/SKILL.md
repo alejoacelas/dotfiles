@@ -6,7 +6,7 @@ description: Turn a gdoc CLI failure seen on a real Google Doc into a committed,
 # gdoc-fidelity-test — from a mangled doc to a committed repro
 
 The harness and its full rules live in the gdoc clone:
-`/Users/alejo/best/work/tools/active/gdoc/cli` (nested git repo, work on branch
+`/Users/alejo/best/tools/active/gdoc/cli` (nested git repo, work on branch
 `fidelity-tests`), skill `.claude/skills/gdoc-fidelity-test/SKILL.md` there, section
 "Reducing a failure seen in a real document". This file is the short checklist.
 

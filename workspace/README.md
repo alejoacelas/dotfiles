@@ -14,5 +14,6 @@ This folder is not a Git repository. Projects and coherent note collections own 
 - `others/` — consequentialist, travel, art, advice and plans.
 - `archive/` — the single destination for inactive work.
 
-Some paths remain compatibility links while Orca sessions are open. Migration status and
-recovery records are in `~/.local/state/best-migration/2026-09-05/`.
+Lifecycle and topic folders are ordinary directories; their configuration lives in dotfiles.
+Original repository history and migration records are preserved under
+`~/.local/state/best-migration/`.

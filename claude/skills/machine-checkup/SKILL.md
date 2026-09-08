@@ -25,8 +25,8 @@ irreversible; see *Guard the irreversible* in the global CLAUDE.md.)
 
 ## 1. Gather the facts
 ```sh
-python3 ~/best/ai/dotfiles/claude/skills/machine-checkup/scripts/scan.py
-~/best/ai/dotfiles/bin/check-agent-config   # instruction/skill drift + dangling links
+python3 ~/best/dotfiles/claude/skills/machine-checkup/scripts/scan.py
+~/best/dotfiles/bin/check-agent-config   # instruction/skill drift + dangling links
 ```
 The first prints a markdown report of the deterministic findings (repos, symlinks, secret
 hits, instruction-file inventory, brew drift, scheduled jobs). The second reports where
