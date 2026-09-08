@@ -114,3 +114,14 @@ The human wanted run overviews to stop compressing several processes into noun l
 - Preserved the existing timing and formatting rules and passed skill validation and the whitespace check.
 
 Agent session 01a07bce-4d78-75c1-a3f9-aa21c8e26f6a · Commits dc7582b
+
+## Finish the deferred folder reorganization
+
+The human wanted the remaining moves finished and authorized interrupting conflicting sessions.
+
+- Made tools and once ordinary root folders, retained active/upcoming/stable, moved Roughdraft into stable, and retired the old work and ai containers.
+- Moved folder instructions into central sources and subscribed owned projects to tools or once, preserving local wording and repository privacy.
+- Repaired installed command paths, campaign entrypoints, linked Git checkouts and the existing launchd check; the installer and 15 context tests pass.
+- Consolidated the remaining archives, created the missing project remotes, and disabled the migration monitor. Full preservation and commit records are in the private migration folder.
+
+Agent session 01a072fe-84d6-73f3-b37e-3bb912088c38 · Commits dotfiles: 994ec3b, f7f00f8, 6db9df9
