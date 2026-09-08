@@ -8,7 +8,8 @@ description: Audit /Users/alejo/best/tools projects by attention state, git remo
 When working in `/Users/alejo/best/tools`:
 
 - Treat `/tidy-up` as the shorthand for this workflow.
-- Treat each child of `active/`, `upcoming/`, and `stable/` as one project.
+- Distinguish projects from topic groups under `active/`, `upcoming/`, and `stable/`.
+- For a topic group, inspect its child repositories; the group itself is not a repository.
 - Keep workspace config in dotfiles; lifecycle and topic folders are not repositories.
 - Confirm each project has its own git remote.
 - Commit meaningful edits in the project repo; push when a remote exists.

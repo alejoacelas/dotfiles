@@ -17,7 +17,7 @@ for status in active upcoming stable; do
     project="${dir%/}"
     name="${project##*/}"
 
-    if [ -d "$project/.git" ]; then
+    if [ -e "$project/.git" ]; then
       first="$(git -C "$project" log --reverse --date=short --format=%ad 2>/dev/null | head -1 || true)"
     last="$(git -C "$project" log -1 --date=short --format=%ad 2>/dev/null || true)"
     if git -C "$project" remote get-url origin >/dev/null 2>&1 || [ -n "$(git -C "$project" remote 2>/dev/null)" ]; then
@@ -25,18 +25,10 @@ for status in active upcoming stable; do
     else
       remote="missing"
     fi
-  elif git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    first="$(git log --reverse --date=short --format=%ad -- "$project" 2>/dev/null | head -1 || true)"
-    last="$(git log -1 --date=short --format=%ad -- "$project" 2>/dev/null || true)"
-    if git remote get-url origin >/dev/null 2>&1 || [ -n "$(git remote 2>/dev/null)" ]; then
-      remote="parent"
-    else
-      remote="missing"
-    fi
   else
-    first=""
-    last=""
-    remote="missing"
+    printf "%-10s %-24s %-12s %-12s %-8s %-8s %s\n" \
+      "$status" "$name" "—" "—" "—" "group" "inspect child repositories"
+    continue
     fi
 
     if [ -z "$last" ]; then
