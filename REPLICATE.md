@@ -125,3 +125,13 @@ The human wanted the remaining moves finished and authorized interrupting confli
 - Consolidated the remaining archives, created the missing project remotes, and disabled the migration monitor. Full preservation and commit records are in the private migration folder.
 
 Agent session 01a072fe-84d6-73f3-b37e-3bb912088c38 · Commits dotfiles: 994ec3b, f7f00f8, 6db9df9
+
+## Remove human edit tracking
+
+The human wanted human edit tracking removed from both Codex and Claude Code.
+
+- Removed both installed skill links, the shared skill source, the installer entry, and global instructions invoking tracking.
+- Removed session-start marked-diff capture while preserving shared-context synchronization; all 14 tests pass, including the no-tracking hook check.
+- Preserved existing Orca hook changes in a separate baseline commit and archived the retired skill at `~/best/archive/human-edit-tracking`; existing history records remain intact.
+
+Agent session 01a08168-5534-7543-9ec3-57520c0810fe · Commits 3199f7d (existing hooks), ca2b884 (tracking removal)
