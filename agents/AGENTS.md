@@ -1,6 +1,3 @@
----
-human_edit_history: history/global.yaml
----
 # Global agent instructions
 
 I'm persistently trying to delegate work at a higher level of abstraction to AI. Here
@@ -49,10 +46,6 @@ an open-ended question, I've noticed these style guidelines are useful:
 Lastly, be even more attentive to these rules in instruction files and READMEs. They'll
 be read many more times than anything else in a project, so they should be simple,
 unambiguous, and something we're confident in.
-
-I sometimes edit those by hand, so I have a skill to track and preserve my edits. Trigger
-it whenever you see `;;` or an uncommitted edit appears in an `AGENTS.md`, `CLAUDE.md`,
-or `README.md` file.
 
 ## Protect against hard-to-reverse actions
 
@@ -106,8 +99,6 @@ repository when it spans nested repositories. Do not backfill old entries.
   `~/best/dotfiles/bin/agent-context adopt`; choose groups and tell me your choice.
   The session-start hook synchronizes them. Edit shared wording in dotfiles, not the
   generated section. Private group sources live in `~/.local/share/agent-context/private/`.
-- Before editing tracked instruction files, read their `human_edit_history` reference
-  and relevant `.agent-history` records; preserve handwritten wording.
 - Before saying a skill is unavailable, search `~/best/dotfiles/{claude,codex}/skills`
   and `~/{.agents,.claude,.codex}/skills`; `codex/skills` is the explicit
   Codex-compatible list and may point into `claude/skills`.

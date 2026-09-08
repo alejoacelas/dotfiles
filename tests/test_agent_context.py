@@ -4,7 +4,9 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-import subprocess
+import contextlib
+import io
+import json
 
 script = Path(__file__).resolve().parents[1] / 'bin/agent-context'
 loader = importlib.machinery.SourceFileLoader('context', str(script))
@@ -94,26 +96,28 @@ class ContextTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'requires a private project'): m.sync_project(self.path)
         self.assertEqual(before, self.path.read_text())
 
-class EvidenceTest(unittest.TestCase):
-    def test_unborn_git_repository(self):
+class HookTest(unittest.TestCase):
+    def test_hook_does_not_track_marked_edits(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            subprocess.run(['git', 'init', '-q', str(root)], check=True)
-            (root / 'README.md').write_text('A new thought ;;\n')
-            with patch.object(m, 'STATE', root / '.state'):
-                records = m.capture_edits(root)
-                self.assertEqual(1, len(records))
-                self.assertIn('unconfirmed', Path(records[0]).read_text())
-                self.assertEqual('A new thought ;;\n', (root / 'README.md').read_text())
-    def test_nonrepo_snapshot_detects_new_marker(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            (root / 'README.md').write_text('Original.\n')
-            with patch.object(m, 'STATE', root / '.state'):
-                self.assertEqual([], m.capture_edits(root))
-                (root / 'README.md').write_text('Original.\nAdded ;;\n')
-                self.assertEqual(1, len(m.capture_edits(root)))
-                self.assertEqual([], m.capture_edits(root))
+            path = root / 'AGENTS.md'
+            path.write_text('Handwritten ;;\n')
+            m.adopt(path, [], 'public')
+            before = path.read_text()
+            output = io.StringIO()
+            payload = json.dumps({'cwd': str(root), 'hook_event_name': 'SessionStart'})
+            with patch.object(m, 'STATE', root / '.state'), \
+                 patch('sys.argv', ['agent-context', 'hook']), \
+                 patch('sys.stdin', io.StringIO(payload)), contextlib.redirect_stdout(output):
+                self.assertEqual(0, m.main())
+            context = json.loads(output.getvalue())['hookSpecificOutput']['additionalContext']
+            self.assertIn('Current shared instructions', context)
+            self.assertNotIn('human_edit_history', context)
+            self.assertNotIn('human-edit-tracking', context)
+            self.assertFalse((root / '.agent-history').exists())
+            self.assertFalse((root / '.state/snapshots').exists())
+            self.assertEqual(before, path.read_text())
+
     def test_existing_private_source_is_refused_in_public(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

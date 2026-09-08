@@ -3,10 +3,9 @@
 # requires-python = ">=3.10"
 # dependencies = ["PyYAML==6.0.2"]
 # ///
-"""Session-start context sync. Explicit groups, guarded writes, separate edit evidence."""
+"""Session-start context sync. Explicit groups and guarded writes."""
 from __future__ import annotations
 import argparse
-import difflib
 import fcntl
 import hashlib
 import json
@@ -137,48 +136,6 @@ def adopt(path, groups, visibility):
         sync_project(probe)
         desired = probe.read_text()
     atomic(path, desired, old if path.exists() else None)
-
-
-def capture_edits(root):
-    """Save marked diffs as evidence, without claiming authorship or removing markers."""
-    def git(*args):
-        return subprocess.run(['git', '-C', str(root), *args], text=True,
-                              capture_output=True, timeout=20)
-    top = git('rev-parse', '--show-toplevel')
-    is_repo = top.returncode == 0 and Path(top.stdout.strip()).resolve() == root.resolve()
-    if is_repo:
-        has_head = git('rev-parse', '--verify', 'HEAD').returncode == 0
-        changed = git('diff', '--name-only', '-z', *(['HEAD'] if has_head else []), '--', '*.md')
-        untracked = git('ls-files', '--others', '--exclude-standard', '-z', '--', '*.md')
-        if changed.returncode or untracked.returncode:
-            raise ValueError(f'{root}: cannot inspect marked edits')
-        names = sorted(set(filter(None, (changed.stdout + untracked.stdout).split('\0'))))
-    else:
-        names = [p.name for p in root.glob('*.md') if not p.is_symlink()]
-    records = []
-    for name in names:
-        if '.agent-history' in Path(name).parts:
-            continue
-        path = root / name
-        if path.is_symlink() or not path.is_file() or path.stat().st_size > 2_000_000:
-            continue
-        after = path.read_text()
-        snapshot = STATE / 'snapshots' / (digest(str(path.resolve())) + '.txt')
-        if is_repo:
-            result = git('show', 'HEAD:' + name)
-            before = result.stdout if result.returncode == 0 else ''
-        else:
-            before = snapshot.read_text() if snapshot.exists() else ''
-            atomic(snapshot, after)
-        diff = ''.join(difflib.unified_diff(before.splitlines(True), after.splitlines(True),
-                                          fromfile='before/' + name, tofile='after/' + name))
-        if any(line.startswith('+') and not line.startswith('+++') and ';;' in line for line in diff.splitlines()):
-            target = root / '.agent-history/observed' / (digest(name + diff) + '.json')
-            if not target.exists():
-                atomic(target, json.dumps({'file': name, 'kind': 'marked-edit-evidence',
-                       'authorship': 'unconfirmed', 'diff': diff}, indent=2) + '\n')
-            records.append(str(target))
-    return records
 
 
 def trust_codex_hook(home, command):
@@ -320,16 +277,12 @@ def main():
             return int(changed and args.command == 'check')
         if payload.get('hook_event_name', 'SessionStart') != 'SessionStart':
             return 0
-        records = capture_edits(root)
         context = []
         if path:
             # Always inject on startup: files may have been loaded before this hook ran.
             context.append(f'Current shared instructions for {path} (revision {digest(generated)[:12]}):\n{generated}')
-            context.append('Before editing instruction files, consult their human_edit_history reference and any .agent-history records. Preserve handwritten wording.')
-        if records:
-            context.append('Marked edits preserved as evidence. Use human-edit-tracking before editing these passages:\n' + '\n'.join(records))
         if context:
-            print(json.dumps({'systemMessage': f'Agent context: {"updated" if changed else "current"}; {len(records)} marked edit record(s).',
+            print(json.dumps({'systemMessage': f'Agent context: {"updated" if changed else "current"}.',
                               'hookSpecificOutput': {'hookEventName': 'SessionStart', 'additionalContext': '\n\n'.join(context)}}))
     return 0
 

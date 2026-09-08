@@ -35,8 +35,8 @@ telling you to commit. Don't edit `claude/settings.json` from a session without 
 Both Claude and Codex read the one `agents/AGENTS.md`. The Codex app owns
 `~/.codex/config.toml`; keep it free of CLI overrides. `codex/cli.config.toml` links to
 `~/.codex/cli.config.toml` and loads only when Codex starts with `--profile cli`.
-Both tools run `bin/agent-context` at session start. It refreshes declared shared groups,
-preserves marked edit evidence outside loaded documents, and reports conflicts.
+Both tools run `bin/agent-context` at session start. It refreshes declared shared groups
+and reports conflicts.
 The installer includes Orca account-specific Codex homes without changing the CLI profile.
 
 The product directories are compatibility lists, not necessarily canonical sources.
@@ -118,8 +118,7 @@ conflict by preserving the local change and incorporating the intended wording i
 shared source; do not reset the checksum to discard an edit. Global instructions remain
 one symlinked source and are not copied into every project.
 
-Marked-edit evidence goes in `.agent-history/observed/`; confirmed wording history lives
-in the file named by `human_edit_history`. Error logs and installer backups are under
+Error logs and installer backups are under
 `~/.local/state/agent-context/`. No watcher, recurring context sync, or session-end job runs.
 The workspace-migration monitor is temporary and separate.
 

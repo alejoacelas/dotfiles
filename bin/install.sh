@@ -90,7 +90,6 @@ for skill in "$DOTFILES"/codex/skills/*; do
   link "codex/skills/$name" "$HOME/.agents/skills/$name"
   link "codex/skills/$name" "$HOME/.codex/skills/$name"
 done
-link claude/skills/human-edit-tracking "$HOME/.codex/skills/human-edit-tracking"
 prune_stale_dotfiles_skill_links "$HOME/.claude/skills"
 prune_stale_dotfiles_skill_links "$HOME/.agents/skills"
 prune_stale_dotfiles_skill_links "$HOME/.codex/skills"
