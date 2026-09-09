@@ -109,5 +109,10 @@ repository when it spans nested repositories. Do not backfill old entries.
 - Use `gcloud --configuration` and `--project`, `gdoc --account`, `gog --account`, and
   `FLY_80K_TOKEN` or `FLY_PERSONAL_TOKEN`. Google accounts are
   `alejandro.acelas-contractor@80000hours.org` and `alejoacelas@gmail.com`.
-- Batch secret-dependent CLI calls into one `secretspec run ... -- sh -c '...'` so one
-  fingerprint approval covers the workflow.
+- Keep API keys in 1Password; save newly obtained keys there too. Select and verify
+  the correct personal/work account and vault explicitly. Retrieve keys on demand
+  with `op` into the project's `.env` and reuse them there; no SecretSpec or upfront
+  key declarations. Before writing secrets, ensure `.env` is Git-ignored, untracked,
+  and owner-only (`chmod 600`); never print or commit secret values. In the project
+  README, document each variable's purpose and its 1Password account, vault, item,
+  and field, never its value.

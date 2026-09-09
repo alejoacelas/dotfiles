@@ -99,8 +99,10 @@ overwrites data.
 
 ## Secrets
 
-`settings.json` is tracked and public — credentials don't belong in it. Keep anything
-machine-local or secret in `~/.claude/settings.local.json`, which is never tracked. The
+I keep API keys in 1Password and retrieve them on demand into each project's ignored,
+owner-only `.env`. Project READMEs list variable names, purposes, and 1Password
+locations without values. Neither `settings.json` nor `settings.local.json` is a
+credential store; `settings.json` is tracked and public. The
 `hooks/pre-commit` guard (enabled by `install.sh`) blocks any commit that looks like it
 contains a credential; override a false positive with `git commit --no-verify`.
 
