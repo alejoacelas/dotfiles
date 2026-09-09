@@ -52,7 +52,7 @@
       "Bash(codex-companion cancel *)"
     ]
   },
-  "model": "sonnet",
+  "model": "claude-fable-5-1[1m]",
   "hooks": {
     "PreToolUse": [
       {
