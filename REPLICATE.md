@@ -143,5 +143,6 @@ The human wanted API keys stored in 1Password and retrieved on demand into proje
 - Replaced the global SecretSpec instruction with direct `op` retrieval, reuse of local keys, explicit account and vault selection, and saving new keys to 1Password.
 - Required ignored, untracked, owner-only `.env` files and README documentation of variable purposes and 1Password locations without secret values.
 - Removed the README's recommendation to store credentials in Claude settings; preserved the existing model setting in a baseline commit.
+- Centralized credentials in 1Password and verified exact readback, retaining local copies for existing workflows. Remaining personal imports await a destination choice.
 
 Agent session 01a086c8-c0fd-75a1-a1c3-77c04ab1e1f5 · Commits bba2d49 (existing model setting), 5f56fef (credential instructions)
