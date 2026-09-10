@@ -88,6 +88,8 @@ repository when it spans nested repositories. Do not backfill old entries.
   collapsible code blocks; split HTML-bearing files before 50,000 characters. See
   [Orca Markdown collapsibles](../reproduce/orca-markdown-collapsibles.md).
 - Don't use Orca to create tabs, terminals or worktrees for sub-agents unless asked.
+- Prefer the agent's native browser and computer-use tools (including browser extensions)
+  over Orca's browser and computer control.
 - Folder names are lowercase, words separated by dashes.
 - `best/` is an ordinary container. Give projects or coherent note collections their
   own repositories; do not make lifecycle or project-group containers repositories.
