@@ -156,3 +156,13 @@ The human wanted the custom Vercel deployment skill removed and the remaining pe
 - Found separate Granola skill copies with different filing instructions; other skills were left unchanged.
 
 Agent session 01a0b651-6484-7a93-9a8f-a5f49c31162a · Commits dotfiles: ebd0476
+
+## Retire unused custom skills
+
+The human wanted five custom skills removed, any Fly custom-domain component retained, and run-overview’s scope discussed.
+
+- Archived `my-vm`, `deploy-fly`, `delegate-claude-cloud`, `sync-drive`, and `machine-checkup` from dotfiles skill directories and active registries under `~/best/archive/2026-09-retired-agent-skills/`; `LOCATIONS.md` records each original location.
+- Fly had no custom-domain component to preserve and still referenced the superseded SecretSpec workflow.
+- Left `run-overview` unchanged pending discussion of its broad automatic trigger.
+
+Agent session 01a0b651-6484-7a93-9a8f-a5f49c31162a · Commits dotfiles: 9d5b892
