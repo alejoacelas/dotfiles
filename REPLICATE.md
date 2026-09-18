@@ -146,3 +146,13 @@ The human wanted API keys stored in 1Password and retrieved on demand into proje
 - Centralized credentials in 1Password and verified exact readback, retaining local copies for existing workflows. After the personal account was connected, saved 27 personal credentials there and kept the old Fly reference working.
 
 Agent session 01a086c8-c0fd-75a1-a1c3-77c04ab1e1f5 · Commits bba2d49 (existing model setting), 5f56fef (credential instructions)
+
+## Retire the Vercel skill
+
+The human wanted the custom Vercel deployment skill removed and the remaining personal skills inventoried.
+
+- Archived the source from `~/best/dotfiles/claude/skills/deploy-vercel` at `~/best/archive/2026-09-deploy-vercel-skill/deploy-vercel` so it remains recoverable.
+- Removed the compatibility entry and three active installation links; future dotfiles installs will no longer install it.
+- Found separate Granola skill copies with different filing instructions; other skills were left unchanged.
+
+Agent session 01a0b651-6484-7a93-9a8f-a5f49c31162a · Commits dotfiles: ebd0476
