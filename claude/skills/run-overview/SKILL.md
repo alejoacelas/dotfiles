@@ -1,6 +1,6 @@
 ---
 name: run-overview
-description: Create a concise OVERVIEW.md and live RUN-LOG.md before a substantial, long-running, autonomous, multi-stage, or multi-agent run. Use when the user wants a large plan made easy to inspect without replacing the main implementation plan. Do not use for ordinary short tasks.
+description: Create a concise OVERVIEW.md and live RUN-LOG.md when the user requests a run overview or run log, or delegates a project expected to span multiple work sessions with several independently reviewable deliverables. Do not trigger merely because a task involves several steps, tools, agents, or a deployment.
 ---
 # Run overview
 
@@ -20,10 +20,7 @@ Treat a step as a meaningful unit of work, not as a single verb or atomic action
 - Keep each stage goal as one unnumbered bullet by default, and do not number section titles within a stage.
 - Give stages descriptive titles that say what they accomplish.
 - List each run goal separately; give each stage one goal unless it genuinely needs more.
-- Write times as `m` and `h`, without decimals.
-- Prefix every step with its estimated elapsed clock time, such as `[20m]`, `[1h]`, or `[1–2h]`.
-- Add the literal `[optional]` tag after the time only when the run can deliver its intended result without that step.
-- Add serial step estimates to produce the total shown in the stage title; explain when steps overlap rather than adding their times.
+- Add the literal `[optional]` tag to a step only when the run can deliver its intended result without it.
 - Nest links to generated artifacts beneath the step that produces them, using `link — contents`
 - Focus artifact descriptions on the parts most likely to deserve the user's attention, without telling the user how to review them.
 
@@ -33,7 +30,7 @@ Begin with an “at a glance” title and a link to the authoritative plan. Stat
 
 Give each stage:
 
-1. A descriptive title and total time estimate.
+1. A descriptive title.
 2. One clear goal.
 3. A numbered list of meaningful steps.
 4. Links to relevant plan sections or generated artifacts where they help explain the work.
@@ -50,17 +47,24 @@ Create the log with the overview's stages and unchecked steps before execution, 
 ```markdown
 # Run log
 
-## Stage 1: <Descriptive accomplishment> [est 2h | actual 3h]
+## Stage 1: <Descriptive accomplishment>
 
-1. [x] [est 30m | actual 42m] <Completed step.>
+1. [x] <Completed step.>
    a. [<Output>](<path>) — <Contents most likely to deserve attention.>
    b. Unexpected: <Material surprise, deviation, failure, or new work.>
-2. [ ] [est 90m | actual —] <Pending step.>
+2. [ ] <Pending step.>
 ```
 
-- Keep the initial estimate beside the actual elapsed clock time.
-- Use the estimate's units for the actual time and round actual times up to avoid decimals.
 - Check off steps as they finish and link their outputs underneath.
 - Add `Unexpected:` only for a material surprise, deviation, failure, or new piece of work.
-- Preserve the original estimates so the user can see where the run took longer or less time than planned.
 - Keep the log short enough to understand from the checked steps, output links, and unexpected events.
+
+## Optional timing
+
+Time estimates and actual-time tracking are optional. Decide independently whether each helps the user schedule work, compare approaches, or understand a material delay; no explicit request is needed. Omit timing when it would add bookkeeping or imply precision the available evidence does not support.
+
+When useful:
+
+- Add estimates to relevant steps or stages, using `m` and `h` without decimals, such as `[20m]` or `[1–2h]`.
+- Add serial step estimates for a stage total; explain overlapping work rather than adding its times.
+- Record actual elapsed time only when it can be measured reliably. If an estimate exists, preserve it beside the actual time, such as `[est 30m | actual 42m]`.
