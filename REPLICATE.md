@@ -166,3 +166,13 @@ The human wanted five custom skills removed, any Fly custom-domain component ret
 - Left `run-overview` unchanged pending discussion of its broad automatic trigger.
 
 Agent session 01a0b651-6484-7a93-9a8f-a5f49c31162a · Commits dotfiles: 9d5b892
+
+## Narrow run overview scope
+
+The human wanted run-overview to trigger less often and let the model decide when timing is useful.
+
+- Limited automatic use to projects spanning multiple work sessions with several independently reviewable deliverables; explicit requests still trigger it.
+- Made estimates and actual-time tracking independently optional, with guidance to use them only when useful and supported by evidence.
+- Updated the default log example to omit timing; the shared source updates both Claude and Codex through existing links.
+
+Agent session 01a0b651-6484-7a93-9a8f-a5f49c31162a · Commits dotfiles: 9492beb
