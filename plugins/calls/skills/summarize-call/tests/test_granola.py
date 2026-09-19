@@ -8,7 +8,7 @@ import unittest
 from unittest.mock import patch
 
 
-script = Path(__file__).resolve().parents[1] / 'plugins/calls/skills/summarize-call/scripts/granola.py'
+script = Path(__file__).resolve().parents[1] / 'scripts/granola.py'
 spec = importlib.util.spec_from_file_location('granola', script)
 granola = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(granola)

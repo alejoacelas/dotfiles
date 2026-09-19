@@ -52,6 +52,9 @@ Historical instruction snapshots remain in Git history. Archived workspace files
 live independently under `~/best/archive/`. Session records live in
 [`REPLICATE.md`](REPLICATE.md).
 
+Repository tests live in `tests/`; skill-specific tests travel with their skill
+in its own `tests/` directory.
+
 ## Common maintenance
 
 ```sh
@@ -60,6 +63,7 @@ bin/sync-project-skills                   # refresh ai-guides plugin mirrors
 bin/sync-project-skills --check           # check mirrors without writing
 bin/agent-context check /path/to/project  # inspect selected context
 ~/.local/share/agent-context/venv/bin/python -m unittest discover -s tests
+~/.local/share/agent-context/venv/bin/python -m unittest discover -s plugins/calls/skills/summarize-call/tests
 ```
 
 Shared context is selected explicitly per repository with

@@ -131,7 +131,6 @@ while IFS= read -r source; do
   relative="${source#"$DOTFILES/workspace/containers/"}"
   link "workspace/containers/$relative" "$BEST_ROOT/$relative"
 done < <(rg --files --hidden "$DOTFILES/workspace/containers" -g '!**/.codex/**')
-link workspace/containers/tools/.codex "$BEST_ROOT/tools/.codex"
 if [ -d "$HOME/.local/share/agent-context/private/workspace/once/.agents" ] && [ ! -e "$BEST_ROOT/projects/.agents" ]; then
   ln -s "$HOME/.local/share/agent-context/private/workspace/once/.agents" "$BEST_ROOT/projects/.agents"
 fi
