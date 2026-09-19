@@ -4,7 +4,7 @@ Use topic folders: `agent-workflows/`, `connectors/`, `research-evaluations/`,
 `ai-community/`, and `others/` for projects without a clear fit.
 Name project folders `YYYY-MM-project-name`. Each project keeps its own Git repository
 and remote. Declare the `once` shared-context group using `agent-context adopt`, state
-the scope in its AGENTS.md, and make CLAUDE.md contain `@AGENTS.md`.
+the scope in its AGENTS.md. Do not create duplicate CLAUDE.md instructions.
 Keep topic folders as ordinary directories; their shared configuration lives in dotfiles.
 Apply the global privacy rules.
 
