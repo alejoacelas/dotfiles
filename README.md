@@ -20,8 +20,7 @@ It requires `uv`, creates an isolated Python environment, and includes Orca's
 account-specific Codex homes. The Codex app retains ownership of its base config.
 
 Employer context comes from a separate private clone at
-`~/.local/share/agent-context/private`. Private skill drafts live in the ignored
-`skill-drafts/` repository.
+`~/.local/share/agent-context/private`.
 
 ## Where things live
 
@@ -36,7 +35,11 @@ Employer context comes from a separate private clone at
 | `codex/cli.config.toml` | CLI settings for `codex --profile cli` |
 | `plugins/` | Public plugin sources and shared skills |
 | `shell/zprofile`, `git/gitconfig`, `Brewfile` | Shell, Git and Homebrew configuration |
-| `workspace/AGENTS.md`, `workspace/README.md`, `workspace/containers/`, `workspace/projects-AGENTS.md` | Live configuration for ordinary folders under `~/best/` |
+| `workspace/` | Live configuration for ordinary folders under `~/best/` |
+
+`workspace/` mirrors `~/best/`: for example, `workspace/tools/AGENTS.md` supplies
+`~/best/tools/AGENTS.md` through a symlink. Individual repositories keep their own
+instructions; this tree manages ordinary container folders.
 
 The skill directories are explicit compatibility lists; shared entries can be
 symlinks to one source. Installed registries remain real directories so other

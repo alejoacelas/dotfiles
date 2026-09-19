@@ -112,8 +112,6 @@ link bin/agent-context "$HOME/.local/bin/agent-context"
 # Ordinary container configuration lives here; existing repositories keep their own files.
 BEST_ROOT="$HOME/best"
 mkdir -p "$BEST_ROOT"
-link workspace/AGENTS.md "$BEST_ROOT/AGENTS.md"
-link workspace/README.md "$BEST_ROOT/README.md"
 # Claude Code 2.1.277+ reads AGENTS.md natively; do not recreate project shims.
 link REPLICATE.md "$BEST_ROOT/REPLICATE.md"
 for folder in me archive writing work/aim work/80k; do
@@ -123,14 +121,13 @@ done
 if [ ! -e "$BEST_ROOT/tools" ] && [ ! -L "$BEST_ROOT/tools" ]; then
   mkdir -p "$BEST_ROOT/tools/active" "$BEST_ROOT/tools/stable"
 fi
-if [ ! -L "$BEST_ROOT/projects" ] && [ ! -e "$BEST_ROOT/projects/.git" ]; then
-  mkdir -p "$BEST_ROOT/projects"
-  link workspace/projects-AGENTS.md "$BEST_ROOT/projects/AGENTS.md"
-fi
 while IFS= read -r source; do
-  relative="${source#"$DOTFILES/workspace/containers/"}"
-  link "workspace/containers/$relative" "$BEST_ROOT/$relative"
-done < <(rg --files --hidden "$DOTFILES/workspace/containers" -g '!**/.codex/**')
+  relative="${source#"$DOTFILES/workspace/"}"
+  if [ "$relative" = projects/AGENTS.md ] && { [ -L "$BEST_ROOT/projects" ] || [ -e "$BEST_ROOT/projects/.git" ]; }; then
+    continue
+  fi
+  link "workspace/$relative" "$BEST_ROOT/$relative"
+done < <(rg --files --hidden "$DOTFILES/workspace")
 if [ -d "$HOME/.local/share/agent-context/private/workspace/once/.agents" ] && [ ! -e "$BEST_ROOT/projects/.agents" ]; then
   ln -s "$HOME/.local/share/agent-context/private/workspace/once/.agents" "$BEST_ROOT/projects/.agents"
 fi

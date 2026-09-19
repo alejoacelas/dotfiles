@@ -48,7 +48,6 @@ Preserve its repository and history; do not copy private material into a public 
 | `work/aim/` | Aim engagements and related work. |
 | `work/strategy/` | AI-enablement strategy and planning; preserve its privacy. |
 | `dotfiles/` | Shared instructions, installed skills and machine configuration. |
-| `dotfiles/skill-drafts/` | The separate private repository for skills in development. |
 | `archive/` | Retired substantial work and workspace history without a better home. |
 
 Each project topic folder also has `archive/` for unfinished, thin, parked or unlikely-to-be-revisited projects.

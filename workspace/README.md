@@ -3,7 +3,7 @@
 My workspace, organized by the work and reference material I want to find.
 This folder is not a Git repository. Projects and coherent note collections own their repositories.
 
-- `dotfiles/` — shared instructions, hooks, skills and machine configuration; private drafts in `skill-drafts/`.
+- `dotfiles/` — shared instructions, hooks, skills and machine configuration.
 - `work/` — `80k/` employer work, `aim/` engagements and `strategy/` planning.
 - `tools/` — active and stable tools.
 - `projects/` — dated projects grouped by topic, each with a repository and remote.

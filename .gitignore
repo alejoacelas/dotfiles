@@ -5,6 +5,3 @@
 codex/config.toml
 **/__pycache__/
 *.pyc
-
-# Separate private skill-development repository.
-/skill-drafts/
