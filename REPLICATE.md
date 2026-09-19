@@ -235,3 +235,12 @@ Alejo asked to refresh project instructions and remove redundant Claude instruct
 - Checked instruction references and shared-context freshness; native Claude loading requires 2.1.277+ with the built-in feature enabled.
 
 Agent session 01a0b915-3eb2-78b2-9add-6ba48ad9a3b1 · Commits cb25805c2c343a18f532d98ef054f9c6d5e3c485, c70f47ba8f4fd13757134cdfa09c2fc585920ffd
+
+## Keep project navigation current
+
+The human wanted the grouping proposal removed, the folder map treated as a snapshot, and the Matt Pocock trial parked.
+
+- Deleted the proposal and its index links; instructed agents to check actual folders and repair inconsistent maps and indexes.
+- Moved `projects/agents/2026-08-mattpocock-skills` to `projects/agents/archive/2026-08-mattpocock-skills`, preserving its private repository.
+
+Agent session 01a0b90b-7ae3-7ed1-bb2f-fde3ad5d78d3 · Commits dotfiles: 6f2e88f; agent-context-private: 44905fe
