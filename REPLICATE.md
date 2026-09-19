@@ -187,3 +187,11 @@ Alejo wanted employer work grouped under work, one-offs consolidated into projec
 - Proposed five topic groups of 11–12 projects, including archived candidates; the full proposal and move manifest live in the private context repository. Retained old other container notes in the shared archive.
 
 Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits dotfiles: 621edd5 (pre-existing configuration checkpoint), 971fe1e; 80k: 75d2401d; agent-context-private: f8f8efe (pre-existing archive checkpoint), 7c6d764
+
+## Simplify the personal workspace
+
+The human wanted to remove unstarted personal projects and simplify the remaining folders.
+
+- Deleted the local placeholder repositories at `me/past` and `me/relationships` as explicitly requested. Moved writing and style into wiki, merged body and mind into health, and grouped blog and website under `me/sites`; updated container indexes. Existing GitHub repositories were not deleted or renamed.
+
+Agent session 01a0b90b-7ae3-7ed1-bb2f-fde3ad5d78d3 · Commits me/health: 122d3c3, wiki/style: 7ed0f68, wiki/peter-hartree-ai-journal: 27824a8, wiki: 22e3c6a, dotfiles: 5ceaed4, health merge: 14f68bb
