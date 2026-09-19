@@ -263,3 +263,11 @@ Alejo wanted the empty love/advice placeholders archived and people grouped with
 - Archived the two placeholder repositories in the shared archive, preserving their history and separate privacy settings. Repaired calls-to-people and people-to-workspace links; shell syntax and local-link checks passed.
 
 Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits dotfiles: b1291b2; people: d2d72f9; calls: 6c6f480; agent-context-private: 2e62f46
+
+## Archive Mutual Yes under community
+
+Alejo wanted Mutual Yes moved out of relationships into the community archive.
+
+- Moved the intact repository to projects/community/archive/2026-09-mutual-yes and removed it from the relationships index. Recorded its former location and reason in the destination archive.
+
+Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits 9a8ffc7
