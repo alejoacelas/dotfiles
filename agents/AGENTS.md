@@ -95,6 +95,7 @@ repository when it spans nested repositories. Do not backfill old entries.
   own repositories; do not make lifecycle or project-group containers repositories.
 - Put one-off projects in `~/best/projects/`, named `YYYY-MM-project-name`. Every one-off
   gets its own repository and GitHub remote. Apply the privacy rules above.
+- Keep essays, explainers and reference collections in `~/best/writing/` (formerly `wiki/`).
 - Group employer and aim work under `~/best/work/{80k,aim}/`. Draft skills live
   in the separate private repository `~/best/dotfiles/skill-drafts/`.
 - Before moving or creating something in another folder, read its `AGENTS.md` if present.

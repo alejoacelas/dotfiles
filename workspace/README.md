@@ -7,7 +7,7 @@ This folder is not a Git repository. Projects and coherent note collections own 
 - `work/` — `80k/` employer work and `aim/` work.
 - `tools/` — active and stable tools.
 - `projects/` — dated projects grouped by topic, each with a repository and remote.
-- `wiki/` — reusable explanations and reference material.
+- `writing/` — reusable explanations and reference material.
 - `me/` — personal material, blog and website.
 - `people/` — people to learn from, meet and know.
 - `calls/` — private call transcripts and related work.

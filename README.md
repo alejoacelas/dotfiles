@@ -111,7 +111,7 @@ contains a credential; override a false positive with `git commit --no-verify`.
 ## Shared project instructions
 
 Run `bin/agent-context adopt /path/to/project --groups tools --visibility public` to
-subscribe a project. One-offs live in `~/best/projects/`; use the `once` group for them, `wiki` for reference collections,
+subscribe a project. One-offs live in `~/best/projects/`; use the `once` group for them, `wiki` for reference collections in `~/best/writing/`,
 and `80k` only in private employer projects. Group order in YAML is the composition order.
 Use `bin/agent-context sync /path/to/project` for a manual refresh and `check` for a
 read-only freshness check. SessionStart calls the same code automatically.

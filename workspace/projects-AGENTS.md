@@ -17,7 +17,7 @@ Preserve its repository and history; do not copy private material into a public 
 |---|---|
 | `tools/active/` | Tools under active development. |
 | `tools/stable/` | Working tools that need occasional maintenance. |
-| `wiki/` | Reusable explanations, reference material and settled research. |
+| `writing/` | Reusable explanations, reference material and settled research. |
 | `me/admin/` | Personal administration, paperwork, travel and related projects. |
 | `me/health/` | Physical and mental health, food and environment research. |
 | `me/sites/` | Personal blog and website. |

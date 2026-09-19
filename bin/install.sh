@@ -124,7 +124,7 @@ if [ -L "$BEST_ROOT/CLAUDE.md" ] || [ ! -f "$BEST_ROOT/CLAUDE.md" ] || [ "$(cat 
   cp "$DOTFILES/workspace/CLAUDE.md" "$BEST_ROOT/CLAUDE.md"
 fi
 link REPLICATE.md "$BEST_ROOT/REPLICATE.md"
-for folder in me archive wiki people work/aim work/80k; do
+for folder in me archive writing people work/aim work/80k; do
   mkdir -p "$BEST_ROOT/$folder"
 done
 # Avoid changing temporary compatibility links or still-active parent repositories.

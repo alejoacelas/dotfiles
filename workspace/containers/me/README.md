@@ -4,6 +4,6 @@ Personal work already started:
 - [Stuff](stuff/): purchase history and gear notes.
 - [Sites](sites/): my blog and personal website.
 
-Style notes and Peter Hartree’s journal collection live in `../wiki/`.
+Style notes and Peter Hartree’s journal collection live in `../writing/`.
 
 - [Admin](admin/): personal administration, paperwork, travel and related projects.
