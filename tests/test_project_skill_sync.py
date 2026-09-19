@@ -26,7 +26,8 @@ class ProjectSkillSyncTests(unittest.TestCase):
             self.assertEqual(run("--check").returncode, 0)
             guides = root / "writing/ai-guides/.claude/skills"
             self.assertEqual({p.name for p in guides.iterdir()}, {"call-wiki", "wiki-comments"})
-            self.assertTrue((root / "calls/.claude/skills/summarize-call/SKILL.md").exists())
+            calls = root / "calls/.claude/skills"
+            self.assertEqual({p.name for p in calls.iterdir()}, {"summarize-call"})
             runtime = guides / "call-wiki/.env"
             runtime.write_text("private fixture")
             (source / "call-wiki/SKILL.md").write_text("changed")

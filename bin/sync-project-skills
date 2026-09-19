@@ -15,6 +15,9 @@ for project in calls writing/ai-guides; do
   fi
   for source in "$SOURCE_ROOT"/*/; do
     skill="$(basename "$source")"
+    if [ "$project" = calls ] && [ "$skill" != summarize-call ]; then
+      continue
+    fi
     if [ "$project" = writing/ai-guides ] && [ "$skill" != call-wiki ] && [ "$skill" != wiki-comments ]; then
       continue
     fi
