@@ -129,7 +129,7 @@ for folder in me archive wiki people work/aim work/80k; do
 done
 # Avoid changing temporary compatibility links or still-active parent repositories.
 if [ ! -e "$BEST_ROOT/tools" ] && [ ! -L "$BEST_ROOT/tools" ]; then
-  mkdir -p "$BEST_ROOT/tools/active" "$BEST_ROOT/tools/upcoming" "$BEST_ROOT/tools/stable"
+  mkdir -p "$BEST_ROOT/tools/active" "$BEST_ROOT/tools/stable"
 fi
 if [ ! -L "$BEST_ROOT/projects" ] && [ ! -e "$BEST_ROOT/projects/.git" ]; then
   mkdir -p "$BEST_ROOT/projects"

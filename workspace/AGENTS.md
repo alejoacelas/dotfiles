@@ -8,5 +8,6 @@ and inactive work in archive. Keep shared instructions and container configurati
 Every one-off gets its own repository and GitHub remote. Keep employer information and
 others' non-public information private. Preserve repository history when moving projects.
 
-Archive things in `~/best/archive/`. Record what moved, its previous location, and why
-in the archive's `REPLICATE.md`. Do not create additional archive destinations.
+Archive retired work in `~/best/archive/`. Project topic folders may have their own
+`archive/` for unfinished or insubstantial work. Record the old path and reason in the
+destination archive's `REPLICATE.md`.

@@ -1,6 +1,14 @@
 # Projects
 
-My one-off projects, including travel, art and personal planning. Each has its own
-repository and remote, with a `YYYY-MM-project-name` folder.
+My projects, grouped by topic:
 
-[Proposed topic groups](GROUPING-PROPOSAL.md) include possible returns from the archive.
+- [Agent workflows](agent-workflows/): agent tools, prompts and workflow experiments.
+- [Connectors](connectors/): service integrations and connected apps.
+- [Research and evaluations](research-evaluations/): investigations and comparisons.
+- [AI community](ai-community/): enablement, funding and community projects.
+- [Others](others/): projects without a clear home above.
+
+Each group has an `archive/` for unfinished or thin projects. Personal administration
+lives in [me/admin](../me/admin/).
+
+[Project index and archived candidates](GROUPING-PROPOSAL.md).

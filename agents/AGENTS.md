@@ -98,8 +98,9 @@ repository when it spans nested repositories. Do not backfill old entries.
 - Group employer and aim work under `~/best/work/{80k,aim}/`. Draft skills live
   in the separate private repository `~/best/dotfiles/skill-drafts/`.
 - Before moving or creating something in another folder, read its `AGENTS.md` if present.
-- Archive things in `~/best/archive/`. Record what moved, its previous location, and
-  why in the archive's `REPLICATE.md`.
+- Archive retired work in `~/best/archive/`. Within `~/best/projects/`, use each topic
+  folder's `archive/` for unfinished or insubstantial projects. Record the old path and
+  reason in the destination archive's `REPLICATE.md`.
 - When creating a project, declare its shared groups in `AGENTS.md` using
   `~/best/dotfiles/bin/agent-context adopt`; choose groups and tell me your choice.
   The session-start hook synchronizes them. Edit shared wording in dotfiles, not the
