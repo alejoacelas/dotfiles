@@ -29,7 +29,9 @@ workspace, not a fixed taxonomy. Check the actual folders before using these pat
 If you find an inconsistency, update this map and the relevant indexes to match;
 suggest structural changes when the appropriate home is unclear.
 
-When a project finishes, suggest moving it to the durable home that fits its output.
+If a project seems unlikely to be revisited, prefer keeping it in
+`projects/<topic>/archive/` rather than moving it to another part of the workspace.
+Suggest a durable home below when its output is likely to be used or maintained.
 Preserve its repository and history; do not copy private material into a public repo.
 
 | Folder in ~/best/ | Contents and suitable finished work |
@@ -50,8 +52,8 @@ Preserve its repository and history; do not copy private material into a public 
 | `dotfiles/skill-drafts/` | The separate private repository for skills in development. |
 | `archive/` | Retired substantial work and workspace history without a better home. |
 
-Each project topic folder also has `archive/` for unfinished, thin or parked projects.
-This is an explicit exception to the shared archive rule. Keep substantial research
-and working artifacts visible even if future improvements remain. Record each move,
+Each project topic folder also has `archive/` for unfinished, thin, parked or unlikely-to-be-revisited projects.
+This is an explicit exception to the shared archive rule. Substantial research and
+working artifacts can stay archived too when unlikely to be used again. Record each move,
 its former path and the reason in that local archive's REPLICATE.md. Restore a project
 to the topic folder when work resumes. Do not create a Git repository for the archive.
