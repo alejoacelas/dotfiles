@@ -135,6 +135,10 @@ Error logs and installer backups are under
 `~/.local/state/agent-context/`. No watcher, recurring context sync, or session-end job runs.
 The workspace-migration monitor is temporary and separate.
 
+For sessions in `projects/` or at the `best/` root, SessionStart also flags projects
+in `projects/live/` with no substantive activity for 14 days. It reports candidates;
+the agent chooses a destination using `projects/AGENTS.md` before moving them.
+
 Run `~/.local/share/agent-context/venv/bin/python -m unittest discover -s tests` to verify
 local-text preservation, conflicts, missing sources, moves, privacy and idempotence.
 

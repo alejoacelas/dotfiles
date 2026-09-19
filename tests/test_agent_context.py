@@ -7,6 +7,9 @@ from unittest.mock import patch
 import contextlib
 import io
 import json
+import os
+import subprocess
+import time
 
 script = Path(__file__).resolve().parents[1] / 'bin/agent-context'
 loader = importlib.machinery.SourceFileLoader('context', str(script))
@@ -134,5 +137,51 @@ class HookTest(unittest.TestCase):
                 self.assertEqual('Mine.\n', path.read_text())
                 m.adopt(path, ['employer'], 'private')
                 self.assertIn('Employer-only wording.', path.read_text())
+
+class LiveProjectTest(unittest.TestCase):
+    def test_activity_scope_and_hook_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            project = root / 'projects/live/example'
+            project.mkdir(parents=True)
+            def git(*args, env=None):
+                subprocess.run(['git', '-C', str(project), *args], check=True,
+                               stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, env=env)
+            git('init')
+            git('config', 'user.name', 'Test')
+            git('config', 'user.email', 'test@example.com')
+            (project / 'notes.md').write_text('Substantive work.\n')
+            (project / '.gitignore').write_text('cache/\n')
+            git('add', '.')
+            git('commit', '-m', 'Old work', env=dict(os.environ,
+                GIT_AUTHOR_DATE='2001-01-01T00:00:00Z', GIT_COMMITTER_DATE='2001-01-01T00:00:00Z'))
+            (project / 'REPLICATE.md').write_text('Bookkeeping.\n')
+            git('add', '.')
+            git('commit', '-m', 'Recent bookkeeping')
+            (project / 'cache').mkdir()
+            (project / 'cache/generated.txt').write_text('Not project activity.\n')
+            with patch.object(m, 'DOTFILES', root / 'dotfiles'):
+                self.assertIn('example:', m.live_project_reminder(project))
+                self.assertEqual('', m.live_project_reminder(root / 'writing'))
+                output = io.StringIO()
+                with patch.object(m, 'STATE', root / '.state'), \
+                     patch('sys.argv', ['agent-context', 'hook']), \
+                     patch('sys.stdin', io.StringIO(json.dumps({'cwd': str(root)}))), \
+                     contextlib.redirect_stdout(output):
+                    self.assertEqual(0, m.main())
+                self.assertIn('Live project review', json.loads(output.getvalue())[
+                    'hookSpecificOutput']['additionalContext'])
+                draft = project / 'draft.md'
+                draft.write_text('Uncommitted work.\n')
+                self.assertEqual('', m.live_project_reminder(project))
+                git('add', 'draft.md')
+                self.assertEqual('', m.live_project_reminder(project))
+                now = time.time()
+                with patch.object(m.time, 'time', return_value=now):
+                    os.utime(draft, (now - 14 * 86400, now - 14 * 86400))
+                    self.assertIn('14 days', m.live_project_reminder(project))
+                    os.utime(draft, (now - 14 * 86400 + 1, now - 14 * 86400 + 1))
+                    self.assertEqual('', m.live_project_reminder(project))
+
 
 if __name__ == '__main__': unittest.main()

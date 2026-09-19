@@ -1,11 +1,26 @@
 # Projects
 
-Use topic folders: `agents/`, `connectors/`, `community/`, and `others/` for projects without a clear fit.
+Use `live/` for projects being worked on now. Use topic folders: `agents/`, `connectors/`, `community/`, and `others/` for projects without a clear fit.
 Name project folders `YYYY-MM-project-name`. Each project keeps its own Git repository
 and remote. Declare the `once` shared-context group using `agent-context adopt`, state
 the scope in its AGENTS.md. Do not create duplicate CLAUDE.md instructions.
 Keep topic folders as ordinary directories; their shared configuration lives in dotfiles.
 Apply the global privacy rules.
+
+## Keep live projects current
+
+Move any project with no substantive edits in the last 14 days out of `live/`.
+Choose the appropriate topic folder for ongoing or parked work, or the permanent
+home below for a tool, reference collection, personal material or employer work.
+Preserve its repository, privacy and uncommitted work; check for a running session
+before moving its checkout. Record the move and update links and indexes.
+
+The session-start hook reports candidates when a session starts in `projects/`
+or its descendants, or at the `best/` root. It does not move files itself.
+It uses the latest substantive Git commit and timestamps of changed or untracked,
+non-ignored files. Instruction/log-only commits and ignored outputs do not reset
+the clock. Treat this as an estimate: inspect uncommitted deletions, nested repos
+and copied files before deciding the actual last edit.
 
 ## Where finished work belongs
 
