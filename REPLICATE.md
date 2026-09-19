@@ -244,3 +244,13 @@ The human wanted the grouping proposal removed, the folder map treated as a snap
 - Moved `projects/agents/2026-08-mattpocock-skills` to `projects/agents/archive/2026-08-mattpocock-skills`, preserving its private repository.
 
 Agent session 01a0b90b-7ae3-7ed1-bb2f-fde3ad5d78d3 · Commits dotfiles: 6f2e88f; agent-context-private: 44905fe
+
+## Route call-derived writing to its own repository
+
+Alejo wanted guides and publishing separated from calls, and video-blur tooling extracted into tools.
+
+- Updated call-wiki, wiki-comments and the optional summarize-call writing pass to use the private writing/ai-guides repository. Cross-repository links and commits now explicitly separate guides from call records.
+- Extended sync-project-skills to mirror the two writing skills into ai-guides while keeping all three in calls. Added a test covering skill selection, drift detection, idempotence and private runtime-file preservation; validated all three skills and their mirrors.
+- Indexed video-blur under active tools. New repositories declare wiki and tools context groups respectively. All checks passed; the publication output matched 88 pre-move files and built locally without deployment.
+
+Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits dotfiles: cb25805 (pre-existing instruction checkpoint), 10eab14; calls: 6d01da1 (pre-existing instruction checkpoint), 1b6bd33; ai-guides: 8389b11; video-blur: 66b5f62; writing: 32198bf
