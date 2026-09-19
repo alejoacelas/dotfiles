@@ -318,3 +318,13 @@ Alejo reviewed the shared sources and wanted only the 80k case retained.
 - Updated live instructions so agents do not recreate the retired groups. All 17 context tests pass.
 
 Agent session 01a0b915-3eb2-78b2-9add-6ba48ad9a3b1 · Commits 113f708
+
+## Remove personal hook overhead
+
+Alejo wanted guarded-file checks, automatic review reminders and people-sync removed, and the banner silencer simplified.
+
+- Removed all five registrations and their six supporting files: guarded-file protection, two review reminders, people-sync, and the cache-patching silencer.
+- Retired the silencer instead of maintaining plugin patches; restored three cached plugin scripts with backups. Routine banners and setup warnings can now appear normally.
+- Verified unrelated settings and hooks were preserved exactly, JSON remains valid, and restored shell scripts pass syntax checks.
+
+Agent session 01a0b915-3eb2-78b2-9add-6ba48ad9a3b1 · Commits 7fcaef4
