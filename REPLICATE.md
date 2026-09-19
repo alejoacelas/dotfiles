@@ -387,3 +387,14 @@ Alejo wanted best-claude removed, the Granola helper simplified, the installer c
 - All 21 tests passed, including public-API pagination, transcript formatting, missing-key behavior and isolated installer checks. Corrected a macOS path-alias mismatch in the new test after its first failure. Plugin mirrors match; the configuration checker reports no hard failures. No live Granola request or full machine installation was needed.
 
 Agent session 01a0bb6c-e2fd-7990-8db1-2889c6580d6a · Commits a274996
+
+## Colocate skill tests and retire more scaffolding
+
+Alejo wanted tidy-up and reproduce removed, skill-test placement reconsidered, and a broader review of deletion and regrouping candidates.
+
+- Removed tidy-up, its tools/.codex symlink and installer registration; removed the two remaining reproduce notes. Existing workspace procedures retain the current Markdown and skill-installation rules.
+- Moved Granola tests into summarize-call/tests with a relative helper path. Root tests continue to cover context, installation and mirror synchronization; README documents both test commands.
+- Located SERVICE-AUDIT.md in the separate private skill-drafts repository: it is an unstarted task brief, not runtime configuration. Left it for an explicit retirement decision. Also identified the unused Granola virtual environment, old one-off permission rules and workspace layout as remaining cleanup candidates.
+- All 18 infrastructure and 3 skill tests pass; shell syntax and mirror checks pass. The config checker reports no hard failures, only existing drift elsewhere.
+
+Agent session 01a0bb6c-e2fd-7990-8db1-2889c6580d6a · Commits d4f45e5
