@@ -279,3 +279,11 @@ The human wanted a live project folder and a startup reminder for projects untou
 - Added `projects/live/`, the 14-day relocation rule, and a read-only reminder in the existing SessionStart hook for projects sessions and the workspace root. Uses substantive Git history plus uncommitted file timestamps, excluding bookkeeping and ignored artifacts. All 16 tests pass, including scope, staging, ignored activity and the exact deadline.
 
 Agent session 01a0b90b-7ae3-7ed1-bb2f-fde3ad5d78d3 · Commits dotfiles: 82ab903
+
+## Prefer local archives for unlikely revisits
+
+Alejo wanted projects unlikely to be revisited kept in their topic archive rather than relocated elsewhere.
+
+- Updated projects/AGENTS.md to prefer projects/<topic>/archive/ and reserve durable-home suggestions for outputs likely to be used or maintained. Removed the conflicting instruction to keep substantial artifacts visible regardless of expected use.
+
+Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits 4df5189
