@@ -2,4 +2,4 @@
 
 AI enablement, funding and community projects.
 
-[Project index](../GROUPING-PROPOSAL.md) · [Parked projects](archive/)
+[Parked projects](archive/)

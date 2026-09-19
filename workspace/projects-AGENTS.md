@@ -9,6 +9,11 @@ Apply the global privacy rules.
 
 ## Where finished work belongs
 
+The topic names above and destination folders below are a snapshot of the current
+workspace, not a fixed taxonomy. Check the actual folders before using these paths.
+If you find an inconsistency, update this map and the relevant indexes to match;
+suggest structural changes when the appropriate home is unclear.
+
 When a project finishes, suggest moving it to the durable home that fits its output.
 Preserve its repository and history; do not copy private material into a public repo.
 

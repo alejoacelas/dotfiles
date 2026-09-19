@@ -10,4 +10,3 @@ My projects, grouped by topic:
 Each group has an `archive/` for unfinished or thin projects. Personal administration
 lives in [me/admin](../me/admin/).
 
-[Project index and archived candidates](GROUPING-PROPOSAL.md).
