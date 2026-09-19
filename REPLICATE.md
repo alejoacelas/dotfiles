@@ -287,3 +287,13 @@ Alejo wanted projects unlikely to be revisited kept in their topic archive rathe
 - Updated projects/AGENTS.md to prefer projects/<topic>/archive/ and reserve durable-home suggestions for outputs likely to be used or maintained. Removed the conflicting instruction to keep substantial artifacts visible regardless of expected use.
 
 Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits 4df5189
+
+## Shorten standing agent instructions
+
+Alejo wanted the global instructions, shared groups and article reviewer simplified, then a review of what tools/AGENTS.md should contain.
+
+- Reduced global instructions from 1,186 to 391 words and moved occasional procedures to a linked guide, preserving identity, privacy and secret-handling rules.
+- Reduced tools and one-off groups to 63 and 51 words; refreshed this repository's generated block. Other subscribers receive source changes through session-start sync.
+- Checked local links, section anchors, generated-context freshness and whitespace. Left the tools container instructions unchanged for discussion.
+
+Agent session 01a0b921-9a6a-76c1-9000-c63b1c0cb909 · Commits dotfiles: d4f25b2; agent-context-private: 2dffb3b; web-article-reviewer: 1be9638
