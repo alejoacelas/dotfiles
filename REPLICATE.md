@@ -345,3 +345,13 @@ Alejo preferred the old writing instructions in blind comparisons and wanted the
 - Verified the Claude, Codex and active Orca account instruction entrypoints all resolve to this file. The separate writing experiment continues to use frozen old/new snapshots, so this live change does not contaminate its comparisons.
 
 Agent session 01a0b921-9a6a-76c1-9000-c63b1c0cb909 · Commits e4971cf
+
+## Global call summarization
+
+Alejo wanted summarize-call available globally, saving to best/calls under its local filing rules.
+
+- Exposed the shared skill through Claude and both Codex registries; kept the project mirror for standalone checkouts.
+- Required reading calls/AGENTS.md before filing and moved the detailed folder convention there.
+- Kept new transcript caches inside the private archive; verified helper paths from /tmp and validated the skill and mirrors.
+
+Agent session 01a0bb5d-f2cb-7111-b7b7-18b2b064e999 · Commits dotfiles a2e22e6; calls 8b064af
