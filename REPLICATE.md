@@ -195,3 +195,14 @@ The human wanted to remove unstarted personal projects and simplify the remainin
 - Deleted the local placeholder repositories at `me/past` and `me/relationships` as explicitly requested. Moved writing and style into wiki, merged body and mind into health, and grouped blog and website under `me/sites`; updated container indexes. Existing GitHub repositories were not deleted or renamed.
 
 Agent session 01a0b90b-7ae3-7ed1-bb2f-fde3ad5d78d3 · Commits me/health: 122d3c3, wiki/style: 7ed0f68, wiki/peter-hartree-ai-journal: 27824a8, wiki: 22e3c6a, dotfiles: 5ceaed4, health merge: 14f68bb
+
+## Topic groups, local archives and writing
+
+Alejo wanted project topic folders, personal administration under me, upcoming tools sorted into projects, local archives for unfinished work, and wiki renamed to writing.
+
+- Applied the proposed topic groups as agent-workflows, connectors, research-evaluations and ai-community; added others. Moved personal projects into me/admin and six upcoming-tool repositories into the relevant topics.
+- Parked six unfinished proposals or handoffs in topic-local archives and recorded the reasons in private archive logs. Updated global and project instructions to permit these archives and map durable homes for finished work.
+- Renamed wiki to writing and moved five standalone essay/reference collections there as ignored independent repositories. Updated workspace indexes and installer paths; preserved the wiki shared-context group ID.
+- Verified all 30 project repository states through the moves, repaired email/Slack sibling links, checked affected symlinks and shell syntax, and confirmed that private nested repositories remain untracked by their public parent. Exact moves and classifications live in the private context repository.
+
+Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits dotfiles: e8847b4, a299e1e; writing: 63a54e5; agent-context-private: 59d7a34, 8752c3c; email: 4c6692a; slack: 71f220f
