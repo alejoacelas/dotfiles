@@ -197,7 +197,7 @@ already spoken in this call. Remove `[unclear]` markers as garbles resolve
 
 ### Step 8: Check slug distinctiveness
 
-After writing, list every call file in the archive (`ls once/*/ many/*/`). If
+After writing, list every call file in the archive (`rg --files -g '*-trans.md' -g '*-sum.md'`). If
 the new slug is generic ("intro-call", "uplift-consulting") or overlaps too
 much with an earlier call's slug — in any folder — rename the new pair to
 something more distinctive of this call's content, and consider renaming the

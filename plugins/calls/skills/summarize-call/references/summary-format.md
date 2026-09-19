@@ -81,7 +81,7 @@ word for what the call was. `coaching` is the one that matters downstream
 user is walking the other person through AI tooling on their work. Otherwise
 pick the plain word that fits — `advice`, `hiring`, `collab`, `intro`, … —
 inventing a new one only when none of the existing kinds
-(`grep -rh '^kind:' once/*/ many/*/ | sort -u`) fits. Frontmatter is
+(`rg --no-filename '^kind:' -g '*-sum.md' | sort -u`) fits. Frontmatter is
 private: strip it when concatenating the summary into the Google Doc.
 
 ## Formatting guidelines

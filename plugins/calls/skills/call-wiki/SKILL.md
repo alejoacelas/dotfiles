@@ -49,7 +49,7 @@ title: <The question, as a question>
 sidebar: <short sidebar name, 2–3 words, distinct within its category>
 category: <group slug — see below>
 calls:
-  - "[<YYYY-MM-DD> <Person> <slug>](../../../calls/once/<org-name>/<file>-sum.md)"
+  - "[<YYYY-MM-DD> <Person> <slug>](../../../calls/<group>/<person>/<file>-sum.md)"
 ---
 
 *Last updated <YYYY-MM-DD> · Confidence: <rung> — <short provenance clause;
