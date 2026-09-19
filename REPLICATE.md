@@ -328,3 +328,11 @@ Alejo wanted guarded-file checks, automatic review reminders and people-sync rem
 - Verified unrelated settings and hooks were preserved exactly, JSON remains valid, and restored shell scripts pass syntax checks.
 
 Agent session 01a0b915-3eb2-78b2-9add-6ba48ad9a3b1 · Commits 7fcaef4
+
+## Keep the writing experiment registration private
+
+Alejo wanted an employer technical recommendation included in the blind writing experiment.
+
+- Moved the experiment's context registration out of the public registry when its source material required a private repository.
+
+Agent session 01a0b921-9a6a-76c1-9000-c63b1c0cb909 · Commits dotfiles 6c350de; agent-context-private b1a6801
