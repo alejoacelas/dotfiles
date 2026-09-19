@@ -309,3 +309,12 @@ Alejo wanted selective shared context at startup and after compaction, without a
 - Full selections, cross-repository hashes and sanitized startup evidence are in the private context repository under migration/2026-09-19-explicit-context/.
 
 Agent session 01a0b915-3eb2-78b2-9add-6ba48ad9a3b1 · Commits dotfiles 0a5bbdb
+
+## Keep only employer shared context
+
+Alejo reviewed the shared sources and wanted only the 80k case retained.
+
+- Removed tools, once and wiki subscriptions and retired their public source files; nine explicitly selected employer repositories retain 80k guidance. Local project instructions and container exclusions remain in place.
+- Updated live instructions so agents do not recreate the retired groups. All 17 context tests pass.
+
+Agent session 01a0b915-3eb2-78b2-9add-6ba48ad9a3b1 · Commits 113f708
