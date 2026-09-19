@@ -8,7 +8,7 @@ Usage:
     python granola.py get <doc_id>      # Get transcript for a specific meeting
     python granola.py recent [n]        # Get transcript for nth most recent meeting (default: 1)
 
-Transcripts are saved under ~/best/calls/.cache/summarize-call/transcripts/.
+Transcripts are saved under the skill-local data/transcripts/ directory.
 """
 
 import os
@@ -51,7 +51,7 @@ API_BASE = "https://api.granola.ai/v1"
 # 7.4x moved the desktop DEK into an app-scoped Keychain item we can't read.
 PUBLIC_API_BASE = "https://public-api.granola.ai/v1"
 SKILL_DIR = Path(__file__).resolve().parent.parent
-CACHE_DIR = Path.home() / "best" / "calls" / ".cache" / "summarize-call"
+CACHE_DIR = SKILL_DIR / "data"
 TRANSCRIPTS_DIR = CACHE_DIR / "transcripts"
 SUMMARIES_DIR = CACHE_DIR / "summaries"
 

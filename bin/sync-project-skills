@@ -8,16 +8,13 @@ SOURCE_ROOT="$DOTFILES_ROOT/plugins/calls/skills"
 RSYNC_ARGS=(-acO --delete --exclude=.env --exclude=.venv --exclude=data/ --exclude=__pycache__/)
 stale=0
 
-for project in calls writing/ai-guides; do
+for project in writing/ai-guides; do
   if [ ! -d "$BEST_ROOT/$project/.git" ]; then
     printf 'skip: %s repo is not cloned\n' "$project"
     continue
   fi
   for source in "$SOURCE_ROOT"/*/; do
     skill="$(basename "$source")"
-    if [ "$project" = calls ] && [ "$skill" != summarize-call ]; then
-      continue
-    fi
     if [ "$project" = writing/ai-guides ] && [ "$skill" != call-wiki ] && [ "$skill" != wiki-comments ]; then
       continue
     fi

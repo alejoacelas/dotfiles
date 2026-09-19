@@ -1,4 +1,6 @@
-# Project-only call skills
+# Original project-only call skills
+
+Historical setup: calls now uses the global skill; only AI guides keeps project mirrors.
 
 The public `calls` plugin contains the `summarize-call` and `call-wiki` skills.
 `bin/sync-project-skills` mirrors their tracked files into

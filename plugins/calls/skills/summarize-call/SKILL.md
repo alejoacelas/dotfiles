@@ -21,7 +21,7 @@ Resolve this skill's directory from the `SKILL.md` you loaded and set
 `CALL_SKILL` to that absolute directory. Run archive operations from `~/best/calls`;
 run the bundled helpers by their absolute paths as shown below. References are
 relative to this skill, not the working directory. Temporary transcripts and
-garble inventories stay in `~/best/calls/.cache/summarize-call/`.
+garble inventories stay in `$CALL_SKILL/data/`.
 
 ## Setup (once)
 
@@ -55,7 +55,7 @@ python3 "$CALL_SKILL/scripts/granola.py" recent [n]    # nth most recent transcr
 ```
 
 `get <doc_id>` prints the raw transcript to stdout (also saved under
-`~/best/calls/.cache/summarize-call/transcripts/`). Speakers are `**Me**:` (the account holder, Alejandro)
+`$CALL_SKILL/data/transcripts/`). Speakers are `**Me**:` (the account holder, Alejandro)
 and `**Other**:` (everyone else).
 
 These commands are the default path for every call. But the public API index
@@ -164,7 +164,7 @@ no more two-section single body. Pass `--account <email>` to every `gdoc` call
 ### Step 5: Garble inventory, then tidied transcript
 
 Before writing the transcript, write a temporary garble inventory to
-`~/best/calls/.cache/summarize-call/garbles/<YYYY-MM-DD>-<person>.md`: one line per span where the
+`$CALL_SKILL/data/garbles/<YYYY-MM-DD>-<person>.md`: one line per span where the
 transcription seems garbled — the raw text, plus the likely reading when one
 is guessable from the call itself.
 

@@ -67,16 +67,16 @@ for their individual actions. For example, `calls` contains `summarize-call` and
 
 | Public source | Project wiring |
 |---|---|
-| [`plugins/calls/`](plugins/calls/) | `calls/.claude/skills/` and `writing/ai-guides/.claude/skills/{call-wiki,wiki-comments}/` |
+| [`plugins/calls/`](plugins/calls/) | Global `summarize-call`; `writing/ai-guides/.claude/skills/{call-wiki,wiki-comments}/` |
 
 The marketplace at [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
 also makes the plugin independently installable. Edit the public source here, run
 `bin/sync-project-skills`, then commit and push the affected repos. The dotfiles pre-commit hook
-blocks source changes while a calls or ai-guides mirror differs. Run the mirror command explicitly
+blocks source changes while an ai-guides mirror differs. Run the mirror command explicitly
 when changing those plugin sources; installation does not write into an active calls project.
 Do not edit the generated mirror. Entries under `claude/skills/` and
 `codex/skills/` explicitly expose a skill globally through `install.sh`. The mirror's ignored `.env` and `.venv` link to the local
-source; new transcript caches stay in the ignored `calls/.cache/summarize-call/`.
+source; transcript caches stay in the global skill’s ignored `data/` directory.
 
 The root `AGENTS.md` contains project instructions. Claude Code 2.1.277+ reads it
 natively when no project or ancestor Claude instruction file suppresses fallback.
