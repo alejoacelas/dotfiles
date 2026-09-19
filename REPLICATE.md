@@ -216,3 +216,13 @@ Alejo wanted meals and relationship projects out of admin, strategy under work, 
 - Inspected calls without changing it: 67 article files, nine Slack-derived drafts, a publishing pipeline and video-blur tooling. Recommended a private writing collection for articles/drafts/site, with coordinated path updates because publishing and call skills depend on the current layout.
 
 Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits dotfiles: 2a008f7; health: 606d2e2; strategy: 30aa1fd; agent-context-private: 6455bd2
+
+## Simplify project topics
+
+The human wanted shorter topic names and research evaluations grouped under others.
+
+- Renamed `projects/agent-workflows/` to `projects/agents/` and `projects/ai-community/` to `projects/community/`.
+- Dissolved `projects/research-evaluations/` into `projects/others/`, preserving the archived project and its archive record.
+- Updated topic instructions, indexes and symlinks; verified the moved repositories retain their original HEAD commits.
+
+Agent session 01a0b90b-7ae3-7ed1-bb2f-fde3ad5d78d3 · Commits dotfiles: 52620a4; agent-context-private: 9aabadb
