@@ -398,3 +398,13 @@ Alejo wanted tidy-up and reproduce removed, skill-test placement reconsidered, a
 - All 18 infrastructure and 3 skill tests pass; shell syntax and mirror checks pass. The config checker reports no hard failures, only existing drift elsewhere.
 
 Agent session 01a0bb6c-e2fd-7990-8db1-2889c6580d6a · Commits d4f45e5
+
+## Mirror the workspace layout
+
+Alejo wanted the remaining approved cleanup completed and the role of workspace explained.
+
+- Flattened workspace/containers into workspace/{me,projects,tools} and placed project instructions at workspace/projects/AGENTS.md. Updated all 23 affected live links and simplified installation to one tree traversal.
+- Archived the unstarted private workshop outside dotfiles, removed its obsolete placement instructions, deleted the unused 26 MB Granola environment, and removed five stale permission rules. Credentials and cached transcripts were preserved.
+- All 19 infrastructure and 3 skill tests passed, including repeated workspace installation and backup preservation. The full machine installer succeeded; live paths resolve correctly and hook definitions remain identical. Only Claude instruction exclusion paths changed. Fixed a trailing blank line caught by the diff check.
+
+Agent session 01a0bb6c-e2fd-7990-8db1-2889c6580d6a · Commits 54fb63c
