@@ -44,9 +44,9 @@ its expected signing identity is missing; never silently fall back to ad-hoc sig
 
 ## Markdown review
 
-Use [Peter Hartree's Roughdraft fork](https://github.com/peterhartree/roughdraft).
-Open files with `roughdraft open "/absolute/path/to/file.md"`. After the user reviews
-or closes the document, reread it for CriticMarkup feedback.
+Use Zed by default to open Markdown for human review.
+Open files with `open -a Zed "/absolute/path/to/file.md"` on macOS.
+After the user reviews or edits a document, reread it before making further changes.
 
 ## Claude instruction compatibility
 
