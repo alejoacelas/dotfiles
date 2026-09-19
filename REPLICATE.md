@@ -376,3 +376,14 @@ Alejo wanted the historical directories removed while keeping current, functiona
 - Left current configuration, installer behavior and hooks intact. Shell syntax and diff checks passed.
 
 Agent session 01a0bb6c-e2fd-7990-8db1-2889c6580d6a · Commits a4c61e4
+
+## Remove retired agents and fallback code
+
+Alejo wanted best-claude removed, the Granola helper simplified, the installer cleanup order fixed, and further obsolete material removed.
+
+- Removed the five writing-agent definitions and ~/best/.claude symlink, the old migration verification, and two obsolete setup notes whose instructions conflict with the current configuration.
+- Removed desktop token decryption, Keychain access, virtual-environment re-execution and duplicate transcript formatting from Granola. The helper now uses only the public API and reports missing keys before any request.
+- Moved obsolete Claude skill-link pruning before broken-link validation; removed installation of the defunct grouping proposal. Kept private workspace links whose targets remain live.
+- All 21 tests passed, including public-API pagination, transcript formatting, missing-key behavior and isolated installer checks. Corrected a macOS path-alias mismatch in the new test after its first failure. Plugin mirrors match; the configuration checker reports no hard failures. No live Granola request or full machine installation was needed.
+
+Agent session 01a0bb6c-e2fd-7990-8db1-2889c6580d6a · Commits a274996
