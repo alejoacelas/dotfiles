@@ -366,3 +366,13 @@ Alejo wanted summarize-call kept as the official workflow, simpler documentation
 - All 17 tests passed. The configuration check found no hard failures; existing instruction differences and one-sided skills remain outside this change.
 
 Agent session 01a0bb6c-e2fd-7990-8db1-2889c6580d6a · Commits 173f3fa
+
+## Remove historical configuration snapshots
+
+Alejo wanted the historical directories removed while keeping current, functional configuration.
+
+- Removed 26 tracked files from agents/history, workspace/original-containers, workspace/retired-other and workspace/retired-upcoming; updated the README to point to Git history.
+- Materialized all eight incoming archive symlinks as regular files and verified their contents against the previous commit. Recorded their former paths and preservation in the archive's REPLICATE.md.
+- Left current configuration, installer behavior and hooks intact. Shell syntax and diff checks passed.
+
+Agent session 01a0bb6c-e2fd-7990-8db1-2889c6580d6a · Commits a4c61e4
