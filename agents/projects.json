@@ -13,12 +13,6 @@
       ],
       "visibility": "public"
     },
-    "~/best/projects/live/2026-09-writing-instructions-test": {
-      "groups": [
-        "once"
-      ],
-      "visibility": "public"
-    },
     "~/best/tools/active/dictation": {
       "groups": [
         "tools"
