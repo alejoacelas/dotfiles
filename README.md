@@ -48,10 +48,9 @@ instructions. The calls plugin also supplies `call-wiki` and `wiki-comments`,
 mirrored into `writing/ai-guides` for standalone checkouts. The
 [marketplace](.claude-plugin/marketplace.json) exposes the plugin independently.
 
-`workspace/original-containers/`, `workspace/retired-*`, and `agents/history/`
-preserve historical files. The retired workspace files still have incoming links
-from `~/best/archive/`; they are not safe to remove without replacing those links.
-Session records live in [`REPLICATE.md`](REPLICATE.md).
+Historical instruction snapshots remain in Git history. Archived workspace files
+live independently under `~/best/archive/`. Session records live in
+[`REPLICATE.md`](REPLICATE.md).
 
 ## Common maintenance
 
