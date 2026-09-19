@@ -10,3 +10,4 @@ These are the only projects competing for development attention.
 - `search-bar/` — the app works, but connected-source search remains unfinished.
 - `shortcuts/` — turn the conservative base into the shortcut system I actually want.
 - `twitter/` — maintain the extension and finish the graph and list workflows.
+- `video-blur/` — recording-redaction tools and private experiment reports; recordings remain in calls.

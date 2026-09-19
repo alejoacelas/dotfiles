@@ -228,7 +228,7 @@ summary is edited or renamed:
 Do **not** run this unless the user asks for a wiki pass. Kept here so it can
 be re-enabled later: follow the `call-wiki` skill (sibling to this one) —
 harvest the call's "I looked into / I'm not sure" moments, research each
-against primary sources, and file grounded entries in the archive's `wiki/`,
+against primary sources, and file grounded entries in `~/best/writing/ai-guides/articles/` (a separate private repo),
 linked from the summary's open questions. It runs last so the Google Doc
 snapshot stays free of repo-relative links.
 

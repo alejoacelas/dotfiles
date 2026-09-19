@@ -1,6 +1,6 @@
 ---
 name: call-wiki
-description: Turn a call's "I looked into X" / "I'm not sure about Y" moments into grounded wiki entries under the archive's wiki/ folder — modular ~300-word explainers with every claim traced to a primary source and tagged by confidence, linked from the call summary. Use after filing a call, or when the user asks to "build the wiki" for a call or research a call's open questions.
+description: Turn a call's "I looked into X" / "I'm not sure about Y" moments into grounded wiki entries under ~/best/writing/ai-guides/articles/ — modular ~300-word explainers with every claim traced to a primary source and tagged by confidence, linked from the call summary. Use after filing a call, or when the user asks to "build the wiki" for a call or research a call's open questions.
 ---
 
 # Call wiki — ground what was said on calls
@@ -9,8 +9,10 @@ On calls I often say "I looked into this" or "I'm not sure how that works". Each
 such moment becomes a wiki entry: a short file I can read to actually know the
 thing, grounded in primary sources instead of my memory of them.
 
-Entries live in `wiki/` at the archive root, shared across all calls — the same
-question comes up with different people, so one entry serves them all and gets
+Entries live in `articles/` in the separate private `~/best/writing/ai-guides/`
+repository. Run guide commands from that repository; calls remain in `~/best/calls/`.
+If either checkout is absent, locate or clone its private repository before writing.
+The same question comes up with different people, so one entry serves them all and gets
 refreshed instead of duplicated.
 
 ## Step 1: Harvest topics
@@ -31,14 +33,14 @@ of preference, and anything only a specific human can answer.
 
 ## Step 2: Check for an existing entry
 
-`ls wiki/` and grep for the topic. If an entry exists, update it — recheck its
+`ls articles/` and grep for the topic. If an entry exists, update it — recheck its
 claims if its Last-updated date is old, append the new call to its
 frontmatter — instead of writing a near-duplicate. Slugs follow the archive rule: distinctive across
 the whole wiki, no generic names.
 
 ## Step 3: Research and write
 
-One entry per topic, `wiki/<topic-slug>.md`, roughly 250–350 words plus the
+One entry per topic, `articles/<topic-slug>.md`, roughly 250–350 words plus the
 Sources list:
 
 ```markdown
@@ -47,7 +49,7 @@ title: <The question, as a question>
 sidebar: <short sidebar name, 2–3 words, distinct within its category>
 category: <group slug — see below>
 calls:
-  - "[<YYYY-MM-DD> <Person> <slug>](../once/<org-name>/<file>-sum.md)"
+  - "[<YYYY-MM-DD> <Person> <slug>](../../../calls/once/<org-name>/<file>-sum.md)"
 ---
 
 *Last updated <YYYY-MM-DD> · Confidence: <rung> — <short provenance clause;
@@ -78,7 +80,7 @@ Frontmatter rules:
   to add).
 - `category` drives the published sidebar's groups and the URL
   (`alejo.wiki/<category>/<slug>/`). List the existing ones
-  (`grep -h '^category:' wiki/*.md | sort -u`) and reuse the group that fits;
+  (`grep -h '^category:' articles/*.md | sort -u`) and reuse the group that fits;
   create a new one only when none does, and name any new category in your
   wrap-up so Alejo can review the grouping.
 - An updated entry appends the new call to `calls:` and refreshes the
@@ -133,7 +135,7 @@ State the page's default rung in the Last-updated line; tag inline, in
 parentheses, only the claims that deviate — exactly `(inferred — <note>)` or
 `(reported — <note>)`, since the publish step turns that pattern into a
 hover-underline on the claim and rung words in the header line into pills
-linking the /confidence/ ladder page (`wiki-site/pages/confidence.md`). The
+linking the /confidence/ ladder page (`site/pages/confidence.md`). The
 publish step also colors the date by age (amber past one month, red past
 two), so refreshing a rechecked entry's date matters.
 
@@ -163,19 +165,20 @@ verbatim. Then edit their drafts into one voice and spot-check the links.
 
 ## Step 4: Link the entries
 
-- `wiki/README.md` (create if missing; first line is the folder's standing
+- `articles/README.md` (create if missing; first line is the folder's standing
   question): one line per entry — `- [<sidebar name>](<slug>.md) — <one-line
   answer>` — under a `## <Category>` heading matching the entry's category.
   Never use a filename as link text: everywhere a reader sees an entry it
   goes by its `sidebar` name (same rule as cross-links).
-- In the call summary's Appendix 1, append ` → [wiki](../../wiki/<slug>.md)`
+- In the call summary's Appendix 1, append ` → [wiki](../../../writing/ai-guides/articles/<slug>.md)`
   to each question that now has an entry. Claims verified wrong get a
   correction in the summary text itself, not just a link.
-- Commit `wiki/` together with the call files.
+- Commit guide changes in ai-guides and call-summary changes in calls separately.
+  Preserve relative links in both directions; do not copy private transcripts into guides.
 
 ## Feedback log
 
-`wiki/feedback-log.md` (private; the publish step skips it) collects Alejo's
+`articles/feedback-log.md` (private; the publish step skips it) collects Alejo's
 feedback on existing wiki pages and what changed in response — the raw
 material for improving this skill. Whenever he critiques a page ("not general
 enough", "too dense"), append an entry as part of acting on it: date and
@@ -186,14 +189,14 @@ this skill's rules and note the promotion in the entry.
 
 ## Step 5: Publish
 
-First make sure the call's participant has a row in `wiki-site/people.yaml`
+First make sure the call's participant has a row in `site/people.yaml`
 — slug is their first name plus last-name initial (e.g. `katym`), `folders`
 their archive folders. That gives them a public short link,
 `alejo.wiki/<person-slug>`, listing every entry derived from calls with them
 (first name only appears on the page; it stays out of the sidebar and site
 search).
 
-Then run `wiki-site/publish` (archive root). It sanitizes every entry —
+Then run `site/publish` from the ai-guides repository. It sanitizes every entry —
 keeping private frontmatter and names off the public site — rebuilds the
 Astro site, and deploys to [alejo.wiki](https://alejo.wiki). End the wrap-up
 with the person's short link — that's what to send them.

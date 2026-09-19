@@ -65,12 +65,12 @@ for their individual actions. For example, `calls` contains `summarize-call` and
 
 | Public source | Project wiring |
 |---|---|
-| [`plugins/calls/`](plugins/calls/) | `calls/.claude/skills/{call-wiki,summarize-call}/` |
+| [`plugins/calls/`](plugins/calls/) | `calls/.claude/skills/` and `writing/ai-guides/.claude/skills/{call-wiki,wiki-comments}/` |
 
 The marketplace at [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
 also makes the plugin independently installable. Edit the public source here, run
-`bin/sync-project-skills`, then commit and push both repos. The dotfiles pre-commit hook
-blocks source changes while the calls mirror differs. Run the mirror command explicitly
+`bin/sync-project-skills`, then commit and push the affected repos. The dotfiles pre-commit hook
+blocks source changes while a calls or ai-guides mirror differs. Run the mirror command explicitly
 when changing those plugin sources; installation does not write into an active calls project.
 Do not edit the generated mirror or put project-only skills under `claude/skills/`, which
 `install.sh` exposes globally. The mirror's ignored `.env` and `.venv` link to the local

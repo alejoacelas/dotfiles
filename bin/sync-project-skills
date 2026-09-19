@@ -1,56 +1,55 @@
 #!/usr/bin/env bash
-# Mirror public project skills into private repos that must work in clean checkouts.
+# Mirror public project skills into the private repositories that use them.
 set -euo pipefail
 
 DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BEST_ROOT="$(cd "$DOTFILES_ROOT/.." && pwd)"
 SOURCE_ROOT="$DOTFILES_ROOT/plugins/calls/skills"
-TARGET_ROOT="$BEST_ROOT/calls/.claude/skills"
+RSYNC_ARGS=(-acO --delete --exclude=.env --exclude=.venv --exclude=data/ --exclude=__pycache__/)
+stale=0
 
-if [ ! -d "$BEST_ROOT/calls/.git" ]; then
-  printf 'skip: calls repo is not cloned at %s\n' "$BEST_ROOT/calls"
-  exit 0
-fi
-
-RSYNC_ARGS=(
-  -acO --delete --exclude=.env --exclude=.venv --exclude=data/
-  --exclude=__pycache__/
-)
-
-if [ "${1:-}" = "--check" ]; then
-  stale=0
+for project in calls writing/ai-guides; do
+  if [ ! -d "$BEST_ROOT/$project/.git" ]; then
+    printf 'skip: %s repo is not cloned\n' "$project"
+    continue
+  fi
   for source in "$SOURCE_ROOT"/*/; do
     skill="$(basename "$source")"
-    changes="$(rsync -n --itemize-changes "${RSYNC_ARGS[@]}" "$source" "$TARGET_ROOT/$skill/")"
-    if [ -n "$changes" ]; then
-      printf 'calls %s mirror is stale:\n%s\n' "$skill" "$changes" >&2
-      stale=1
+    if [ "$project" = writing/ai-guides ] && [ "$skill" != call-wiki ] && [ "$skill" != wiki-comments ]; then
+      continue
     fi
-  done
-  if [ "$stale" -eq 1 ]; then
-    printf 'Run %s/bin/sync-project-skills, then commit calls too.\n' "$DOTFILES_ROOT" >&2
-    exit 1
-  fi
-  printf 'ok: calls skill mirrors match dotfiles\n'
-  exit 0
-fi
-
-for source in "$SOURCE_ROOT"/*/; do
-  skill="$(basename "$source")"
-  target="$TARGET_ROOT/$skill/"
-  mkdir -p "$target"
-  rsync "${RSYNC_ARGS[@]}" "$source" "$target"
-
-  # Reuse machine-local dependencies and credentials without tracking them in calls.
-  for local_path in .env .venv; do
-    if [ -e "$source$local_path" ]; then
-      if [ -L "$target$local_path" ]; then
-        ln -sfn "$source$local_path" "$target$local_path"
-      elif [ ! -e "$target$local_path" ]; then
-        ln -s "$source$local_path" "$target$local_path"
+    target="$BEST_ROOT/$project/.claude/skills/$skill/"
+    if [ "${1:-}" = --check ]; then
+      if [ ! -d "$target" ]; then
+        printf '%s %s mirror is missing\n' "$project" "$skill" >&2
+        stale=1
+        continue
       fi
+      changes="$(rsync -n --itemize-changes "${RSYNC_ARGS[@]}" "$source" "$target")"
+      if [ -n "$changes" ]; then
+        printf '%s %s mirror is stale:\n%s\n' "$project" "$skill" "$changes" >&2
+        stale=1
+      fi
+      continue
     fi
+    mkdir -p "$target"
+    rsync "${RSYNC_ARGS[@]}" "$source" "$target"
+    for local_path in .env .venv; do
+      if [ -e "$source$local_path" ]; then
+        if [ -L "$target$local_path" ]; then
+          ln -sfn "$source$local_path" "$target$local_path"
+        elif [ ! -e "$target$local_path" ]; then
+          ln -s "$source$local_path" "$target$local_path"
+        fi
+      fi
+    done
+    printf 'synced: %s/%s\n' "$project" "$skill"
   done
-
-  printf 'synced: %s -> %s\n' "$source" "$target"
 done
+if [ "$stale" -ne 0 ]; then
+  printf 'Run %s/bin/sync-project-skills, then commit the affected repositories.\n' "$DOTFILES_ROOT" >&2
+  exit 1
+fi
+if [ "${1:-}" = --check ]; then
+  printf 'ok: project skill mirrors match dotfiles\n'
+fi
