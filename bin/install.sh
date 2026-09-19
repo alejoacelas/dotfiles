@@ -116,13 +116,7 @@ BEST_ROOT="$HOME/best"
 mkdir -p "$BEST_ROOT"
 link workspace/AGENTS.md "$BEST_ROOT/AGENTS.md"
 link workspace/README.md "$BEST_ROOT/README.md"
-# Keep imports as real files so their relative AGENTS.md target is unambiguous.
-if [ -L "$BEST_ROOT/CLAUDE.md" ] || [ ! -f "$BEST_ROOT/CLAUDE.md" ] || [ "$(cat "$BEST_ROOT/CLAUDE.md")" != '@AGENTS.md' ]; then
-  if [ -e "$BEST_ROOT/CLAUDE.md" ] || [ -L "$BEST_ROOT/CLAUDE.md" ]; then
-    mv "$BEST_ROOT/CLAUDE.md" "$HOME/.local/state/agent-context/root-CLAUDE.pre-install.$(date +%s)"
-  fi
-  cp "$DOTFILES/workspace/CLAUDE.md" "$BEST_ROOT/CLAUDE.md"
-fi
+# Claude Code 2.1.277+ reads AGENTS.md natively; do not recreate project shims.
 link REPLICATE.md "$BEST_ROOT/REPLICATE.md"
 for folder in me archive writing people work/aim work/80k; do
   mkdir -p "$BEST_ROOT/$folder"
@@ -134,9 +128,6 @@ fi
 if [ ! -L "$BEST_ROOT/projects" ] && [ ! -e "$BEST_ROOT/projects/.git" ]; then
   mkdir -p "$BEST_ROOT/projects"
   link workspace/projects-AGENTS.md "$BEST_ROOT/projects/AGENTS.md"
-  if [ ! -e "$BEST_ROOT/projects/CLAUDE.md" ]; then
-    cp "$DOTFILES/workspace/CLAUDE.md" "$BEST_ROOT/projects/CLAUDE.md"
-  fi
 fi
 while IFS= read -r source; do
   relative="${source#"$DOTFILES/workspace/containers/"}"
