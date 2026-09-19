@@ -69,6 +69,7 @@ for skill in "$DOTFILES"/claude/skills/*; do
   name="$(basename "$skill")"
   link "claude/skills/$name" "$HOME/.claude/skills/$name"
 done
+prune_stale_dotfiles_skill_links "$HOME/.claude/skills"
 for skill in "$HOME"/.claude/skills/*; do
   if [ -L "$skill" ] && [ ! -e "$skill" ]; then
     printf '  broken  %s -> %s\n' "${skill/#$HOME/~}" "$(readlink "$skill")" >&2
@@ -90,7 +91,6 @@ for skill in "$DOTFILES"/codex/skills/*; do
   link "codex/skills/$name" "$HOME/.agents/skills/$name"
   link "codex/skills/$name" "$HOME/.codex/skills/$name"
 done
-prune_stale_dotfiles_skill_links "$HOME/.claude/skills"
 prune_stale_dotfiles_skill_links "$HOME/.agents/skills"
 prune_stale_dotfiles_skill_links "$HOME/.codex/skills"
 for root in "$HOME"/Library/Application\ Support/orca/codex-accounts/*/home/skills; do
@@ -134,9 +134,6 @@ done < <(rg --files --hidden "$DOTFILES/workspace/containers" -g '!**/.codex/**'
 link workspace/containers/tools/.codex "$BEST_ROOT/tools/.codex"
 if [ -d "$HOME/.local/share/agent-context/private/workspace/once/.agents" ] && [ ! -e "$BEST_ROOT/projects/.agents" ]; then
   ln -s "$HOME/.local/share/agent-context/private/workspace/once/.agents" "$BEST_ROOT/projects/.agents"
-fi
-if [ -f "$HOME/.local/share/agent-context/private/workspace/projects-grouping.md" ] && [ ! -e "$BEST_ROOT/projects/GROUPING-PROPOSAL.md" ]; then
-  ln -s "$HOME/.local/share/agent-context/private/workspace/projects-grouping.md" "$BEST_ROOT/projects/GROUPING-PROPOSAL.md"
 fi
 if [ -d "$HOME/.local/share/agent-context/private/workspace/tools/.claude" ] && [ ! -e "$BEST_ROOT/tools/.claude" ]; then
   ln -s "$HOME/.local/share/agent-context/private/workspace/tools/.claude" "$BEST_ROOT/tools/.claude"

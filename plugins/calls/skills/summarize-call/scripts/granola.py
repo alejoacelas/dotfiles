@@ -15,239 +15,15 @@ import os
 import sys
 from pathlib import Path
 
-# Token decryption needs the `cryptography` package. It lives in the skill-local
-# .venv (system python is externally-managed and can't install it). If we were
-# launched under a python that lacks it, re-exec under the venv so callers can
-# just run `python3 granola.py` without knowing about the venv.
-_VENV_PY = Path(__file__).resolve().parent.parent / ".venv" / "bin" / "python"
-if os.environ.get("_GRANOLA_REEXEC") != "1" and _VENV_PY.exists():
-    try:
-        import cryptography  # noqa: F401
-    except ImportError:
-        os.environ["_GRANOLA_REEXEC"] = "1"
-        os.execv(str(_VENV_PY), [str(_VENV_PY), __file__, *sys.argv[1:]])
-
-import base64
-import hashlib
 import json
 import re
 import subprocess
 from datetime import datetime, timezone
 
-GRANOLA_DIR = Path.home() / "Library" / "Application Support" / "Granola"
-STORED_ACCOUNTS = GRANOLA_DIR / "stored-accounts.json"
-SUPABASE_AUTH = GRANOLA_DIR / "supabase.json"
-# Granola 7.2x+ encrypts the token store. The plaintext files above are left
-# stale by newer builds; the live tokens now live in these .enc files, which are
-# AES-256-GCM-encrypted with a data encryption key (DEK) wrapped in storage.dek.
-STORED_ACCOUNTS_ENC = GRANOLA_DIR / "stored-accounts.json.enc"
-SUPABASE_AUTH_ENC = GRANOLA_DIR / "supabase.json.enc"
-DEK_FILE = GRANOLA_DIR / "storage.dek"
-# macOS Keychain service holding the Electron safeStorage key that wraps the DEK.
-KEYCHAIN_SERVICE = "Granola Safe Storage"
-API_BASE = "https://api.granola.ai/v1"
-# Granola's documented public API. A personal key (grn_...) authenticates here
-# and lets us skip the desktop token entirely. Preferred path since Granola
-# 7.4x moved the desktop DEK into an app-scoped Keychain item we can't read.
 PUBLIC_API_BASE = "https://public-api.granola.ai/v1"
 SKILL_DIR = Path(__file__).resolve().parent.parent
-CACHE_DIR = SKILL_DIR / "data"
-TRANSCRIPTS_DIR = CACHE_DIR / "transcripts"
-SUMMARIES_DIR = CACHE_DIR / "summaries"
-
-# Granola's API rejects requests without a client-version header ("Unsupported
-# client"). The desktop app sends its own version; we mirror a known-good one.
-# Bump this if Granola starts rejecting the value.
-GRANOLA_CLIENT_VERSION = "7.162.2"
-
-# How recent a call must be to auto-summarise (in minutes)
+TRANSCRIPTS_DIR = SKILL_DIR / "data" / "transcripts"
 RECENT_THRESHOLD_MINUTES = 30
-
-
-def _parse_stored_accounts(data: dict) -> dict | None:
-    """Extract tokens from a parsed stored-accounts payload (plaintext or decrypted)."""
-    accounts_raw = data.get('accounts')
-    if not accounts_raw:
-        return None
-    accounts = json.loads(accounts_raw) if isinstance(accounts_raw, str) else accounts_raw
-    if not accounts:
-        return None
-    tokens_raw = accounts[0].get('tokens')
-    if not tokens_raw:
-        return None
-    return json.loads(tokens_raw) if isinstance(tokens_raw, str) else tokens_raw
-
-
-def _parse_supabase(data: dict) -> dict | None:
-    """Extract tokens from a parsed supabase payload (plaintext or decrypted)."""
-    return json.loads(data['workos_tokens'])
-
-
-def _tokens_from_stored_accounts() -> dict | None:
-    """Read tokens from stored-accounts.json (legacy plaintext store)."""
-    if not STORED_ACCOUNTS.exists():
-        return None
-    try:
-        return _parse_stored_accounts(json.load(open(STORED_ACCOUNTS)))
-    except (json.JSONDecodeError, KeyError, IndexError, TypeError):
-        return None
-
-
-def _tokens_from_supabase() -> dict | None:
-    """Read tokens from supabase.json (legacy plaintext store)."""
-    if not SUPABASE_AUTH.exists():
-        return None
-    try:
-        return _parse_supabase(json.load(open(SUPABASE_AUTH)))
-    except (json.JSONDecodeError, KeyError, TypeError):
-        return None
-
-
-def _aes_cbc_decrypt(key: bytes, iv: bytes, ct: bytes) -> bytes:
-    """AES-CBC decrypt, preferring `cryptography`, falling back to pycryptodome."""
-    try:
-        from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-        d = Cipher(algorithms.AES(key), modes.CBC(iv)).decryptor()
-        return d.update(ct) + d.finalize()
-    except ImportError:
-        from Crypto.Cipher import AES
-        return AES.new(key, AES.MODE_CBC, iv).decrypt(ct)
-
-
-def _aes_gcm_decrypt(key: bytes, nonce: bytes, ct: bytes, tag: bytes) -> bytes:
-    """AES-GCM decrypt+verify, preferring `cryptography`, falling back to pycryptodome."""
-    try:
-        from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-        return AESGCM(key).decrypt(nonce, ct + tag, None)
-    except ImportError:
-        from Crypto.Cipher import AES
-        return AES.new(key, AES.MODE_GCM, nonce=nonce).decrypt_and_verify(ct, tag)
-
-
-def _safestorage_decrypt(blob: bytes) -> bytes:
-    """Decrypt an Electron safeStorage blob.
-
-    On macOS this is `v10` + AES-128-CBC, key = PBKDF2-HMAC-SHA1(keychain_pw,
-    "saltysalt", 1003, 16), IV = 16 spaces. Raises on any failure (e.g. the user
-    declining the Keychain access prompt)."""
-    out = subprocess.run(
-        ["security", "find-generic-password", "-ws", KEYCHAIN_SERVICE],
-        capture_output=True, text=True, timeout=30,
-    )
-    if out.returncode != 0 or not out.stdout.strip():
-        raise RuntimeError(f"Keychain lookup failed for {KEYCHAIN_SERVICE!r}")
-    pw = out.stdout.strip()
-    key = hashlib.pbkdf2_hmac("sha1", pw.encode("utf-8"), b"saltysalt", 1003, 16)
-    if blob[:3] in (b"v10", b"v11"):
-        blob = blob[3:]
-    dec = _aes_cbc_decrypt(key, b" " * 16, blob)
-    pad = dec[-1]
-    if 1 <= pad <= 16:
-        dec = dec[:-pad]
-    return dec
-
-
-def _unwrap_dek() -> bytes | None:
-    """Return the 32-byte data encryption key stored (wrapped) in storage.dek."""
-    if not DEK_FILE.exists():
-        return None
-    dek = base64.b64decode(_safestorage_decrypt(DEK_FILE.read_bytes()).decode("utf-8"))
-    return dek if len(dek) == 32 else None
-
-
-def _decrypt_enc_file(path: Path, dek: bytes) -> str:
-    """Decrypt a Granola *.enc payload: [iv:12][ciphertext][tag:16], AES-256-GCM."""
-    data = path.read_bytes()
-    iv, tag, ct = data[:12], data[-16:], data[12:-16]
-    return _aes_gcm_decrypt(dek, iv, ct, tag).decode("utf-8")
-
-
-def _tokens_from_encrypted() -> dict | None:
-    """Decrypt the encrypted token store (Granola 7.2x+) and extract tokens.
-
-    Returns None (rather than raising) on any failure so callers can fall back
-    to the legacy plaintext stores."""
-    try:
-        dek = _unwrap_dek()
-    except Exception:
-        return None
-    if not dek:
-        return None
-    for path, parser in ((STORED_ACCOUNTS_ENC, _parse_stored_accounts),
-                         (SUPABASE_AUTH_ENC, _parse_supabase)):
-        if not path.exists():
-            continue
-        try:
-            tokens = parser(json.loads(_decrypt_enc_file(path, dek)))
-            if tokens and 'access_token' in tokens:
-                return tokens
-        except Exception:
-            continue
-    return None
-
-
-def get_access_token() -> str:
-    """Read the Granola access token.
-
-    Prefers the encrypted store (Granola 7.2x+ keeps the live token there and
-    leaves the plaintext files stale), then falls back to the legacy plaintext
-    stored-accounts.json / supabase.json for older builds."""
-    tokens = (
-        _tokens_from_encrypted()
-        or _tokens_from_stored_accounts()
-        or _tokens_from_supabase()
-    )
-    if not tokens or 'access_token' not in tokens:
-        print(
-            f"Error: Could not read Granola tokens from {GRANOLA_DIR}.\n"
-            "Tried the encrypted store (stored-accounts.json.enc) and the legacy\n"
-            "plaintext files. Is Granola installed and signed in? If decryption is\n"
-            "failing, ensure the `cryptography` (or `pycryptodome`) package is available\n"
-            "and that you allowed the Keychain access prompt.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-    return tokens['access_token']
-
-
-def api_call(endpoint: str, payload: dict) -> any:
-    """Make an authenticated POST request to the Granola API."""
-    token = get_access_token()
-
-    result = subprocess.run(
-        [
-            'curl', '-s', '--compressed', '-X', 'POST',
-            f'{API_BASE}/{endpoint}',
-            '-H', f'Authorization: Bearer {token}',
-            '-H', 'Content-Type: application/json',
-            '-H', f'X-Client-Version: {GRANOLA_CLIENT_VERSION}',
-            '-d', json.dumps(payload),
-        ],
-        capture_output=True, text=True,
-    )
-
-    if result.returncode != 0:
-        print(f"Error: API call failed: {result.stderr}", file=sys.stderr)
-        sys.exit(1)
-
-    try:
-        parsed = json.loads(result.stdout)
-    except json.JSONDecodeError:
-        print(f"Error: Invalid JSON response: {result.stdout[:200]}", file=sys.stderr)
-        sys.exit(1)
-
-    # Granola returns errors as {"message": "..."} with HTTP 200; surface them.
-    if isinstance(parsed, dict) and set(parsed.keys()) == {'message'}:
-        msg = parsed['message']
-        hint = ""
-        if msg == "Unauthorized":
-            hint = " (token may be expired — open Granola.app to refresh)"
-        elif msg == "Unsupported client":
-            hint = f" (bump GRANOLA_CLIENT_VERSION in {Path(__file__).name})"
-        print(f"Error: Granola API: {msg}{hint}", file=sys.stderr)
-        sys.exit(1)
-
-    return parsed
 
 
 def _read_api_key() -> str | None:
@@ -276,6 +52,10 @@ def _read_api_key() -> str | None:
 def public_get(path: str, params: dict | None = None) -> any:
     """GET an authenticated request against the public API (Bearer grn_ key)."""
     key = _read_api_key()
+    if not key:
+        print("Error: Set GRANOLA_API_KEY in the environment or the skill's .env file.",
+              file=sys.stderr)
+        sys.exit(1)
     args = [
         'curl', '-s', '--compressed', '-G', f'{PUBLIC_API_BASE}{path}',
         '-H', f'Authorization: Bearer {key}',
@@ -344,29 +124,20 @@ def get_recent_documents(limit: int = 5) -> list[dict]:
     # Public API: ordered by created_at desc, 30 per page; paginate until we
     # have `limit` notes, then re-sort by updated_at so a re-dated older call
     # surfaces at the top like the app does.
-    if _read_api_key():
-        notes: list[dict] = []
-        cursor = None
-        while len(notes) < limit:
-            params = {'page_size': 30}
-            if cursor:
-                params['cursor'] = cursor
-            resp = public_get('/notes', params)
-            page = resp.get('notes', []) if isinstance(resp, dict) else []
-            notes.extend(page)
-            if not (isinstance(resp, dict) and resp.get('hasMore') and page):
-                break
-            cursor = resp.get('cursor')
-        notes.sort(key=_effective_timestamp, reverse=True)
-        return notes[:limit]
-    # Desktop-token fallback. Fetch a larger window than ``limit`` so the
-    # updated_at re-sort has room to surface docs updated today.
-    docs = api_call('get-documents', {'limit': max(limit * 4, 30)})
-    if not isinstance(docs, list):
-        print(f"Error: Unexpected API response format", file=sys.stderr)
-        sys.exit(1)
-    docs.sort(key=_effective_timestamp, reverse=True)
-    return docs[:limit]
+    notes: list[dict] = []
+    cursor = None
+    while len(notes) < limit:
+        params = {'page_size': 30}
+        if cursor:
+            params['cursor'] = cursor
+        resp = public_get('/notes', params)
+        page = resp.get('notes', []) if isinstance(resp, dict) else []
+        notes.extend(page)
+        if not (isinstance(resp, dict) and resp.get('hasMore') and page):
+            break
+        cursor = resp.get('cursor')
+    notes.sort(key=_effective_timestamp, reverse=True)
+    return notes[:limit]
 
 
 def check_recent():
@@ -433,13 +204,13 @@ def list_meetings(limit: int = 20):
         print()
 
 
-def _build_transcript_public(note_id: str) -> tuple[str, str, str]:
+def build_transcript(note_id: str) -> tuple[str, str, str]:
     """Build transcript markdown from the public API's single get-note call.
 
     ``GET /notes/{id}?include=transcript`` returns the note metadata and the
     transcript segments together. Each segment carries ``speaker.source``
     (``microphone`` = the account holder, ``speaker`` = system audio / everyone
-    else), ``text`` and ``start_time`` — the same shape the desktop path groups.
+    else), ``text`` and ``start_time``.
     """
     note = public_get(f'/notes/{note_id}', {'include': 'transcript'})
     if not isinstance(note, dict) or 'id' not in note:
@@ -466,73 +237,6 @@ def _build_transcript_public(note_id: str) -> tuple[str, str, str]:
         if not text:
             continue
         source = (seg.get('speaker') or {}).get('source', '')
-        speaker = 'Me' if source == 'microphone' else 'Other'
-
-        if speaker != current_speaker:
-            if current_text:
-                lines.append(f"**{current_speaker}**: {' '.join(current_text)}")
-                lines.append("")
-            current_speaker = speaker
-            current_text = [text]
-        else:
-            current_text.append(text)
-
-    if current_text:
-        lines.append(f"**{current_speaker}**: {' '.join(current_text)}")
-
-    return '\n'.join(lines), title, date_str
-
-
-def build_transcript(doc_id: str) -> tuple[str, str, str]:
-    """
-    Fetch and build transcript markdown for a specific document.
-
-    Returns:
-        tuple: (markdown_content, title, date_str)
-    """
-    if _read_api_key():
-        return _build_transcript_public(doc_id)
-
-    # Fetch document metadata
-    docs_response = api_call('get-documents-batch', {'document_ids': [doc_id]})
-    if isinstance(docs_response, dict) and 'docs' in docs_response:
-        docs_list = docs_response['docs']
-    elif isinstance(docs_response, list):
-        docs_list = docs_response
-    else:
-        docs_list = []
-    doc = docs_list[0] if docs_list else {}
-
-    title = doc.get('title', 'Untitled')
-    effective = _effective_timestamp(doc)
-    date_str = effective[:10] if effective else 'unknown-date'
-
-    # Fetch transcript chunks
-    chunks = api_call('get-document-transcript', {'document_id': doc_id})
-
-    if not isinstance(chunks, list) or len(chunks) == 0:
-        print(f"Error: No transcript found for document ID: {doc_id}", file=sys.stderr)
-        sys.exit(1)
-
-    # Sort by timestamp
-    chunks.sort(key=lambda c: c.get('start_timestamp', ''))
-
-    lines = []
-    lines.append(f"# {title}")
-    lines.append(f"Date: {date_str}")
-    lines.append("")
-
-    # Group consecutive segments by speaker
-    current_speaker = None
-    current_text = []
-
-    for chunk in chunks:
-        source = chunk.get('source', 'unknown')
-        text = chunk.get('text', '').strip()
-
-        if not text:
-            continue
-
         speaker = 'Me' if source == 'microphone' else 'Other'
 
         if speaker != current_speaker:

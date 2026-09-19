@@ -38,13 +38,6 @@ A bare `grn_…` line works too; `$GRANOLA_API_KEY` in the environment overrides
 the file. That's the whole setup — the public API returns JSON, so no extra
 packages are needed.
 
-Legacy fallback: with no key set, the script tries to decrypt Granola's local
-desktop token store, which needs the `cryptography` package in a skill-local
-`.venv/` (`python3 -m venv .venv && .venv/bin/pip install cryptography`; the
-script re-execs under it automatically). This path broke with Granola 7.4x,
-which moved the decryption key into an app-scoped macOS Keychain item that only
-Granola-signed code can read — hence the public-API key above.
-
 ## Commands
 
 ```bash
@@ -63,7 +56,7 @@ is sometimes incomplete: a call the app shows can be absent from `list`/
 `check` even though its summary and transcript exist server-side (verified —
 not an account, pagination, or folder issue; a Granola-side indexing gap).
 `GET /v1/notes/{id}` only takes `not_…` ids, so there is no way to reach such
-a note through the API, and the desktop-token fallback is dead (see above).
+a note through the API using its desktop ID.
 
 When a call is missing, recover it yourself before involving the user:
 
