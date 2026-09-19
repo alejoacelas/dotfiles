@@ -93,7 +93,10 @@ repository when it spans nested repositories. Do not backfill old entries.
 - Folder names are lowercase, words separated by dashes.
 - `best/` is an ordinary container. Give projects or coherent note collections their
   own repositories; do not make lifecycle or project-group containers repositories.
-- Every one-off gets its own repository and GitHub remote. Apply the privacy rules above.
+- Put one-off projects in `~/best/projects/`, named `YYYY-MM-project-name`. Every one-off
+  gets its own repository and GitHub remote. Apply the privacy rules above.
+- Group employer and aim work under `~/best/work/{80k,aim}/`. Draft skills live
+  in the separate private repository `~/best/dotfiles/skill-drafts/`.
 - Before moving or creating something in another folder, read its `AGENTS.md` if present.
 - Archive things in `~/best/archive/`. Record what moved, its previous location, and
   why in the archive's `REPLICATE.md`.

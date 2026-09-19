@@ -124,18 +124,18 @@ if [ -L "$BEST_ROOT/CLAUDE.md" ] || [ ! -f "$BEST_ROOT/CLAUDE.md" ] || [ "$(cat 
   cp "$DOTFILES/workspace/CLAUDE.md" "$BEST_ROOT/CLAUDE.md"
 fi
 link REPLICATE.md "$BEST_ROOT/REPLICATE.md"
-for folder in me others archive wiki people; do
+for folder in me archive wiki people work/aim work/80k; do
   mkdir -p "$BEST_ROOT/$folder"
 done
 # Avoid changing temporary compatibility links or still-active parent repositories.
 if [ ! -e "$BEST_ROOT/tools" ] && [ ! -L "$BEST_ROOT/tools" ]; then
   mkdir -p "$BEST_ROOT/tools/active" "$BEST_ROOT/tools/upcoming" "$BEST_ROOT/tools/stable"
 fi
-if [ ! -L "$BEST_ROOT/once" ] && [ ! -e "$BEST_ROOT/once/.git" ]; then
-  mkdir -p "$BEST_ROOT/once"
-  link workspace/once-AGENTS.md "$BEST_ROOT/once/AGENTS.md"
-  if [ ! -e "$BEST_ROOT/once/CLAUDE.md" ]; then
-    cp "$DOTFILES/workspace/CLAUDE.md" "$BEST_ROOT/once/CLAUDE.md"
+if [ ! -L "$BEST_ROOT/projects" ] && [ ! -e "$BEST_ROOT/projects/.git" ]; then
+  mkdir -p "$BEST_ROOT/projects"
+  link workspace/projects-AGENTS.md "$BEST_ROOT/projects/AGENTS.md"
+  if [ ! -e "$BEST_ROOT/projects/CLAUDE.md" ]; then
+    cp "$DOTFILES/workspace/CLAUDE.md" "$BEST_ROOT/projects/CLAUDE.md"
   fi
 fi
 while IFS= read -r source; do
@@ -143,8 +143,11 @@ while IFS= read -r source; do
   link "workspace/containers/$relative" "$BEST_ROOT/$relative"
 done < <(rg --files --hidden "$DOTFILES/workspace/containers" -g '!**/.codex/**')
 link workspace/containers/tools/.codex "$BEST_ROOT/tools/.codex"
-if [ -d "$HOME/.local/share/agent-context/private/workspace/once/.agents" ] && [ ! -e "$BEST_ROOT/once/.agents" ]; then
-  ln -s "$HOME/.local/share/agent-context/private/workspace/once/.agents" "$BEST_ROOT/once/.agents"
+if [ -d "$HOME/.local/share/agent-context/private/workspace/once/.agents" ] && [ ! -e "$BEST_ROOT/projects/.agents" ]; then
+  ln -s "$HOME/.local/share/agent-context/private/workspace/once/.agents" "$BEST_ROOT/projects/.agents"
+fi
+if [ -f "$HOME/.local/share/agent-context/private/workspace/projects-grouping.md" ] && [ ! -e "$BEST_ROOT/projects/GROUPING-PROPOSAL.md" ]; then
+  ln -s "$HOME/.local/share/agent-context/private/workspace/projects-grouping.md" "$BEST_ROOT/projects/GROUPING-PROPOSAL.md"
 fi
 if [ -d "$HOME/.local/share/agent-context/private/workspace/tools/.claude" ] && [ ! -e "$BEST_ROOT/tools/.claude" ]; then
   ln -s "$HOME/.local/share/agent-context/private/workspace/tools/.claude" "$BEST_ROOT/tools/.claude"

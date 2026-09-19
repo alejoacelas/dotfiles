@@ -1,7 +1,8 @@
 # best
 
 This is an ordinary container for independent repositories and meaningful project groups.
-Keep status folders in tools and 80k. Put one-offs in once, reference material in wiki,
+Keep status folders in tools and work/80k. Group aim and 80k under work.
+Put one-offs in projects, reference material in wiki,
 and inactive work in archive. Keep shared instructions and container configuration in dotfiles.
 
 Every one-off gets its own repository and GitHub remote. Keep employer information and

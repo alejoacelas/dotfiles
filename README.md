@@ -53,6 +53,8 @@ home instead of `~/.codex`. For example, `orca skills install --skill orca-cli` 
 the community installer to target Claude Code, Codex, and the universal registry.
 The installer also removes dangling dotfiles-owned links left by skill renames.
 
+Draft skills live in `skill-drafts/`, a separate private repository ignored by this repo.
+
 ## Project-only plugins
 
 Keep public skills that should not load globally under `plugins/`. Projects that must
@@ -109,7 +111,7 @@ contains a credential; override a false positive with `git commit --no-verify`.
 ## Shared project instructions
 
 Run `bin/agent-context adopt /path/to/project --groups tools --visibility public` to
-subscribe a project. Use `once` for dated one-offs, `wiki` for reference collections,
+subscribe a project. One-offs live in `~/best/projects/`; use the `once` group for them, `wiki` for reference collections,
 and `80k` only in private employer projects. Group order in YAML is the composition order.
 Use `bin/agent-context sync /path/to/project` for a manual refresh and `check` for a
 read-only freshness check. SessionStart calls the same code automatically.
