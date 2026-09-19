@@ -336,3 +336,12 @@ Alejo wanted an employer technical recommendation included in the blind writing 
 - Moved the experiment's context registration out of the public registry when its source material required a private repository.
 
 Agent session 01a0b921-9a6a-76c1-9000-c63b1c0cb909 · Commits dotfiles 6c350de; agent-context-private b1a6801
+
+## Restore the original writing guidance
+
+Alejo preferred the old writing instructions in blind comparisons and wanted the writing-relevant parts restored.
+
+- Restored the original writing section, including the Piper excerpt, examples of concrete details, hyperlinks and guidance for instruction files. Kept the current workflow, privacy and shared-context sections intact.
+- Verified the Claude, Codex and active Orca account instruction entrypoints all resolve to this file. The separate writing experiment continues to use frozen old/new snapshots, so this live change does not contaminate its comparisons.
+
+Agent session 01a0b921-9a6a-76c1-9000-c63b1c0cb909 · Commits e4971cf
