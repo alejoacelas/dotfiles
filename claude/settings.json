@@ -56,45 +56,6 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Read",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if [ \"$CLAUDE_PROJECT_DIR\" = \"$HOME/people\" ]; then python3 \"$HOME/best/dotfiles/claude/hooks/sync_gate.py\"; fi"
-          }
-        ]
-      },
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$HOME/best/dotfiles/claude/hooks/guard-judgment.py\""
-          }
-        ]
-      },
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"$HOME/best/dotfiles/claude/hooks/codex/plan-write-reminder.mjs\"",
-            "if": "Write(*/.claude/plans/*.md)",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "matcher": "Skill",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"$HOME/best/dotfiles/claude/hooks/codex/code-review-reminder.mjs\"",
-            "timeout": 5
-          }
-        ]
-      },
-      {
         "matcher": "*",
         "hooks": [
           {
@@ -214,11 +175,6 @@
           {
             "type": "command",
             "command": "bash \"$HOME/best/dotfiles/claude/hooks/relink-settings.sh\"",
-            "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "bash \"$HOME/best/dotfiles/claude/hooks/quiet-plugin-hooks.sh\"",
             "timeout": 10
           }
         ]
