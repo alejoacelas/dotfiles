@@ -234,4 +234,4 @@ Alejo asked to refresh project instructions and remove redundant Claude instruct
 - Updated the applicable instructions and removed redundant local Claude copies; distinct content and preserved snapshots remain.
 - Checked instruction references and shared-context freshness; native Claude loading requires 2.1.277+ with the built-in feature enabled.
 
-Agent session 01a0b915-3eb2-78b2-9add-6ba48ad9a3b1 · Commits c70f47ba8f4fd13757134cdfa09c2fc585920ffd
+Agent session 01a0b915-3eb2-78b2-9add-6ba48ad9a3b1 · Commits cb25805c2c343a18f532d98ef054f9c6d5e3c485, c70f47ba8f4fd13757134cdfa09c2fc585920ffd
