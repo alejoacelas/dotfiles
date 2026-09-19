@@ -176,3 +176,14 @@ The human wanted run-overview to trigger less often and let the model decide whe
 - Updated the default log example to omit timing; the shared source updates both Claude and Codex through existing links.
 
 Agent session 01a0b651-6484-7a93-9a8f-a5f49c31162a · Commits dotfiles: 9492beb
+
+## Work, projects and draft skills
+
+Alejo wanted employer work grouped under work, one-offs consolidated into projects, and draft skills nested under dotfiles.
+
+- Moved aim and 80k beneath work, renamed once to projects, and moved nine repositories from other into dated project folders. Preserved their Git histories and existing changes.
+- Moved the separate private skills repository to ignored skill-drafts; updated global instructions, workspace indexes and installer destinations. Kept the existing once context-group ID for compatibility.
+- Repaired affected symlinks and a Git worktree; verified all 71 moved repository heads and working-tree states before the archive-link documentation correction. Shell syntax and diff checks passed.
+- Proposed five topic groups of 11–12 projects, including archived candidates; the full proposal and move manifest live in the private context repository. Retained old other container notes in the shared archive.
+
+Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits dotfiles: 621edd5 (pre-existing configuration checkpoint), 971fe1e; 80k: 75d2401d; agent-context-private: f8f8efe (pre-existing archive checkpoint), 7c6d764
