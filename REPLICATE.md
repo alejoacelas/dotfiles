@@ -254,3 +254,12 @@ Alejo wanted guides and publishing separated from calls, and video-blur tooling 
 - Indexed video-blur under active tools. New repositories declare wiki and tools context groups respectively. All checks passed; the publication output matched 88 pre-move files and built locally without deployment.
 
 Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits dotfiles: cb25805 (pre-existing instruction checkpoint), 10eab14; calls: 6d01da1 (pre-existing instruction checkpoint), 1b6bd33; ai-guides: 8389b11; video-blur: 66b5f62; writing: 32198bf
+
+## Put people beside relationship projects
+
+Alejo wanted the empty love/advice placeholders archived and people grouped with relationships.
+
+- Moved people to me/relationships/people as an intact repository alongside mutual-yes. Kept admire, discover and places together; updated workspace indexes and installation so the old top-level people folder will not return.
+- Archived the two placeholder repositories in the shared archive, preserving their history and separate privacy settings. Repaired calls-to-people and people-to-workspace links; shell syntax and local-link checks passed.
+
+Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits dotfiles: b1291b2; people: d2d72f9; calls: 6c6f480; agent-context-private: 2e62f46
