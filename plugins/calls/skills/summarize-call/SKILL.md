@@ -1,23 +1,37 @@
 ---
 name: summarize-call
-description: Fetch a Granola call transcript from the API, clean it, and file a tidied transcript plus a structured summary under the person's once/many call folder. Use when the user wants to pull, clean, summarize, or archive Granola calls — "summarise my call", "save my last Granola call", "archive these calls".
+description: Fetch a Granola call transcript from the API, clean it, and file a tidied transcript plus a structured summary in ~/best/calls, following that repository's AGENTS.md. Use when the user wants to pull, clean, summarize, or archive Granola calls — "summarise my call", "save my last Granola call", "archive these calls".
 ---
 
 # Granola call → tidied transcript + summary
 
 Adapted from [HartreeWorks/skill--summarise-granola](https://github.com/HartreeWorks/skill--summarise-granola),
-rewired to file into this repo's call archive. Reads transcripts over Granola's
+rewired to file into `~/best/calls`. Reads transcripts over Granola's
 [public API](https://docs.granola.ai) with a personal key — no cache, no connector.
+
+## Destination and paths
+
+Always save calls in `~/best/calls`, regardless of the session's working directory.
+Before fetching or writing, read `~/best/calls/AGENTS.md` and any instructions in
+the destination person's folder. That repository defines the exact filing paths,
+folder conventions, indexes and sync requirements. If it is missing, stop and
+report that; do not create an archive in the current project.
+
+Resolve this skill's directory from the `SKILL.md` you loaded and set
+`CALL_SKILL` to that absolute directory. Run archive operations from `~/best/calls`;
+run the bundled helpers by their absolute paths as shown below. References are
+relative to this skill, not the working directory. Temporary transcripts and
+garble inventories stay in `~/best/calls/.cache/summarize-call/`.
 
 ## Setup (once)
 
 `granola.py` authenticates with a Granola public API key. Generate one in the
 Granola app (**Settings → API**) — it looks like `grn_…` — then put it in a
-gitignored `.env` beside the script so it never lands in shell history or a chat
+gitignored `.env` in this skill’s directory so it never lands in shell history or a chat
 transcript:
 
 ```bash
-cp .env.example .env   # then paste your grn_ key into .env
+cp "$CALL_SKILL/.env.example" "$CALL_SKILL/.env"   # then paste your grn_ key into .env
 ```
 
 A bare `grn_…` line works too; `$GRANOLA_API_KEY` in the environment overrides
@@ -34,14 +48,14 @@ Granola-signed code can read — hence the public-API key above.
 ## Commands
 
 ```bash
-python3 scripts/granola.py list [n]      # n most recent meetings (default 20; paginates)
-python3 scripts/granola.py check         # recent-call / selection JSON
-python3 scripts/granola.py get <doc_id>  # print transcript markdown for one call
-python3 scripts/granola.py recent [n]    # nth most recent transcript
+python3 "$CALL_SKILL/scripts/granola.py" list [n]      # n most recent meetings (default 20; paginates)
+python3 "$CALL_SKILL/scripts/granola.py" check         # recent-call / selection JSON
+python3 "$CALL_SKILL/scripts/granola.py" get <doc_id>  # print transcript markdown for one call
+python3 "$CALL_SKILL/scripts/granola.py" recent [n]    # nth most recent transcript
 ```
 
 `get <doc_id>` prints the raw transcript to stdout (also saved under
-`data/transcripts/`). Speakers are `**Me**:` (the account holder, Alejandro)
+`~/best/calls/.cache/summarize-call/transcripts/`). Speakers are `**Me**:` (the account holder, Alejandro)
 and `**Other**:` (everyone else).
 
 These commands are the default path for every call. But the public API index
@@ -71,7 +85,7 @@ note was pre-created, not when the call happened.
 ### Step 1: Pick the call
 
 ```bash
-python3 scripts/granola.py check
+python3 "$CALL_SKILL/scripts/granola.py" check
 ```
 
 Returns JSON in one of two modes:
@@ -86,7 +100,7 @@ If the user already named a call or gave a doc id, skip the check.
 ### Step 2: Extract the transcript
 
 ```bash
-python3 scripts/granola.py get <doc_id>   # or: recent <n>
+python3 "$CALL_SKILL/scripts/granola.py" get <doc_id>   # or: recent <n>
 ```
 
 ### Step 3: Confirm participant names
@@ -108,7 +122,7 @@ printf 'Being written — check back shortly.\n' > /tmp/placeholder.md
 gdoc --account <email> --json new "<title>" --file /tmp/placeholder.md      # → id, url
 gdoc --account <email> --json add-tab <id> "Transcript"
 GDOC_PY=$(head -1 "$(which gdoc)" | cut -c3-)             # gdoc's interpreter
-$GDOC_PY scripts/rename_tab.py <id> t.0 "Summary"        # first tab is born "Tab 1"
+GDOC_ACCOUNT=<email> "$GDOC_PY" "$CALL_SKILL/scripts/rename_tab.py" <id> t.0 "Summary"        # first tab is born "Tab 1"
 ```
 
 Post the doc URL (`.../document/d/<id>/edit`) in the reply as soon as it
@@ -150,7 +164,7 @@ no more two-section single body. Pass `--account <email>` to every `gdoc` call
 ### Step 5: Garble inventory, then tidied transcript
 
 Before writing the transcript, write a temporary garble inventory to
-`data/garbles/<YYYY-MM-DD>-<person>.md`: one line per span where the
+`~/best/calls/.cache/summarize-call/garbles/<YYYY-MM-DD>-<person>.md`: one line per span where the
 transcription seems garbled — the raw text, plus the likely reading when one
 is guessable from the call itself.
 
@@ -162,7 +176,7 @@ topic shifts, preserve exact wording for the categories listed there. Repaired
 garbles are fixed silently — no bracket note; only unresolved ones stay marked
 `[unclear]` / `[name unclear]`.
 
-Save to the filing path below with the `-trans.md` suffix.
+Save to the filing path specified by `~/best/calls/AGENTS.md` with the `-trans.md` suffix.
 
 ### Step 6: Summary
 
@@ -226,32 +240,11 @@ summary is edited or renamed:
 ### Step 10 (off by default): Wiki pass
 
 Do **not** run this unless the user asks for a wiki pass. Kept here so it can
-be re-enabled later: follow the `call-wiki` skill (sibling to this one) —
+be re-enabled later: follow the `call-wiki` skill at `~/best/writing/ai-guides/.claude/skills/call-wiki/SKILL.md` —
 harvest the call's "I looked into / I'm not sure" moments, research each
 against primary sources, and file grounded entries in `~/best/writing/ai-guides/articles/` (a separate private repo),
 linked from the summary's open questions. It runs last so the Google Doc
 snapshot stays free of repo-relative links.
-
-## Filing rule
-
-Paths are relative to the call archive root, wherever that repository is cloned.
-
-```
-<once|many>/<org-firstname>/<YYYY-MM-DD>-<two-word-slug>-trans.md
-<once|many>/<org-firstname>/<YYYY-MM-DD>-<two-word-slug>-sum.md
-```
-
-- **org-firstname** — a short org identifier (usually three letters, from
-  their email domain), then lowercase first name: 80,000 hours → `80k`,
-  impact ops → `iops`, catalyze impact → `cat`, ambitious impact → `aim`,
-  coefficient giving → `cg`, anthropic → `ant`, independent / no clear org →
-  `ind`. One folder per person; reuse it across calls.
-- **once/** — people with a single recorded call. **many/** — repeat people
-  only (a suggested follow-up does not count). A confirmed recurring series may
-  start in `many/`; otherwise move a `once/` folder when a second call lands.
-- **two-word-slug** — a short two-word description of the call (e.g.
-  `agentic-coaching`, `career-advice`). Two calls with one person on the same
-  day get distinct slugs.
 
 ## Batch runs
 

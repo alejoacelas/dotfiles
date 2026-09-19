@@ -54,10 +54,12 @@ The installer also removes dangling dotfiles-owned links left by skill renames.
 
 Draft skills live in `skill-drafts/`, a separate private repository ignored by this repo.
 
-## Project-only plugins
+## Plugins and project mirrors
 
-Keep public skills that should not load globally under `plugins/`. Projects that must
-work in isolated or cloud checkouts carry a generated mirror.
+Public plugin sources live under `plugins/`. `summarize-call` is also installed
+globally for Claude and Codex; it always files in `~/best/calls` using that
+repository’s `AGENTS.md`. Projects that must work in isolated checkouts carry
+a generated mirror.
 
 Name each plugin for the whole package, normally with a concise noun; name its skills
 for their individual actions. For example, `calls` contains `summarize-call` and
@@ -72,9 +74,9 @@ also makes the plugin independently installable. Edit the public source here, ru
 `bin/sync-project-skills`, then commit and push the affected repos. The dotfiles pre-commit hook
 blocks source changes while a calls or ai-guides mirror differs. Run the mirror command explicitly
 when changing those plugin sources; installation does not write into an active calls project.
-Do not edit the generated mirror or put project-only skills under `claude/skills/`, which
-`install.sh` exposes globally. The mirror's ignored `.env` and `.venv` link to the local
-source; generated `data/` remains private to `calls`.
+Do not edit the generated mirror. Entries under `claude/skills/` and
+`codex/skills/` explicitly expose a skill globally through `install.sh`. The mirror's ignored `.env` and `.venv` link to the local
+source; new transcript caches stay in the ignored `calls/.cache/summarize-call/`.
 
 The root `AGENTS.md` contains project instructions. Claude Code 2.1.277+ reads it
 natively when no project or ancestor Claude instruction file suppresses fallback.

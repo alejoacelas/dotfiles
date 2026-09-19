@@ -8,7 +8,7 @@ Usage:
     python granola.py get <doc_id>      # Get transcript for a specific meeting
     python granola.py recent [n]        # Get transcript for nth most recent meeting (default: 1)
 
-Transcripts are automatically saved to the data/transcripts/ folder.
+Transcripts are saved under ~/best/calls/.cache/summarize-call/transcripts/.
 """
 
 import os
@@ -50,9 +50,10 @@ API_BASE = "https://api.granola.ai/v1"
 # and lets us skip the desktop token entirely. Preferred path since Granola
 # 7.4x moved the desktop DEK into an app-scoped Keychain item we can't read.
 PUBLIC_API_BASE = "https://public-api.granola.ai/v1"
-SKILL_DIR = Path(__file__).parent.parent
-TRANSCRIPTS_DIR = SKILL_DIR / "data" / "transcripts"
-SUMMARIES_DIR = SKILL_DIR / "data" / "summaries"
+SKILL_DIR = Path(__file__).resolve().parent.parent
+CACHE_DIR = Path.home() / "best" / "calls" / ".cache" / "summarize-call"
+TRANSCRIPTS_DIR = CACHE_DIR / "transcripts"
+SUMMARIES_DIR = CACHE_DIR / "summaries"
 
 # Granola's API rejects requests without a client-version header ("Unsupported
 # client"). The desktop app sends its own version; we mirror a known-good one.
