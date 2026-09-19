@@ -1,4 +1,4 @@
-# agent-workflows
+# agents
 
 Agent tools, prompts and workflow experiments.
 

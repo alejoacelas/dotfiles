@@ -1,7 +1,6 @@
 # Projects
 
-Use topic folders: `agent-workflows/`, `connectors/`, `research-evaluations/`,
-`ai-community/`, and `others/` for projects without a clear fit.
+Use topic folders: `agents/`, `connectors/`, `community/`, and `others/` for projects without a clear fit.
 Name project folders `YYYY-MM-project-name`. Each project keeps its own Git repository
 and remote. Declare the `once` shared-context group using `agent-context adopt`, state
 the scope in its AGENTS.md. Do not create duplicate CLAUDE.md instructions.
