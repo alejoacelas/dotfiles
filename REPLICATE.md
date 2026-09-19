@@ -206,3 +206,13 @@ Alejo wanted project topic folders, personal administration under me, upcoming t
 - Verified all 30 project repository states through the moves, repaired email/Slack sibling links, checked affected symlinks and shell syntax, and confirmed that private nested repositories remain untracked by their public parent. Exact moves and classifications live in the private context repository.
 
 Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits dotfiles: e8847b4, a299e1e; writing: 63a54e5; agent-context-private: 59d7a34, 8752c3c; email: 4c6692a; slack: 71f220f
+
+## Personal homes and work strategy
+
+Alejo wanted meals and relationship projects out of admin, strategy under work, and a proposal for tidying calls.
+
+- Moved meals to me/health/meals; moved advice, love and Mutual Yes to me/relationships. Admin now contains four paperwork/travel projects. Updated indexes and kept meals ignored by its parent repository.
+- Moved strategy to work/strategy, retaining its private repository and correcting call-reference links. All five moved repositories preserved their history and existing state.
+- Inspected calls without changing it: 67 article files, nine Slack-derived drafts, a publishing pipeline and video-blur tooling. Recommended a private writing collection for articles/drafts/site, with coordinated path updates because publishing and call skills depend on the current layout.
+
+Agent session 01a0b905-404c-7231-916c-024f887eb815 · Commits dotfiles: 2a008f7; health: 606d2e2; strategy: 30aa1fd; agent-context-private: 6455bd2
