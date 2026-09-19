@@ -176,6 +176,10 @@
             "type": "command",
             "command": "bash \"$HOME/best/dotfiles/claude/hooks/relink-settings.sh\"",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/best/dotfiles/claude/hooks/quiet-plugin-hooks.py\""
           }
         ]
       },
