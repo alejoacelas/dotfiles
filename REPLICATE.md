@@ -355,3 +355,14 @@ Alejo wanted summarize-call available globally, saving to best/calls under its l
 - Kept new transcript caches inside the private archive; verified helper paths from /tmp and validated the skill and mirrors.
 
 Agent session 01a0bb5d-f2cb-7111-b7b7-18b2b064e999 · Commits dotfiles a2e22e6; calls 8b064af
+
+## Retire the duplicate call skill
+
+Alejo wanted summarize-call kept as the official workflow, simpler documentation, and an assessment of the installer and historical files.
+
+- Removed granola-transcript's six tracked files and its active Claude link; preserved the separately installed universal-registry copy under ~/.local/state/dotfiles/retired-skills/20260919-215351/ before removing it from discovery.
+- Shortened README.md and moved maintenance rules into AGENTS.md. Verified summarize-call resolves to the canonical plugin source in all three global registries.
+- Kept the installer: it connects tracked files to live tool configuration. Retained historical files because eight still supply archive entries through symlinks; the remaining snapshots preserve migration history.
+- All 17 tests passed. The configuration check found no hard failures; existing instruction differences and one-sided skills remain outside this change.
+
+Agent session 01a0bb6c-e2fd-7990-8db1-2889c6580d6a · Commits 173f3fa
