@@ -78,9 +78,10 @@ repository when it spans nested repositories. Do not backfill old entries.
 
 ## Conventions
 
-- Keep shared project instructions in `AGENTS.md`. Make the project's `CLAUDE.md`
-  contain `@AGENTS.md` so Claude Code imports the same instructions. Do not maintain
-  duplicate instruction text in both files.
+- Keep project instructions in `AGENTS.md`. Claude Code 2.1.277+ can load it natively
+  when no ancestor or project `CLAUDE.md`/`CLAUDE.local.md` suppresses fallback. Do not
+  create duplicate `CLAUDE.md` files. Keep an `@AGENTS.md` shim only for a verified
+  compatibility need; preserve `CLAUDE.md` files with distinct content, such as call indexes.
 - Keep `README.md` for the human-facing project overview. Put agent behavior and
   workflow requirements in `AGENTS.md`, even when the README also explains the project.
 - Orca Markdown: collapsibles only as `<details class="orca-details">` with a plain

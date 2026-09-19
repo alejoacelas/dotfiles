@@ -105,8 +105,8 @@ meeting title and a skim of the transcript (Step 8 may rename it).
 
 ```bash
 printf 'Being written — check back shortly.\n' > /tmp/placeholder.md
-gdoc --json new "<title>" --file /tmp/placeholder.md      # → id, url
-gdoc --json add-tab <id> "Transcript"
+gdoc --account <email> --json new "<title>" --file /tmp/placeholder.md      # → id, url
+gdoc --account <email> --json add-tab <id> "Transcript"
 GDOC_PY=$(head -1 "$(which gdoc)" | cut -c3-)             # gdoc's interpreter
 $GDOC_PY scripts/rename_tab.py <id> t.0 "Summary"        # first tab is born "Tab 1"
 ```
@@ -132,7 +132,7 @@ If `gog` reports no auth for a service, the Google Calendar / Gmail MCP
 connectors (80k account) are the fallback.
 
 ```bash
-gdoc share <id> <email> --role writer
+gdoc --account <email> share <id> <email> --role writer
 ```
 
 Say in the reply who the doc was shared with. If neither source yields an
@@ -189,13 +189,13 @@ much with an earlier call's slug — in any folder — rename the new pair to
 something more distinctive of this call's content, and consider renaming the
 earlier colliding pair too (use `git mv` when the old files are committed).
 The test: from the slug alone, could you tell the calls apart? If the slug
-changed, retitle the doc: `gdoc rename <id> "<new title>"`.
+changed, retitle the doc: `gdoc --account <email> rename <id> "<new title>"`.
 
 ### Step 9: Fill the Google Doc + folder index + NOTES.md
 
 Push the finished files into the doc from Step 4 and record the call in the
-folder index (see the archive `CLAUDE.md` → **Folder index + Google Doc
-mirror** and **Per-person NOTES.md** for the canonical rules):
+folder index using the rules below. These also apply when an existing call or
+summary is edited or renamed:
 
 1. Fill both tabs (`write` strips YAML frontmatter itself; `--tab` leaves the
    sibling tab alone; `cat` sets the read baseline `write` requires). The tab
@@ -205,9 +205,9 @@ mirror** and **Per-person NOTES.md** for the canonical rules):
    ```bash
    ATTR='*Summary and transcript created with the Claude skill available [here](https://github.com/alejoacelas/dotfiles/blob/main/plugins/calls/skills/summarize-call/SKILL.md).*'
    { printf '%s\n\n' "$ATTR"; awk 'NR==1&&/^---$/{f=1;next} f&&/^---$/{f=0;next} !f' <sum.md>; } > /tmp/sum-doc.md  # frontmatter must not sit below the line
-   gdoc cat <id> > /dev/null
-   gdoc write <id> /tmp/sum-doc.md --tab Summary
-   gdoc write <id> <trans.md>      --tab Transcript
+   gdoc --account <email> cat <id> > /dev/null
+   gdoc --account <email> write <id> /tmp/sum-doc.md --tab Summary
+   gdoc --account <email> write <id> <trans.md>      --tab Transcript
    ```
 2. Add a bullet to the person's folder `CLAUDE.md` (create it on the first call):
    `**<date> · <slug>**` + a `[gdoc]` link (`.../document/d/<id>/edit`, by ID so a
@@ -216,11 +216,11 @@ mirror** and **Per-person NOTES.md** for the canonical rules):
    `## <YYYY-MM-DD> <Slug In Title Case>` section, newest first, with 3–10 bullets
    of under 12 words each — written for the people who were on the call, so each
    bullet brings back a moment rather than explains itself. Then sync its mirror
-   doc: on first creation, `gdoc new "Alejo-<Other> Call Notes" --file
+   doc: on first creation, `gdoc --account <email> new "Alejo-<Other> Call Notes" --file
    NOTES.md`, append `---` + `Google Doc: <link>` to the file, and push once so
-   the doc includes the footer; on later calls, `gdoc diff <id> NOTES.md` first
+   the doc includes the footer; on later calls, `gdoc --account <email> diff <id> NOTES.md` first
    and fold any remote edits into the local file, then
-   `gdoc cat <id> > /dev/null && gdoc write <id> NOTES.md`. Never recreate the
+   `gdoc --account <email> cat <id> > /dev/null && gdoc --account <email> write <id> NOTES.md`. Never recreate the
    doc — the link must stay stable.
 
 ### Step 10 (off by default): Wiki pass
@@ -234,9 +234,11 @@ snapshot stays free of repo-relative links.
 
 ## Filing rule
 
+Paths are relative to the call archive root, wherever that repository is cloned.
+
 ```
-people/work/<once|many>/<org-firstname>/<YYYY-MM-DD>-<two-word-slug>-trans.md
-people/work/<once|many>/<org-firstname>/<YYYY-MM-DD>-<two-word-slug>-sum.md
+<once|many>/<org-firstname>/<YYYY-MM-DD>-<two-word-slug>-trans.md
+<once|many>/<org-firstname>/<YYYY-MM-DD>-<two-word-slug>-sum.md
 ```
 
 - **org-firstname** — a short org identifier (usually three letters, from
@@ -245,8 +247,8 @@ people/work/<once|many>/<org-firstname>/<YYYY-MM-DD>-<two-word-slug>-sum.md
   coefficient giving → `cg`, anthropic → `ant`, independent / no clear org →
   `ind`. One folder per person; reuse it across calls.
 - **once/** — people with a single recorded call. **many/** — repeat people
-  only (a suggested follow-up doesn't count); move a `once/` folder over when
-  a second call lands.
+  only (a suggested follow-up does not count). A confirmed recurring series may
+  start in `many/`; otherwise move a `once/` folder when a second call lands.
 - **two-word-slug** — a short two-word description of the call (e.g.
   `agentic-coaching`, `career-advice`). Two calls with one person on the same
   day get distinct slugs.

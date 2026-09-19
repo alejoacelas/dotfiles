@@ -23,7 +23,6 @@ bin/install.sh           creates links and installs the session-start hook
 bin/sync-project-skills  updates/checks private project mirrors
 hooks/pre-commit         blocks secrets and stale project-skill mirrors
 AGENTS.md                repo-local instructions and subscribed shared context
-CLAUDE.md                @AGENTS.md import
 ```
 
 Claude Code saves settings by replacing the file, which turns the `~/.claude/settings.json`
@@ -77,7 +76,11 @@ Do not edit the generated mirror or put project-only skills under `claude/skills
 `install.sh` exposes globally. The mirror's ignored `.env` and `.venv` link to the local
 source; generated `data/` remains private to `calls`.
 
-The root `AGENTS.md` contains project instructions; `CLAUDE.md` imports it.
+The root `AGENTS.md` contains project instructions. Claude Code 2.1.277+ reads it
+natively when no project or ancestor Claude instruction file suppresses fallback.
+See [Anthropic’s loading rules](https://code.claude.com/docs/en/memory#agents-md);
+older versions and sessions without the built-in feature need an import shim.
+The global `~/.claude/CLAUDE.md` remains the user-level instruction entrypoint.
 
 ## Install (or re-link) on a machine
 
@@ -109,6 +112,12 @@ credential store; `settings.json` is tracked and public. The
 contains a credential; override a false positive with `git commit --no-verify`.
 
 ## Shared project instructions
+
+Codex loads project instructions from the local Git root down to its starting directory.
+Outside a repository it checks only that directory; GitHub hosting is not required.
+Container instructions therefore do not automatically reach independent child repos.
+Declare the relevant shared groups in each child repo, and put project-specific
+restrictions inside that repo. See [Codex instruction discovery](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
 
 Run `bin/agent-context adopt /path/to/project --groups tools --visibility public` to
 subscribe a project. One-offs live in `~/best/projects/`; use the `once` group for them, `wiki` for reference collections in `~/best/writing/`,
