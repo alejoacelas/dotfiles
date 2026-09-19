@@ -39,9 +39,9 @@ as ordinary directories. Folder names use lowercase words separated by dashes.
 Before creating or moving anything, read the destination's `AGENTS.md` and
 [workspace procedures](/Users/alejo/best/dotfiles/agents/workflows.md#creating-or-moving-projects).
 
-Select shared groups deliberately with `~/best/dotfiles/bin/agent-context adopt`
-and tell me why. Selection is explicit per repository, never inferred from parent
-folders. The startup hook reads shared sources without changing project files.
+Only the `80k` shared group is currently approved. Select it explicitly for relevant
+private employer repositories with `~/best/dotfiles/bin/agent-context adopt`;
+do not add other shared groups without asking. Never infer membership from parent folders. The startup hook reads shared sources without changing project files.
 Keep project-essential rules in its own AGENTS.md; private shared sources and
 selections live in `~/.local/share/agent-context/private/`.
 

@@ -122,7 +122,7 @@ new sibling repository grant membership. Essential build, privacy and behavior r
 belong in the project's own AGENTS.md so they also travel with standalone clones.
 See [Codex discovery](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
 
-Run `bin/agent-context adopt /path/to/project --groups tools --visibility public` to
+Run `bin/agent-context adopt /path/to/project --groups 80k --visibility private` to
 register a choice. Use `--visibility private` for private repositories, and an empty
 `--groups` to remove a selection. Public selections live in `agents/projects.json`;
 private selections live in `~/.local/share/agent-context/private/projects.json`.
@@ -130,10 +130,9 @@ Update entries explicitly when moving a project. Linked Git worktrees reuse the
 main checkout's selection. Unregistered nested repos, archives, fixtures and vendored
 trees receive no shared groups.
 
-The four short sources are `tools` (maintained software), `once` (one-off projects),
-`wiki` (reference collections), and private `80k` (employer work). They contain curated
-rules rather than whole parent instruction files. Edit public text in `agents/groups/`
-and private text in the private clone's `groups/`. There are no generated copies,
+Only the private `80k` group is selected, for nine employer repositories. Other
+projects use their local instructions without shared groups. Edit employer guidance
+in the private clone’s `groups/80k.md`. There are no generated copies,
 YAML subscriptions, synchronization command or project-file writes at startup.
 `bin/agent-context check /path/to/project` shows the selected context without writing.
 
