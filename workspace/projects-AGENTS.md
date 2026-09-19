@@ -24,10 +24,9 @@ Preserve its repository and history; do not copy private material into a public 
 | `writing/` | Reusable explanations, reference material and settled research. |
 | `me/admin/` | Visas, paperwork and travel. |
 | `me/health/` | Physical and mental health, food, meals and environment research. |
-| `me/relationships/` | Love, advice and relationship projects. |
+| `me/relationships/` | People to learn from, meet and know, plus relationship projects. |
 | `me/sites/` | Personal blog and website. |
 | `me/stuff/` | Purchases, equipment and ownership notes. |
-| `people/` | People to learn from, meet and know. |
 | `calls/` | Private call transcripts, notes and related work. |
 | `work/80k/` | Private employer work and its tools. |
 | `work/aim/` | Aim engagements and related work. |

@@ -8,8 +8,7 @@ This folder is not a Git repository. Projects and coherent note collections own 
 - `tools/` — active and stable tools.
 - `projects/` — dated projects grouped by topic, each with a repository and remote.
 - `writing/` — reusable explanations and reference material.
-- `me/` — personal material, blog and website.
-- `people/` — people to learn from, meet and know.
+- `me/` — personal material, relationships and people research, blog and website.
 - `calls/` — private call transcripts and related work.
 - `archive/` — retired work and workspace history; project groups also keep local archives.
 

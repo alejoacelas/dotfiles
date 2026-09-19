@@ -1,7 +1,7 @@
 # Relationships
 
-- [Love](love/): a placeholder for future notes.
-- [Advice](advice/): a private placeholder for future notes.
-- [Mutual Yes](mutual-yes/): a two-person private Yes/No check.
+- [People](people/README.md): people I admire, want to discover or might meet while traveling.
+- [Mutual Yes](mutual-yes/README.md): a two-person private Yes/No check.
 
-Each collection keeps its own repository and privacy settings.
+These are separate repositories. Keep private relationship notes out of public people
+research. Call transcripts and private meeting notes remain in [calls](../../calls/).

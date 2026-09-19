@@ -118,7 +118,7 @@ link workspace/AGENTS.md "$BEST_ROOT/AGENTS.md"
 link workspace/README.md "$BEST_ROOT/README.md"
 # Claude Code 2.1.277+ reads AGENTS.md natively; do not recreate project shims.
 link REPLICATE.md "$BEST_ROOT/REPLICATE.md"
-for folder in me archive writing people work/aim work/80k; do
+for folder in me archive writing work/aim work/80k; do
   mkdir -p "$BEST_ROOT/$folder"
 done
 # Avoid changing temporary compatibility links or still-active parent repositories.
