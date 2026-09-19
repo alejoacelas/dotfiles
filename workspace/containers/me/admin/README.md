@@ -1,4 +1,4 @@
 # Admin
 
-My personal administration, paperwork, travel and related projects.
-Each dated project keeps its own repository and privacy settings.
+My visas, paperwork and travel projects. Each dated project keeps its own repository
+and privacy settings.

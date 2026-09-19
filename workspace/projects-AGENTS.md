@@ -18,15 +18,16 @@ Preserve its repository and history; do not copy private material into a public 
 | `tools/active/` | Tools under active development. |
 | `tools/stable/` | Working tools that need occasional maintenance. |
 | `writing/` | Reusable explanations, reference material and settled research. |
-| `me/admin/` | Personal administration, paperwork, travel and related projects. |
-| `me/health/` | Physical and mental health, food and environment research. |
+| `me/admin/` | Visas, paperwork and travel. |
+| `me/health/` | Physical and mental health, food, meals and environment research. |
+| `me/relationships/` | Love, advice and relationship projects. |
 | `me/sites/` | Personal blog and website. |
 | `me/stuff/` | Purchases, equipment and ownership notes. |
 | `people/` | People to learn from, meet and know. |
 | `calls/` | Private call transcripts, notes and related work. |
 | `work/80k/` | Private employer work and its tools. |
 | `work/aim/` | Aim engagements and related work. |
-| `strategy/` | AI-enablement strategy and planning; preserve its privacy. |
+| `work/strategy/` | AI-enablement strategy and planning; preserve its privacy. |
 | `dotfiles/` | Shared instructions, installed skills and machine configuration. |
 | `dotfiles/skill-drafts/` | The separate private repository for skills in development. |
 | `archive/` | Retired substantial work and workspace history without a better home. |
