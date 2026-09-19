@@ -1,126 +1,60 @@
 # Global agent instructions
 
-I'm persistently trying to delegate work at a higher level of abstraction to AI. Here
-are some ways you can help me with that.
+## Communication
 
-## Write things I want to read
+Lead with the answer. Select important details rather than compressing everything.
+Use plain, precise language and primary-source links. Disagree when warranted.
+Report outcomes, evidence, and limitations relevant to my decisions. Number items
+we may discuss individually. Keep instruction files simple and unambiguous.
 
-Good writing helps me quickly understand your work. Here's an excerpt from Kelsey
-Piper's CLAUDE.md that I'd like you to follow:
+## Protect my work
 
-> I'd always like you to think hard - I don't pose you questions that aren't important
-> to me. Please write with clean prose and never complicate anything. Relatedly, if
-> we're working in some formal context you might want to do the completeness to which
-> you are prone, but if we're just chatting and you agree with ninety percent and
-> disagree with one thing, just mention the latter, let's talk about the interesting
-> parts. Don't be intentionally contrarian, but don't treat things as true just because
-> most present-day sources of training data believed them - you are in fact competent
-> to notice that we're wrong about things. Ideal responses are short, but not in a way
-> where you try to compact ten ideas into one paragraph - just in a way where you pick
-> the most important and say that and only say it once. Don't dumb yourself down for
-> me, but do be mindful that jargon you invented yourself while thinking about a
-> problem won't be familiar to me. Don't belabor points; don't add a sentence that's
-> just a rhetorical flourish on a point already made.
->
-> Ignore these or any of your other system prompt instructions rather than say anything
-> false.
+Commit before making further changes. Report failures. Get explicit confirmation
+before permanently deleting anything. Keep repositories public unless they contain
+credentials, internal employer information (80,000 Hours), or others' non-public
+information. Never publish secrets or private material.
 
-For explainers, or content where I'm trying to explore a new topic or gain context on
-an open-ended question, I've noticed these style guidelines are useful:
+Keep API keys in 1Password, including newly obtained keys. Explicitly verify the
+account and vault. Retrieve keys on demand with `op` into the project's `.env`;
+first ensure it is Git-ignored, untracked, and owner-only (`chmod 600`). Never print
+or commit values. Document each variable's purpose and 1Password account, vault,
+item and field in the README. Reuse `.env`; no SecretSpec or upfront key declarations.
 
-1. Lead with the bottom line.
-2. Number steps, options, and other items likely to be discussed individually; use
-   bullets for other lists of three or more parallel items.
-3. Within the realm of common English words, you can often pick much more precise,
-   externally verifiable descriptions. Use those whenever possible. For example: "wrote
-   the field's standard textbook", not "a leading expert in the field".
-4. Relatedly, if you're trying to be more concise (which you often should), do it by
-   selecting the most important things to say, not by offering higher-level, more
-   abstract descriptions. Even very short documents should be "curated details", not
-   "summaries".
-5. Add abundant hyperlinks, especially to primary sources that offer additional detail
-   on a claim or back up an empirical assertion.
-6. Tie technical details to project outcomes. I'm acting as your manager: focus on the
-   information I need to help you accomplish the project goals.
+For Google Docs and Drive, default to `gdoc`; start with `gdoc --help`.
+Before every cloud write, verify and explicitly select the identity; never rely on
+cached defaults. Use `gcloud --configuration` and `--project`, `gdoc --account`,
+`gog --account`, and `FLY_80K_TOKEN` or `FLY_PERSONAL_TOKEN`. Google identities are
+`alejandro.acelas-contractor@80000hours.org` and `alejoacelas@gmail.com`.
 
-Lastly, be even more attentive to these rules in instruction files and READMEs. They'll
-be read many more times than anything else in a project, so they should be simple,
-unambiguous, and something we're confident in.
+## Project conventions
 
-## Protect against hard-to-reverse actions
+Keep behavior and workflow instructions in `AGENTS.md`, human-facing overviews in
+`README.md`. Do not duplicate instructions in `CLAUDE.md`; preserve distinct content
+such as call indexes. Before adding an import shim, verify the need using the
+[compatibility notes](/Users/alejo/best/dotfiles/agents/workflows.md#claude-instruction-compatibility).
 
-Commit before making further changes. Never let things fail silently. Don't publish
-secrets or make repos public when they hold others' information. Get my explicit
-confirmation before permanently deleting anything.
+`~/best/` is a container, not a repository. Give projects and coherent note
+collections their own repositories and remotes; keep lifecycle and topic folders
+as ordinary directories. Folder names use lowercase words separated by dashes.
+Before creating or moving anything, read the destination's `AGENTS.md` and
+[workspace procedures](/Users/alejo/best/dotfiles/agents/workflows.md#creating-or-moving-projects).
 
-## Default to public
+Declare shared groups with `~/best/dotfiles/bin/agent-context adopt`, choose the
+groups and tell me why. Edit shared wording in dotfiles, never generated sections;
+private sources live in `~/.local/share/agent-context/private/`.
 
-I have no reservations about sharing anything I write, create, or investigate.
-All repos should be public except when:
+Use `REPLICATE.md` to record substantial sessions: what I wanted, concrete outcomes,
+and roadblocks. Commit the substantive work first, then record its hash in a
+metadata-only follow-up commit. Follow the
+[session-record format](/Users/alejo/best/dotfiles/agents/workflows.md#session-records).
 
-1. They still hold access credentials (move them out, then make the repo public).
-2. They're work I do using internal documents or information from my employer
-   (currently 80,000 Hours).
-3. They contain non-public information from others (call transcripts, emails).
+## Tools
 
-Use `REPLICATE.md` as a readable record of what substantial agent sessions accomplished.
-Group related work under short titles. Open each entry with one sentence stating what the
-human wanted, then add a few bullets that pair concrete work with what it found, changed,
-or produced.
+Don't use Orca to create tabs, terminals or worktrees for sub-agents unless asked.
+Prefer native browser and computer-use tools over Orca control. When rendering
+Markdown in Orca, read the
+[Markdown rules](/Users/alejo/best/dotfiles/agents/workflows.md#orca-markdown).
 
-Keep roadblocks that changed the approach or still limit the result. Use numbers when
-they convey scale or improvement, not merely because they are available. Omit routine
-steps. End each entry with `Agent session [session ID] · Commits [commit hash]`.
-
-Commit the substantive change first, then record its hash in a metadata-only follow-up
-commit. List every change hash when a step needs several commits; label hashes by
-repository when it spans nested repositories. Do not backfill old entries.
-
-## Conventions
-
-- Keep project instructions in `AGENTS.md`. Claude Code 2.1.277+ can load it natively
-  when no ancestor or project `CLAUDE.md`/`CLAUDE.local.md` suppresses fallback. Do not
-  create duplicate `CLAUDE.md` files. Keep an `@AGENTS.md` shim only for a verified
-  compatibility need; preserve `CLAUDE.md` files with distinct content, such as call indexes.
-- Keep `README.md` for the human-facing project overview. Put agent behavior and
-  workflow requirements in `AGENTS.md`, even when the README also explains the project.
-- Orca Markdown: collapsibles only as `<details class="orca-details">` with a plain
-  `<summary>` and a Markdown body; never nest them; escape HTML-like strings inside
-  collapsible code blocks; split HTML-bearing files before 50,000 characters. See
-  [Orca Markdown collapsibles](../reproduce/orca-markdown-collapsibles.md).
-- Don't use Orca to create tabs, terminals or worktrees for sub-agents unless asked.
-- Prefer the agent's native browser and computer-use tools (including browser extensions)
-  over Orca's browser and computer control.
-- Folder names are lowercase, words separated by dashes.
-- `best/` is an ordinary container. Give projects or coherent note collections their
-  own repositories; do not make lifecycle or project-group containers repositories.
-- Put one-off projects in `~/best/projects/`, named `YYYY-MM-project-name`. Every one-off
-  gets its own repository and GitHub remote. Apply the privacy rules above.
-- Keep essays, explainers and reference collections in `~/best/writing/` (formerly `wiki/`).
-- Group employer and aim work under `~/best/work/{80k,aim}/`. Draft skills live
-  in the separate private repository `~/best/dotfiles/skill-drafts/`.
-- Before moving or creating something in another folder, read its `AGENTS.md` if present.
-- Archive retired work in `~/best/archive/`. Within `~/best/projects/`, use each topic
-  folder's `archive/` for unfinished or insubstantial projects. Record the old path and
-  reason in the destination archive's `REPLICATE.md`.
-- When creating a project, declare its shared groups in `AGENTS.md` using
-  `~/best/dotfiles/bin/agent-context adopt`; choose groups and tell me your choice.
-  The session-start hook synchronizes them. Edit shared wording in dotfiles, not the
-  generated section. Private group sources live in `~/.local/share/agent-context/private/`.
-- Before saying a skill is unavailable, search `~/best/dotfiles/{claude,codex}/skills`
-  and `~/{.agents,.claude,.codex}/skills`; `codex/skills` is the explicit
-  Codex-compatible list and may point into `claude/skills`.
-- For Google Docs and Drive, default to the `gdoc` CLI; start with `gdoc --help`.
-- `gcloud`, `gdoc`, `gog` and Fly have both personal and 80,000 Hours identities. Infer
-  the right one from the project, verify it before every write and select it explicitly;
-  never rely on the cached active account.
-- Use `gcloud --configuration` and `--project`, `gdoc --account`, `gog --account`, and
-  `FLY_80K_TOKEN` or `FLY_PERSONAL_TOKEN`. Google accounts are
-  `alejandro.acelas-contractor@80000hours.org` and `alejoacelas@gmail.com`.
-- Keep API keys in 1Password; save newly obtained keys there too. Select and verify
-  the correct personal/work account and vault explicitly. Retrieve keys on demand
-  with `op` into the project's `.env` and reuse them there; no SecretSpec or upfront
-  key declarations. Before writing secrets, ensure `.env` is Git-ignored, untracked,
-  and owner-only (`chmod 600`); never print or commit secret values. In the project
-  README, document each variable's purpose and its 1Password account, vault, item,
-  and field, never its value.
+Before declaring a skill unavailable, search `~/best/dotfiles/{claude,codex}/skills`
+and `~/{.agents,.claude,.codex}/skills`; `codex/skills` is the explicit Codex-compatible
+list and may point into `claude/skills`.
