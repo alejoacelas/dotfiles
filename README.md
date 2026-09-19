@@ -22,7 +22,7 @@ Brewfile                 every Homebrew tap/formula/cask
 bin/install.sh           creates links and installs the session-start hook
 bin/sync-project-skills  updates/checks private project mirrors
 hooks/pre-commit         blocks secrets and stale project-skill mirrors
-AGENTS.md                repo-local instructions and subscribed shared context
+AGENTS.md                repo-local instructions (shared context stays separate)
 ```
 
 Claude Code saves settings by replacing the file, which turns the `~/.claude/settings.json`
@@ -34,8 +34,8 @@ telling you to commit. Don't edit `claude/settings.json` from a session without 
 Both Claude and Codex read the one `agents/AGENTS.md`. The Codex app owns
 `~/.codex/config.toml`; keep it free of CLI overrides. `codex/cli.config.toml` links to
 `~/.codex/cli.config.toml` and loads only when Codex starts with `--profile cli`.
-Both tools run `bin/agent-context` at session start. It refreshes declared shared groups
-and reports conflicts.
+Both tools run `bin/agent-context` at startup, resume and after compaction. It reads
+explicitly selected shared groups without rewriting project files.
 The installer includes Orca account-specific Codex homes without changing the CLI profile.
 
 The product directories are compatibility lists, not necessarily canonical sources.
@@ -94,7 +94,8 @@ brew bundle --file ~/best/dotfiles/Brewfile
 ~/best/dotfiles/bin/install.sh
 ```
 
-The installer requires `uv` and creates an isolated Python environment with pinned PyYAML.
+The installer requires `uv` and creates an isolated Python environment; the hook uses
+only the standard library.
 For employer groups, clone the private `agent-context-private` repository into
 `~/.local/share/agent-context/private` using an authorized account.
 
@@ -116,31 +117,47 @@ contains a credential; override a false positive with `git commit --no-verify`.
 Codex loads project instructions from the local Git root down to its starting directory.
 Outside a repository it checks only that directory; GitHub hosting is not required.
 Container instructions therefore do not automatically reach independent child repos.
-Declare the relevant shared groups in each child repo, and put project-specific
-restrictions inside that repo. See [Codex instruction discovery](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
+Select shared groups explicitly for each repository. Neither parent folders nor a
+new sibling repository grant membership. Essential build, privacy and behavior rules
+belong in the project's own AGENTS.md so they also travel with standalone clones.
+See [Codex discovery](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
 
 Run `bin/agent-context adopt /path/to/project --groups tools --visibility public` to
-subscribe a project. One-offs live in `~/best/projects/`; use the `once` group for them, `wiki` for reference collections in `~/best/writing/`,
-and `80k` only in private employer projects. Group order in YAML is the composition order.
-Use `bin/agent-context sync /path/to/project` for a manual refresh and `check` for a
-read-only freshness check. SessionStart calls the same code automatically.
+register a choice. Use `--visibility private` for private repositories, and an empty
+`--groups` to remove a selection. Public selections live in `agents/projects.json`;
+private selections live in `~/.local/share/agent-context/private/projects.json`.
+Update entries explicitly when moving a project. Linked Git worktrees reuse the
+main checkout's selection. Unregistered nested repos, archives, fixtures and vendored
+trees receive no shared groups.
 
-Edit shared text in `agents/groups/`; edit project text outside the generated boundaries.
-The checksum detects changes to generated text and refuses to overwrite them. Resolve a
-conflict by preserving the local change and incorporating the intended wording into the
-shared source; do not reset the checksum to discard an edit. Global instructions remain
-one symlinked source and are not copied into every project.
+The four short sources are `tools` (maintained software), `once` (one-off projects),
+`wiki` (reference collections), and private `80k` (employer work). They contain curated
+rules rather than whole parent instruction files. Edit public text in `agents/groups/`
+and private text in the private clone's `groups/`. There are no generated copies,
+YAML subscriptions, synchronization command or project-file writes at startup.
+`bin/agent-context check /path/to/project` shows the selected context without writing.
 
-Error logs and installer backups are under
-`~/.local/state/agent-context/`. No watcher, recurring context sync, or session-end job runs.
-The workspace-migration monitor is temporary and separate.
+Claude normally reads ancestor AGENTS.md files. The registry's explicit `local_only`
+list identifies container files that must not leak into independent children. The
+installer excludes their exact paths (and symlink targets) through `claudeMdExcludes`;
+the Claude hook restores them only in their own directory or Git repository. Add a
+new container to this list and rerun `install` when needed. Project-local and nested
+instruction discovery otherwise stays native. Existing independent exclusions are
+preserved. See [Claude loading rules](https://code.claude.com/docs/en/memory#agents-md).
+
+Both clients use `SessionStart`, including `source: compact`, to reread selected
+sources before the next response. The hook reports missing sources and privacy
+conflicts visibly; errors and installer backups are in `~/.local/state/agent-context/`.
+It does not watch files or rewrite project instructions. These machine-local choices
+do not accompany an unrelated cloud clone.
 
 For sessions in `projects/` or at the `best/` root, SessionStart also flags projects
 in `projects/live/` with no substantive activity for 14 days. It reports candidates;
 the agent chooses a destination using `projects/AGENTS.md` before moving them.
 
 Run `~/.local/share/agent-context/venv/bin/python -m unittest discover -s tests` to verify
-local-text preservation, conflicts, missing sources, moves, privacy and idempotence.
+explicit selection, startup/compaction output, nested-repository boundaries, private
+source protection, worktrees and the absence of project-file writes.
 
 Codex requires each hook definition to be trusted. The installer uses Codex's supported
 app-server configuration API to trust only the exact SessionStart command it installs;

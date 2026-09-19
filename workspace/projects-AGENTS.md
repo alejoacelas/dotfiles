@@ -2,8 +2,8 @@
 
 Use `live/` for projects being worked on now. Use topic folders: `agents/`, `connectors/`, `community/`, and `others/` for projects without a clear fit.
 Name project folders `YYYY-MM-project-name`. Each project keeps its own Git repository
-and remote. Declare the `once` shared-context group using `agent-context adopt`, state
-the scope in its AGENTS.md. Do not create duplicate CLAUDE.md instructions.
+and remote. Consider the `once` shared-context group using `agent-context adopt`;
+select it deliberately and state the scope in the project’s AGENTS.md. Do not create duplicate CLAUDE.md instructions.
 Keep topic folders as ordinary directories; their shared configuration lives in dotfiles.
 Apply the global privacy rules.
 

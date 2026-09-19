@@ -39,9 +39,11 @@ as ordinary directories. Folder names use lowercase words separated by dashes.
 Before creating or moving anything, read the destination's `AGENTS.md` and
 [workspace procedures](/Users/alejo/best/dotfiles/agents/workflows.md#creating-or-moving-projects).
 
-Declare shared groups with `~/best/dotfiles/bin/agent-context adopt`, choose the
-groups and tell me why. Edit shared wording in dotfiles, never generated sections;
-private sources live in `~/.local/share/agent-context/private/`.
+Select shared groups deliberately with `~/best/dotfiles/bin/agent-context adopt`
+and tell me why. Selection is explicit per repository, never inferred from parent
+folders. The startup hook reads shared sources without changing project files.
+Keep project-essential rules in its own AGENTS.md; private shared sources and
+selections live in `~/.local/share/agent-context/private/`.
 
 Use `REPLICATE.md` to record substantial sessions: what I wanted, concrete outcomes,
 and roadblocks. Commit the substantive work first, then record its hash in a

@@ -105,10 +105,8 @@ link claude/settings.json "$HOME/.claude/settings.json"
 # Enable the repo's tracked git hooks (the secret-scan pre-commit guard).
 git -C "$DOTFILES" config core.hooksPath hooks
 
-# Session-start synchronization uses one pinned YAML dependency in an isolated environment.
+# Session-start context uses only the standard library in an isolated environment.
 uv venv --allow-existing "$HOME/.local/share/agent-context/venv"
-uv pip install --python "$HOME/.local/share/agent-context/venv/bin/python" PyYAML==6.0.2
-"$HOME/.local/share/agent-context/venv/bin/python" "$DOTFILES/bin/agent-context" install
 link bin/agent-context "$HOME/.local/bin/agent-context"
 
 # Ordinary container configuration lives here; existing repositories keep their own files.
@@ -150,6 +148,9 @@ if [ -f "$HOME/.local/share/agent-context/private/archive/REPLICATE.md" ]; then
     ln -s "$HOME/.local/share/agent-context/private/archive/REPLICATE.md" "$target"
   fi
 fi
+
+# Install after workspace symlinks exist so Claude exclusions include their real paths.
+"$HOME/.local/share/agent-context/venv/bin/python" "$DOTFILES/bin/agent-context" install
 
 # Keep machine-local or secret settings in ~/.claude/settings.local.json (untracked) —
 # never in the tracked settings.json linked above.

@@ -1,9 +1,9 @@
 #!/usr/bin/env -S uv run --script
 # /// script
 # requires-python = ">=3.10"
-# dependencies = ["PyYAML==6.0.2"]
+# dependencies = []
 # ///
-"""Session-start context sync. Explicit groups and guarded writes."""
+"""Read-only session context from explicitly selected project groups."""
 from __future__ import annotations
 import argparse
 import fcntl
@@ -16,13 +16,12 @@ import subprocess
 import sys
 import tempfile
 import time
-import yaml
 
 DOTFILES = Path(__file__).resolve().parents[1]
 STATE = Path.home() / '.local/state/agent-context'
-BEGIN = re.compile(r'<!-- agent-context:begin sha256=([a-f0-9]{64}) -->\n')
-END = '<!-- agent-context:end -->\n'
 NAME = re.compile(r'[a-z0-9][a-z0-9-]*\Z')
+EXCLUDED = {'archive', 'archives', 'fixtures', 'test-fixtures', 'vendor', 'vendors',
+            'node_modules', '.venv', 'venv', 'snapshots', 'original-containers', 'retired-upcoming'}
 
 
 def digest(data):
@@ -50,93 +49,155 @@ def atomic(path, content, before=None):
             os.unlink(temp)
 
 
-def split(text):
-    if not text.startswith('---\n'):
-        return {}, '', text
-    stop = text.find('\n---\n', 4)
-    if stop == -1:
-        raise ValueError('Unclosed YAML front matter')
-    header = text[:stop + 5]
-    data = yaml.safe_load(text[4:stop]) or {}
-    if not isinstance(data, dict):
-        raise ValueError('Front matter must be a mapping')
-    return data, header, text[stop + 5:]
+def registry_paths():
+    return [DOTFILES / 'agents/projects.json',
+            Path.home() / '.local/share/agent-context/private/projects.json']
 
 
-def declaration(path):
-    data, _, _ = split(path.read_text())
-    return data.get('agent_context')
+def validate(config):
+    if not isinstance(config, dict):
+        raise ValueError('Project selection must be an object')
+    groups = config.get('groups')
+    if (not isinstance(groups, list) or not all(isinstance(x, str) and NAME.fullmatch(x) for x in groups)
+            or len(groups) != len(set(groups))):
+        raise ValueError('Groups must be unique lowercase names')
+    if config.get('visibility') not in ('public', 'private'):
+        raise ValueError('Project visibility must be public or private')
 
 
-def locate(cwd):
-    """Find a declaration without crossing a repository boundary."""
+def load_projects():
+    projects = {}
+    for registry in registry_paths():
+        if not registry.exists():
+            continue
+        data = json.loads(registry.read_text())
+        if data.get('version') != 1 or not isinstance(data.get('projects'), dict):
+            raise ValueError(f'{registry}: expected version 1 and projects object')
+        for name, config in data['projects'].items():
+            path = Path(name).expanduser()
+            if not path.is_absolute():
+                raise ValueError(f'{registry}: project paths must be absolute or start with ~/')
+            path = path.resolve()
+            validate(config)
+            if path in projects:
+                raise ValueError(f'Duplicate project selection: {path}')
+            if registry == registry_paths()[0] and config['visibility'] != 'public':
+                raise ValueError(f'{registry}: private projects belong in the private registry')
+            projects[path] = config
+    return projects
+
+
+def locate(cwd, projects):
+    """Only explicit selections within this checkout; never inherit across a nested repo."""
+    cwd = cwd.resolve()
+    if EXCLUDED.intersection(cwd.parts):
+        return None
     for root in [cwd, *cwd.parents]:
-        path = root / 'AGENTS.md'
-        if path.is_file() and declaration(path) is not None:
-            return path
+        if root in projects:
+            return root
         if (root / '.git').exists():
+            # Linked worktrees share their main checkout's explicit selection.
+            if (root / '.git').is_file():
+                common = subprocess.check_output(
+                    ['git', '-C', str(root), 'rev-parse', '--path-format=absolute', '--git-common-dir'],
+                    text=True, timeout=5).strip()
+                original = Path(common).resolve().parent
+                relative = cwd.relative_to(root)
+                for suffix in [relative, *relative.parents]:
+                    candidate = original / suffix
+                    if candidate in projects:
+                        return candidate
             break
     return None
 
 
-def sync_project(path, check=False):
-    old = path.read_text()
-    data, header, body = split(old)
-    config = data.get('agent_context')
-    if not isinstance(config, dict) or config.get('version') != 1:
-        raise ValueError(f'{path}: agent_context.version must be 1')
-    groups = config.get('groups')
-    visibility = config.get('visibility')
-    if not isinstance(groups, list) or not all(isinstance(x, str) and NAME.fullmatch(x) for x in groups):
-        raise ValueError(f'{path}: groups must be a list of lowercase names')
-    if len(groups) != len(set(groups)) or visibility not in ('public', 'private'):
-        raise ValueError(f'{path}: duplicate groups or missing visibility')
+def local_only_paths():
+    """Known container instructions: load in their own scope, never across repositories."""
+    paths = []
+    for registry in registry_paths():
+        if registry.exists():
+            for name in json.loads(registry.read_text()).get('local_only', []):
+                path = Path(name).expanduser()
+                if not path.is_absolute() or path.name != 'AGENTS.md':
+                    raise ValueError(f'{registry}: local_only entries must be absolute AGENTS.md paths')
+                paths.append(path)
+    return paths
+
+
+def local_context(cwd):
+    # Claude excludes these exact files globally; restore only this checkout's own scope.
+    cwd = cwd.resolve()
+    excluded = {p.resolve() for p in local_only_paths()}
     pieces = []
-    for group in groups:
+    for root in [cwd, *cwd.parents]:
+        path = root / 'AGENTS.md'
+        if path.resolve() in excluded and path.is_file():
+            pieces.append(f'Local instructions from {path}:\n{path.read_text().strip()}')
+        if (root / '.git').exists():
+            break
+        # Outside Git, only the starting directory is local, not every ancestor.
+        if root == cwd and not any((p / '.git').exists() for p in cwd.parents):
+            break
+    return '\n\n'.join(reversed(pieces))
+
+
+def group_text(config):
+    validate(config)
+    pieces = []
+    for group in config['groups']:
         public = DOTFILES / 'agents/groups' / (group + '.md')
         private = Path.home() / '.local/share/agent-context/private/groups' / (group + '.md')
         if public.exists() and private.exists():
             raise ValueError(f'Ambiguous public and private group: {group}')
         source = public if public.exists() else private
-        if source == private and visibility != 'private':
-            raise ValueError(f'{path}: private group {group} requires a private project')
         if not source.is_file():
             raise ValueError(f'Missing shared group: {group}')
-        _, _, content = split(source.read_text())
-        pieces.append(f'<!-- shared group: {group} -->\n' + content.rstrip() + '\n')
-    generated = '\n'.join(pieces)
-    if len(generated.encode()) > 24000:
-        raise ValueError(f'{path}: shared context exceeds 24 KB; reduce the groups')
-    starts = list(BEGIN.finditer(body))
-    if len(starts) != 1 or body.count(END) != 1:
-        raise ValueError(f'{path}: generated boundaries missing or duplicated; explicit adoption required')
-    start = starts[0]
-    stop = body.index(END)
-    if stop < start.end() or digest(body[start.end():stop]) != start.group(1):
-        raise ValueError(f'{path}: generated text was edited; preserve it and reconcile with its shared source')
-    replacement = f'<!-- agent-context:begin sha256={digest(generated)} -->\n' + generated + END
-    desired = header + body[:start.start()] + replacement + body[stop + len(END):]
-    changed = desired != old
-    if changed and not check:
-        atomic(path, desired, old)
-    return changed, generated
+        if source == private and config['visibility'] != 'private':
+            raise ValueError(f'Private group {group} requires a private project')
+        pieces.append(f'Shared group: {group} (source: {source})\n{source.read_text().strip()}')
+    text = '\n\n'.join(pieces)
+    if len(text.encode()) > 24000:
+        raise ValueError('Shared context exceeds 24 KB; reduce the groups')
+    return text
+
+
+def shared_context(cwd):
+    projects = load_projects()
+    selected = locate(cwd, projects)
+    if selected is None:
+        return ''
+    text = group_text(projects[selected])
+    if not text:
+        return ''
+    return (f'Explicit shared instructions for {selected}. These are project defaults; '
+            'more specific project instructions take precedence. Relative paths in a source '
+            'are relative to that source file.\n\n' + text)
 
 
 def adopt(path, groups, visibility):
-    old = path.read_text() if path.exists() else ''
-    data, _, body = split(old)
-    if 'agent_context' in data or 'agent-context:begin' in body:
-        raise ValueError('Already adopted; edit the YAML declaration instead')
-    data['agent_context'] = {'version': 1, 'groups': groups, 'visibility': visibility}
-    initial = ('---\n' + yaml.safe_dump(data, sort_keys=False) + '---\n' +
-               f'<!-- agent-context:begin sha256={digest("")} -->\n{END}\n' + body)
-    # Validate all group sources before changing the user's file.
-    with tempfile.TemporaryDirectory() as tmp:
-        probe = Path(tmp) / 'AGENTS.md'
-        probe.write_text(initial)
-        sync_project(probe)
-        desired = probe.read_text()
-    atomic(path, desired, old if path.exists() else None)
+    """Register a deliberate choice without changing the project's instructions."""
+    path = (path.parent if path.name == 'AGENTS.md' else path).resolve()
+    if not path.is_dir():
+        raise ValueError(f'Project directory does not exist: {path}')
+    config = {'groups': groups, 'visibility': visibility}
+    group_text(config)  # Validate before writing.
+    registries = registry_paths()
+    destination = registries[0 if visibility == 'public' else 1]
+    projects = load_projects()
+    if path in projects and projects[path]['visibility'] != visibility:
+        raise ValueError('Visibility change requires moving the existing registry entry explicitly')
+    old = destination.read_text() if destination.exists() else None
+    data = json.loads(old) if old is not None else {'version': 1, 'projects': {}}
+    key = str(path)
+    if path.is_relative_to(Path.home()):
+        key = '~/' + str(path.relative_to(Path.home()))
+    # Normalize existing spelling, including absolute versus home-relative paths.
+    data['projects'] = {k: v for k, v in data['projects'].items()
+                        if Path(k).expanduser().resolve() != path}
+    if groups:
+        data['projects'][key] = config
+    data['projects'] = dict(sorted(data['projects'].items()))
+    atomic(destination, json.dumps(data, indent=2) + '\n', old)
 
 
 def trust_codex_hook(home, command):
@@ -192,10 +253,22 @@ def trust_codex_hook(home, command):
         proc.wait(timeout=10)
 
 
+def claude_exclusions(data, target):
+    """Reconcile only exclusions this installer owns, retaining independent choices."""
+    state = STATE / ('claude-exclusions-' + digest(str(target)) + '.json')
+    desired = list(dict.fromkeys(name for path in local_only_paths()
+                                for name in (str(path), str(path.resolve()))))
+    # A fresh clone may already contain these generated exclusions in settings.json.
+    owned = json.loads(state.read_text()) if state.exists() else desired
+    independent = [name for name in data.get('claudeMdExcludes', []) if name not in owned]
+    data['claudeMdExcludes'] = independent + [name for name in desired if name not in independent]
+    return state, [name for name in desired if name not in independent]
+
+
 def install():
     """Merge one owned hook into existing configs, including Orca account homes."""
     import shlex
-    command = shlex.quote(sys.executable) + ' ' + shlex.quote(str(DOTFILES / 'bin/agent-context')) + ' hook'
+    base_command = shlex.quote(sys.executable) + ' ' + shlex.quote(str(DOTFILES / 'bin/agent-context')) + ' hook'
     homes = [Path.home() / '.codex']
     homes += list((Path.home() / 'Library/Application Support/orca/codex-accounts').glob('*/home'))
     if os.environ.get('CODEX_HOME'):
@@ -211,6 +284,8 @@ def install():
         seen.add(target)
         old = target.read_text() if target.exists() else '{}'
         data = json.loads(old)
+        command = base_command + (' --client codex' if codex else ' --client claude')
+        exclusion_state = claude_exclusions(data, target) if not codex else None
         hooks = data.setdefault('hooks', {})
         for event, groups in list(hooks.items()):
             retained = []
@@ -231,6 +306,9 @@ def install():
             if not backup.exists():
                 atomic(backup, old)
             atomic(target, text, old if target.exists() else None)
+        if exclusion_state:
+            state, owned = exclusion_state
+            atomic(state, json.dumps(owned, indent=2) + '\n')
         print(f'Installed SessionStart hook: {config}')
     for home in set(homes):
         home.mkdir(parents=True, exist_ok=True)
@@ -245,7 +323,7 @@ def install():
             target.rename(backup)
         target.symlink_to(source)
     for home in set(homes):
-        trust_codex_hook(home, command)
+        trust_codex_hook(home, base_command + ' --client codex')
 
 
 def live_project_reminder(cwd):
@@ -290,44 +368,39 @@ def live_project_reminder(cwd):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['hook', 'sync', 'check', 'adopt', 'install'])
+    parser.add_argument('command', choices=['hook', 'check', 'adopt', 'install'])
     parser.add_argument('path', nargs='?', default='.')
     parser.add_argument('--groups', nargs='*', default=[])
+    parser.add_argument('--client', choices=['codex', 'claude'], default='codex')
     parser.add_argument('--visibility', choices=['public', 'private'], default='public')
     args = parser.parse_args()
-    STATE.mkdir(parents=True, exist_ok=True)
-    os.chmod(STATE, 0o700)
     if args.command == 'install':
         install()
         return 0
     payload = json.load(sys.stdin) if args.command == 'hook' else {}
+    if args.command == 'hook' and payload.get('hook_event_name', 'SessionStart') != 'SessionStart':
+        return 0
     cwd = Path(payload.get('cwd', args.path)).expanduser().resolve()
-    path = cwd if cwd.name == 'AGENTS.md' else locate(cwd)
-    root = path.parent if path else cwd
-    lock = STATE / (digest(str(root)) + '.lock')
-    with lock.open('w') as handle:
-        fcntl.flock(handle, fcntl.LOCK_EX)
-        if args.command == 'adopt':
-            path = cwd if cwd.name == 'AGENTS.md' else cwd / 'AGENTS.md'
-            adopt(path, args.groups, args.visibility)
-            print(f'Adopted {path}: {", ".join(args.groups) or "no shared groups"}')
-            return 0
-        changed, generated = sync_project(path, args.command == 'check') if path else (False, '')
-        if args.command != 'hook':
-            print(f'{path}: ' + ('stale' if changed and args.command == 'check' else 'updated' if changed else 'current') if path else 'No project declaration')
-            return int(changed and args.command == 'check')
-        if payload.get('hook_event_name', 'SessionStart') != 'SessionStart':
-            return 0
-        context = []
-        reminder = live_project_reminder(cwd)
-        if reminder:
-            context.append(reminder)
-        if path:
-            # Always inject on startup: files may have been loaded before this hook ran.
-            context.append(f'Current shared instructions for {path} (revision {digest(generated)[:12]}):\n{generated}')
-        if context:
-            print(json.dumps({'systemMessage': f'Agent context: {"updated" if changed else "current"}.',
-                              'hookSpecificOutput': {'hookEventName': 'SessionStart', 'additionalContext': '\n\n'.join(context)}}))
+    if cwd.name == 'AGENTS.md':
+        cwd = cwd.parent
+    if args.command == 'adopt':
+        STATE.mkdir(parents=True, exist_ok=True)
+        os.chmod(STATE, 0o700)
+        with (STATE / 'registry.lock').open('w') as handle:
+            fcntl.flock(handle, fcntl.LOCK_EX)
+            adopt(cwd, args.groups, args.visibility)
+        print(f'Selected {cwd}: {", ".join(args.groups) or "no shared groups"}')
+        return 0
+    context = shared_context(cwd)
+    if args.command == 'check':
+        print(context or 'No shared groups selected')
+        return 0
+    reminder = live_project_reminder(cwd)
+    local = local_context(cwd) if args.client == 'claude' else ''
+    context = '\n\n'.join(part for part in [local, context, reminder] if part)
+    if context:
+        print(json.dumps({'hookSpecificOutput': {
+            'hookEventName': 'SessionStart', 'additionalContext': context}}))
     return 0
 
 
@@ -342,5 +415,5 @@ if __name__ == '__main__':
         print(message, file=sys.stderr)
         if len(sys.argv) > 1 and sys.argv[1] == 'hook':
             print(json.dumps({'systemMessage': message, 'hookSpecificOutput': {
-                'hookEventName': 'SessionStart', 'additionalContext': message + '. Shared instructions may be stale; resolve before relying on them.'}}))
+                'hookEventName': 'SessionStart', 'additionalContext': message + '. Shared instructions were not loaded; resolve before relying on them.'}}))
         raise SystemExit(1)

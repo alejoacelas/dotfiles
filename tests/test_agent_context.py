@@ -20,123 +20,235 @@ loader.exec_module(m)
 class ContextTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.root = Path(self.tmp.name)
-        self.previous = m.DOTFILES
-        m.DOTFILES = self.root / 'dotfiles'
-        self.groups = m.DOTFILES / 'agents/groups'
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name).resolve()
+        self.dotfiles = self.root / 'dotfiles'
+        self.groups = self.dotfiles / 'agents/groups'
+        self.private = self.root / '.local/share/agent-context/private'
         self.groups.mkdir(parents=True)
-        (self.groups / 'tools.md').write_text('Shared text.\n')
+        (self.private / 'groups').mkdir(parents=True)
+        (self.groups / 'tools.md').write_text('Shared tools instruction.\n')
         self.project = self.root / 'project'
         self.project.mkdir()
         self.path = self.project / 'AGENTS.md'
-        self.local = '# Mine\n\nExact  spacing.\n'
-        self.path.write_text(self.local)
-    def tearDown(self):
-        m.DOTFILES = self.previous
-        self.tmp.cleanup()
-    def adopt(self):
-        m.adopt(self.path, ['tools'], 'public')
-    def test_adopt_preserves_local_text(self):
-        self.adopt()
-        self.assertTrue(self.path.read_text().endswith(self.local))
-    def test_source_change_and_idempotence(self):
-        self.adopt()
-        (self.groups / 'tools.md').write_text('New shared text.\n')
-        self.assertTrue(m.sync_project(self.path)[0])
-        self.assertFalse(m.sync_project(self.path)[0])
-    def test_local_edit_survives(self):
-        self.adopt()
-        self.path.write_text(self.path.read_text() + 'Handwritten addition.\n')
-        (self.groups / 'tools.md').write_text('Updated.\n')
-        m.sync_project(self.path)
-        self.assertTrue(self.path.read_text().endswith('Handwritten addition.\n'))
-    def test_generated_edit_blocks_overwrite(self):
-        self.adopt()
-        self.path.write_text(self.path.read_text().replace('Shared text.', 'My edit.'))
-        before = self.path.read_text()
-        with self.assertRaisesRegex(ValueError, 'was edited'): m.sync_project(self.path)
-        self.assertEqual(before, self.path.read_text())
-    def test_missing_source_leaves_file_untouched(self):
-        before = self.path.read_text()
-        with self.assertRaisesRegex(ValueError, 'requires a private project'): m.adopt(self.path, ['missing'], 'public')
-        self.assertEqual(before, self.path.read_text())
-    def test_move_does_not_change_subscription(self):
-        self.adopt()
-        moved = self.root / 'moved'
-        self.project.rename(moved)
-        (self.groups / 'tools.md').write_text('After move.\n')
-        m.sync_project(moved / 'AGENTS.md')
-        self.assertIn('After move.', (moved / 'AGENTS.md').read_text())
-    def test_check_does_not_write(self):
-        self.adopt()
-        before = self.path.read_text()
-        (self.groups / 'tools.md').write_text('After.\n')
-        self.assertTrue(m.sync_project(self.path, check=True)[0])
-        self.assertEqual(before, self.path.read_text())
-    def test_invalid_yaml_fails(self):
-        self.path.write_text('---\nagent_context: [\n---\n')
-        with self.assertRaises(Exception): m.sync_project(self.path)
-    def test_symlink_is_not_overwritten(self):
-        real = self.project / 'real.md'
-        self.path.rename(real)
-        self.path.symlink_to(real)
-        with self.assertRaisesRegex(ValueError, 'symlink'): self.adopt()
-        self.assertEqual(self.local, real.read_text())
-    def test_compare_before_replace(self):
-        before = self.path.read_text()
-        self.path.write_text('Another writer.\n')
-        with self.assertRaisesRegex(ValueError, 'changed during sync'): m.atomic(self.path, 'lost', before)
-        self.assertEqual('Another writer.\n', self.path.read_text())
-    def test_group_order(self):
-        (self.groups / 'other.md').write_text('Second.\n')
-        m.adopt(self.path, ['tools', 'other'], 'public')
-        text = self.path.read_text()
-        self.assertLess(text.index('Shared text.'), text.index('Second.'))
-    def test_private_cannot_enter_public_project(self):
-        self.adopt()
-        before = self.path.read_text()
-        (self.groups / 'tools.md').rename(self.groups / 'saved.md')
-        with self.assertRaisesRegex(ValueError, 'requires a private project'): m.sync_project(self.path)
-        self.assertEqual(before, self.path.read_text())
+        self.path.write_text('# Mine\n\nExact  spacing.\n')
+        for patcher in (patch.object(m, 'DOTFILES', self.dotfiles),
+                        patch.object(Path, 'home', return_value=self.root),
+                        patch.dict(os.environ, {'HOME': str(self.root)}),
+                        patch.object(m, 'STATE', self.root / '.state')):
+            patcher.start()
+            self.addCleanup(patcher.stop)
 
-class HookTest(unittest.TestCase):
-    def test_hook_does_not_track_marked_edits(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            path = root / 'AGENTS.md'
-            path.write_text('Handwritten ;;\n')
-            m.adopt(path, [], 'public')
-            before = path.read_text()
-            output = io.StringIO()
-            payload = json.dumps({'cwd': str(root), 'hook_event_name': 'SessionStart'})
-            with patch.object(m, 'STATE', root / '.state'), \
-                 patch('sys.argv', ['agent-context', 'hook']), \
-                 patch('sys.stdin', io.StringIO(payload)), contextlib.redirect_stdout(output):
-                self.assertEqual(0, m.main())
-            context = json.loads(output.getvalue())['hookSpecificOutput']['additionalContext']
-            self.assertIn('Current shared instructions', context)
-            self.assertNotIn('human_edit_history', context)
-            self.assertNotIn('human-edit-tracking', context)
-            self.assertFalse((root / '.agent-history').exists())
-            self.assertFalse((root / '.state/snapshots').exists())
-            self.assertEqual(before, path.read_text())
+    def register(self, groups=None, visibility='public'):
+        m.adopt(self.path, ['tools'] if groups is None else groups, visibility)
 
-    def test_existing_private_source_is_refused_in_public(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            private = root / '.local/share/agent-context/private/groups'
-            private.mkdir(parents=True)
-            (private / 'employer.md').write_text('Employer-only wording.\n')
-            project = root / 'project'
-            project.mkdir()
-            path = project / 'AGENTS.md'
-            path.write_text('Mine.\n')
-            with patch.object(Path, 'home', return_value=root):
-                with self.assertRaisesRegex(ValueError, 'private group'):
-                    m.adopt(path, ['employer'], 'public')
-                self.assertEqual('Mine.\n', path.read_text())
-                m.adopt(path, ['employer'], 'private')
-                self.assertIn('Employer-only wording.', path.read_text())
+    def snapshot(self):
+        return {str(p.relative_to(self.root)): p.read_bytes()
+                for p in self.root.rglob('*') if p.is_file()}
+
+    def hook(self, source='startup', cwd=None):
+        output = io.StringIO()
+        payload = {'cwd': str(cwd or self.project),
+                   'hook_event_name': 'SessionStart', 'source': source}
+        with patch('sys.argv', ['agent-context', 'hook']), \
+             patch('sys.stdin', io.StringIO(json.dumps(payload))), \
+             contextlib.redirect_stdout(output):
+            result = m.main()
+        self.assertEqual(0, result)
+        return json.loads(output.getvalue()) if output.getvalue().strip() else {}
+
+    def test_registration_is_external_and_removal_preserves_project(self):
+        before = self.path.read_bytes()
+        self.register()
+        self.assertEqual(before, self.path.read_bytes())
+        self.assertEqual({'groups': ['tools'], 'visibility': 'public'},
+                         m.load_projects()[self.project])
+        self.assertTrue((self.dotfiles / 'agents/projects.json').is_file())
+        self.register([])
+        self.assertNotIn(self.project, m.load_projects())
+        self.assertEqual(before, self.path.read_bytes())
+
+    def test_only_selected_sources_are_injected_in_order(self):
+        (self.groups / 'other.md').write_text('Selected second instruction.\n')
+        (self.groups / 'unused.md').write_text('DO NOT LOAD THIS.\n')
+        (self.root / 'AGENTS.md').write_text('UNSELECTED PARENT.\n')
+        self.register(['tools', 'other'])
+        context = m.shared_context(self.project)
+        self.assertLess(context.index('Shared tools instruction.'),
+                        context.index('Selected second instruction.'))
+        self.assertNotIn('DO NOT LOAD THIS', context)
+        self.assertNotIn('UNSELECTED PARENT', context)
+        self.assertNotIn('Exact  spacing.', context)
+        self.assertIn('tools.md', context)
+
+    def test_unregistered_project_does_not_read_parent_agents(self):
+        (self.root / 'AGENTS.md').write_text('Never selected.\n')
+        self.assertEqual('', m.shared_context(self.project))
+        self.assertFalse(self.hook().get('hookSpecificOutput', {}).get('additionalContext'))
+
+    def test_nested_directories_and_repository_boundary(self):
+        self.register()
+        nested = self.project / 'src/package'
+        nested.mkdir(parents=True)
+        self.assertEqual(self.project, m.locate(nested, m.load_projects()))
+        (self.project / 'src/.git').mkdir()
+        self.assertIsNone(m.locate(nested, m.load_projects()))
+        self.assertEqual('', m.shared_context(nested))
+
+    def test_archives_and_fixtures_do_not_inherit_registration(self):
+        self.register()
+        for directory in ('archive', 'archives', 'fixtures', 'test-fixtures', 'vendor', 'node_modules'):
+            with self.subTest(directory=directory):
+                child = self.project / directory / 'example'
+                child.mkdir(parents=True)
+                self.assertEqual('', m.shared_context(child))
+
+    def test_hook_lifecycle_is_read_only_and_source_changes_are_immediate(self):
+        self.register()
+        for source in ('startup', 'resume', 'clear', 'compact'):
+            with self.subTest(source=source):
+                before = self.snapshot()
+                output = self.hook(source)
+                specific = output['hookSpecificOutput']
+                self.assertEqual('SessionStart', specific['hookEventName'])
+                self.assertIn('Shared tools instruction.', specific['additionalContext'])
+                self.assertEqual(before, self.snapshot())
+        (self.groups / 'tools.md').write_text('Fresh instruction.\n')
+        context = self.hook('compact')['hookSpecificOutput']['additionalContext']
+        self.assertIn('Fresh instruction.', context)
+        self.assertNotIn('Shared tools instruction.', context)
+        self.assertNotIn('agent-context:begin', self.path.read_text())
+
+    def test_check_prints_current_context_without_writes(self):
+        self.register()
+        before = self.snapshot()
+        output = io.StringIO()
+        with patch('sys.argv', ['agent-context', 'check', str(self.path)]), \
+             contextlib.redirect_stdout(output):
+            self.assertEqual(0, m.main())
+        self.assertIn('Shared tools instruction.', output.getvalue())
+        self.assertEqual(before, self.snapshot())
+
+    def test_private_source_cannot_enter_public_registry(self):
+        (self.private / 'groups/employer.md').write_text('Private employer instruction.\n')
+        before = self.snapshot()
+        with self.assertRaises(ValueError):
+            self.register(['employer'])
+        self.assertEqual(before, self.snapshot())
+        self.register(['employer'], 'private')
+        self.assertIn('Private employer instruction.', m.shared_context(self.project))
+        self.assertTrue((self.private / 'projects.json').is_file())
+        self.assertEqual('private', m.load_projects()[self.project]['visibility'])
+        public = self.dotfiles / 'agents/projects.json'
+        self.assertNotIn('employer', public.read_text() if public.exists() else '')
+
+    def test_invalid_registration_does_not_change_files(self):
+        (self.private / 'groups/tools.md').write_text('Ambiguous tools source.\n')
+        for groups in (['missing'], ['tools'], ['tools', 'tools'], ['../secret']):
+            with self.subTest(groups=groups):
+                before = self.snapshot()
+                with self.assertRaises(ValueError):
+                    self.register(groups)
+                self.assertEqual(before, self.snapshot())
+
+    def test_deleted_or_oversized_source_fails_visibly(self):
+        self.register()
+        source = self.groups / 'tools.md'
+        source.unlink()
+        with self.assertRaises(ValueError):
+            m.shared_context(self.project)
+        source.write_text('x' * (25 * 1024))
+        with self.assertRaises(ValueError):
+            m.shared_context(self.project)
+
+    def test_registry_rejects_malformed_configuration(self):
+        registry = self.dotfiles / 'agents/projects.json'
+        bad = [
+            {'version': 2, 'projects': {}},
+            {'version': 1, 'projects': {str(self.project): {'groups': ['tools', 'tools'], 'visibility': 'public'}}},
+            {'version': 1, 'projects': {str(self.project): {'groups': ['tools'], 'visibility': 'unknown'}}},
+        ]
+        for data in bad:
+            with self.subTest(data=data):
+                registry.write_text(json.dumps(data))
+                with self.assertRaises(ValueError):
+                    m.load_projects()
+
+    def test_claude_local_only_instructions_do_not_cross_project_boundaries(self):
+        parent = self.root / 'AGENTS.md'
+        parent.write_text('Container-only instruction.\n')
+        registry = self.dotfiles / 'agents/projects.json'
+        registry.write_text(json.dumps({'version': 1, 'projects': {},
+                                       'local_only': [str(parent), str(self.path)]}))
+        self.assertIn('Container-only instruction.', m.local_context(self.root))
+        self.assertIn('Exact  spacing.', m.local_context(self.project))
+        self.assertNotIn('Container-only instruction.', m.local_context(self.project))
+        (self.project / '.git').mkdir()
+        nested = self.project / 'src'
+        nested.mkdir()
+        self.assertIn('Exact  spacing.', m.local_context(nested))
+        self.assertNotIn('Container-only instruction.', m.local_context(nested))
+        (nested / '.git').mkdir()
+        self.assertEqual('', m.local_context(nested))
+
+    def test_claude_exclusions_reconcile_owned_paths_and_symlink_targets(self):
+        link = self.root / 'AGENTS.md'
+        link.symlink_to(self.path)
+        registry = self.dotfiles / 'agents/projects.json'
+        def select(*paths):
+            registry.write_text(json.dumps({'version': 1, 'projects': {},
+                                           'local_only': [str(p) for p in paths]}))
+        target = self.root / '.claude/settings.json'
+        independent = '/independent/**/AGENTS.md'
+        data = {'claudeMdExcludes': [independent, str(link)], 'unrelated': True}
+        select(link)
+        state, owned = m.claude_exclusions(data, target)
+        self.assertEqual([independent, str(link), str(self.path)], data['claudeMdExcludes'])
+        self.assertEqual([str(link), str(self.path)], owned)
+        self.assertTrue(data['unrelated'])
+        self.assertFalse(state.exists())  # Installer persists ownership only after settings succeed.
+        state.parent.mkdir(parents=True, exist_ok=True)
+        state.write_text(json.dumps(owned))
+        again = dict(data)
+        self.assertEqual((state, owned), m.claude_exclusions(data, target))
+        self.assertEqual(again, data)
+        replacement = self.root / 'replacement/AGENTS.md'
+        select(replacement)
+        returned_state, new_owned = m.claude_exclusions(data, target)
+        self.assertEqual(state, returned_state)
+        self.assertEqual([independent, str(replacement)], data['claudeMdExcludes'])
+        self.assertEqual([str(replacement)], new_owned)
+        state.write_text(json.dumps(new_owned))
+        select()
+        self.assertEqual((state, []), m.claude_exclusions(data, target))
+        self.assertEqual([independent], data['claudeMdExcludes'])
+
+    def test_claude_exclusions_preserve_independent_path_when_it_becomes_selected(self):
+        registry = self.dotfiles / 'agents/projects.json'
+        registry.write_text(json.dumps({'version': 1, 'projects': {}, 'local_only': []}))
+        target = self.root / '.claude/settings.json'
+        data = {'claudeMdExcludes': [str(self.path)]}
+        state, owned = m.claude_exclusions(data, target)
+        state.parent.mkdir(parents=True, exist_ok=True)
+        state.write_text(json.dumps(owned))
+        registry.write_text(json.dumps({'version': 1, 'projects': {},
+                                       'local_only': [str(self.path)]}))
+        self.assertEqual((state, []), m.claude_exclusions(data, target))
+        registry.write_text(json.dumps({'version': 1, 'projects': {}, 'local_only': []}))
+        self.assertEqual((state, []), m.claude_exclusions(data, target))
+        self.assertEqual([str(self.path)], data['claudeMdExcludes'])
+
+    def test_linked_worktree_uses_registered_main_repository(self):
+        def git(*args):
+            subprocess.run(['git', '-C', str(self.project), *args], check=True,
+                           stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+        git('init')
+        git('-c', 'user.name=Test', '-c', 'user.email=test@example.com',
+            'commit', '--allow-empty', '-m', 'Initial')
+        self.register()
+        worktree = self.root / 'worktree'
+        git('worktree', 'add', '--detach', str(worktree))
+        self.assertIn('Shared tools instruction.', m.shared_context(worktree))
 
 class LiveProjectTest(unittest.TestCase):
     def test_activity_scope_and_hook_output(self):

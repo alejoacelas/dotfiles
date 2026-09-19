@@ -1,4 +1,5 @@
 # Reference material
 
-- Keep explanations and reusable reference material here; keep project-specific research with its project.
-- Preserve useful topic groups. Link primary sources and distinguish tested behavior from documentation.
+Keep reusable explanations in reference collections and project-specific research
+with its project. Preserve useful topic groups. Link primary sources and distinguish
+tested behavior from documentation.

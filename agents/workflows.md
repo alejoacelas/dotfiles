@@ -10,9 +10,10 @@ Read only the section relevant to the task.
   in `~/best/work/{80k,aim}/`. Draft skills live in the separate private repository
   `~/best/dotfiles/skill-drafts/`.
 - Read the destination's `AGENTS.md` before creating or moving anything there.
-- Declare groups with `~/best/dotfiles/bin/agent-context adopt`; choose groups and
-  tell the user why. The session-start hook synchronizes them. Public sources live
-  in `dotfiles/agents/groups/`; private sources in `~/.local/share/agent-context/private/`.
+- Select groups with `~/best/dotfiles/bin/agent-context adopt`; justify each choice.
+  No group is automatic. Membership lives in `agents/projects.json` or the private
+  context repository, not project YAML. Update the selection when moving a project.
+  Startup and compaction read shared sources without rewriting project files.
 - Archive retired work in `~/best/archive/`. Project topic folders may use their
   own `archive/` for unfinished or insubstantial work. Record the old path and reason
   in the destination archive's `REPLICATE.md`. Preserve repository history and privacy.

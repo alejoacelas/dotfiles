@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/alejo/.local/share/agent-context/venv/bin/python /Users/alejo/best/dotfiles/bin/agent-context hook",
+            "command": "/Users/alejo/.local/share/agent-context/venv/bin/python /Users/alejo/best/dotfiles/bin/agent-context hook --client codex",
             "timeout": 30,
             "additionalContextLimit": 30000
           }

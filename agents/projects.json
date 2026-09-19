@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "projects": {
+    "~/best/dotfiles": {
+      "groups": [
+        "tools"
+      ],
+      "visibility": "public"
+    },
+    "~/best/projects/connectors/2026-09-workspace-tools-comparison": {
+      "groups": [
+        "once"
+      ],
+      "visibility": "public"
+    },
+    "~/best/projects/live/2026-09-writing-instructions-test": {
+      "groups": [
+        "once"
+      ],
+      "visibility": "public"
+    },
+    "~/best/tools/active/dictation": {
+      "groups": [
+        "tools"
+      ],
+      "visibility": "public"
+    },
+    "~/best/tools/active/my-vm": {
+      "groups": [
+        "tools"
+      ],
+      "visibility": "public"
+    },
+    "~/best/tools/active/search-bar": {
+      "groups": [
+        "tools"
+      ],
+      "visibility": "public"
+    },
+    "~/best/tools/active/shortcuts": {
+      "groups": [
+        "tools"
+      ],
+      "visibility": "public"
+    },
+    "~/best/tools/active/twitter/no-numbers-for-x": {
+      "groups": [
+        "tools"
+      ],
+      "visibility": "public"
+    },
+    "~/best/tools/active/twitter/x-follow-graph": {
+      "groups": [
+        "tools"
+      ],
+      "visibility": "public"
+    },
+    "~/best/tools/active/twitter/x-list-sync": {
+      "groups": [
+        "tools"
+      ],
+      "visibility": "public"
+    },
+    "~/best/tools/stable/cmd-tab": {
+      "groups": [
+        "tools"
+      ],
+      "visibility": "public"
+    },
+    "~/best/tools/stable/fetch-url": {
+      "groups": [
+        "tools"
+      ],
+      "visibility": "public"
+    },
+    "~/best/tools/stable/spotlight": {
+      "groups": [
+        "tools"
+      ],
+      "visibility": "public"
+    },
+    "~/best/writing": {
+      "groups": [
+        "wiki"
+      ],
+      "visibility": "public"
+    },
+    "~/best/writing/ai/peter-hartree-ai-journal": {
+      "groups": [
+        "wiki"
+      ],
+      "visibility": "public"
+    },
+    "~/best/writing/life/style": {
+      "groups": [
+        "wiki"
+      ],
+      "visibility": "public"
+    }
+  },
+  "local_only": [
+    "~/best/AGENTS.md",
+    "~/best/tools/AGENTS.md",
+    "~/best/tools/active/twitter/AGENTS.md",
+    "~/best/projects/AGENTS.md",
+    "~/best/writing/AGENTS.md",
+    "~/best/dotfiles/AGENTS.md",
+    "~/best/work/80k/AGENTS.md",
+    "~/best/work/80k/tools/AGENTS.md",
+    "~/best/work/80k/scouting/AGENTS.md",
+    "~/best/me/health/AGENTS.md",
+    "~/best/me/relationships/people/AGENTS.md"
+  ]
+}
