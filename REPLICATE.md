@@ -297,3 +297,15 @@ Alejo wanted the global instructions, shared groups and article reviewer simplif
 - Checked local links, section anchors, generated-context freshness and whitespace. Left the tools container instructions unchanged for discussion.
 
 Agent session 01a0b921-9a6a-76c1-9000-c63b1c0cb909 · Commits dotfiles: d4f25b2; agent-context-private: 2dffb3b; web-article-reviewer: 1be9638
+
+## Explicit shared instructions at startup
+
+Alejo wanted selective shared context at startup and after compaction, without automatic parent inheritance or copied instructions.
+
+- Replaced project YAML/generated blocks with explicit public/private registries; startup only reads selected short sources. Migrated 57 live instruction files, reducing their combined length from 2,038 to 515 lines.
+- Selected 41 repositories deliberately. New siblings and nested repositories do not inherit membership; archived and fixture files remain unchanged. Private memberships stay in the private context repository.
+- Configured Claude ancestor exclusions with local-scope restoration, preserving native project instructions. Fixed exclusion ownership and first-install symlink ordering after independent review.
+- Passed 17 automated tests, fresh Codex/Claude startup probes, and an actual Codex manual compaction/continuation check. Claude and automatic token-triggered compaction were not exercised end-to-end.
+- Full selections, cross-repository hashes and sanitized startup evidence are in the private context repository under migration/2026-09-19-explicit-context/.
+
+Agent session 01a0b915-3eb2-78b2-9add-6ba48ad9a3b1 · Commits dotfiles 0a5bbdb
