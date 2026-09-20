@@ -50,6 +50,11 @@ list. Missing skills and broken links fail; changed skill text is reported as
 drift. Other installed skills are listed as unmanaged, without implying they
 should be available in both clients.
 
+[`stripe-projects`](claude/skills/stripe-projects/SKILL.md) is our locally maintained
+workflow for Stripe's CLI. It reuses projects and credentials where possible and
+skips generated agent instructions. Update it against CLI help and Stripe's
+reference; installing an upstream skill is unnecessary.
+
 [`summarize-call`](plugins/calls/skills/summarize-call/SKILL.md) is the official
 call workflow for both agents. It files in `~/best/calls` under that repository's
 instructions. The calls plugin also supplies `call-wiki` and `wiki-comments`,

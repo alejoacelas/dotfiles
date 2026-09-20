@@ -1,48 +1,44 @@
 ---
 name: stripe-projects
-description: Provision cloud services and retrieve provider credentials through Stripe Projects. Use for service setup, catalog searches, and managing existing Projects resources.
+description: Find and provision cloud services, retrieve provider credentials, and manage existing resources through Stripe Projects.
 ---
 
 # Stripe Projects
 
-Use the installed CLI's `stripe projects --help` and command-specific `--help`
-for syntax. [Stripe's reference](https://docs.stripe.com/projects) explains the
-project and resource model.
+Use `stripe projects --help` and command-specific `--help` for current syntax.
+Install the CLI or Projects plugin only if missing. Reuse existing logins and
+verify the intended Stripe account before changing resources.
 
-## Minimal workflow
+Choose the work needed for the request:
 
-1. Check `stripe projects --help`. Install the Stripe CLI or Projects plugin only
-   if missing; reuse the existing login and verify the intended account.
-2. Find the requested service with `stripe projects search <query> --json` or
-   `stripe projects catalog --json`. If it is absent, report that and consider
-   another setup route appropriate to the request.
-3. Check `stripe projects status --json` in the application directory. A project
-   groups an app's resources; ordinary folders do not each need a project.
-   Use `stripe projects list --json` to find existing projects. To reuse one in
-   a new empty directory, run `stripe projects pull <projectId>`; this writes
-   local state and credentials and reuses the existing resources.
-4. For a new app needing its own resources, run
-   `stripe projects init --preflight --json`, resolve reported blockers, then
-   `stripe projects init <name> --mode manual --skip-skills`.
-   This avoids installing local skills and instruction files. Apply confirmation
-   flags only for choices already authorized by the user.
-5. Add the requested service with `stripe projects add <provider>/<service>`.
-   Use `link <provider>` when an existing provider account needs connecting.
-   Follow the CLI's remedy for authentication or eligibility failures.
-6. Verify the resource with `stripe projects status --json`. Report the provider,
-   service, tier, and environment-variable names. Suggest additional services
-   when needed for the requested outcome.
+- **Find a service:** `stripe projects search <query> --json` or
+  `stripe projects catalog --json`. Report alternatives if the service is absent.
+- **Inspect or reuse resources:** `stripe projects status --json` in the app
+  directory, or `stripe projects list --json` to find existing projects.
+- **Provision:** select the app's existing project, then run
+  `stripe projects add <provider>/<service>`. Use `link <provider>` when an
+  existing provider account needs connecting.
 
-## Credentials and state
+A project groups an app's resources. Create one only when the app needs its own
+resource group: run `stripe projects init --preflight --json`, resolve reported
+blockers, then `stripe projects init <name> --mode manual --skip-skills`.
+This keeps setup limited to the project, without generated agent instructions.
+To connect an existing project in a new empty directory, use
+`stripe projects pull <projectId>`; it writes local state and credentials while
+reusing existing resources. A folder that only consumes an existing API key can
+retrieve that key from 1Password without initializing Stripe Projects.
 
-The CLI manages `.projects/` and syncs credentials to its configured environment
-file. Before commands that write credentials, ensure the destination is ignored,
-untracked, and owner-only (`chmod 600`); reuse the project's `.env`. Keep key
-values out of command output and chat.
+The CLI manages `.projects/` and writes credentials to the configured environment
+file. Before credential writes, ensure the destination is Git-ignored, untracked,
+and owner-only (`chmod 600`); reuse `.env`. Store newly obtained keys in 1Password,
+verifying the account and vault. Retrieve keys with `op` and document variable
+purposes and 1Password account, vault, item, and field in the project's README.
+Keep secret values out of command output and chat.
 
-Store newly obtained API keys in 1Password, explicitly verifying the account and
-vault. Retrieve keys on demand with `op`; document each variable's purpose and
-1Password account, vault, item, and field in the project's README.
+Apply confirmation flags to choices already authorized by the user. Follow the
+CLI's remedy for authentication and eligibility failures. Verify provisioning
+with `status --json`; report the resource, tier, and variable names. Recommend
+additional services when the requested outcome needs them.
 
-Use CLI commands to change project state. Consult command-specific help for
-resource updates, environments, variables, and credential rotation as needed.
+For less common operations, consult command help or
+[Stripe's reference](https://docs.stripe.com/projects).
