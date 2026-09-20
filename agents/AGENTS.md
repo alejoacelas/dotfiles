@@ -72,7 +72,8 @@ Always use `AGENTS.md` for agent instructions; do not create `CLAUDE.md` files o
 compatibility shims. Keep human-facing overviews in `README.md`. When migrating
 existing `CLAUDE.md` files, preserve distinct content such as call indexes.
 
-`~/best/` is a container, not a repository. Give projects and coherent note
+`~/best/` is the home for all our work. Look there for existing projects and suitable
+homes for new work. It is a container, not a repository. Give projects and coherent note
 collections their own repositories and remotes; keep lifecycle and topic folders
 as ordinary directories. Folder names use lowercase words separated by dashes.
 Before creating or moving anything, read the destination's `AGENTS.md` and

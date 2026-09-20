@@ -4,12 +4,8 @@ Read only the section relevant to the task.
 
 ## Creating or moving projects
 
-- Start every new project in `~/best/projects/live/`, named `YYYY-MM-project-name`,
-  with its own repository and GitHub remote. Organize it after two weeks without edits or on demand,
-  following `~/best/projects/AGENTS.md`.
-- Durable homes include `~/best/writing/` for essays and references,
-  `~/best/work/{80k,aim}/` for employer and Aim work, and
-  `~/best/projects/agents/` for agent and skill projects.
+- Follow [projects/AGENTS.md](/Users/alejo/best/projects/AGENTS.md) for starting,
+  reviewing and organizing projects.
 - Read the destination's `AGENTS.md` before creating or moving anything there.
 - Only the `80k` shared group is approved. Select it for relevant private employer
   work with `~/best/dotfiles/bin/agent-context adopt`; do not recreate other groups.
@@ -49,10 +45,3 @@ its expected signing identity is missing; never silently fall back to ad-hoc sig
 Use Zed by default to open Markdown for human review.
 Open files with `open -a Zed "/absolute/path/to/file.md"` on macOS.
 After the user reviews or edits a document, reread it before making further changes.
-
-## Claude instruction compatibility
-
-Claude Code 2.1.277+ can load `AGENTS.md` natively when no ancestor or project
-`CLAUDE.md` or `CLAUDE.local.md` suppresses fallback. Keep an `@AGENTS.md` shim only
-for a verified compatibility need; preserve files with distinct content, such as
-call indexes.

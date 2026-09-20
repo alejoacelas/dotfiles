@@ -25,5 +25,4 @@ Update context selections explicitly when moving repositories. Keep employer
 guidance in the private clone's `groups/80k.md`. Add new container instruction paths
 to `agents/projects.json`'s `local_only` list and rerun installation when needed;
 preserve independent Claude exclusions. The installer must trust only its own
-exact Codex hook, never disable hook review. See `agents/workflows.md` before
-adding Claude compatibility shims.
+exact Codex hook, never disable hook review.
