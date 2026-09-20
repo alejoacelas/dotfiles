@@ -59,27 +59,22 @@ unambiguous, and something we're confident in.
 
 ## Protect my work
 
-Commit before making further changes. Report failures. Get explicit confirmation
-before permanently deleting anything. Keep repositories public unless they contain
-credentials, internal employer information (80,000 Hours), or others' non-public
-information. Never publish secrets or private material.
+Commit before making further changes. Get explicit confirmation before permanently
+deleting anything. Keep repositories public unless they contain credentials,
+employer (80,000 Hours) information, or others' non-public information.
 
-Keep API keys in 1Password, including newly obtained keys, and verify the account
-and vault. Retrieve keys on demand with `op` into the project's existing `.env`,
-which must be Git-ignored, untracked and owner-only (`chmod 600`). Never print or
-commit values. Document each variable's purpose and its 1Password account, vault,
-item and field in the README.
+Keep API keys in 1Password and load them on demand with `op` into the project's
+ignored `.env`. Record in the README where each variable lives in 1Password
+(account, vault, item, field) so the file can be rebuilt.
 
-Choose the personal or work identity from the project's context and select it
-explicitly before every cloud write: `gcloud --configuration` and `--project`,
-`gdoc --account`, `gog --account`, `FLY_80K_TOKEN` or `FLY_PERSONAL_TOKEN`. Google
-identities are `alejandro.acelas-contractor@80000hours.org` and
-`alejoacelas@gmail.com`. For Google Docs and Drive, start with `gdoc --help`.
+I have a work Google identity (`alejandro.acelas-contractor@80000hours.org`) and a
+personal one (`alejoacelas@gmail.com`), with matching `gcloud` configurations and
+`FLY_80K_TOKEN` / `FLY_PERSONAL_TOKEN`. Pick the identity from the project's context
+and pass it explicitly on every cloud write. Use `gdoc` for Google Docs and Drive.
 
 ## Project conventions
 
-Put agent instructions in `AGENTS.md` and human-facing overviews in `README.md`;
-Claude Code and Codex both read `AGENTS.md` directly.
+Put agent instructions in `AGENTS.md` and human-facing overviews in `README.md`.
 
 All our work lives in `~/best/`, a plain folder of independent repositories. Give
 projects and coherent note collections their own repositories and remotes; keep
