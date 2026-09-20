@@ -86,11 +86,11 @@ directories so independent installers can add entries.
 [check-agent-config](bin/check-agent-config) checks shared and client-specific
 sources and reports unmanaged skills separately from broken links and drift.
 
-Edit plugin sources, then regenerate project mirrors with
-[bin/sync-project-skills](bin/sync-project-skills). `summarize-call` is the sole
-maintained call-summary workflow; the duplicate Granola skill was retired. Call
-records stay in calls, while call-derived guides belong in writing/ai-guides.
-Installing dotfiles must not modify those repositories. See `173f3fa` and `10eab14`.
+`summarize-call` is the sole maintained call-summary workflow; both clients link
+to its plugin source. The wiki skills and project-mirroring machinery were retired
+in `14b73ba`; do not reinstall them. Call records stay in calls, while call-derived
+guides belong in writing/ai-guides. Installing dotfiles must not modify those
+repositories. See `173f3fa` and `10eab14`.
 
 ### Give instructions one home
 
