@@ -33,6 +33,6 @@ The harness and its full rules live in the gdoc clone:
   body, assert the request the fix must send. It must fail today.
 - Add one line for the new test file to `docs/TESTS.md`.
 - Trash every scratch doc (Google Drive trash tool). Commit on `fidelity-tests`; do not
-  push unless asked. Add a `REPLICATE.md` entry in the repo, then the metadata commit.
+  push unless asked. Update `DECISIONS.md` only if a lasting decision changed, then commit that update separately.
 - Worked example: `fidelity-tests/write/v01`, `tests/test_write_tab_terminal_bullet.py`,
   LucaDeLeo/gdoc#59.

@@ -18,7 +18,7 @@ and reports days since their last edit. Use its notices to select projects for r
 
 Prefer `projects/<topic>/archive/` for work unlikely to be revisited, including
 substantial research and working artifacts. Keep archives as ordinary directories
-containing project repositories. Record each move's former path and reason in the archive's `REPLICATE.md`;
+containing project repositories. Record each move's former path and reason in the archive's `DECISIONS.md`;
 restore projects to the topic folder when work resumes.
 
 Suggest a durable home for work likely to be reused or maintained. Inspect the

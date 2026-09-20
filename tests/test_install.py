@@ -87,7 +87,7 @@ class InstallTests(unittest.TestCase):
             root = Path(tmp).resolve()
             repo = root / 'dotfiles'
             shutil.copytree(source / 'workspace', repo / 'workspace')
-            (repo / 'REPLICATE.md').write_text('Session records')
+            (repo / 'DECISIONS.md').write_text('Current decisions')
             (repo / 'bin').mkdir()
             script = repo / 'bin/install.sh'
             script.write_text((functions + '\n# Ordinary container configuration lives here;' + phase)
@@ -100,6 +100,7 @@ class InstallTests(unittest.TestCase):
             for _ in range(2):
                 result = subprocess.run(['bash', str(script)], env=env, capture_output=True, text=True)
                 self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual((best / 'DECISIONS.md').resolve(), repo / 'DECISIONS.md')
                 for file in (repo / 'workspace').rglob('*'):
                     if file.is_file():
                         live = best / file.relative_to(repo / 'workspace')

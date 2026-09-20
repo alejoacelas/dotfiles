@@ -113,7 +113,7 @@ link bin/agent-context "$HOME/.local/bin/agent-context"
 BEST_ROOT="$HOME/best"
 mkdir -p "$BEST_ROOT"
 # Claude Code 2.1.277+ reads AGENTS.md natively; do not recreate project shims.
-link REPLICATE.md "$BEST_ROOT/REPLICATE.md"
+link DECISIONS.md "$BEST_ROOT/DECISIONS.md"
 for folder in me archive writing work/aim work/80k; do
   mkdir -p "$BEST_ROOT/$folder"
 done
@@ -135,10 +135,10 @@ if [ -d "$HOME/.local/share/agent-context/private/workspace/tools/.claude" ] && 
   ln -s "$HOME/.local/share/agent-context/private/workspace/tools/.claude" "$BEST_ROOT/tools/.claude"
 fi
 # Personal/private sources are separate clones; no private files are copied into dotfiles.
-if [ -f "$HOME/.local/share/agent-context/private/archive/REPLICATE.md" ]; then
-  target="$BEST_ROOT/archive/REPLICATE.md"
+if [ -f "$HOME/.local/share/agent-context/private/archive/DECISIONS.md" ]; then
+  target="$BEST_ROOT/archive/DECISIONS.md"
   if [ ! -e "$target" ] && [ ! -L "$target" ]; then
-    ln -s "$HOME/.local/share/agent-context/private/archive/REPLICATE.md" "$target"
+    ln -s "$HOME/.local/share/agent-context/private/archive/DECISIONS.md" "$target"
   fi
 fi
 

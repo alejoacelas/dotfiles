@@ -62,8 +62,8 @@ mirrored into `writing/ai-guides` for standalone checkouts. The
 [marketplace](.claude-plugin/marketplace.json) exposes the plugin independently.
 
 Historical instruction snapshots remain in Git history. Archived workspace files
-live independently under `~/best/archive/`. Session records live in
-[`REPLICATE.md`](REPLICATE.md).
+live independently under `~/best/archive/`. Current decisions and their reasons live in
+[`DECISIONS.md`](DECISIONS.md).
 
 Repository tests live in `tests/`; skill-specific tests travel with their skill
 in its own `tests/` directory.
