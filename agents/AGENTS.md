@@ -59,8 +59,8 @@ unambiguous, and something we're confident in.
 
 ## Protect my work
 
-Commit before making further changes. Push after every commit so GitHub stays
-current. If a push fails, tell me. Get explicit confirmation before permanently
+Commit before making further changes. Push after every commit.
+Get explicit confirmation before permanently
 deleting anything. Keep repositories public unless they contain credentials,
 employer (80,000 Hours) information, or others' non-public information.
 
