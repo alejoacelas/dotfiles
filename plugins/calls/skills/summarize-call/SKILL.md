@@ -25,18 +25,15 @@ garble inventories stay in `$CALL_SKILL/data/`.
 
 ## Setup (once)
 
-`granola.py` authenticates with a Granola public API key. Generate one in the
-Granola app (**Settings → API**) — it looks like `grn_…` — then put it in a
-gitignored `.env` in this skill’s directory so it never lands in shell history or a chat
-transcript:
+`granola.py` uses `GRANOLA_API_KEY` for Granola's public API. Reuse an existing
+valid key. Store new keys in 1Password, explicitly verifying the account and vault.
+Retrieve the key on demand with `op` into `$CALL_SKILL/.env` after confirming the
+file is Git-ignored, untracked, and owner-only (`chmod 600`). Keep values out of
+terminal output and chat. Record the variable's purpose and the verified
+1Password account, vault, item, and field in the repository's README.
 
-```bash
-cp "$CALL_SKILL/.env.example" "$CALL_SKILL/.env"   # then paste your grn_ key into .env
-```
-
-A bare `grn_…` line works too; `$GRANOLA_API_KEY` in the environment overrides
-the file. That's the whole setup — the public API returns JSON, so no extra
-packages are needed.
+The environment variable overrides the `.env` file. The helper uses Python's
+standard library; no additional packages are needed.
 
 ## Commands
 

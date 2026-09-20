@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
-"""Make agent-config divergence loud instead of silent.
+"""Check installed skills against dotfiles' explicit compatibility lists.
 
-Two failure modes this catches:
-  HARD  — a symlink that no longer resolves. A dangling skill/instruction link means
-          a tool silently loads nothing. Always a problem. Exit non-zero.
-  DRIFT — a CLAUDE.md and AGENTS.md (or a same-named Claude/Codex skill) that have
-          diverged. NOT an error — you often want them different — but you want to be
-          reminded so you can choose to reconcile. Printed, never fails the run.
-
-Run standalone, or from machine-checkup / the sync-repos check.
+Missing entries and broken links fail the check. Content differences are drift;
+skills outside the compatibility lists are reported separately as unmanaged.
+Also report divergent workspace instruction pairs.
 """
 import hashlib
 import glob
@@ -19,6 +14,7 @@ HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
 DOTFILES = os.path.join(BEST, "dotfiles")
 CLAUDE_SKILLS = os.path.join(HOME, ".claude/skills")
+TRACKED_CLAUDE_SKILLS = os.path.join(DOTFILES, "claude/skills")
 TRACKED_CODEX_SKILLS = os.path.join(DOTFILES, "codex/skills")
 CODEX_SKILL_ROOTS = [
     os.path.join(HOME, ".agents/skills"),
@@ -30,6 +26,7 @@ ORCA_CODEX_SKILL_ROOTS = glob.glob(
 SKIP_DIRS = {".git", "node_modules", "archive", ".venv", "venv", "__pycache__"}
 
 hard = []   # (path, message) — dangling links, real breakage
+unmanaged = []  # Installed skills outside the client compatibility list.
 drift = []  # (label, message) — reminders, not failures
 
 
@@ -81,28 +78,18 @@ def list_skills(*roots):
 
 
 def check_skills():
-    claude = list_skills(CLAUDE_SKILLS)
-    codex = list_skills(*CODEX_SKILL_ROOTS)
-    for name in sorted(set(claude) - set(codex)):
-        drift.append(("skill", f"{name}: in Claude, not in Codex"))
-    for name in sorted(set(codex) - set(claude)):
-        tracked = any(os.path.realpath(path).startswith(BEST) for path in codex[name])
-        tag = "" if tracked else " (UNTRACKED — not in any repo)"
-        drift.append(("skill", f"{name}: in Codex, not in Claude{tag}"))
-    for name in sorted(set(claude) & set(codex)):
-        claude_digests = {digest(path) for path in claude[name]}
-        codex_digests = {digest(path) for path in codex[name]}
-        if claude_digests.isdisjoint(codex_digests):
-            drift.append(("skill", f"{name}: Claude and Codex SKILL.md differ"))
-
-
-def check_tracked_codex_installation():
-    """Every explicitly Codex-compatible skill must reach both Codex registries."""
-    tracked = list_skills(TRACKED_CODEX_SKILLS)
-    for root in CODEX_SKILL_ROOTS:
+    targets = [(TRACKED_CLAUDE_SKILLS, CLAUDE_SKILLS)]
+    targets.extend((TRACKED_CODEX_SKILLS, root) for root in CODEX_SKILL_ROOTS)
+    for source, root in targets:
+        tracked = list_skills(source)
         installed = list_skills(root)
         for name in sorted(set(tracked) - set(installed)):
-            hard.append((root, f"missing tracked Codex skill {name}"))
+            hard.append((root, f"missing tracked skill {name}"))
+        for name in sorted(set(tracked) & set(installed)):
+            if digest(tracked[name][0]) != digest(installed[name][0]):
+                drift.append((root, f"{name}: installed SKILL.md differs from {source}"))
+        for name in sorted(set(installed) - set(tracked)):
+            unmanaged.append((root, name))
 
 
 def main():
@@ -111,9 +98,10 @@ def main():
         check_dangling(root)
     for root in ORCA_CODEX_SKILL_ROOTS:
         check_dangling(root)
+    check_dangling(TRACKED_CLAUDE_SKILLS)
+    check_dangling(TRACKED_CODEX_SKILLS)
     check_instruction_pairs()
     check_skills()
-    check_tracked_codex_installation()
 
     if hard:
         print("HARD — silent load failures (fix these):")
@@ -122,7 +110,11 @@ def main():
     if drift:
         print("DRIFT — diverged, reconcile if you want (reminder, not an error):")
         for label, m in drift:
-            print(f"  • {label}: {m}")
+            print(f"  • {label.replace(HOME, '~')}: {m}")
+    if unmanaged:
+        print("UNMANAGED — installed outside dotfiles compatibility lists (informational):")
+        for root, name in unmanaged:
+            print(f"  • {root.replace(HOME, '~')}: {name}")
     if not hard and not drift:
         print("agent-config: all links resolve, no drift.")
 

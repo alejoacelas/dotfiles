@@ -45,6 +45,11 @@ The skill directories are explicit compatibility lists; shared entries can be
 symlinks to one source. Installed registries remain real directories so other
 installers can add skills.
 
+`bin/check-agent-config` checks each installed registry against its compatibility
+list. Missing skills and broken links fail; changed skill text is reported as
+drift. Other installed skills are listed as unmanaged, without implying they
+should be available in both clients.
+
 [`summarize-call`](plugins/calls/skills/summarize-call/SKILL.md) is the official
 call workflow for both agents. It files in `~/best/calls` under that repository's
 instructions. The calls plugin also supplies `call-wiki` and `wiki-comments`,
