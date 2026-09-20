@@ -438,3 +438,13 @@ Alejo wanted to recover useful guidance lost during instruction shortening and r
 - Verified the diff and both clients' links to the shared global instruction file.
 
 Agent session 01a0be7b-91d2-7bd3-a876-2700e1ec636e · Commits e83b2b4
+
+## Simplify skills and installation checks
+
+Alejo wanted global and repository skills audited, simpler Stripe setup, and approved credential and compatibility-check changes.
+
+- Reduced Stripe guidance to reuse existing projects and CLI help, with manual initialization that skips generated skills. Updated Granola setup to follow the existing 1Password convention.
+- Made skill checks follow each client's explicit compatibility list; report unmanaged skills separately and detect stale copies independently. All 23 tests, both skill validators, and mirror checks passed.
+- Preserved the pre-existing Claude settings change first. External-skill consolidation remains a proposal; gdoc's tracked upstream skills were left unchanged.
+
+Agent session 01a0bec4-1bed-7f62-8fe6-3ae698666938 · Commits 4faa8c4, 8aa6412
