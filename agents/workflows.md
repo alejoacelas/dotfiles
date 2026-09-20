@@ -45,11 +45,19 @@ constraint or prevent recurrence. Link to relative source files and relevant com
 hashes instead of reproducing recoverable mechanics. Never include credentials or
 raw private user data.
 
-Update decisions in place and remove superseded details; Git preserves history.
-Do not add an entry merely because a session happened. Commit substantive work
-first, then update the decision record in a metadata-only follow-up commit, citing
-the relevant substantive hashes. Rewriting an existing chronological record needs
-the same investigation as a new one; do not install a stale experimental draft.
+Add a dated entry under a final “Decision log” heading when we make or change a
+decision worth preserving. Record the decision and enough context to explain why;
+do not add an entry merely because a session happened. When substantial changes
+accumulate, rewrite the current decisions, merge overlapping explanations, remove
+superseded details, and clear log entries whose useful content is now incorporated.
+Preserve relevant reasons and exceptions; Git preserves history. Prefer updating
+an existing explanation over adding another. Grow the document only for distinct
+decisions or necessary reasons.
+
+Commit substantive work first, then update the decision record in a metadata-only
+follow-up commit, citing the relevant substantive hashes. Rewriting an existing
+chronological record needs the same investigation as a new one; do not install a
+stale experimental draft.
 
 ## Orca Markdown
 

@@ -85,10 +85,22 @@ destination's `AGENTS.md` and the
 Employer context (the `80k` group) loads only for repositories selected with
 `~/best/dotfiles/bin/agent-context adopt`; the procedures cover when to select it.
 
-Keep `DECISIONS.md` as a selective record of current decisions that future work
+Keep `DECISIONS.md` as a concise record of current decisions that future work
 should not accidentally undo. Put grouped core decisions first, with linked reasons
-and consequential exceptions below. Update it when decisions change; prune obsolete
-details instead of appending session logs. Follow the
+and consequential exceptions below.
+
+When we make or change a decision worth preserving, add a dated entry to a log at
+the bottom. Record only the decision and enough context to explain why; skip session
+progress and routine implementation details.
+
+When you notice substantial changes accumulating, rewrite the document to reflect
+the current decisions and fold in the log. Remove superseded decisions, merge
+overlapping explanations, and clear entries whose useful content is now incorporated.
+Preserve relevant reasons and exceptions; rely on Git for history.
+
+Prefer updating an existing explanation over adding another. The document should
+grow only when there are more distinct decisions or necessary reasons to preserve.
+Follow the
 [decision-record format](/Users/alejo/best/dotfiles/agents/workflows.md#decision-records).
 
 ## Tools
