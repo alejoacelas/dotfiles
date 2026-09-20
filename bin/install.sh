@@ -113,7 +113,6 @@ link bin/agent-context "$HOME/.local/bin/agent-context"
 BEST_ROOT="$HOME/best"
 mkdir -p "$BEST_ROOT"
 # Claude Code 2.1.277+ reads AGENTS.md natively; do not recreate project shims.
-link DECISIONS.md "$BEST_ROOT/DECISIONS.md"
 for folder in me archive writing work/aim work/80k; do
   mkdir -p "$BEST_ROOT/$folder"
 done
