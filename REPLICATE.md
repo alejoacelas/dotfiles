@@ -428,3 +428,13 @@ Alejo wanted every project to start in `live/`, a simple two-week sorting remind
 - All 19 infrastructure tests passed; fresh hook invocations succeeded for Claude and Codex, and all skill registries were checked for removal.
 
 Agent session 01a0be63-da16-7bb1-8257-11b57546a2f7 · Commits 99b1267, 0d10e17
+
+## Recover useful instruction detail
+
+Alejo wanted to recover useful guidance lost during instruction shortening and review broader preferences from the early global prompts.
+
+- Added the two approved rules: compare options with defensible estimates and recommendation thresholds; choose cloud identities from project context before verifying and selecting them for writes.
+- Reviewed earlier global CLAUDE.md and AGENTS.md snapshots, distinguishing surviving rules, relocated procedures, and omitted preferences. Further restorations remain proposals for review.
+- Verified the diff and both clients' links to the shared global instruction file.
+
+Agent session 01a0be7b-91d2-7bd3-a876-2700e1ec636e · Commits e83b2b4
