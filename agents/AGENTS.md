@@ -96,10 +96,11 @@ do not add other shared groups without asking. Never infer membership from paren
 Keep project-essential rules in its own AGENTS.md; private shared sources and
 selections live in `~/.local/share/agent-context/private/`.
 
-Use `REPLICATE.md` to record substantial sessions: what I wanted, concrete outcomes,
-and roadblocks. Commit the substantive work first, then record its hash in a
-metadata-only follow-up commit. Follow the
-[session-record format](/Users/alejo/best/dotfiles/agents/workflows.md#session-records).
+Keep `REPLICATE.md` as a selective record of current decisions that future work
+should not accidentally undo. Put grouped core decisions first, with linked reasons
+and consequential exceptions below. Update it when decisions change; prune obsolete
+details instead of appending session logs. Follow the
+[decision-record format](/Users/alejo/best/dotfiles/agents/workflows.md#decision-records).
 
 ## Tools
 

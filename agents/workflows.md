@@ -16,16 +16,40 @@ Read only the section relevant to the task.
   workspace-wide archive destination. Record moves with their old path and reason;
   preserve repository history and privacy.
 
-## Session records
+## Decision records
 
-Use short titles in `REPLICATE.md`. Open each entry with one sentence stating what
-the human wanted, then a few bullets pairing concrete work with findings or outputs.
-Keep roadblocks that changed the approach or still limit the result. Use numbers
-when they convey scale or improvement. Omit routine steps; do not backfill old entries.
+Use `REPLICATE.md` to prevent important decisions from being accidentally undone.
+Select choices that answer a real recurring tension or a costly mistake supported
+by the project and its history. Group choices that protect the same outcome. Expand
+each with the current rule, its reason and only the exceptions that affect future
+work. Discard history that no longer changes what someone should do.
 
-Commit substantive changes first. In a metadata-only follow-up commit, end the entry
-with `Agent session [session ID] · Commits [commit hash]`. List every substantive
-change hash when needed; label hashes by repository for work spanning repositories.
+Use a short title, then “Core decisions”, then “Details”. Under Core decisions,
+group related choices under descriptive headings, with individual decisions as
+concise bullets. Each bullet links to its matching subsection under Details. Aim
+for 3–5 groups and 6–10 decision bullets; do not pad a small project to meet a count.
+The core section should make sense on its own. Do not add an appendix of omitted
+material.
+
+Read the existing record, relevant instructions and README, and the actual code,
+configuration and tests. Follow substantive commits and diffs to understand reasons,
+reversals and constraints; do not rely on commit titles or merely summarize the old
+log. Use implementation to establish current behavior and history to establish
+reasons. Distinguish recorded intentions, observed behavior and inference. Do not
+invent motivations or treat passing tests as proof of live production behavior.
+
+Keep only decisions whose loss could lead to a consequential mistake. Omit routine
+implementation facts, feature inventories, setup recipes, repeated test counts and
+incidental session activity. Keep past failures only when they explain a current
+constraint or prevent recurrence. Link to relative source files and relevant commit
+hashes instead of reproducing recoverable mechanics. Never include credentials or
+raw private user data.
+
+Update decisions in place and remove superseded details; Git preserves history.
+Do not add an entry merely because a session happened. Commit substantive work
+first, then update the decision record in a metadata-only follow-up commit, citing
+the relevant substantive hashes. Rewriting an existing chronological record needs
+the same investigation as a new one; do not install a stale experimental draft.
 
 ## Orca Markdown
 
