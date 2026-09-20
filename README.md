@@ -59,8 +59,7 @@ reference; installing an upstream skill is unnecessary.
 
 [`summarize-call`](plugins/calls/skills/summarize-call/SKILL.md) is the official
 call workflow for both agents. It files in `~/best/calls` under that repository's
-instructions. The calls plugin also supplies `call-wiki` and `wiki-comments`,
-mirrored into `writing/ai-guides` for standalone checkouts. The older synced
+instructions. Both clients link to the same skill source. The older synced
 `summarise-granola` skill is disabled through Claude's `skillOverrides`, including
 its `anthropic-skills:` name, so account sync cannot reactivate it locally. The
 [marketplace](.claude-plugin/marketplace.json) exposes the plugin independently.
@@ -91,8 +90,6 @@ and commits inside it; the parent repository tracks installation code only.
 
 ```sh
 bin/check-agent-config                    # broken links, missing skills, differences
-bin/sync-project-skills                   # refresh ai-guides plugin mirrors
-bin/sync-project-skills --check           # check mirrors without writing
 bin/agent-context check /path/to/project  # inspect selected context
 ~/.local/share/agent-context/venv/bin/python -m unittest discover -s tests
 ~/.local/share/agent-context/venv/bin/python -m unittest discover -s plugins/calls/skills/summarize-call/tests
@@ -111,5 +108,5 @@ session-start relinking hook preserves that copy in this repo and restores the
 link, reporting when a commit is needed.
 
 API keys live in 1Password and are retrieved into ignored, owner-only `.env` files.
-The commit guard detects common credential patterns and stale plugin mirrors.
+The commit guard detects common credential patterns.
 Maintenance rules are in [`AGENTS.md`](AGENTS.md).

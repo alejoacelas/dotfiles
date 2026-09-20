@@ -227,15 +227,6 @@ summary is edited or renamed:
    `gdoc --account <email> cat <id> > /dev/null && gdoc --account <email> write <id> NOTES.md`. Never recreate the
    doc — the link must stay stable.
 
-### Step 10 (off by default): Wiki pass
-
-Do **not** run this unless the user asks for a wiki pass. Kept here so it can
-be re-enabled later: follow the `call-wiki` skill at `~/best/writing/ai-guides/.claude/skills/call-wiki/SKILL.md` —
-harvest the call's "I looked into / I'm not sure" moments, research each
-against primary sources, and file grounded entries in `~/best/writing/ai-guides/articles/` (a separate private repo),
-linked from the summary's open questions. It runs last so the Google Doc
-snapshot stays free of repo-relative links.
-
 ## Batch runs
 
 For a batch, dispatch one subagent per call so cleaning stays off the main
@@ -244,5 +235,4 @@ contents of both reference files (subagents can also Read them from this
 skill folder), and the exact output paths. Create every doc (Step 4) and post
 all links first, then have each agent run its own Steps 5–7 (earlier
 same-person calls are already committed); run Steps 8–9 once at the end, over
-the whole batch — parallel agents can't see each other's slugs. A wiki pass,
-if requested, must dedupe topics across the batch's calls.
+the whole batch — parallel agents can't see each other's slugs.

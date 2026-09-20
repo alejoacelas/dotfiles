@@ -20,9 +20,8 @@ Run `bin/install.sh` after adding a skill. Keep installed skill
 registries as real directories. `summarize-call` is the official call workflow;
 do not restore the retired `granola-transcript` skill.
 
-Edit plugin sources under `plugins/`, then run `bin/sync-project-skills` and commit
-the affected repositories. Do not edit generated project mirrors. Name plugins for
-the package and skills for their actions. Installation must not write into calls.
+Edit plugin sources under `plugins/`. Name plugins for the package and skills for
+their actions. Installation must not write into calls.
 
 Update context selections explicitly when moving repositories. Keep employer
 guidance in the private clone's `groups/80k.md`. Add new container instruction paths

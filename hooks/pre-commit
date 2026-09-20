@@ -11,8 +11,4 @@ if printf '%s' "$added" | grep -qEi "$pat"; then
   exit 1
 fi
 
-root="$(git rev-parse --show-toplevel)"
-if git diff --cached --name-only --diff-filter=ACMR | grep -q '^plugins/calls/'; then
-  "$root/bin/sync-project-skills" --check
-fi
 exit 0
