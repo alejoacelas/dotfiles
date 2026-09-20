@@ -11,7 +11,7 @@
 
 - [Keep the Codex app's settings separate from CLI overrides](#separate-app-and-cli-settings), and preserve unrelated hooks during installation.
 - [Keep ordinary workspace folders out of Git](#version-projects-and-container-configuration-separately); version their shared configuration here and each project in its own repository.
-- [Select skills separately for Claude Code and Codex](#select-skills-for-each-client), with one maintained source for shared skills.
+- [Make custom skills available to both Claude Code and Codex by default](#share-custom-skills-by-default), with one maintained source.
 
 ### Make instructions worth rereading
 
@@ -28,7 +28,7 @@ independently versioned `private-skills/` checkout. Moving files into a convenie
 folder does not make their contents or history suitable for publication.
 
 The [installer](bin/install.sh) accepts an absent private-skills checkout and reads
-its client lists when present. Public-only installation must continue to work.
+its shared and client-specific sources when present. Public-only installation must continue to work.
 Credentials belong in 1Password and ignored, owner-only project `.env` files, never
 in tracked settings. See [README](README.md#private-skills) and commits `06378da`,
 `4bd4cb9`, and `5f56fef`.
@@ -72,13 +72,19 @@ files. Keep this mapping simple when adding a folder; do not restore the retired
 container snapshots or a repository spanning the entire workspace. See `54fb63c`
 and [move procedures](agents/workflows.md#creating-or-moving-projects).
 
-### Select skills for each client
+### Share custom skills by default
 
-[claude/skills](claude/skills/) and [codex/skills](codex/skills/) explicitly select
-compatible skills. Installation in one client does not establish compatibility with
-the other. Installed registries remain real directories so independent installers
-can add entries. [check-agent-config](bin/check-agent-config) reports unmanaged
-skills separately from broken links and drift (`8aa6412`).
+Custom skills belong in [skills/](skills/), which installs into both Claude Code
+and Codex from one maintained source. Private custom skills use
+`private-skills/skills/`; plugin-owned skills use a shared symlink to their source.
+Reserve `claude/skills/` and `codex/skills/` for skills that require one client.
+
+This replaces separate compatibility selections: adding a custom skill should make
+it available to both clients without maintaining a second entry. Existing shared
+public skills were consolidated in `cb5c2f3`. Installed registries remain real
+directories so independent installers can add entries.
+[check-agent-config](bin/check-agent-config) checks shared and client-specific
+sources and reports unmanaged skills separately from broken links and drift.
 
 Edit plugin sources, then regenerate project mirrors with
 [bin/sync-project-skills](bin/sync-project-skills). `summarize-call` is the sole
