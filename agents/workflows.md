@@ -16,9 +16,9 @@ Read only the section relevant to the task.
   No group is automatic. Membership lives in `agents/projects.json` or the private
   context repository, not project YAML. Update the selection when moving a project.
   Startup and compaction read shared sources without rewriting project files.
-- Archive retired work in `~/best/archive/`. Project topic folders may use their
-  own `archive/` for unfinished or insubstantial work. Record the old path and reason
-  in the destination archive's `REPLICATE.md`. Preserve repository history and privacy.
+- Follow the folder's archive rules; Alejo decides them case by case. There is no
+  workspace-wide archive destination. Record moves with their old path and reason;
+  preserve repository history and privacy.
 
 ## Session records
 

@@ -19,8 +19,8 @@ destinations. It uses folder creation time as an estimate of time in `live/`
 ## Archive or keep for reuse
 
 Prefer `projects/<topic>/archive/` for work unlikely to be revisited, including
-substantial research and working artifacts. This is an exception to the shared
-archive rule. Do not make the archive itself a Git repository. Record each move's
+substantial research and working artifacts. Do not make the archive itself a Git
+repository. Record each move's
 former path and reason in the archive's `REPLICATE.md`; restore projects to the topic folder
 when work resumes.
 
@@ -44,4 +44,3 @@ public repository.
 | `work/aim/` | Aim engagements. |
 | `work/strategy/` | Private AI-enablement strategy and planning. |
 | `dotfiles/` | Shared instructions, skills and machine configuration. |
-| `archive/` | Retired substantial work and workspace history without a better home. |
