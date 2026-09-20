@@ -11,9 +11,8 @@ pending work, and choose an appropriate home under `~/best/`. Check for running
 sessions before moving it; preserve Git history,
 uncommitted work and privacy. Record the move and update links and indexes.
 
-The session-start hook only reports days since the last file edit, excluding
-Git-ignored files. It gives no instructions or destination recommendations.
-Use its notices; do not scan projects for inactivity yourself unless asked.
+The session-start hook identifies projects with at least two weeks of inactivity
+and reports days since their last edit. Use its notices to select projects for review.
 
 ## Archive or keep for reuse
 
