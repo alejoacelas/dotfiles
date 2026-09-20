@@ -52,7 +52,7 @@
       "Bash(codex-companion cancel *)"
     ]
   },
-  "model": "opus[1m]",
+  "model": "claude-fable-5-1[1m]",
   "hooks": {
     "PreToolUse": [
       {
@@ -270,10 +270,6 @@
   "autoMemoryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "theme": "dark",
-  "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true,
-  "switchModelsOnFlag": true,
   "claudeMdExcludes": [
     "/Users/alejo/best/AGENTS.md",
     "/Users/alejo/best/dotfiles/workspace/AGENTS.md",
@@ -290,5 +286,9 @@
     "/Users/alejo/best/work/80k/scouting/AGENTS.md",
     "/Users/alejo/best/me/health/AGENTS.md",
     "/Users/alejo/best/me/relationships/people/AGENTS.md"
-  ]
+  ],
+  "theme": "dark",
+  "switchModelsOnFlag": true,
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true
 }
