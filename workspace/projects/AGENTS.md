@@ -17,10 +17,10 @@ and reports days since their last edit. Use its notices to select projects for r
 ## Archive or keep for reuse
 
 Prefer `projects/<topic>/archive/` for work unlikely to be revisited, including
-substantial research and working artifacts. Do not make the archive itself a Git
-repository. Record each move's former path and reason in the archive's `REPLICATE.md`;
+substantial research and working artifacts. Keep archives as ordinary directories
+containing project repositories. Record each move's former path and reason in the archive's `REPLICATE.md`;
 restore projects to the topic folder when work resumes.
 
 Suggest a durable home for work likely to be reused or maintained. Inspect the
 existing folders and their instructions; suggest structural changes if the right
-home is unclear. Never copy private material into a public repository.
+home is unclear.
