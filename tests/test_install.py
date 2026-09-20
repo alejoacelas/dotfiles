@@ -30,12 +30,20 @@ class InstallTests(unittest.TestCase):
                 (skill / 'SKILL.md').write_text(name)
             (private / 'codex/skills').mkdir(parents=True)
             (private / 'codex/skills/shared').symlink_to('../../claude/skills/shared')
+            for base, name in ((repo, 'public-default'), (private, 'private-default')):
+                skill = base / 'skills' / name
+                skill.mkdir(parents=True)
+                (skill / 'SKILL.md').write_text(name)
             for _ in range(2):
                 result = subprocess.run(['bash', str(script)], env=env, capture_output=True, text=True)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 for client in ('.claude', '.agents', '.codex'):
                     self.assertEqual((home / client / 'skills/shared').resolve(),
                                      private / 'claude/skills/shared')
+                for base, name in ((repo, 'public-default'), (private, 'private-default')):
+                    for client in ('.claude', '.agents', '.codex'):
+                        self.assertEqual((home / client / 'skills' / name).resolve(),
+                                         base / 'skills' / name)
                 self.assertTrue((home / '.claude/skills/claude-only').is_symlink())
                 self.assertFalse((home / '.codex/skills/claude-only').exists())
                 self.assertFalse((home / '.agents/skills/claude-only').exists())

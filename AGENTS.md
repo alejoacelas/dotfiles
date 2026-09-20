@@ -12,8 +12,11 @@ Before editing Claude settings, check that `~/.claude/settings.json` still links
 this repo; Claude can replace that link when saving settings. Neither settings file
 is a credential store. Keep secrets in 1Password and ignored, owner-only `.env` files.
 
-Treat `claude/skills/` and `codex/skills/` as explicit compatibility lists. Expose a
-skill in both only after checking it works in both clients. Keep installed skill
+Create custom skills in `skills/` by default; the installer exposes them to both
+Claude Code and Codex from one maintained source. Use `private-skills/skills/`
+for private skills and a shared symlink for plugin-owned sources. Reserve
+`claude/skills/` and `codex/skills/` for skills that require a particular client.
+Run `bin/install.sh` after adding a skill. Keep installed skill
 registries as real directories. `summarize-call` is the official call workflow;
 do not restore the retired `granola-transcript` skill.
 

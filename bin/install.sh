@@ -49,7 +49,7 @@ prune_stale_dotfiles_skill_links() {  # prune_stale_dotfiles_skill_links <regist
     [ -L "$skill" ] || continue
     target="$(readlink "$skill")"
     case "$target" in
-      "$DOTFILES"/claude/skills/*|"$DOTFILES"/codex/skills/*)
+      "$DOTFILES"/skills/*|"$DOTFILES"/claude/skills/*|"$DOTFILES"/codex/skills/*|"$DOTFILES"/private-skills/skills/*|"$DOTFILES"/private-skills/claude/skills/*|"$DOTFILES"/private-skills/codex/skills/*)
         if [ ! -e "$skill" ]; then
           unlink "$skill"
           printf '  pruned  %s (stale dotfiles skill)\n' "${skill/#$HOME/~}"
@@ -64,7 +64,7 @@ link agents/AGENTS.md   "$HOME/.claude/CLAUDE.md"
 # Keep the personal skills directory real. Standard skill installers place their own
 # entries here; tracked dotfiles skills join them as per-skill links.
 real_dir "$HOME/.claude/skills"
-for skill in "$DOTFILES"/claude/skills/* "$DOTFILES"/private-skills/claude/skills/*; do
+for skill in "$DOTFILES"/skills/* "$DOTFILES"/private-skills/skills/* "$DOTFILES"/claude/skills/* "$DOTFILES"/private-skills/claude/skills/*; do
   [ -e "$skill" ] || continue
   name="$(basename "$skill")"
   link "${skill#"$DOTFILES"/}" "$HOME/.claude/skills/$name"
@@ -82,10 +82,9 @@ link codex/hooks.json   "$HOME/.codex/hooks.json"
 link codex/rules        "$HOME/.codex/rules"
 # Codex owns ~/.codex/skills/.system, so link each compatible skill without replacing
 # the directory. ~/.agents/skills is the universal root used by account-scoped Codex
-# runtimes such as Orca. Shared skills can be symlinked into codex/skills from
-# claude/skills; that entry is the explicit compatibility decision.
+# runtimes such as Orca. Shared sources install in both clients automatically.
 real_dir "$HOME/.agents/skills"
-for skill in "$DOTFILES"/codex/skills/* "$DOTFILES"/private-skills/codex/skills/*; do
+for skill in "$DOTFILES"/skills/* "$DOTFILES"/private-skills/skills/* "$DOTFILES"/codex/skills/* "$DOTFILES"/private-skills/codex/skills/*; do
   [ -e "$skill" ] || continue
   name="$(basename "$skill")"
   link "${skill#"$DOTFILES"/}" "$HOME/.agents/skills/$name"

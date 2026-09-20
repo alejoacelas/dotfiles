@@ -29,8 +29,8 @@ Employer context comes from a separate private clone at
 | `agents/AGENTS.md` | Global Claude and Codex instructions |
 | `agents/workflows.md` | Workspace procedures linked from those instructions |
 | `claude/settings.json`, `claude/hooks/` | Claude settings and hooks |
-| `claude/skills/` | Claude's `~/.claude/skills/` registry |
-| `codex/skills/` | Both `~/.agents/skills/` and `~/.codex/skills/` |
+| `skills/` | Shared custom skills for Claude Code and Codex |
+| `claude/skills/`, `codex/skills/` | Client-specific exceptions |
 | `codex/hooks.json`, `codex/rules/` | Codex hooks and rules |
 | `codex/cli.config.toml` | CLI settings for `codex --profile cli` |
 | `plugins/` | Public plugin sources and shared skills |
@@ -41,16 +41,18 @@ Employer context comes from a separate private clone at
 `~/best/tools/AGENTS.md` through a symlink. Individual repositories keep their own
 instructions; this tree manages ordinary container folders.
 
-The skill directories are explicit compatibility lists; shared entries can be
-symlinks to one source. Installed registries remain real directories so other
-installers can add skills.
+Create custom skills in `skills/<name>/SKILL.md`, then run `bin/install.sh`.
+They install into `~/.claude/skills/`, `~/.agents/skills/` and `~/.codex/skills/`
+from one source. For a plugin-owned skill, add a symlink in `skills/` to its source.
+Reserve `claude/skills/` and `codex/skills/` for client-specific exceptions;
+each skill name should appear in only one source directory per client.
+Installed registries remain real directories so other installers can add skills.
 
-`bin/check-agent-config` checks each installed registry against its compatibility
-list. Missing skills and broken links fail; changed skill text is reported as
-drift. Other installed skills are listed as unmanaged, without implying they
-should be available in both clients.
+`bin/check-agent-config` checks each installed registry against the shared sources
+and its client-specific additions. Missing skills and broken links fail; changed
+skill text is reported as drift. Other installed skills are listed as unmanaged.
 
-[`stripe-projects`](claude/skills/stripe-projects/SKILL.md) is our locally maintained
+[`stripe-projects`](skills/stripe-projects/SKILL.md) is our locally maintained
 workflow for Stripe's CLI. It reuses projects and credentials where possible and
 skips generated agent instructions. Update it against CLI help and Stripe's
 reference; installing an upstream skill is unnecessary.
@@ -78,7 +80,8 @@ gh repo clone alejoacelas/private-skills ~/best/dotfiles/private-skills
 ```
 
 `private-skills/` is Git-ignored here and retains its own history and private remote.
-The installer also reads its `claude/skills/` and `codex/skills/` compatibility lists.
+Create private custom skills in its `skills/` directory for both clients. The
+installer also supports its `claude/skills/` and `codex/skills/` exceptions.
 Public-only installations work without that checkout. Make private-skill changes
 and commits inside it; the parent repository tracks installation code only.
 

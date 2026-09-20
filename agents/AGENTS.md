@@ -80,8 +80,7 @@ Use `gcloud --configuration` and `--project`, `gdoc --account`,
 ## Project conventions
 
 Always use `AGENTS.md` for agent instructions; do not create `CLAUDE.md` files or
-compatibility shims. Keep human-facing overviews in `README.md`. When migrating
-existing `CLAUDE.md` files, preserve distinct content such as call indexes.
+compatibility shims. Keep human-facing overviews in `README.md`. 
 
 All our work lives in `~/best/`. It is a container, not a repository.
 Give projects and coherent note
@@ -114,6 +113,9 @@ Prefer native browser and computer-use tools over Orca control. When rendering
 Markdown in Orca, read the
 [Markdown rules](/Users/alejo/best/dotfiles/agents/workflows.md#orca-markdown).
 
-Before declaring a skill unavailable, search `~/best/dotfiles/{claude,codex}/skills`
-and `~/{.agents,.claude,.codex}/skills`; `codex/skills` is the explicit Codex-compatible
-list and may point into `claude/skills`.
+Create custom skills in `~/best/dotfiles/skills/` by default so Claude Code and
+Codex share one maintained source. Put private skills in the independent
+`~/best/dotfiles/private-skills/skills/` repository. Use client-specific directories
+only when a skill requires that client. Run dotfiles' `bin/install.sh` after adding
+a skill. Before declaring a skill unavailable, search these shared sources,
+`~/best/dotfiles/{claude,codex}/skills`, and `~/{.agents,.claude,.codex}/skills`.

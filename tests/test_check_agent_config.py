@@ -37,6 +37,21 @@ class SkillInstallationTests(unittest.TestCase):
         self.assertNotIn('DRIFT', result.stdout)
         self.assertNotIn('UNMANAGED', result.stdout)
 
+    def test_shared_sources_require_both_clients(self):
+        for source, name in (('skills', 'public'), ('private-skills/skills', 'private')):
+            self.skill('best/dotfiles/' + source, name)
+            for registry in ('.agents/skills', '.codex/skills'):
+                self.skill(registry, name)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn('~/.claude/skills: missing tracked skill public', result.stdout)
+        self.assertIn('~/.claude/skills: missing tracked skill private', result.stdout)
+        for name in ('public', 'private'):
+            self.skill('.claude/skills', name)
+        result = self.check()
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertNotIn('UNMANAGED', result.stdout)
+
     def test_missing_installations_fail_for_each_registry(self):
         self.skill('best/dotfiles/claude/skills', 'claude-only')
         self.skill('best/dotfiles/codex/skills', 'codex-only')

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Check installed skills against dotfiles' explicit compatibility lists.
+"""Check installed skills against dotfiles' shared and client-specific sources.
 
 Missing entries and broken links fail the check. Content differences are drift;
-skills outside the compatibility lists are reported separately as unmanaged.
+skills outside the configured sources are reported separately as unmanaged.
 Also report divergent workspace instruction pairs.
 """
 import hashlib
@@ -13,6 +13,8 @@ import sys
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
 DOTFILES = os.path.join(BEST, "dotfiles")
+SHARED_SKILLS = (os.path.join(DOTFILES, "skills"),
+                 os.path.join(DOTFILES, "private-skills/skills"))
 CLAUDE_SKILLS = os.path.join(HOME, ".claude/skills")
 TRACKED_CLAUDE_SKILLS = os.path.join(DOTFILES, "claude/skills")
 TRACKED_CODEX_SKILLS = os.path.join(DOTFILES, "codex/skills")
@@ -28,7 +30,7 @@ ORCA_CODEX_SKILL_ROOTS = glob.glob(
 SKIP_DIRS = {".git", "node_modules", "archive", ".venv", "venv", "__pycache__"}
 
 hard = []   # (path, message) — dangling links, real breakage
-unmanaged = []  # Installed skills outside the client compatibility list.
+unmanaged = []  # Installed skills outside the configured sources.
 drift = []  # (label, message) — reminders, not failures
 
 
@@ -84,7 +86,7 @@ def check_skills():
     targets.extend(((TRACKED_CODEX_SKILLS, PRIVATE_CODEX_SKILLS), root)
                    for root in CODEX_SKILL_ROOTS)
     for source, root in targets:
-        tracked = list_skills(*source)
+        tracked = list_skills(*SHARED_SKILLS, *source)
         installed = list_skills(root)
         for name, paths in tracked.items():
             if len(paths) > 1:
@@ -104,6 +106,8 @@ def main():
         check_dangling(root)
     for root in ORCA_CODEX_SKILL_ROOTS:
         check_dangling(root)
+    for root in SHARED_SKILLS:
+        check_dangling(root)
     check_dangling(TRACKED_CLAUDE_SKILLS)
     check_dangling(TRACKED_CODEX_SKILLS)
     check_dangling(PRIVATE_CLAUDE_SKILLS)
@@ -120,7 +124,7 @@ def main():
         for label, m in drift:
             print(f"  • {label.replace(HOME, '~')}: {m}")
     if unmanaged:
-        print("UNMANAGED — installed outside dotfiles compatibility lists (informational):")
+        print("UNMANAGED — installed outside dotfiles sources (informational):")
         for root, name in unmanaged:
             print(f"  • {root.replace(HOME, '~')}: {name}")
     if not hard and not drift:
