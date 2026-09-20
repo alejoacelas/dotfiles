@@ -76,7 +76,7 @@ and [move procedures](agents/workflows.md#creating-or-moving-projects).
 
 Custom skills belong in [skills/](skills/), which installs into both Claude Code
 and Codex from one maintained source. Private custom skills use
-`private-skills/skills/`; plugin-owned skills use a shared symlink to their source.
+`private-skills/skills/`.
 Reserve `claude/skills/` and `codex/skills/` for skills that require one client.
 
 This replaces separate compatibility selections: adding a custom skill should make
@@ -87,7 +87,8 @@ directories so independent installers can add entries.
 sources and reports unmanaged skills separately from broken links and drift.
 
 `summarize-call` is the sole maintained call-summary workflow; both clients link
-to its plugin source. The wiki skills and project-mirroring machinery were retired
+to `skills/summarize-call/`. It moved from `plugins/calls/skills/summarize-call/`
+in `fcdbb63`, removing plugin packaging that local sharing does not need. The wiki skills and project-mirroring machinery were retired
 in `14b73ba`; do not reinstall them. Call records stay in calls, while call-derived
 guides belong in writing/ai-guides. Installing dotfiles must not modify those
 repositories. See `173f3fa` and `10eab14`.
