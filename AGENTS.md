@@ -14,14 +14,13 @@ is a credential store. Keep secrets in 1Password and ignored, owner-only `.env` 
 
 Create custom skills in `skills/` by default; the installer exposes them to both
 Claude Code and Codex from one maintained source. Use `private-skills/skills/`
-for private skills and a shared symlink for plugin-owned sources. Reserve
+for private skills. Reserve
 `claude/skills/` and `codex/skills/` for skills that require a particular client.
 Run `bin/install.sh` after adding a skill. Keep installed skill
 registries as real directories. `summarize-call` is the official call workflow;
 do not restore the retired `granola-transcript` skill.
 
-Edit plugin sources under `plugins/`. Name plugins for the package and skills for
-their actions. Installation must not write into calls.
+Installation must not write into calls.
 
 Update context selections explicitly when moving repositories. Keep employer
 guidance in the private clone's `groups/80k.md`. Add new container instruction paths

@@ -33,7 +33,6 @@ Employer context comes from a separate private clone at
 | `claude/skills/`, `codex/skills/` | Client-specific exceptions |
 | `codex/hooks.json`, `codex/rules/` | Codex hooks and rules |
 | `codex/cli.config.toml` | CLI settings for `codex --profile cli` |
-| `plugins/` | Public plugin sources and shared skills |
 | `shell/zprofile`, `git/gitconfig`, `Brewfile` | Shell, Git and Homebrew configuration |
 | `workspace/` | Live configuration for ordinary folders under `~/best/` |
 
@@ -43,7 +42,7 @@ instructions; this tree manages ordinary container folders.
 
 Create custom skills in `skills/<name>/SKILL.md`, then run `bin/install.sh`.
 They install into `~/.claude/skills/`, `~/.agents/skills/` and `~/.codex/skills/`
-from one source. For a plugin-owned skill, add a symlink in `skills/` to its source.
+from one source.
 Reserve `claude/skills/` and `codex/skills/` for client-specific exceptions;
 each skill name should appear in only one source directory per client.
 Installed registries remain real directories so other installers can add skills.
@@ -57,12 +56,11 @@ workflow for Stripe's CLI. It reuses projects and credentials where possible and
 skips generated agent instructions. Update it against CLI help and Stripe's
 reference; installing an upstream skill is unnecessary.
 
-[`summarize-call`](plugins/calls/skills/summarize-call/SKILL.md) is the official
+[`summarize-call`](skills/summarize-call/SKILL.md) is the official
 call workflow for both agents. It files in `~/best/calls` under that repository's
 instructions. Both clients link to the same skill source. The older synced
 `summarise-granola` skill is disabled through Claude's `skillOverrides`, including
-its `anthropic-skills:` name, so account sync cannot reactivate it locally. The
-[marketplace](.claude-plugin/marketplace.json) exposes the plugin independently.
+its `anthropic-skills:` name, so account sync cannot reactivate it locally.
 
 Historical instruction snapshots remain in Git history. Archived workspace files
 live independently under `~/best/archive/`. Current decisions and their reasons live in
@@ -92,7 +90,7 @@ and commits inside it; the parent repository tracks installation code only.
 bin/check-agent-config                    # broken links, missing skills, differences
 bin/agent-context check /path/to/project  # inspect selected context
 ~/.local/share/agent-context/venv/bin/python -m unittest discover -s tests
-~/.local/share/agent-context/venv/bin/python -m unittest discover -s plugins/calls/skills/summarize-call/tests
+~/.local/share/agent-context/venv/bin/python -m unittest discover -s skills/summarize-call/tests
 ```
 
 Shared context is selected explicitly per repository with

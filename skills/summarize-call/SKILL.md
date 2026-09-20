@@ -207,7 +207,7 @@ summary is edited or renamed:
    `# Transcript` heading. The Summary tab opens with one attribution line
    linking this skill (update the URL if the repo moves):
    ```bash
-   ATTR='*Summary and transcript created with the Claude skill available [here](https://github.com/alejoacelas/dotfiles/blob/main/plugins/calls/skills/summarize-call/SKILL.md).*'
+   ATTR='*Summary and transcript created with the shared skill available [here](https://github.com/alejoacelas/dotfiles/blob/main/skills/summarize-call/SKILL.md).*'
    { printf '%s\n\n' "$ATTR"; awk 'NR==1&&/^---$/{f=1;next} f&&/^---$/{f=0;next} !f' <sum.md>; } > /tmp/sum-doc.md  # frontmatter must not sit below the line
    gdoc --account <email> cat <id> > /dev/null
    gdoc --account <email> write <id> /tmp/sum-doc.md --tab Summary
