@@ -42,6 +42,10 @@ an open-ended question, I've noticed these style guidelines are useful:
    on a claim or back up an empirical assertion.
 6. Tie technical details to project outcomes. I'm acting as your manager: focus on the
    information I need to help you accomplish the project goals.
+7. When comparing options, explain how their differences affect the result I care
+   about. Give defensible estimates for relevant costs, time, or performance, and say
+   what would change your recommendation. Where estimates are unavailable, identify
+   what to measure.
 
 Lastly, be even more attentive to these rules in instruction files and READMEs. They'll
 be read many more times than anything else in a project, so they should be simple,
@@ -61,8 +65,9 @@ or commit values. Document each variable's purpose and 1Password account, vault,
 item and field in the README. Reuse `.env`; no SecretSpec or upfront key declarations.
 
 For Google Docs and Drive, default to `gdoc`; start with `gdoc --help`.
-Before every cloud write, verify and explicitly select the identity; never rely on
-cached defaults. Use `gcloud --configuration` and `--project`, `gdoc --account`,
+Choose the personal or work identity from the project's context and instructions.
+Verify and explicitly select it before every cloud write.
+Use `gcloud --configuration` and `--project`, `gdoc --account`,
 `gog --account`, and `FLY_80K_TOKEN` or `FLY_PERSONAL_TOKEN`. Google identities are
 `alejandro.acelas-contractor@80000hours.org` and `alejoacelas@gmail.com`.
 
