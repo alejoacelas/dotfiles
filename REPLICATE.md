@@ -468,3 +468,12 @@ Alejo chose an independent private skill repository inside the ignored `private-
 - Simplify-projects wording remains a proposal, revised to leave implementation choices to model judgment.
 
 Agent session 01a0bec4-1bed-7f62-8fe6-3ae698666938 · Commits 06378da, 4bd4cb9
+
+## Prefer direct meaning in prose
+
+The user wanted the agreed general writing instruction added globally and the prompts behind their preferred REPLICATE rewrites identified.
+
+- Added the exact approved paragraph about expressing actions, relationships and consequences directly to agents/AGENTS.md; verified the installed Claude and Codex instructions link to it.
+- Read the latest comparison's saved assignments: A is the mistake-prevention prompt and B is the owner-review prompt for both dotfiles and gdoc. Returned their exact selection instructions and the shared prompt source.
+
+Agent session 01a0bb6c-e2fd-7990-8db1-2889c6580d6a · Commits 34263de
