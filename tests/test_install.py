@@ -90,7 +90,7 @@ class InstallTests(unittest.TestCase):
         installer = (source / 'bin/install.sh').read_text()
         functions = installer.split('echo "Linking dotfiles')[0]
         phase = installer.split('# Ordinary container configuration lives here;')[1]
-        phase = phase.split('if [ -d "$HOME/.local/share/agent-context/private/workspace/once/.agents"')[0]
+        phase = phase.split('if [ -d "$HOME/.local/share/agent-context/private/workspace/tools/.claude"')[0]
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
             repo = root / 'dotfiles'

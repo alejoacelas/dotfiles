@@ -126,9 +126,6 @@ while IFS= read -r source; do
   fi
   link "workspace/$relative" "$BEST_ROOT/$relative"
 done < <(rg --files --hidden "$DOTFILES/workspace")
-if [ -d "$HOME/.local/share/agent-context/private/workspace/once/.agents" ] && [ ! -e "$BEST_ROOT/projects/.agents" ]; then
-  ln -s "$HOME/.local/share/agent-context/private/workspace/once/.agents" "$BEST_ROOT/projects/.agents"
-fi
 if [ -d "$HOME/.local/share/agent-context/private/workspace/tools/.claude" ] && [ ! -e "$BEST_ROOT/tools/.claude" ]; then
   ln -s "$HOME/.local/share/agent-context/private/workspace/tools/.claude" "$BEST_ROOT/tools/.claude"
 fi
