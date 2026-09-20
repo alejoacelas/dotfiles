@@ -1,57 +1,48 @@
 # Projects
 
-Use `live/` for projects being worked on now. Use topic folders: `agents/`, `connectors/`, `community/`, and `others/` for projects without a clear fit.
-Name project folders `YYYY-MM-project-name`. Each project keeps its own Git repository
-and remote. State the scope in the project’s AGENTS.md. Do not create duplicate CLAUDE.md instructions.
-Keep topic folders as ordinary directories; their shared configuration lives in dotfiles.
-Apply the global privacy rules.
+Put active projects in `live/`; otherwise use `agents/`, `connectors/`,
+`community/`, or `others/` when no topic fits. Name projects `YYYY-MM-project-name`,
+give each its own Git repository and remote, and state its scope in `AGENTS.md`.
+Do not duplicate instructions in `CLAUDE.md`. Topic folders are ordinary directories;
+their shared configuration lives in dotfiles. Global privacy rules apply.
 
-## Keep live projects current
+## Move inactive projects
 
-Move any project with no substantive edits in the last 14 days out of `live/`.
-Choose the appropriate topic folder for ongoing or parked work, or the permanent
-home below for a tool, reference collection, personal material or employer work.
-Preserve its repository, privacy and uncommitted work; check for a running session
-before moving its checkout. Record the move and update links and indexes.
+Move projects with no substantive edits for 14 days out of `live/` and into a topic
+folder, archive, or durable home below. Check for running sessions first; preserve
+Git history, uncommitted work and privacy. Record the move and update links and indexes.
 
-The session-start hook reports candidates when a session starts in `projects/`
-or its descendants, or at the `best/` root. It does not move files itself.
-It uses the latest substantive Git commit and timestamps of changed or untracked,
-non-ignored files. Instruction/log-only commits and ignored outputs do not reset
-the clock. Treat this as an estimate: inspect uncommitted deletions, nested repos
-and copied files before deciding the actual last edit.
+The session-start hook flags candidates from `best/`, `projects/`, and descendants
+of `projects/`; it never moves them. Its estimate uses substantive commits and changed or untracked file timestamps,
+excluding ignored files and instruction/log-only commits. Check deletions, nested
+repos and copied files before relying on it.
 
-## Where finished work belongs
+## Archive or keep for reuse
 
-The topic names above and destination folders below are a snapshot of the current
-workspace, not a fixed taxonomy. Check the actual folders before using these paths.
-If you find an inconsistency, update this map and the relevant indexes to match;
-suggest structural changes when the appropriate home is unclear.
+Prefer `projects/<topic>/archive/` for work unlikely to be revisited, including
+substantial research and working artifacts. This is an exception to the shared
+archive rule. Do not make the archive itself a Git repository. Record each move's
+former path and reason in the archive's `REPLICATE.md`; restore projects to the topic folder
+when work resumes.
 
-If a project seems unlikely to be revisited, prefer keeping it in
-`projects/<topic>/archive/` rather than moving it to another part of the workspace.
-Suggest a durable home below when its output is likely to be used or maintained.
-Preserve its repository and history; do not copy private material into a public repo.
+Suggest a durable home for work likely to be reused or maintained. Check that these
+folders still exist, correct this map and relevant indexes when needed, and suggest
+structural changes if the right home is unclear. Never copy private material into a
+public repository.
 
-| Folder in ~/best/ | Contents and suitable finished work |
+| Folder in `~/best/` | Contents |
 |---|---|
 | `tools/active/` | Tools under active development. |
-| `tools/stable/` | Working tools that need occasional maintenance. |
-| `writing/` | Reusable explanations, reference material and settled research. |
+| `tools/stable/` | Tools needing occasional maintenance. |
+| `writing/` | Explanations, references and settled research. |
 | `me/admin/` | Visas, paperwork and travel. |
-| `me/health/` | Physical and mental health, food, meals and environment research. |
-| `me/relationships/` | People to learn from, meet and know, plus relationship projects. |
+| `me/health/` | Health, food, meals and environment research. |
+| `me/relationships/` | People and relationships. |
 | `me/sites/` | Personal blog and website. |
-| `me/stuff/` | Purchases, equipment and ownership notes. |
-| `calls/` | Private call transcripts, notes and related work. |
+| `me/stuff/` | Purchases and equipment. |
+| `calls/` | Private call transcripts and notes. |
 | `work/80k/` | Private employer work and its tools. |
-| `work/aim/` | Aim engagements and related work. |
-| `work/strategy/` | AI-enablement strategy and planning; preserve its privacy. |
-| `dotfiles/` | Shared instructions, installed skills and machine configuration. |
+| `work/aim/` | Aim engagements. |
+| `work/strategy/` | Private AI-enablement strategy and planning. |
+| `dotfiles/` | Shared instructions, skills and machine configuration. |
 | `archive/` | Retired substantial work and workspace history without a better home. |
-
-Each project topic folder also has `archive/` for unfinished, thin, parked or unlikely-to-be-revisited projects.
-This is an explicit exception to the shared archive rule. Substantial research and
-working artifacts can stay archived too when unlikely to be used again. Record each move,
-its former path and the reason in that local archive's REPLICATE.md. Restore a project
-to the topic folder when work resumes. Do not create a Git repository for the archive.
