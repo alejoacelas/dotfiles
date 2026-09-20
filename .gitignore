@@ -5,3 +5,5 @@
 codex/config.toml
 **/__pycache__/
 *.pyc
+# Independently versioned private skill sources.
+/private-skills/
