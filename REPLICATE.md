@@ -448,3 +448,13 @@ Alejo wanted global and repository skills audited, simpler Stripe setup, and app
 - Preserved the pre-existing Claude settings change first. External-skill consolidation remains a proposal; gdoc's tracked upstream skills were left unchanged.
 
 Agent session 01a0bec4-1bed-7f62-8fe6-3ae698666938 · Commits 4faa8c4, 8aa6412
+
+## Own the Stripe workflow
+
+Alejo wanted external skills consolidated in dotfiles, a simple locally maintained Stripe skill, and general improvements proposed for simplify-projects.
+
+- Made Stripe guidance choose browsing, reuse, or provisioning according to the request. Existing API-key consumers can use 1Password without creating Stripe projects.
+- Documented local ownership; the skill validator passed and all three installed registry paths resolve to the maintained content.
+- Skill consolidation awaits a storage choice because the existing history contains private material and dotfiles is public. Preserved pending source edits in their original repository; no private content was imported.
+
+Agent session 01a0bec4-1bed-7f62-8fe6-3ae698666938 · Commits 0a9a1fb
