@@ -60,7 +60,9 @@ reference; installing an upstream skill is unnecessary.
 [`summarize-call`](plugins/calls/skills/summarize-call/SKILL.md) is the official
 call workflow for both agents. It files in `~/best/calls` under that repository's
 instructions. The calls plugin also supplies `call-wiki` and `wiki-comments`,
-mirrored into `writing/ai-guides` for standalone checkouts. The
+mirrored into `writing/ai-guides` for standalone checkouts. The older synced
+`summarise-granola` skill is disabled through Claude's `skillOverrides`, including
+its `anthropic-skills:` name, so account sync cannot reactivate it locally. The
 [marketplace](.claude-plugin/marketplace.json) exposes the plugin independently.
 
 Historical instruction snapshots remain in Git history. Archived workspace files

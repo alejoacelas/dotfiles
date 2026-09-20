@@ -290,5 +290,9 @@
   "theme": "dark",
   "switchModelsOnFlag": true,
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "skillOverrides": {
+    "anthropic-skills:summarise-granola": "off",
+    "summarise-granola": "off"
+  }
 }
