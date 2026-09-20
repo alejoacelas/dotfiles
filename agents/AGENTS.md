@@ -68,10 +68,9 @@ cached defaults. Use `gcloud --configuration` and `--project`, `gdoc --account`,
 
 ## Project conventions
 
-Keep behavior and workflow instructions in `AGENTS.md`, human-facing overviews in
-`README.md`. Do not duplicate instructions in `CLAUDE.md`; preserve distinct content
-such as call indexes. Before adding an import shim, verify the need using the
-[compatibility notes](/Users/alejo/best/dotfiles/agents/workflows.md#claude-instruction-compatibility).
+Always use `AGENTS.md` for agent instructions; do not create `CLAUDE.md` files or
+compatibility shims. Keep human-facing overviews in `README.md`. When migrating
+existing `CLAUDE.md` files, preserve distinct content such as call indexes.
 
 `~/best/` is a container, not a repository. Give projects and coherent note
 collections their own repositories and remotes; keep lifecycle and topic folders

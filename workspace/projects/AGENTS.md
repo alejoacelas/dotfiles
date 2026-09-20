@@ -3,8 +3,7 @@
 Put active projects in `live/`; otherwise use `agents/`, `connectors/`,
 `community/`, or `others/` when no topic fits. Name projects `YYYY-MM-project-name`,
 give each its own Git repository and remote, and state its scope in `AGENTS.md`.
-Do not duplicate instructions in `CLAUDE.md`. Topic folders are ordinary directories;
-their shared configuration lives in dotfiles. Global privacy rules apply.
+Topic folders are ordinary directories; their shared configuration lives in dotfiles.
 
 ## Move inactive projects
 
