@@ -327,7 +327,7 @@ def install():
 
 
 def live_project_reminder(cwd):
-    """Notify about old live folders; never change or classify projects."""
+    """Report days since live projects were edited; never change or classify them."""
     projects = (DOTFILES.parent / 'projects').resolve()
     cwd = cwd.resolve()
     if cwd != projects.parent and not cwd.is_relative_to(projects):
@@ -340,15 +340,20 @@ def live_project_reminder(cwd):
     for project in sorted(live.iterdir()):
         if not project.is_dir() or project.name.startswith('.') or project.is_symlink():
             continue
-        stat = project.stat()
-        # Folder age approximates time in live/; moving an old folder preserves its age.
-        created = getattr(stat, 'st_birthtime', stat.st_mtime)
-        if now - created > 14 * 86400:
-            notes.append(f'- live/{project.name}')
-    if not notes:
-        return ''
-    return ('These project folders in live/ are more than two weeks old. '
-            'Read them, commit pending work, and sort them.\n' + '\n'.join(notes))
+        if (project / '.git').exists():
+            names = subprocess.check_output(
+                ['git', '-C', str(project), 'ls-files', '--cached', '--others',
+                 '--exclude-standard', '-z'], timeout=5).decode().split('\0')
+            files = (project / name for name in names if name)
+        else:
+            files = project.rglob('*')
+        latest = max((file.stat().st_mtime for file in files
+                      if not file.is_symlink() and file.is_file()),
+                     default=project.stat().st_mtime)
+        days = int((now - latest) // 86400)
+        if days >= 14:
+            notes.append(f'Project live/{project.name} has not been edited in {days} days.')
+    return '\n'.join(notes)
 
 
 def main():

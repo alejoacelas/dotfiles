@@ -251,27 +251,23 @@ class ContextTest(unittest.TestCase):
         self.assertIn('Shared tools instruction.', m.shared_context(worktree))
 
 class LiveProjectTest(unittest.TestCase):
-    def test_folder_age_scope_and_notice_only_for_both_clients(self):
+    def test_edit_age_scope_and_notice_only_for_both_clients(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
             project = root / 'projects/live/example'
             project.mkdir(parents=True)
             draft = project / 'draft.md'
             draft.write_text('Uncommitted work.\n')
-            stat = project.stat()
-            created = getattr(stat, 'st_birthtime', stat.st_mtime)
+            edited = draft.stat().st_mtime
             (project.parent / 'linked').symlink_to(project, target_is_directory=True)
             (project.parent / '.hidden').mkdir()
             (project.parent / 'notes.txt').write_text('Not a project.')
-            expected = ('These project folders in live/ are more than two weeks old. '
-                        'Read them, commit pending work, and sort them.\n- live/example')
+            expected = 'Project live/example has not been edited in 14 days.'
             with patch.object(m, 'DOTFILES', root / 'dotfiles'), \
                  patch.object(m, 'STATE', root / '.state'):
-                with patch.object(m.time, 'time', return_value=created + 14 * 86400):
+                with patch.object(m.time, 'time', return_value=edited + 14 * 86400 - 1):
                     self.assertEqual('', m.live_project_reminder(project))
-                with patch.object(m.time, 'time', return_value=created + 14 * 86400 + 1):
-                    # No Git repository is needed, and recent edits do not reset folder age.
-                    draft.write_text('Recent work.\n')
+                with patch.object(m.time, 'time', return_value=edited + 14 * 86400):
                     self.assertEqual(expected, m.live_project_reminder(project))
                     self.assertEqual(expected, m.live_project_reminder(root))
                     self.assertEqual('', m.live_project_reminder(root / 'writing'))
@@ -283,9 +279,25 @@ class LiveProjectTest(unittest.TestCase):
                             self.assertEqual(0, m.main())
                         self.assertEqual(expected, json.loads(output.getvalue())[
                             'hookSpecificOutput']['additionalContext'])
-                    self.assertEqual('Recent work.\n', draft.read_text())
+                    self.assertEqual('Uncommitted work.\n', draft.read_text())
                     self.assertFalse((project / '.git').exists())
                     self.assertFalse((root / '.state').exists())
+                    os.utime(draft, (edited + 86400, edited + 86400))
+                    self.assertEqual('', m.live_project_reminder(project))
+                    os.utime(draft, (edited, edited))
+                    # Git metadata and ignored outputs do not count as project edits.
+                    subprocess.run(['git', 'init', str(project)], check=True,
+                                   stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+                    ignore = project / '.gitignore'
+                    ignore.write_text('cache/\n')
+                    os.utime(ignore, (edited, edited))
+                    (project / 'cache').mkdir()
+                    (project / 'cache/output.txt').write_text('Generated.')
+                    self.assertEqual(expected, m.live_project_reminder(project))
+                    subprocess.run(['git', '-C', str(project), 'add', 'draft.md'], check=True)
+                    self.assertEqual(expected, m.live_project_reminder(project))
+                    os.utime(draft, (edited + 86400, edited + 86400))
+                    self.assertEqual('', m.live_project_reminder(project))
 
 
 if __name__ == '__main__': unittest.main()

@@ -5,7 +5,7 @@ Read only the section relevant to the task.
 ## Creating or moving projects
 
 - Start every new project in `~/best/projects/live/`, named `YYYY-MM-project-name`,
-  with its own repository and GitHub remote. Organize it after two weeks or on demand,
+  with its own repository and GitHub remote. Organize it after two weeks without edits or on demand,
   following `~/best/projects/AGENTS.md`.
 - Durable homes include `~/best/writing/` for essays and references,
   `~/best/work/{80k,aim}/` for employer and Aim work, and

@@ -1,6 +1,6 @@
 # Projects
 
-Start every new project in `live/`. Organize it after two weeks or on demand into
+Start every new project in `live/`. Organize it after two weeks without edits or on demand into
 `agents/`, `connectors/`, `community/`, `others/`, or a home below.
 Name projects `YYYY-MM-project-name`,
 give each its own Git repository and remote, and state its scope in `AGENTS.md`.
@@ -8,13 +8,13 @@ Topic folders are ordinary directories; their shared configuration lives in dotf
 
 ## Review and organize projects
 
-After two weeks in `live/`, or when asked, read the project, commit pending work,
+After two weeks without edits in `live/`, or when asked, read the project, commit pending work,
 and sort it. Check for running sessions before moving it; preserve Git history,
 uncommitted work and privacy. Record the move and update links and indexes.
 
-The session-start hook only notifies; it neither moves projects nor recommends
-destinations. It uses folder creation time as an estimate of time in `live/`
-(modification time if creation time is unavailable); moved folders may appear older.
+The session-start hook only reports days since the last file edit, excluding
+Git-ignored files. It gives no instructions or destination recommendations.
+Use its notices; do not scan projects for inactivity yourself unless asked.
 
 ## Archive or keep for reuse
 
