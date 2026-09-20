@@ -251,49 +251,41 @@ class ContextTest(unittest.TestCase):
         self.assertIn('Shared tools instruction.', m.shared_context(worktree))
 
 class LiveProjectTest(unittest.TestCase):
-    def test_activity_scope_and_hook_output(self):
+    def test_folder_age_scope_and_notice_only_for_both_clients(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
+            root = Path(tmp).resolve()
             project = root / 'projects/live/example'
             project.mkdir(parents=True)
-            def git(*args, env=None):
-                subprocess.run(['git', '-C', str(project), *args], check=True,
-                               stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, env=env)
-            git('init')
-            git('config', 'user.name', 'Test')
-            git('config', 'user.email', 'test@example.com')
-            (project / 'notes.md').write_text('Substantive work.\n')
-            (project / '.gitignore').write_text('cache/\n')
-            git('add', '.')
-            git('commit', '-m', 'Old work', env=dict(os.environ,
-                GIT_AUTHOR_DATE='2001-01-01T00:00:00Z', GIT_COMMITTER_DATE='2001-01-01T00:00:00Z'))
-            (project / 'REPLICATE.md').write_text('Bookkeeping.\n')
-            git('add', '.')
-            git('commit', '-m', 'Recent bookkeeping')
-            (project / 'cache').mkdir()
-            (project / 'cache/generated.txt').write_text('Not project activity.\n')
-            with patch.object(m, 'DOTFILES', root / 'dotfiles'):
-                self.assertIn('example:', m.live_project_reminder(project))
-                self.assertEqual('', m.live_project_reminder(root / 'writing'))
-                output = io.StringIO()
-                with patch.object(m, 'STATE', root / '.state'), \
-                     patch('sys.argv', ['agent-context', 'hook']), \
-                     patch('sys.stdin', io.StringIO(json.dumps({'cwd': str(root)}))), \
-                     contextlib.redirect_stdout(output):
-                    self.assertEqual(0, m.main())
-                self.assertIn('Live project review', json.loads(output.getvalue())[
-                    'hookSpecificOutput']['additionalContext'])
-                draft = project / 'draft.md'
-                draft.write_text('Uncommitted work.\n')
-                self.assertEqual('', m.live_project_reminder(project))
-                git('add', 'draft.md')
-                self.assertEqual('', m.live_project_reminder(project))
-                now = time.time()
-                with patch.object(m.time, 'time', return_value=now):
-                    os.utime(draft, (now - 14 * 86400, now - 14 * 86400))
-                    self.assertIn('14 days', m.live_project_reminder(project))
-                    os.utime(draft, (now - 14 * 86400 + 1, now - 14 * 86400 + 1))
+            draft = project / 'draft.md'
+            draft.write_text('Uncommitted work.\n')
+            stat = project.stat()
+            created = getattr(stat, 'st_birthtime', stat.st_mtime)
+            (project.parent / 'linked').symlink_to(project, target_is_directory=True)
+            (project.parent / '.hidden').mkdir()
+            (project.parent / 'notes.txt').write_text('Not a project.')
+            expected = ('These project folders in live/ are more than two weeks old. '
+                        'Read them, commit pending work, and sort them.\n- live/example')
+            with patch.object(m, 'DOTFILES', root / 'dotfiles'), \
+                 patch.object(m, 'STATE', root / '.state'):
+                with patch.object(m.time, 'time', return_value=created + 14 * 86400):
                     self.assertEqual('', m.live_project_reminder(project))
+                with patch.object(m.time, 'time', return_value=created + 14 * 86400 + 1):
+                    # No Git repository is needed, and recent edits do not reset folder age.
+                    draft.write_text('Recent work.\n')
+                    self.assertEqual(expected, m.live_project_reminder(project))
+                    self.assertEqual(expected, m.live_project_reminder(root))
+                    self.assertEqual('', m.live_project_reminder(root / 'writing'))
+                    for client in ('codex', 'claude'):
+                        output = io.StringIO()
+                        with patch('sys.argv', ['agent-context', 'hook', '--client', client]), \
+                             patch('sys.stdin', io.StringIO(json.dumps({'cwd': str(root)}))), \
+                             contextlib.redirect_stdout(output):
+                            self.assertEqual(0, m.main())
+                        self.assertEqual(expected, json.loads(output.getvalue())[
+                            'hookSpecificOutput']['additionalContext'])
+                    self.assertEqual('Recent work.\n', draft.read_text())
+                    self.assertFalse((project / '.git').exists())
+                    self.assertFalse((root / '.state').exists())
 
 
 if __name__ == '__main__': unittest.main()

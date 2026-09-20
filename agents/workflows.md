@@ -4,11 +4,12 @@ Read only the section relevant to the task.
 
 ## Creating or moving projects
 
-- Put one-offs in `~/best/projects/`, named `YYYY-MM-project-name`, with their own
-  repository and GitHub remote. Read `~/best/projects/AGENTS.md` for current placement.
-- Keep essays and reference collections in `~/best/writing/`; employer and aim work
-  in `~/best/work/{80k,aim}/`. Skill-development projects belong under
-  `~/best/projects/agents/`, each in its own repository.
+- Start every new project in `~/best/projects/live/`, named `YYYY-MM-project-name`,
+  with its own repository and GitHub remote. Organize it after two weeks or on demand,
+  following `~/best/projects/AGENTS.md`.
+- Durable homes include `~/best/writing/` for essays and references,
+  `~/best/work/{80k,aim}/` for employer and Aim work, and
+  `~/best/projects/agents/` for agent and skill projects.
 - Read the destination's `AGENTS.md` before creating or moving anything there.
 - Only the `80k` shared group is approved. Select it for relevant private employer
   work with `~/best/dotfiles/bin/agent-context adopt`; do not recreate other groups.

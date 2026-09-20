@@ -327,7 +327,7 @@ def install():
 
 
 def live_project_reminder(cwd):
-    """Report stale live projects; never move a checkout from a startup hook."""
+    """Notify about old live folders; never change or classify projects."""
     projects = (DOTFILES.parent / 'projects').resolve()
     cwd = cwd.resolve()
     if cwd != projects.parent and not cwd.is_relative_to(projects):
@@ -337,33 +337,18 @@ def live_project_reminder(cwd):
         return ''
     now = time.time()
     notes = []
-    metadata = {'AGENTS.md', 'CLAUDE.md', 'REPLICATE.md', '.gitignore', '.DS_Store'}
-    specs = ['.', *[f':(exclude,glob)**/{name}' for name in sorted(metadata)]]
     for project in sorted(live.iterdir()):
         if not project.is_dir() or project.name.startswith('.') or project.is_symlink():
             continue
-        if not (project / '.git').exists():
-            notes.append(f'- {project.name}: no Git repository; inspect activity manually.')
-            continue
-        def git(*args):
-            return subprocess.check_output(['git', '-C', str(project), *args], timeout=5).decode()
-        stamp = git('log', '-1', '--format=%ct', '--', *specs).strip()
-        latest = float(stamp) if stamp else 0
-        changed = git('diff', '--name-only', '-z', 'HEAD', '--', *specs)
-        changed += git('ls-files', '--others', '--exclude-standard', '-z', '--', *specs)
-        for name in changed.split('\0'):
-            file = project / name
-            if name and file.is_file() and not file.is_symlink():
-                latest = max(latest, file.stat().st_mtime)
-        if not latest:
-            notes.append(f'- {project.name}: no substantive activity found; review its destination.')
-        elif now - latest >= 14 * 86400:
-            notes.append(f'- {project.name}: {int((now - latest) // 86400)} days since substantive activity.')
+        stat = project.stat()
+        # Folder age approximates time in live/; moving an old folder preserves its age.
+        created = getattr(stat, 'st_birthtime', stat.st_mtime)
+        if now - created > 14 * 86400:
+            notes.append(f'- live/{project.name}')
     if not notes:
         return ''
-    return ('Live project review: follow projects/AGENTS.md and move inactive projects out of live/ '
-            'to a topic folder or durable destination. Review uncommitted work and running sessions first. '
-            'The hook only reports candidates.\n' + '\n'.join(notes))
+    return ('These project folders in live/ are more than two weeks old. '
+            'Read them, commit pending work, and sort them.\n' + '\n'.join(notes))
 
 
 def main():
