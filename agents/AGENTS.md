@@ -64,36 +64,31 @@ before permanently deleting anything. Keep repositories public unless they conta
 credentials, internal employer information (80,000 Hours), or others' non-public
 information. Never publish secrets or private material.
 
-Keep API keys in 1Password, including newly obtained keys. Explicitly verify the
-account and vault. Retrieve keys on demand with `op` into the project's `.env`;
-first ensure it is Git-ignored, untracked, and owner-only (`chmod 600`). Never print
-or commit values. Document each variable's purpose and 1Password account, vault,
-item and field in the README. Reuse `.env`; no SecretSpec or upfront key declarations.
+Keep API keys in 1Password, including newly obtained keys, and verify the account
+and vault. Retrieve keys on demand with `op` into the project's existing `.env`,
+which must be Git-ignored, untracked and owner-only (`chmod 600`). Never print or
+commit values. Document each variable's purpose and its 1Password account, vault,
+item and field in the README.
 
-For Google Docs and Drive, default to `gdoc`; start with `gdoc --help`.
-Choose the personal or work identity from the project's context and instructions.
-Verify and explicitly select it before every cloud write.
-Use `gcloud --configuration` and `--project`, `gdoc --account`,
-`gog --account`, and `FLY_80K_TOKEN` or `FLY_PERSONAL_TOKEN`. Google identities are
-`alejandro.acelas-contractor@80000hours.org` and `alejoacelas@gmail.com`.
+Choose the personal or work identity from the project's context and select it
+explicitly before every cloud write: `gcloud --configuration` and `--project`,
+`gdoc --account`, `gog --account`, `FLY_80K_TOKEN` or `FLY_PERSONAL_TOKEN`. Google
+identities are `alejandro.acelas-contractor@80000hours.org` and
+`alejoacelas@gmail.com`. For Google Docs and Drive, start with `gdoc --help`.
 
 ## Project conventions
 
-Always use `AGENTS.md` for agent instructions; do not create `CLAUDE.md` files or
-compatibility shims. Keep human-facing overviews in `README.md`. 
+Put agent instructions in `AGENTS.md` and human-facing overviews in `README.md`;
+Claude Code and Codex both read `AGENTS.md` directly.
 
-All our work lives in `~/best/`. It is a container, not a repository.
-Give projects and coherent note
-collections their own repositories and remotes; keep lifecycle and topic folders
-as ordinary directories. Folder names use lowercase words separated by dashes.
-Before creating or moving anything, read the destination's `AGENTS.md` and
+All our work lives in `~/best/`, a plain folder of independent repositories. Give
+projects and coherent note collections their own repositories and remotes; keep
+lifecycle and topic folders as ordinary directories. Folder names use lowercase
+words separated by dashes. Before creating or moving anything, read the
+destination's `AGENTS.md` and the
 [workspace procedures](/Users/alejo/best/dotfiles/agents/workflows.md#creating-or-moving-projects).
-
-Only the `80k` shared group is currently approved. Select it explicitly for relevant
-private employer repositories with `~/best/dotfiles/bin/agent-context adopt`;
-do not add other shared groups without asking. Never infer membership from parent folders. The startup hook reads shared sources without changing project files.
-Keep project-essential rules in its own AGENTS.md; private shared sources and
-selections live in `~/.local/share/agent-context/private/`.
+Employer context (the `80k` group) loads only for repositories selected with
+`~/best/dotfiles/bin/agent-context adopt`; the procedures cover when to select it.
 
 Keep `DECISIONS.md` as a selective record of current decisions that future work
 should not accidentally undo. Put grouped core decisions first, with linked reasons
@@ -108,14 +103,12 @@ Try existing sessions, saved logins, and credentials available through the brows
 or terminal. Collect any remaining steps that require my involvement and ask me
 upfront, specifying the action needed. Continue independent work while waiting.
 
-Don't use Orca to create tabs, terminals or worktrees for sub-agents unless asked.
-Prefer native browser and computer-use tools over Orca control. When rendering
-Markdown in Orca, read the
+Use native browser and computer-use tools rather than Orca control, and create Orca
+tabs, terminals or worktrees for sub-agents only when asked. When rendering Markdown
+in Orca, read the
 [Markdown rules](/Users/alejo/best/dotfiles/agents/workflows.md#orca-markdown).
 
-Create custom skills in `~/best/dotfiles/skills/` by default so Claude Code and
-Codex share one maintained source. Put private skills in the independent
-`~/best/dotfiles/private-skills/skills/` repository. Use client-specific directories
-only when a skill requires that client. Run dotfiles' `bin/install.sh` after adding
-a skill. Before declaring a skill unavailable, search these shared sources,
-`~/best/dotfiles/{claude,codex}/skills`, and `~/{.agents,.claude,.codex}/skills`.
+Create custom skills in `~/best/dotfiles/skills/` so Claude Code and Codex share one
+source, or in the private `~/best/dotfiles/private-skills/` checkout, then run
+dotfiles' `bin/install.sh`. The [dotfiles README](/Users/alejo/best/dotfiles/README.md)
+covers client-specific exceptions and install locations.
