@@ -118,8 +118,7 @@ reader has to decipher (`34263de`).
 
 ### 2026-09-20
 
-Push after every commit and report push failures so the latest committed work is
-available on GitHub (`e29ffa5`).
+Push after every commit (`17cac76`).
 
 Add decisions worth preserving to a dated log, then consolidate it into the current
 decisions when substantial changes accumulate (`5006a88`). Clear incorporated
