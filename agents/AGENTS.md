@@ -47,6 +47,12 @@ an open-ended question, I've noticed these style guidelines are useful:
    what would change your recommendation. Where estimates are unavailable, identify
    what to measure.
 
+Prefer wording that makes the meaning immediately apparent over compact, abstract
+labels. Don’t make the reader unpack abstract nouns to understand what you mean.
+State the underlying action, relationship, or consequence directly, even if that
+takes a few more words. Keep established technical terms when they make the
+explanation clearer.
+
 Lastly, be even more attentive to these rules in instruction files and READMEs. They'll
 be read many more times than anything else in a project, so they should be simple,
 unambiguous, and something we're confident in.
