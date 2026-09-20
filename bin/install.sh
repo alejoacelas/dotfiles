@@ -44,7 +44,7 @@ real_dir() {  # real_dir <absolute path>; replace an old whole-directory link sa
 
 prune_stale_dotfiles_skill_links() {  # prune_stale_dotfiles_skill_links <registry>
   local root="$1" skill target
-  [ -d "$root" ] || return
+  [ -d "$root" ] || return 0
   for skill in "$root"/*; do
     [ -L "$skill" ] || continue
     target="$(readlink "$skill")"
@@ -64,10 +64,10 @@ link agents/AGENTS.md   "$HOME/.claude/CLAUDE.md"
 # Keep the personal skills directory real. Standard skill installers place their own
 # entries here; tracked dotfiles skills join them as per-skill links.
 real_dir "$HOME/.claude/skills"
-for skill in "$DOTFILES"/claude/skills/*; do
+for skill in "$DOTFILES"/claude/skills/* "$DOTFILES"/private-skills/claude/skills/*; do
   [ -e "$skill" ] || continue
   name="$(basename "$skill")"
-  link "claude/skills/$name" "$HOME/.claude/skills/$name"
+  link "${skill#"$DOTFILES"/}" "$HOME/.claude/skills/$name"
 done
 prune_stale_dotfiles_skill_links "$HOME/.claude/skills"
 for skill in "$HOME"/.claude/skills/*; do
@@ -85,11 +85,11 @@ link codex/rules        "$HOME/.codex/rules"
 # runtimes such as Orca. Shared skills can be symlinked into codex/skills from
 # claude/skills; that entry is the explicit compatibility decision.
 real_dir "$HOME/.agents/skills"
-for skill in "$DOTFILES"/codex/skills/*; do
+for skill in "$DOTFILES"/codex/skills/* "$DOTFILES"/private-skills/codex/skills/*; do
   [ -e "$skill" ] || continue
   name="$(basename "$skill")"
-  link "codex/skills/$name" "$HOME/.agents/skills/$name"
-  link "codex/skills/$name" "$HOME/.codex/skills/$name"
+  link "${skill#"$DOTFILES"/}" "$HOME/.agents/skills/$name"
+  link "${skill#"$DOTFILES"/}" "$HOME/.codex/skills/$name"
 done
 prune_stale_dotfiles_skill_links "$HOME/.agents/skills"
 prune_stale_dotfiles_skill_links "$HOME/.codex/skills"

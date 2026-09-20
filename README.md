@@ -68,6 +68,20 @@ live independently under `~/best/archive/`. Session records live in
 Repository tests live in `tests/`; skill-specific tests travel with their skill
 in its own `tests/` directory.
 
+## Private skills
+
+Private skill sources live in an optional, independent repository. To install them:
+
+```sh
+gh repo clone alejoacelas/private-skills ~/best/dotfiles/private-skills
+~/best/dotfiles/bin/install.sh
+```
+
+`private-skills/` is Git-ignored here and retains its own history and private remote.
+The installer also reads its `claude/skills/` and `codex/skills/` compatibility lists.
+Public-only installations work without that checkout. Make private-skill changes
+and commits inside it; the parent repository tracks installation code only.
+
 ## Common maintenance
 
 ```sh

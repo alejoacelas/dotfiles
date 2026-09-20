@@ -66,6 +66,30 @@ class SkillInstallationTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn('dangling symlink', result.stdout)
 
+    def test_private_compatibility_lists_are_optional_and_checked(self):
+        result = self.check()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.skill('best/dotfiles/private-skills/claude/skills', 'private-only')
+        self.skill('.claude/skills', 'private-only')
+        self.skill('best/dotfiles/private-skills/codex/skills', 'private-shared')
+        self.skill('.agents/skills', 'private-shared')
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn('~/.codex/skills: missing tracked skill private-shared', result.stdout)
+        self.assertNotIn('UNMANAGED', result.stdout)
+        self.skill('.codex/skills', 'private-shared')
+        result = self.check()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn('DRIFT', result.stdout)
+
+    def test_public_and_private_name_collision_is_reported(self):
+        self.skill('best/dotfiles/claude/skills', 'same')
+        self.skill('best/dotfiles/private-skills/claude/skills', 'same')
+        self.skill('.claude/skills', 'same')
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn('duplicate source for tracked skill same', result.stdout)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -6,6 +6,40 @@ import unittest
 
 
 class InstallTests(unittest.TestCase):
+    def test_optional_private_skills_install_for_selected_clients(self):
+        source = Path(__file__).resolve().parents[1] / 'bin/install.sh'
+        phase = source.read_text().split('# The app owns config.toml;')[0]
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            repo = root / 'dotfiles'
+            (repo / 'bin').mkdir(parents=True)
+            (repo / 'agents').mkdir()
+            (repo / 'agents/AGENTS.md').write_text('Instructions')
+            (repo / 'codex/rules').mkdir(parents=True)
+            (repo / 'codex/hooks.json').write_text('{}')
+            script = repo / 'bin/install.sh'
+            script.write_text(phase.replace('$HOME', '$TEST_HOME'))
+            home = root / 'home'
+            env = dict(os.environ, TEST_HOME=str(home))
+            result = subprocess.run(['bash', str(script)], env=env, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            private = repo / 'private-skills'
+            for name in ('shared', 'claude-only'):
+                skill = private / 'claude/skills' / name
+                skill.mkdir(parents=True)
+                (skill / 'SKILL.md').write_text(name)
+            (private / 'codex/skills').mkdir(parents=True)
+            (private / 'codex/skills/shared').symlink_to('../../claude/skills/shared')
+            for _ in range(2):
+                result = subprocess.run(['bash', str(script)], env=env, capture_output=True, text=True)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                for client in ('.claude', '.agents', '.codex'):
+                    self.assertEqual((home / client / 'skills/shared').resolve(),
+                                     private / 'claude/skills/shared')
+                self.assertTrue((home / '.claude/skills/claude-only').is_symlink())
+                self.assertFalse((home / '.codex/skills/claude-only').exists())
+                self.assertFalse((home / '.agents/skills/claude-only').exists())
+
     def test_prunes_retired_skills_before_checking_external_links(self):
         source = Path(__file__).resolve().parents[1] / 'bin/install.sh'
         # Run the actual Claude installation phase in an isolated directory.

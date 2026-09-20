@@ -16,6 +16,8 @@ DOTFILES = os.path.join(BEST, "dotfiles")
 CLAUDE_SKILLS = os.path.join(HOME, ".claude/skills")
 TRACKED_CLAUDE_SKILLS = os.path.join(DOTFILES, "claude/skills")
 TRACKED_CODEX_SKILLS = os.path.join(DOTFILES, "codex/skills")
+PRIVATE_CLAUDE_SKILLS = os.path.join(DOTFILES, "private-skills/claude/skills")
+PRIVATE_CODEX_SKILLS = os.path.join(DOTFILES, "private-skills/codex/skills")
 CODEX_SKILL_ROOTS = [
     os.path.join(HOME, ".agents/skills"),
     os.path.join(HOME, ".codex/skills"),
@@ -78,16 +80,20 @@ def list_skills(*roots):
 
 
 def check_skills():
-    targets = [(TRACKED_CLAUDE_SKILLS, CLAUDE_SKILLS)]
-    targets.extend((TRACKED_CODEX_SKILLS, root) for root in CODEX_SKILL_ROOTS)
+    targets = [((TRACKED_CLAUDE_SKILLS, PRIVATE_CLAUDE_SKILLS), CLAUDE_SKILLS)]
+    targets.extend(((TRACKED_CODEX_SKILLS, PRIVATE_CODEX_SKILLS), root)
+                   for root in CODEX_SKILL_ROOTS)
     for source, root in targets:
-        tracked = list_skills(source)
+        tracked = list_skills(*source)
         installed = list_skills(root)
+        for name, paths in tracked.items():
+            if len(paths) > 1:
+                hard.append((root, f"duplicate source for tracked skill {name}"))
         for name in sorted(set(tracked) - set(installed)):
             hard.append((root, f"missing tracked skill {name}"))
         for name in sorted(set(tracked) & set(installed)):
             if digest(tracked[name][0]) != digest(installed[name][0]):
-                drift.append((root, f"{name}: installed SKILL.md differs from {source}"))
+                drift.append((root, f"{name}: installed SKILL.md differs from {tracked[name][0]}"))
         for name in sorted(set(installed) - set(tracked)):
             unmanaged.append((root, name))
 
@@ -100,6 +106,8 @@ def main():
         check_dangling(root)
     check_dangling(TRACKED_CLAUDE_SKILLS)
     check_dangling(TRACKED_CODEX_SKILLS)
+    check_dangling(PRIVATE_CLAUDE_SKILLS)
+    check_dangling(PRIVATE_CODEX_SKILLS)
     check_instruction_pairs()
     check_skills()
 
