@@ -96,7 +96,7 @@ do not add other shared groups without asking. Never infer membership from paren
 Keep project-essential rules in its own AGENTS.md; private shared sources and
 selections live in `~/.local/share/agent-context/private/`.
 
-Keep `REPLICATE.md` as a selective record of current decisions that future work
+Keep `DECISIONS.md` as a selective record of current decisions that future work
 should not accidentally undo. Put grouped core decisions first, with linked reasons
 and consequential exceptions below. Update it when decisions change; prune obsolete
 details instead of appending session logs. Follow the

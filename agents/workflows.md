@@ -18,7 +18,7 @@ Read only the section relevant to the task.
 
 ## Decision records
 
-Use `REPLICATE.md` to prevent important decisions from being accidentally undone.
+Use `DECISIONS.md` to prevent important decisions from being accidentally undone.
 Select choices that answer a real recurring tension or a costly mistake supported
 by the project and its history. Group choices that protect the same outcome. Expand
 each with the current rule, its reason and only the exceptions that affect future
