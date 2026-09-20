@@ -24,10 +24,10 @@ Apply the relevant rules within the requested scope:
    instructions that run in the background or have accumulated multiple purposes.
    Suggest removing them, narrowing their purpose, or replacing them with an
    explicit action.
-6. **Propose guards against recurrence.** For findings that would come back
-   without intervention, propose the smallest durable fix. One sentence in the
-   folder's `AGENTS.md`, or in the skill that produced the clutter, is often
-   enough; a very simple check is sometimes worth it.
+6. **Propose guards against recurrence.** When you see a good opportunity,
+   propose the smallest durable fix for a finding that would otherwise come back.
+   One sentence in the folder's `AGENTS.md`, or in the skill that produced the
+   clutter, is often enough.
 
 All changes require the user's approval, either upfront for a defined scope or
 after reviewing concrete suggestions. Where approval is needed, present numbered
