@@ -15,7 +15,7 @@
 
 ### Make instructions worth rereading
 
-- [Write project rules in AGENTS.md and explanations in README.md](#give-instructions-one-home); add a Claude import only after checking the installed client's need.
+- [Write project rules in AGENTS.md and explanations in README.md](#give-instructions-one-home); preserve distinct content when retiring Claude instruction files.
 - [Keep current decisions rather than accumulating session reports](#record-choices-that-future-work-must-preserve), and express their meaning directly.
 
 ## Details
@@ -90,9 +90,9 @@ Installing dotfiles must not modify those repositories. See `173f3fa` and `10eab
 
 AGENTS.md holds behavior and workflow rules; README.md explains the project to a
 human. Do not duplicate those rules in CLAUDE.md. Preserve distinct content such as
-call indexes, and check [client compatibility requirements](AGENTS.md)
-before adding an import shim. Native loading made many former shims redundant;
-compatibility must follow the installed client, not an old setup recipe.
+call indexes. The [current global rule](agents/AGENTS.md#project-conventions) forbids
+new CLAUDE.md files and compatibility shims. Native loading made the former imports
+redundant; do not restore an old setup recipe.
 
 ### Record choices that future work must preserve
 
