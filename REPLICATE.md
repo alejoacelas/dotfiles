@@ -458,3 +458,13 @@ Alejo wanted external skills consolidated in dotfiles, a simple locally maintain
 - Skill consolidation awaits a storage choice because the existing history contains private material and dotfiles is public. Preserved pending source edits in their original repository; no private content was imported.
 
 Agent session 01a0bec4-1bed-7f62-8fe6-3ae698666938 · Commits 0a9a1fb
+
+## Install optional private skills
+
+Alejo chose an independent private skill repository inside the ignored `private-skills/` folder.
+
+- Extended installation and compatibility checks to its optional client lists; public-only checkouts remain usable. Private content and history stay outside this repository.
+- Preserved existing skill history and restored global links. All 26 tests passed, including absent-private-source and repeat-installation cases. Fixed the installer's failure when pruning an absent registry.
+- Simplify-projects wording remains a proposal, revised to leave implementation choices to model judgment.
+
+Agent session 01a0bec4-1bed-7f62-8fe6-3ae698666938 · Commits 06378da, 4bd4cb9
