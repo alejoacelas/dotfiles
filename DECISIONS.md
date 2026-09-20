@@ -113,3 +113,13 @@ and approved this filename (`a9183b9`). The [format](agents/workflows.md#decisio
 is authoritative. The [writing instructions](agents/AGENTS.md#write-things-i-want-to-read)
 likewise favor concrete actions and consequences over abstract labels that the
 reader has to decipher (`34263de`).
+
+## Decision log
+
+### 2026-09-20
+
+Add decisions worth preserving to a dated log, then consolidate it into the current
+decisions when substantial changes accumulate (`5006a88`). Clear incorporated
+entries and merge or remove redundant and superseded content so the record grows
+only for distinct decisions or necessary reasons. Leave “substantial changes” to
+agent judgment rather than prescribing a threshold.
