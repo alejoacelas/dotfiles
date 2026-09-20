@@ -97,6 +97,11 @@ metadata-only follow-up commit. Follow the
 
 ## Tools
 
+At the start of project execution, check access to the services the work will need.
+Try existing sessions, saved logins, and credentials available through the browser
+or terminal. Collect any remaining steps that require my involvement and ask me
+upfront, specifying the action needed. Continue independent work while waiting.
+
 Don't use Orca to create tabs, terminals or worktrees for sub-agents unless asked.
 Prefer native browser and computer-use tools over Orca control. When rendering
 Markdown in Orca, read the
