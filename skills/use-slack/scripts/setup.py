@@ -22,8 +22,15 @@ DEFAULT_USER_AGENT = (
 WORKSPACES = ("80000hours", "ai-uplift")
 
 
+def clean_pasted_value(value: str) -> str:
+    value = value.strip()
+    if len(value) >= 2 and value[0] in "\"'`" and value[-1] == value[0]:
+        value = value[1:-1].strip()
+    return value
+
+
 def read_secret(label: str, prefix: str) -> str:
-    value = getpass.getpass(f"{label} (hidden): ").strip()
+    value = clean_pasted_value(getpass.getpass(f"{label} (hidden): "))
     if not value.startswith(prefix):
         raise SystemExit(f"Expected a value beginning with {prefix}")
     return value
@@ -60,7 +67,7 @@ def main() -> None:
 
     xoxc = read_secret("xoxc token", "xoxc-")
     xoxd = read_secret("xoxd cookie", "xoxd-")
-    user_agent = input("Chrome user agent [use default]: ").strip() or DEFAULT_USER_AGENT
+    user_agent = clean_pasted_value(input("Chrome user agent [use default]: ")) or DEFAULT_USER_AGENT
 
     config.setdefault("workspaces", {})[args.workspace] = {
         "xoxc_token": xoxc,
