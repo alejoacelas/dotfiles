@@ -7,13 +7,11 @@ Read only the section relevant to the task.
 - Follow [projects/AGENTS.md](/Users/alejo/best/projects/AGENTS.md) for starting,
   reviewing and organizing projects.
 - Read the destination's `AGENTS.md` before creating or moving anything there.
-- Only the `80k` shared group is approved. Select it for relevant private employer
-  work with `~/best/dotfiles/bin/agent-context adopt`; do not recreate other groups.
-  No group is automatic. Membership lives in `agents/projects.json` or the private
-  context repository, not project YAML. Update the selection when moving a project.
-  Startup and compaction read shared sources without rewriting project files.
-- Follow the folder's archive rules; Alejo decides them case by case. There is no
-  workspace-wide archive destination. Record moves with their old path and reason;
+- Select the `80k` shared group for relevant private employer work with
+  `~/best/dotfiles/bin/agent-context adopt`. Membership lives in
+  `agents/projects.json` or the private context repository. Update the selection
+  when moving a project.
+- Follow the folder's archive rules. Record moves with their old path and reason;
   preserve repository history and privacy.
 
 ## Decision records
