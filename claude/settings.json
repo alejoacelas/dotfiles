@@ -52,7 +52,10 @@
       "Bash(codex-companion cancel *)"
     ]
   },
-  "model": "claude-fable-5-1[1m]",
+  "skillOverrides": {
+    "anthropic-skills:summarise-granola": "off",
+    "summarise-granola": "off"
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -292,9 +295,5 @@
   "theme": "dark",
   "switchModelsOnFlag": true,
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true,
-  "skillOverrides": {
-    "anthropic-skills:summarise-granola": "off",
-    "summarise-granola": "off"
-  }
+  "agentPushNotifEnabled": true
 }
