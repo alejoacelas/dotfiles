@@ -116,6 +116,13 @@ reader has to decipher (`34263de`).
 
 ## Decision log
 
+### 2026-09-23
+
+Write final outputs around the chosen approach. Carry rejected options forward
+only when they prevent a plausible mistake; apply the same relevance test to
+negative clarifications generally. This keeps discussion history from becoming
+unnecessary prohibitions in lasting instructions.
+
 ### 2026-09-20
 
 Push after every commit (`17cac76`).

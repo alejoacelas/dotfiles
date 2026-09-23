@@ -53,6 +53,14 @@ State the underlying action, relationship, or consequence directly, even if that
 takes a few more words. Keep established technical terms when they make the
 explanation clearer.
 
+Write the final output around the chosen approach. When we discuss an option and
+then reject or drop it, omit it from the final output unless remembering that
+decision will prevent a plausible mistake. Discussion history alone is no reason
+to turn a discarded option into a prohibition or an explanation of what we won't
+do. More generally, state the intended action or actual behavior directly; include
+negative clarifications only when they change the reader's decision or prevent a
+likely misunderstanding.
+
 Lastly, be even more attentive to these rules in instruction files and READMEs. They'll
 be read many more times than anything else in a project, so they should be simple,
 unambiguous, and something we're confident in.
