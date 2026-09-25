@@ -1,7 +1,6 @@
 # Fun
 
-This folder is for projects aimed at exploration and fun. Let curiosity, learning,
-and enjoyment guide the scope; a small experiment can be a complete project.
+This folder is for projects aimed at exploration and fun.
 
 Start new projects directly here. Name them `YYYY-MM-project-name`, give each its
 own Git repository and remote, and state what it explores in its `AGENTS.md`.

@@ -46,7 +46,6 @@ and the [workspace source](/Users/alejo/best/dotfiles/workspace/).
 
 ### 2026-09-25
 
-Keep projects aimed at exploration and fun in `~/best/fun/`, with curiosity,
-learning, and enjoyment guiding their scope. New projects start directly in this
+Keep projects aimed at exploration and fun in `~/best/fun/`. New projects start directly in this
 folder and retain the independent repositories and archiving conventions used
 elsewhere. See [fun instructions](fun/AGENTS.md) and `0b96174`.
