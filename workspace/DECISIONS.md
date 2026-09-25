@@ -21,10 +21,6 @@ and topic folders organize them without becoming repositories themselves. See
 [workspace instructions](/Users/alejo/best/AGENTS.md) and the dotfiles reorganization
 commits `971fe1e` and `54fb63c`.
 
-Exception: `~/best/fun` is a repository ([alejoacelas/fun](https://github.com/alejoacelas/fun))
-for tooling its projects share, such as the `adb-phone` connection script. It
-ignores every subfolder, so projects keep their own repositories.
-
 ### Move projects with their history
 
 Read destination instructions before moving a project, preserve its repository and
@@ -53,7 +49,3 @@ and the [workspace source](/Users/alejo/best/dotfiles/workspace/).
 Keep projects aimed at exploration and fun in `~/best/fun/`. New projects start directly in this
 folder and retain the independent repositories and archiving conventions used
 elsewhere. See [fun instructions](fun/AGENTS.md) and `0b96174`.
-
-Make `~/best/fun` a repository that tracks only its top-level files, so shared
-phone-app tooling has history and a backup. Its subfolders stay independent
-project repositories.

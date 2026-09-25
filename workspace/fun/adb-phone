@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# adb-phone: make sure the Moto G35 is connected to adb (USB or wireless debugging).
+# Usage: adb-phone            -> connect and print the serial to use with `adb -s`
+#        adb-phone <adb args> -> connect, then run `adb -s <serial> <adb args>`
+set -euo pipefail
+PHONE_SERIAL="${PHONE_SERIAL:-ZE223HJXDZ}"   # ro.serialno; appears in USB serial and mDNS name
+WAIT_SECONDS="${WAIT_SECONDS:-10}"
+
+connected_serial() {
+  adb devices | awk -v s="$PHONE_SERIAL" 'NR>1 && $2=="device" && index($1,s) {print $1; exit}'
+}
+
+adb start-server >/dev/null 2>&1
+serial="$(connected_serial)"
+deadline=$((SECONDS + WAIT_SECONDS))
+while [[ -z "$serial" && $SECONDS -lt $deadline ]]; do
+  # mDNS line: adb-ZE223HJXDZ-xxxxxx  _adb-tls-connect._tcp  192.168.1.148:45811
+  target="$(adb mdns services | awk -v s="adb-$PHONE_SERIAL-" \
+    'index($1,s)==1 && $2=="_adb-tls-connect._tcp" {print $3; exit}')"
+  if [[ -n "$target" ]]; then
+    adb connect "$target" >/dev/null 2>&1 || true
+  fi
+  sleep 1
+  serial="$(connected_serial)"
+done
+
+if [[ -z "$serial" ]]; then
+  echo "Phone not found. On the phone: Settings > System > Developer options > Wireless debugging ON" >&2
+  echo "(it turns itself off when Wi-Fi drops or the phone joins a different access point)." >&2
+  exit 1
+fi
+
+if [[ $# -gt 0 ]]; then exec adb -s "$serial" "$@"; fi
+echo "$serial"
