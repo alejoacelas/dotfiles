@@ -119,8 +119,10 @@ Try existing sessions, saved logins, and credentials available through the brows
 or terminal. Collect any remaining steps that require my involvement and ask me
 upfront, specifying the action needed. Continue independent work while waiting.
 
-Use native browser and computer-use tools rather than Orca control, and create Orca
-tabs, terminals or worktrees for sub-agents only when asked. When rendering Markdown
+Use the `browser-use-cloud` skill as the default for AI browser interaction. Use
+native local browser or computer-use tools for localhost, desktop tabs, or features
+the cloud browser cannot access. Create Orca tabs, terminals or worktrees for
+sub-agents only when asked. When rendering Markdown
 in Orca, read the
 [Markdown rules](/Users/alejo/best/dotfiles/agents/workflows.md#orca-markdown).
 

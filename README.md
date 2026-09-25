@@ -105,6 +105,20 @@ Claude's settings-saving behavior can replace its symlink with a copy. The
 session-start relinking hook preserves that copy in this repo and restores the
 link, reporting when a commit is needed.
 
+[`browser-use-cloud`](skills/browser-use-cloud/SKILL.md) is the default AI browser
+workflow. `bin/bu-cloud` starts named v4 cloud browsers and controls them through
+Playwright. Its Python dependencies install on demand through `uv`.
+Run `bin/bu-cloud --help` for commands; stop sessions after use to end billing.
+Cookie sync requires the official [profile-use helper](https://docs.browser-use.com/cloud/guides/profile-sync)
+at `~/.local/bin/profile-use`. Profile IDs and login state are machine-local.
+
+`BROWSER_USE_API_KEY` lives in 1Password account `my.1password.com`, vault
+`Personal`, item `Browser-use`, field `BROWSER_USE_API_KEY`. The command retrieves
+it with `op` into ignored, owner-only `skills/browser-use-cloud/.env`.
+Local `profiles.json` maps personal/work aliases to cloud profile IDs; `.state/`
+holds connection details. Neither belongs in Git. Profiles copy Chrome cookies;
+passwords remain in 1Password and some sites require a fresh login.
+
 API keys live in 1Password and are retrieved into ignored, owner-only `.env` files.
 The commit guard detects common credential patterns.
 Maintenance rules are in [`AGENTS.md`](AGENTS.md).
