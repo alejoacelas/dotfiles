@@ -16,3 +16,5 @@ when work resumes.
 For Android apps, connect to the phone with `~/best/fun/adb-phone`. It prints the
 serial to pass to `adb -s`, or runs `adb` with any arguments you give it. If it
 can't find the phone, ask me to turn on Wireless debugging.
+The phone stays awake while charging (`svc power stayon true`), so plug it in
+for tests that run in the background.
