@@ -41,3 +41,12 @@ The installer backs up conflicting real files. Update the source and installer
 mapping instead of maintaining divergent installed copies. See the
 [dotfiles decisions](/Users/alejo/best/dotfiles/DECISIONS.md#version-projects-and-container-configuration-separately)
 and the [workspace source](/Users/alejo/best/dotfiles/workspace/).
+
+## Decision log
+
+### 2026-09-25
+
+Keep projects aimed at exploration and fun in `~/best/fun/`, with curiosity,
+learning, and enjoyment guiding their scope. New projects start directly in this
+folder and retain the independent repositories and archiving conventions used
+elsewhere. See [fun instructions](fun/AGENTS.md) and `0b96174`.
