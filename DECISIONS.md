@@ -116,6 +116,15 @@ reader has to decipher (`34263de`).
 
 ## Decision log
 
+### 2026-09-25
+
+Use Browser Use Cloud as the default AI browser control surface, with explicit
+personal/work profile selection and local tools for desktop-only access. Keep
+credentials in 1Password, profile mappings local, and stop cloud sessions after
+tasks to end billing and save login state. The shared
+[skill](skills/browser-use-cloud/SKILL.md) and v4 SDK command implement this for
+Claude Code and Codex (`e516c0d`).
+
 ### 2026-09-23
 
 Write final outputs around the chosen approach. Carry rejected options forward
