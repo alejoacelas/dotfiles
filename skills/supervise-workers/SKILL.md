@@ -20,8 +20,10 @@ worktree (add `.supervise/` to `.git/info/exclude`). The task file states:
 3. "When you finish or get blocked, write `.supervise/<slug>/report.md`: what you
    did, the evidence, and anything left or your question. Then stop."
 
-Launch the worker, wait for its prompt, and send only a pointer to the file. Claude
-workers distrust long pasted instructions, so never paste the task itself.
+Launch every worker with full permissions (the flags below, which match Orca's own
+defaults) so it never stalls on an approval prompt. Wait for its prompt, then send
+only a pointer to the file: Claude workers distrust long pasted instructions, so
+never paste the task itself.
 
 ```sh
 h=$(orca terminal create --worktree current --title "<slug>" --json \
