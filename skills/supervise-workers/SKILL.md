@@ -48,11 +48,19 @@ It returns when the worker's turn ends (`DONE`), it needs an answer (`WAITING`),
 its terminal closes (`GONE`), or the timeout passes (`TIMEOUT`), and prints the
 worker's last message.
 
-- Claude Code: run it in the background; you are re-invoked when it exits.
-- Codex: run it in the foreground with a tool timeout above the wait's, and repeat.
-  Never end your turn while any worker is unverified.
+- Claude Code: run it in the background; you are re-invoked when it exits. With
+  several workers, run one background wait per worker.
+- Codex: start a detached watcher per worker, then end your turn:
 
-With several workers, wait on them one after another.
+  ```sh
+  ~/.agents/skills/supervise-workers/watch-worker.sh "$h" "$since" <slug>
+  ```
+
+  When the wait ends, the watcher saves its output to `.supervise/<slug>/wait.out`
+  and types a "Watcher:" message into your terminal, which starts your next turn.
+  Messages that arrive while you are busy are queued. Start a new watcher whenever
+  you send a worker a follow-up, and end your turn only while every unverified
+  worker has a live watcher.
 
 ## Check
 
