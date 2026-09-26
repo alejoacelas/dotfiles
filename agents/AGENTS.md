@@ -119,11 +119,7 @@ Try existing sessions, saved logins, and credentials available through the brows
 or terminal. Collect any remaining steps that require my involvement and ask me
 upfront, specifying the action needed. Continue independent work while waiting.
 
-Use the `browser-use-cloud` skill as the default for AI browser interaction. Use
-native local browser or computer-use tools for localhost, desktop tabs, or features
-the cloud browser cannot access. Create Orca tabs, terminals or worktrees for
-sub-agents only when asked. When rendering Markdown
-in Orca, read the
+When rendering Markdown in Orca, read the
 [Markdown rules](/Users/alejo/best/dotfiles/agents/workflows.md#orca-markdown).
 
 Create custom skills in `~/best/dotfiles/skills/` so Claude Code and Codex share one
