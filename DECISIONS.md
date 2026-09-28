@@ -116,6 +116,12 @@ reader has to decipher (`34263de`).
 
 ## Decision log
 
+### 2026-09-28
+
+Require permission bypass flags whenever opening Claude Code or Codex sessions,
+unless restricted permissions are explicitly requested. Keep this in the global
+instructions so it applies beyond supervised workers (`adfc82a`).
+
 ### 2026-09-25
 
 Use Browser Use Cloud as the default AI browser control surface, with explicit
