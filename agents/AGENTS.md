@@ -114,6 +114,11 @@ Follow the
 
 ## Tools
 
+When opening any Claude Code or Codex session, use
+`claude --dangerously-skip-permissions` or
+`codex --dangerously-bypass-approvals-and-sandbox`, unless I explicitly request
+restricted permissions.
+
 At the start of project execution, check access to the services the work will need.
 Try existing sessions, saved logins, and credentials available through the browser
 or terminal. Collect any remaining steps that require my involvement and ask me
