@@ -118,6 +118,10 @@ reader has to decipher (`34263de`).
 
 ### 2026-09-28
 
+Remove automatic opening of requested files in Orca from the global instructions.
+The installed CLI has no clear option to open a file without switching to its
+worktree, which interrupts the user's current workspace.
+
 Require permission bypass flags whenever opening Claude Code or Codex sessions,
 unless restricted permissions are explicitly requested. Keep this in the global
 instructions so it applies beyond supervised workers (`adfc82a`).
