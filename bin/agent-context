@@ -287,19 +287,24 @@ def install():
         command = base_command + (' --client codex' if codex else ' --client claude')
         exclusion_state = claude_exclusions(data, target) if not codex else None
         hooks = data.setdefault('hooks', {})
+        handler = {'type': 'command', 'command': command, 'timeout': 30}
+        if codex:
+            handler['additionalContextLimit'] = 30000
+        position = None  # keep our hook where it was so installs don't reorder other tools' hooks
         for event, groups in list(hooks.items()):
             retained = []
             for group in groups:
+                if (event == 'SessionStart' and position is None and
+                        any('/bin/agent-context' in h.get('command', '') for h in group.get('hooks', []))):
+                    position = len(retained)
                 handlers = [h for h in group.get('hooks', []) if
                             'human_edit_hook.py' not in h.get('command', '') and
                             '/bin/agent-context' not in h.get('command', '')]
                 if handlers:
                     retained.append(dict(group, hooks=handlers))
             hooks[event] = retained
-        handler = {'type': 'command', 'command': command, 'timeout': 30}
-        if codex:
-            handler['additionalContextLimit'] = 30000
-        hooks.setdefault('SessionStart', []).append({'hooks': [handler]})
+        session = hooks.setdefault('SessionStart', [])
+        session.insert(len(session) if position is None else position, {'hooks': [handler]})
         text = json.dumps(data, indent=2) + '\n'
         if text != old:
             backup = STATE / 'config-backups' / (digest(str(target) + old) + '.json')
