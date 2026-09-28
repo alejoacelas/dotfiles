@@ -121,6 +121,10 @@ Try existing sessions, saved logins, and credentials available through the brows
 or terminal. Collect any remaining steps that require my involvement and ask me
 upfront, specifying the action needed. Continue independent work while waiting.
 
+When you create a file I specifically requested, open it for me with
+`cd "$(dirname <path>)" && orca file open <absolute-path>`. Orca picks the
+workspace from the current directory.
+
 When rendering Markdown in Orca, read the
 [Markdown rules](/Users/alejo/best/dotfiles/agents/workflows.md#orca-markdown).
 
