@@ -84,6 +84,10 @@ installer also supports its `claude/skills/` and `codex/skills/` exceptions.
 Public-only installations work without that checkout. Make private-skill changes
 and commits inside it; the parent repository tracks installation code only.
 
+`bin/adb-phone` connects the Android test phone and forwards any supplied `adb`
+arguments to it. Use `~/best/dotfiles/bin/adb-phone`; shared helpers live here rather
+than alongside projects.
+
 ## Common maintenance
 
 ```sh

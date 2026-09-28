@@ -15,3 +15,8 @@ into `~/best/fun/` when work resumes.
 
 - 2026-09-26: Moved `~/best/fun/2026-09-aguita-amarilla` to
   `~/best/fun/archive/2026-09-aguita-amarilla` at Alejo's request to archive it.
+
+- 2026-09-28: Moved `~/best/fun/2026-09-native-browser-control` to
+  `~/best/fun/archive/2026-09-native-browser-control` after importing its full Git
+  history into `~/best/fun/2026-09-agent-browser-rules/native-control/`. Keep this
+  checkout as a historical backup; the combined repository owns new work.

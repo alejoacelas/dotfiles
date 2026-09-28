@@ -13,7 +13,7 @@ Git history and privacy, record each move and its reason in the archive's
 `DECISIONS.md`, and update links and indexes. Move a project back out of its archive
 when work resumes.
 
-For Android apps, connect to the phone with `~/best/fun/adb-phone`. It prints the
+For Android apps, connect to the phone with `~/best/dotfiles/bin/adb-phone`. It prints the
 serial to pass to `adb -s`, or runs `adb` with any arguments you give it. If it
 can't find the phone, ask me to turn on Wireless debugging.
 The phone stays awake while charging (`svc power stayon true`), so plug it in
