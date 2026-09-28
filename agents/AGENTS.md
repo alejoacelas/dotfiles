@@ -1,8 +1,5 @@
 # Global agent instructions
 
-I'm persistently trying to delegate work at a higher level of abstraction to AI. Here
-are some ways you can help me with that.
-
 ## Write things I want to read
 
 Good writing helps me quickly understand your work. Here's an excerpt from Kelsey
