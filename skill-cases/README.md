@@ -13,3 +13,5 @@ This repository is public. Private evidence and wholly private cases belong in
 ## Cases
 
 - [Interface judgment](interface-judgment/case.md): retired skill; original context, draft and trials preserved privately.
+
+- [Save skill case](save-skill-case/case.md): captured for later revision; original instructions, implementation history and frozen draft preserved. Evaluation suggestions are unapproved.
