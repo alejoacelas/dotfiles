@@ -128,6 +128,13 @@ instructions so it applies beyond supervised workers (`adfc82a`).
 
 ### 2026-09-29
 
+Keep the concise prepare-to-share version as a candidate until the user reviews
+its generated work. Compare versions using fresh agent contexts, identical project
+snapshots and tasks, and preserve unedited outputs with their inputs and review
+links ([first trials](skills/prepare-to-share/evaluations/2026-09-29/README.md),
+`1c5f387`, `f2e1916`). Wording that reads better is not sufficient evidence to
+replace the active skill.
+
 Keep prepare-to-share focused on helping peers decide whether to adopt a project
 and complete setup from their own starting point. Choose document structure by
 reader responsibilities; treat audience profiles as assumptions to refine, not
