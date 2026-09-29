@@ -9,14 +9,14 @@
     "a": {
       "label": "full",
       "repository": "alejoacelas/dotfiles",
-      "commit": "1c5f387",
+      "commit": "1c5f387e3f1e2e69301f5c19b0d4a2087c6f1785",
       "path": "skills/prepare-to-share/SKILL.md",
       "words": 1384
     },
     "b": {
       "label": "concise",
       "repository": "alejoacelas/dotfiles",
-      "commit": "1c5f387",
+      "commit": "1c5f387e3f1e2e69301f5c19b0d4a2087c6f1785",
       "path": "skills/prepare-to-share/versions/concise.md",
       "words": 538
     }
