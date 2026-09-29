@@ -109,8 +109,10 @@ Claude's settings-saving behavior can replace its symlink with a copy. The
 session-start relinking hook preserves that copy in this repo and restores the
 link, reporting when a commit is needed.
 
-[`browser-use-cloud`](skills/browser-use-cloud/SKILL.md) is the default AI browser
-workflow. `bin/bu-cloud` starts named v4 cloud browsers and controls them through
+The [`browser-use-cloud` skill](skills/browser-use-cloud/DISABLED.md) is temporarily
+disabled: its entrypoint is named `DISABLED.md`, so agents do not discover it as a
+skill. Rename it to `SKILL.md` to restore it. The supporting `bin/bu-cloud` command
+remains available; it starts named v4 cloud browsers and controls them through
 Playwright. Its Python dependencies install on demand through `uv`.
 Run `bin/bu-cloud --help` for commands; stop sessions after use to end billing.
 Cookie sync requires the official [profile-use helper](https://docs.browser-use.com/cloud/guides/profile-sync)
