@@ -12,4 +12,4 @@ This repository is public. Private evidence and wholly private cases belong in
 
 ## Cases
 
-No cases captured here yet.
+- [Interface judgment](interface-judgment/case.md): retired skill; original context, draft and trials preserved privately.
