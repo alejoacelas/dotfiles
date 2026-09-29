@@ -11,7 +11,7 @@ Make the idea cheap to capture and possible to resume without the original conve
 
 Start from what the user points to and their reason for saving it. Give a short provisional suggestion for what the skill would teach and what observable choices the user could grade. Save the available evidence immediately; refine these suggestions as you recover the relevant context.
 
-Use an existing case collection when available. Otherwise create `skill-cases/<short-name>/` in the current repository if its visibility is appropriate, and link it from `skill-cases/README.md`. Keep private evidence in a private repository. Save a proposed skill inside the case, separate from installed skills, until the user chooses to adopt it.
+Save cases in `~/best/dotfiles/skill-cases/<short-name>/` and add their idea, status and link to `~/best/dotfiles/skill-cases/README.md`. This is the shared collection regardless of the current project. Dotfiles is public: keep private evidence or wholly private cases in `~/best/dotfiles/private-skills/skill-cases/<short-name>/`; include only safe pointers in the public collection. Save a proposed skill inside the case, separate from installed skills, until the user chooses to adopt it.
 
 Use [the case record](references/case-record.md) to retain:
 

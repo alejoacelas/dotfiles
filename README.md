@@ -30,6 +30,7 @@ Employer context comes from a separate private clone at
 | `agents/workflows.md` | Workspace procedures linked from those instructions |
 | `claude/settings.json`, `claude/hooks/` | Claude settings and hooks |
 | `skills/` | Shared custom skills for Claude Code and Codex |
+| [`skill-cases/`](skill-cases/) | Saved cases, evidence and drafts for developing skills |
 | `claude/skills/`, `codex/skills/` | Client-specific exceptions |
 | `codex/hooks.json`, `codex/rules/` | Codex hooks and rules |
 | `codex/cli.config.toml` | CLI settings for `codex --profile cli` |
