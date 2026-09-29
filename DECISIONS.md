@@ -134,6 +134,9 @@ narrow first draft, observable grading questions and proposed evaluation cases.
 Run evaluations after user approval and propose generalization only with another
 independent case. The shared [save-skill-case skill](skills/save-skill-case/SKILL.md)
 implements this workflow (`823d304`).
+Save cases centrally in [skill-cases/](skill-cases/), regardless of the originating
+project. Keep private evidence in the private-skills checkout under `skill-cases/`
+(`e1516c9`, decided 2026-09-29).
 
 Keep the concise prepare-to-share version as a candidate until the user reviews
 its generated work. Compare versions using fresh agent contexts, identical project
