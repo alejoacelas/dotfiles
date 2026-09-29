@@ -1,0 +1,75 @@
+{
+  "date": "2026-09-29",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "medium",
+  "fresh_context": true,
+  "context_note": "Four fresh subagents (fork_turns=none), with the same shared environment instructions, no drafting conversation, and one supplied skill bundle each. Separate clones on the same machine; not OS-level sandboxes.",
+  "prompt_template": "Prepare this repository for peers to adopt, focusing on its README and setup documentation. Use the prepare-to-share skill at {bundle}/SKILL.md. Your checkout is {checkout}. Read its AGENTS.md and inspect the implementation as needed. Work only in this checkout and the supplied skill bundle; do not inspect other checkouts, conversation logs, or other skill installations. You may consult official external documentation. Make the documentation changes, verify claims and applicable setup steps as far as available access permits, and leave the changes uncommitted for review. Do not deploy, spend money, access private accounts/data, publish built artifacts, or change the license. If a choice requires the owner, record it and continue independent work. Do not launch other agents. When finished, write ../report.md with changed files, checks and their results, and any unresolved issues, then stop.",
+  "variants": {
+    "a": {
+      "label": "full",
+      "repository": "alejoacelas/dotfiles",
+      "commit": "1c5f387",
+      "path": "skills/prepare-to-share/SKILL.md",
+      "words": 1384
+    },
+    "b": {
+      "label": "concise",
+      "repository": "alejoacelas/dotfiles",
+      "commit": "1c5f387",
+      "path": "skills/prepare-to-share/versions/concise.md",
+      "words": 538
+    }
+  },
+  "bundle_note": "Both variants received the same audiences directory. The concise variant\u2019s audience link was changed from ../audiences/README.md to audiences/README.md to match its standalone bundle. No other skill text changed.",
+  "runs": [
+    {
+      "id": "morning-a",
+      "repository": "alejoacelas/2026-09-morning-reader",
+      "base_commit": "d5f83458bfc708d08433f457113fb5384b623390",
+      "variant": "a",
+      "result_commit": "84de5c5448dda14efd344a594e31d95add3b9743",
+      "branch": "docs/share-a-2026-09-29",
+      "skill_bundle_sha256": "ed511cb55132a61f9425530f4a4bad6f560439e55fc91f72037ca9ce6d0fc827",
+      "report": "morning-a-report.md"
+    },
+    {
+      "id": "morning-b",
+      "repository": "alejoacelas/2026-09-morning-reader",
+      "base_commit": "d5f83458bfc708d08433f457113fb5384b623390",
+      "variant": "b",
+      "result_commit": "b46323645b06fd1fd0c91aca9afad2cd013fe9ec",
+      "branch": "docs/share-b-2026-09-29",
+      "skill_bundle_sha256": "68c461bc26c900611815992111c897ab48d30aa79afbd9d54911b15b0c65a731",
+      "report": "morning-b-report.md"
+    },
+    {
+      "id": "writing-a",
+      "repository": "alejoacelas/writing-checks",
+      "base_commit": "904f3f84a27b03cc112167e5950d69676d5d793b",
+      "variant": "a",
+      "result_commit": "2c5e0dbfaef20175ec98e79a273e40671af7d481",
+      "branch": "docs/share-a-2026-09-29",
+      "skill_bundle_sha256": "ed511cb55132a61f9425530f4a4bad6f560439e55fc91f72037ca9ce6d0fc827",
+      "report": "writing-a-report.md"
+    },
+    {
+      "id": "writing-b",
+      "repository": "alejoacelas/writing-checks",
+      "base_commit": "904f3f84a27b03cc112167e5950d69676d5d793b",
+      "variant": "b",
+      "result_commit": "c085425615c1b05e38bfb443e3fb9ad217080059",
+      "branch": "docs/share-b-2026-09-29",
+      "skill_bundle_sha256": "68c461bc26c900611815992111c897ab48d30aa79afbd9d54911b15b0c65a731",
+      "report": "writing-b-report.md"
+    }
+  ],
+  "audience_files_sha256": {
+    "README.md": "4fa61337ecec9436f66d253a39ae267c845ca0978d67492c07597ac443d7bcc6",
+    "ai-fluent-professional.md": "bbdb89f22e6470ea0c4b157ac022231747501ec94e82112cb9355edf734daaa9",
+    "decision-maker.md": "2741fa541b515c0c0fbee7d194fa56dddd70ee1e8588f59330ec947d76ae03a5",
+    "developer-peer.md": "e294778a450059f7ee8b4e6c4d0179647e626621f0fb45a2687f68aee97742a3",
+    "readers-agent.md": "09629f21abe54e35e024fe80e96fde64055ed624b0006432731de08fc4753f00",
+    "technical-operator.md": "a94095eb92c1b6452dafe84b1de6d2f6a5746aa7424d73b0a1b4107c0b9e7f46"
+  }
+}
