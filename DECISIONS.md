@@ -128,6 +128,13 @@ instructions so it applies beyond supervised workers (`adfc82a`).
 
 ### 2026-09-29
 
+Capture skill ideas as concrete cases before proposing a broader skill. Preserve
+pinned source states, transcripts, exact agent instructions and outputs; save a
+narrow first draft, observable grading questions and proposed evaluation cases.
+Run evaluations after user approval and propose generalization only with another
+independent case. The shared [save-skill-case skill](skills/save-skill-case/SKILL.md)
+implements this workflow (`823d304`).
+
 Keep the concise prepare-to-share version as a candidate until the user reviews
 its generated work. Compare versions using fresh agent contexts, identical project
 snapshots and tasks, and preserve unedited outputs with their inputs and review
