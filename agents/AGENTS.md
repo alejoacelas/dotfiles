@@ -70,7 +70,7 @@ deleting anything. Keep repositories public unless they contain credentials,
 employer (80,000 Hours) information, or others' non-public information.
 
 Keep API keys in 1Password and load them on demand with `op` into the project's
-ignored `.env`. Record in the README where each variable lives in 1Password
+ignored `.env`. Record in `AGENTS.md` where each variable lives in 1Password
 (account, vault, item, field) so the file can be rebuilt.
 
 I have a work Google identity (`alejandro.acelas-contractor@80000hours.org`) and a
