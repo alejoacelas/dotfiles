@@ -126,14 +126,13 @@ Require permission bypass flags whenever opening Claude Code or Codex sessions,
 unless restricted permissions are explicitly requested. Keep this in the global
 instructions so it applies beyond supervised workers (`adfc82a`).
 
-### 2026-09-25
+### 2026-09-29
 
-Use Browser Use Cloud as the default AI browser control surface, with explicit
-personal/work profile selection and local tools for desktop-only access. Keep
-credentials in 1Password, profile mappings local, and stop cloud sessions after
-tasks to end billing and save login state. The shared
-[skill](skills/browser-use-cloud/SKILL.md) and v4 SDK command implement this for
-Claude Code and Codex (`e516c0d`).
+Temporarily disable the Browser Use Cloud skill while exploring which browser
+instructions should apply only on remote computers. Its entrypoint is preserved
+as [DISABLED.md](skills/browser-use-cloud/DISABLED.md); supporting tools and local
+credentials remain in place (`2b1f192`). Browser Use Cloud is no longer the shared
+default browser instruction.
 
 ### 2026-09-23
 
