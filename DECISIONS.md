@@ -128,6 +128,13 @@ instructions so it applies beyond supervised workers (`adfc82a`).
 
 ### 2026-09-29
 
+Keep prepare-to-share focused on helping peers decide whether to adopt a project
+and complete setup from their own starting point. Choose document structure by
+reader responsibilities; treat audience profiles as assumptions to refine, not
+fixed requirements. The skill preserves these principles without imposing the
+source project’s server-specific layout ([skill](skills/prepare-to-share/SKILL.md),
+`7074aba`).
+
 Temporarily disable the Browser Use Cloud skill while exploring which browser
 instructions should apply only on remote computers. Its entrypoint is preserved
 as [DISABLED.md](skills/browser-use-cloud/DISABLED.md); supporting tools and local
