@@ -1,6 +1,6 @@
 # Case record
 
-Use this structure for `case.md`, omitting empty sections. Keep artifacts beside it. After collecting the current case and saving and presenting its first draft, add a short entry to `~/best/dotfiles/skill-cases/README.md` with the idea, status and link. The record should let another agent resume without repeating the original investigation.
+Use this structure for `case.md`, omitting empty sections. Keep every artifact inside the case folder, or cite it at a pinned commit. After collecting the current case and saving and presenting its first draft, add a short entry to `~/best/dotfiles/skill-cases/README.md` with the idea, status and link. The record should let another agent resume without repeating the original investigation.
 
 ## Idea and current state
 
@@ -37,7 +37,7 @@ For each candidate, record:
 
 ## Runs and review
 
-Use a separate folder for each run. Preserve the full skill bundle and supplied instructions, exact rendered prompt and command, model/settings, input snapshot, environment constraints, agent transcript, raw output and diff. Record completion or failure, checks actually performed, and any unverified behavior. Link published artifacts to immutable revisions when possible.
+Use `runs/<date>/<run>/` for each run and `runs/<date>/review/` for the manifest, page data and the user's `feedback.json`. Preserve the full skill bundle and supplied instructions, exact rendered prompt and command, model/settings, input snapshot, environment constraints, agent transcript, raw output and diff. Record completion or failure, checks actually performed, and any unverified behavior. Link published artifacts to immutable revisions when possible.
 
 Link each user judgment to its run, output revision and criterion version. Keep a corrected output separate from the original. Record subsequent draft changes and which feedback motivated them.
 

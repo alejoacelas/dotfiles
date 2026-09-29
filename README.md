@@ -84,6 +84,17 @@ installer also supports its `claude/skills/` and `codex/skills/` exceptions.
 Public-only installations work without that checkout. Make private-skill changes
 and commits inside it; the parent repository tracks installation code only.
 
+## Skill cases
+
+Saved skill cases, their trials and review feedback live in a separate private
+repository, checked out at `skill-cases/` and Git-ignored here:
+
+```sh
+gh repo clone alejoacelas/skill-cases ~/best/dotfiles/skill-cases
+```
+
+The [save-skill-case skill](skills/save-skill-case/SKILL.md) writes to it.
+
 `bin/adb-phone` connects the Android test phone and forwards any supplied `adb`
 arguments to it. Use `~/best/dotfiles/bin/adb-phone`; shared helpers live here rather
 than alongside projects.

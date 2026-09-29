@@ -7,3 +7,5 @@ codex/config.toml
 *.pyc
 # Independently versioned private skill sources.
 /private-skills/
+# Private skill cases, versioned independently (alejoacelas/skill-cases).
+/skill-cases/

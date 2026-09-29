@@ -136,12 +136,15 @@ synthesis (`9a6f4ae`).
 Capture skill ideas as concrete cases before proposing a broader skill. Preserve
 pinned source states, transcripts, exact agent instructions and outputs; save a
 narrow first draft, observable grading questions and proposed evaluation cases.
-Run evaluations after user approval and propose generalization only with another
-independent case. The shared [save-skill-case skill](skills/save-skill-case/SKILL.md)
+Run trials by default and save their outputs for the user's review; propose
+generalization only with another independent case. The shared [save-skill-case skill](skills/save-skill-case/SKILL.md)
 implements this workflow (`823d304`).
-Save cases centrally in [skill-cases/](skill-cases/), regardless of the originating
-project. Keep private evidence in the private-skills checkout under `skill-cases/`
-(`e1516c9`, decided 2026-09-29).
+Save every case as a self-contained folder in the private `alejoacelas/skill-cases`
+repository, checked out at `skill-cases/` and Git-ignored here, regardless of the
+originating project. Cases copy what they need or cite commit-pinned GitHub URLs,
+so they survive changes to the original project; the repository is private
+because cases hold transcripts and others' messages (decided 2026-09-29, replacing
+the public-index-plus-private-evidence split from `e1516c9`).
 
 Temporarily disable the Browser Use Cloud skill while exploring which browser
 instructions should apply only on remote computers. Its entrypoint is preserved
