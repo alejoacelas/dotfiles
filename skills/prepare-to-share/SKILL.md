@@ -11,7 +11,7 @@ Improve the documentation, not the project. Change code only where a documented 
 
 ## Know your readers
 
-Match the readers to the [audience profiles](/Users/alejo/best/dotfiles/agents/audiences/README.md). Each profile lists what that kind of reader already knows, so documents can skip it, and what needs explaining. Write only what falls outside what they know. When feedback shows a profile is wrong, update the profile as well as the document.
+Match the readers to the [audience profiles](audiences/README.md). Each profile lists what that kind of reader already knows, so documents can skip it, and what needs explaining. Write only what falls outside what they know. When feedback shows a profile is wrong, update the profile as well as the document.
 
 If the user names specific receivers, check what has already passed between you and them: their original request, messages and threads, document comments, and call notes. Keep a gitignored `receivers.local.md` at the repository root, with one section per person:
 
