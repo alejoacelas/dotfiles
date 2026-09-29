@@ -9,6 +9,19 @@ The readers are peers: people with the same need who could use the project thems
 
 Improve the documentation, not the project. Change code only where a documented claim would otherwise be false, or where a personal value needs to become a setting.
 
+## Know your readers
+
+Match the readers to the [audience profiles](/Users/alejo/best/dotfiles/agents/audiences/README.md). Each profile lists what that kind of reader already knows, so documents can skip it, and what needs explaining. Write only what falls outside what they know. When feedback shows a profile is wrong, update the profile as well as the document.
+
+If the user names specific receivers, check what has already passed between you and them: their original request, messages and threads, document comments, and call notes. Keep a gitignored `receivers.local.md` at the repository root, with one section per person:
+
+- Their audience profile.
+- What they asked for, with a link.
+- What they have been told or shown, with the date and a link.
+- Decisions they made, and questions still open.
+
+Record only exchanges you can point to, so later documents can rely on them: skip what they already know, and answer what they asked. Update the record after each new exchange.
+
 ## Remove what isn't yours to share
 
 Follow the global rule: share nothing about other people, organisations or clients that they haven't approved sharing. That includes names, internal links, message threads, and examples that reveal who the project was built for. Replace your own machine-specific details (local paths, personal tools, account and project IDs, password-manager items) with what a peer would use: standard tools, settings with defaults, and where to get their own keys and what they cost.
@@ -22,7 +35,7 @@ Old commits keep whatever the current files no longer show. When the history con
 These documents get read more than anything else in the project, so spend the effort. Draft, then cut.
 
 - Make each sentence say something the reader needs. Drop any sentence that only restates the one before it or explains what the reader already knows.
-- Assume the reader is competent and knows their tools. Explain what's specific to this project, not the basics.
+- Assume the reader is competent and knows their tools, as described in their audience profile. Explain what's specific to this project, not the basics.
 - Lead with the value, and give each audience what it needs first. The first screen should answer "why would I want this?"; mechanics come after.
 - Be direct and unambiguous. State each decision briefly with its reason. Write instructions as "If X, do Y", and state limits as explicit rules.
 - Replace vague phrases with concrete ones. If a reviewer could ask "what does this mean?", say the underlying fact instead.
