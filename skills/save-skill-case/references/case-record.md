@@ -1,6 +1,6 @@
 # Case record
 
-Use this structure for `case.md`, omitting empty sections. Keep artifacts beside it and add a short entry to `~/best/dotfiles/skill-cases/README.md` with the idea, status and link. The record should let another agent resume without repeating the original investigation.
+Use this structure for `case.md`, omitting empty sections. Keep artifacts beside it. After collecting the current case and saving and presenting its first draft, add a short entry to `~/best/dotfiles/skill-cases/README.md` with the idea, status and link. The record should let another agent resume without repeating the original investigation.
 
 ## Idea and current state
 

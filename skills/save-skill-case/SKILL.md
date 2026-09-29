@@ -7,6 +7,12 @@ description: Save a concrete piece of work as evidence for a future skill, prese
 
 Make the idea cheap to capture and possible to resume without the original conversation. Preserve the concrete case before trying to discover its general form. A first draft is a hypothesis; another independent case is needed before proposing a broader skill.
 
+## Keep the first draft independent
+
+Until you have finished collecting the current case and saved and presented its first skill draft, use only the current conversation and the source files, transcripts and examples relevant to the user's request. Do not read or search previous skill cases, their index, derived skill drafts, evaluation results or cross-case summaries. Scope searches to the current case's sources so earlier interpretations do not bias the draft. The blank case template is safe to read. When explicitly resuming a saved case, read that case, but defer other cases until this checkpoint.
+
+Defer updating the shared case index and searching for related cases until after presenting the first draft. Preserve that draft before incorporating anything learned from previous cases. If earlier case material is already in context, record that exposure rather than claiming the draft is independent.
+
 ## Capture the case
 
 Start from what the user points to and their reason for saving it. Give a short provisional suggestion for what the skill would teach and what observable choices the user could grade. Save the available evidence immediately; refine these suggestions as you recover the relevant context.
@@ -42,6 +48,6 @@ Save the exact rendered agent prompt, launch command, supplied instructions, ski
 
 ## Look for a broader skill afterward
 
-Once the case is durably saved and any approved trials are dispatched, you may look for other skill candidates in relevant existing records. Keep this search bounded and secondary to the capture. Look for shared decisions or recurring corrections, rather than shared subject matter or visual style.
+Once collection of the current case is complete, its first draft is saved and presented, and any approved trials are dispatched, you may look for other skill candidates in relevant existing records. Keep this search bounded and secondary to the capture. Look for shared decisions or recurring corrections, rather than shared subject matter or visual style.
 
 After finding at least one other independent case, suggest a common skill supported by both. Show the shared behavior, differences that must remain conditional, and what would test the proposed generalization. Record it as a proposal; preserve the original cases and drafts so the user can decide what to combine.
