@@ -12,4 +12,4 @@ This repository is public. Private evidence and wholly private cases belong in
 
 ## Cases
 
-- [Prepare repositories for sharing](prepare-to-share/case.md): README and setup judgment; full and concise drafts preserved, first trials complete, awaiting review.
+No cases captured here yet.

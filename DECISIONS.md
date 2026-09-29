@@ -128,12 +128,6 @@ instructions so it applies beyond supervised workers (`adfc82a`).
 
 ### 2026-09-29
 
-Keep prepare-to-share’s full and concise candidates uninstalled in
-`skill-cases/prepare-to-share/` while restarting skill drafting from the original
-case. Preserve trial outputs and keep employer-derived conversation evidence in
-private-skills. The fresh drafting conversation excludes the prior skill request
-and all later revisions ([case](skill-cases/prepare-to-share/case.md), `ac65e81`).
-
 Capture skill ideas as concrete cases before proposing a broader skill. Preserve
 pinned source states, transcripts, exact agent instructions and outputs; save a
 narrow first draft, observable grading questions and proposed evaluation cases.
@@ -143,20 +137,6 @@ implements this workflow (`823d304`).
 Save cases centrally in [skill-cases/](skill-cases/), regardless of the originating
 project. Keep private evidence in the private-skills checkout under `skill-cases/`
 (`e1516c9`, decided 2026-09-29).
-
-Keep the concise prepare-to-share version as a candidate until the user reviews
-its generated work. Compare versions using fresh agent contexts, identical project
-snapshots and tasks, and preserve unedited outputs with their inputs and review
-links ([first trials](skill-cases/prepare-to-share/evaluations/2026-09-29/README.md),
-`1c5f387`, `f2e1916`). Wording that reads better is not sufficient evidence to
-replace the active skill.
-
-Keep prepare-to-share focused on helping peers decide whether to adopt a project
-and complete setup from their own starting point. Choose document structure by
-reader responsibilities; treat audience profiles as assumptions to refine, not
-fixed requirements. The skill preserves these principles without imposing the
-source project’s server-specific layout ([skill](skill-cases/prepare-to-share/draft/SKILL.md),
-`7074aba`).
 
 Temporarily disable the Browser Use Cloud skill while exploring which browser
 instructions should apply only on remote computers. Its entrypoint is preserved
