@@ -15,3 +15,5 @@ This repository is public. Private evidence and wholly private cases belong in
 - [Interface judgment](interface-judgment/case.md): retired skill; original context, draft and trials preserved privately.
 
 - [Save skill case](save-skill-case/case.md): captured for later revision; original instructions, implementation history and frozen draft preserved. Evaluation suggestions are unapproved.
+
+- Repo sharing docs: a skill for preparing a repository's README and setup docs for peers. Draft v1 and blind trials against no skill on three repositories await review. The case is private (`private-skills/skill-cases/repo-sharing-docs/`).
