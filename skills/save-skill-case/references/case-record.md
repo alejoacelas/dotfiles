@@ -5,7 +5,7 @@ Use this structure for `case.md`, omitting empty sections. Keep artifacts beside
 ## Idea and current state
 
 - User's description and what they want to reuse.
-- Current state: captured, draft ready, awaiting trial approval, running, awaiting review, or reviewed.
+- Current state: captured, draft ready, running, awaiting review, or reviewed.
 - Next decision, unresolved questions and known missing evidence.
 
 ## Evidence
@@ -33,7 +33,7 @@ For each candidate, record:
 - Proposed task and why the case is informative; whether it informed the draft.
 - Skill versions to compare and required environment or services.
 - Expected output, review location and relevant cost or access limits.
-- Approval status and the user's exact approval or adjustments when given.
+- Run status, and the user's exact adjustments when given.
 
 ## Runs and review
 
