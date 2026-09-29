@@ -17,3 +17,5 @@ This repository is public. Private evidence and wholly private cases belong in
 - [Save skill case](save-skill-case/case.md): captured for later revision; original instructions, implementation history and frozen draft preserved. Evaluation suggestions are unapproved.
 
 - Repo sharing docs: a skill for preparing a repository's README and setup docs for peers. Draft v1 and blind trials against no skill on three repositories await review. The case is private (`private-skills/skill-cases/repo-sharing-docs/`).
+
+- Client setup handover: a skill for turning a piloted setup into a handover package (owner overview, setup steps, user guide, agent file) for client organisations of 10–50 people. Draft v1 and one trial against no skill await review. The case is private (`private-skills/skill-cases/client-setup-handover/`).
