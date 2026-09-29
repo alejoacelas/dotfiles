@@ -128,6 +128,11 @@ instructions so it applies beyond supervised workers (`adfc82a`).
 
 ### 2026-09-29
 
+Keep a new skill case’s first draft independent of prior cases: finish collecting
+the current evidence and save and present its draft before reading the case index,
+previous drafts or trial results. Preserve the initial draft before cross-case
+synthesis (`9a6f4ae`).
+
 Capture skill ideas as concrete cases before proposing a broader skill. Preserve
 pinned source states, transcripts, exact agent instructions and outputs; save a
 narrow first draft, observable grading questions and proposed evaluation cases.
