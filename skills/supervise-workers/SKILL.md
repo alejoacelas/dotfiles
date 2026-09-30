@@ -62,6 +62,14 @@ worker's last message.
   you send a worker a follow-up, and end your turn only while every unverified
   worker has a live watcher.
 
+  Track the handle of any extra Orca terminal you open for a watch command,
+  separately from the worker and supervisor handles. Once that terminal's watch
+  command has finished and its output is saved, close it with
+  `orca terminal close --terminal "$watch_terminal"`. Clean up these terminals
+  after failures and cancellations too; before finishing, verify that none remain
+  open. Close only terminals you opened for watching, not the supervisor or a
+  worker whose result still needs checking.
+
 ## Check
 
 1. `DONE`: read the report and verify the evidence yourself. Accept, or move the
