@@ -1,6 +1,7 @@
 ---
 name: native-mockups
-description: Show a visual problem as a picture of the surface where it happens — a Google Doc, WordPress page, Slack message, email, editor, web app, macOS app or terminal — with Before, Expected and Observed panels rendered from HTML/CSS. Use when explaining or reporting a rendering, formatting or layout bug; when confirming what a UI should look like before building it; or before claiming that output on a visual surface came out right.
+description: Render native-looking Before, Expected and Observed panels from HTML/CSS. Use only when the user explicitly invokes native-mockups by name.
+disable-model-invocation: true
 ---
 # Native mockups
 
@@ -10,6 +11,9 @@ Markdown links" and "bold preserved" both described pages the user found broken
 at a glance.
 
 ## When to draw
+
+Activate only when the user explicitly invokes `native-mockups` by name. The
+following cases guide the work after invocation; they are not automatic triggers.
 
 1. **Explaining a visual bug.** Draw Before, Expected and Observed.
 2. **Before building UI from a verbal request.** Draw Expected, and Current when
