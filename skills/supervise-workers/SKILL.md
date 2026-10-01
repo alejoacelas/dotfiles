@@ -1,9 +1,13 @@
 ---
 name: supervise-workers
-description: Delegate tasks to long-running Claude Code or Codex workers in Orca terminals and supervise them until each result is verified done. Use when you own a process and hand parts of it to other agents — "delegate this to workers", "spawn a claude/codex worker", "fan out", "hand this off and make sure it gets done", "supervise the workers".
+description: Launch and supervise separate Claude Code or Codex worker sessions in Orca terminals. Use when the task calls for separate worker sessions, workers in separate worktrees, or agents from a different family (such as Claude from Codex). Ordinary in-session subagents, generic delegation or parallelism, and worktree management alone do not trigger this skill.
 ---
 
 # Supervise workers
+
+Use this workflow once separate workers are called for. For ordinary in-session
+subagents, use the host's native delegation tools. A request to "fan out" or
+"delegate" alone does not require separate terminal sessions.
 
 You own the outcome. Workers do the work in Orca terminals; you decide when it is
 done by checking evidence yourself. A worker saying "done" is not evidence, and a
