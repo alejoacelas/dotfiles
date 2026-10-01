@@ -171,6 +171,11 @@ agent judgment rather than prescribing a threshold.
 
 ### 2026-10-01
 
+Use `supervise-workers` when separate worker sessions, workers in separate
+worktrees, or agents from another family are called for. Ordinary in-session
+subagents and generic delegation do not trigger the terminal supervision workflow
+(`b7ccca0`).
+
 Make `native-mockups` explicit-only at the user’s request. Visual tasks alone
 should not activate it; preserve the invocation controls for both clients
 (`4e6c2ab`).
