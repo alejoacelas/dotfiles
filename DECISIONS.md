@@ -168,3 +168,9 @@ decisions when substantial changes accumulate (`5006a88`). Clear incorporated
 entries and merge or remove redundant and superseded content so the record grows
 only for distinct decisions or necessary reasons. Leave “substantial changes” to
 agent judgment rather than prescribing a threshold.
+
+### 2026-10-01
+
+Make `native-mockups` explicit-only at the user’s request. Visual tasks alone
+should not activate it; preserve the invocation controls for both clients
+(`4e6c2ab`).
