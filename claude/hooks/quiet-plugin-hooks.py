@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Drop the startup status lines the codex and hive plugins print.
+"""Drop the startup status line the codex plugin prints.
 
-Both plugins emit a `systemMessage` from their SessionStart hook every session
-("codex: available", "hive: run /hive:align for setup recommendations"). The
-hooks also do work worth keeping — codex puts `codex-companion` on PATH and
-injects its help text, hive registers the transcript dir for retrieval — so the
-hooks stay and only their `systemMessage` is filtered out.
+The plugin emits a `systemMessage` ("codex: available") from its SessionStart
+hook every session. The hook also does work worth keeping — it puts
+`codex-companion` on PATH and injects its help text — so the hook stays and
+only its `systemMessage` is filtered out.
 
 Claude Code loads hooks.json at session start, so a patch applies from the next
 session on. Plugin updates install a fresh hooks.json; this re-applies then.
@@ -16,7 +15,7 @@ import pathlib
 import sys
 
 FILTER = " | jq -c 'del(.systemMessage) | select(length > 0)'"
-PLUGINS = ("codex@codex-plugin-cc", "hive@alignment-hive")
+PLUGINS = ("codex@codex-plugin-cc",)
 
 installed = pathlib.Path.home() / ".claude/plugins/installed_plugins.json"
 try:

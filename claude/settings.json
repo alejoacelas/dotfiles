@@ -237,8 +237,6 @@
   "enabledPlugins": {
     "vercel@claude-plugins-official": false,
     "codex@codex-plugin-cc": false,
-    "hive@alignment-hive": true,
-    "model-router-aarch64-apple-darwin@alignment-hive": true,
     "llms-fetch-mcp@alignment-hive": true,
     "warp@claude-code-warp": false
   },
