@@ -237,7 +237,6 @@
   "enabledPlugins": {
     "vercel@claude-plugins-official": false,
     "codex@codex-plugin-cc": false,
-    "llms-fetch-mcp@alignment-hive": true,
     "warp@claude-code-warp": false
   },
   "extraKnownMarketplaces": {
