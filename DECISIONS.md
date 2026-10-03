@@ -179,3 +179,12 @@ subagents and generic delegation do not trigger the terminal supervision workflo
 Make `native-mockups` explicit-only at the user’s request. Visual tasks alone
 should not activate it; preserve the invocation controls for both clients
 (`4e6c2ab`).
+
+### 2026-10-03
+
+Use separate read-only service accounts and vaults (`mac-agents`, `server-agents`)
+in personal 1Password for unattended credential access. Keep bootstrap tokens in
+`Personal` and owner-only machine files, outside the agent vaults. Use `op-agent`
+so ordinary `op` retains interactive access to other accounts and vaults.
+Credential access authorizes authentication within the task, not additional actions
+([implementation](https://github.com/alejoacelas/dotfiles/commit/f8f4da3)).
