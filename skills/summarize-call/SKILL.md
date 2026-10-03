@@ -118,10 +118,9 @@ GDOC_ACCOUNT=<email> "$GDOC_PY" "$CALL_SKILL/scripts/rename_tab.py" <id> t.0 "Su
 Post the doc URL (`.../document/d/<id>/edit`) in the reply as soon as it
 exists, before continuing.
 
-Keep the doc private to Alejo: never share it with anyone, and check that
-creating it didn't share it automatically. Alejo shares it himself after
-reading it. To make that one step for him, find the other participant's email
-in this order, stopping at the first hit:
+Keep the doc private until Alejo approves sharing it, and check that creating
+it didn't share it automatically. Find the other participant's email in this
+order, stopping at the first hit:
 
 1. The calendar event for the call — its attendees' emails. Check the 80k
    calendar first, then the personal one (`gog` picks the right OAuth client
@@ -137,8 +136,15 @@ in this order, stopping at the first hit:
 If `gog` reports no auth for a service, the Google Calendar / Gmail MCP
 connectors (80k account) are the fallback.
 
-Give that email in the reply next to the doc link. If neither source yields
-one, say so — never guess an address.
+When the doc is finished (after Step 9), ask Alejo whether to share it with
+that email as a writer, and share it only if he says yes:
+
+```bash
+gdoc --account <email> share <id> <participant-email> --role writer
+```
+
+If neither source yields an email, say so and ask for the address — never
+guess one. (Mirror docs are shared, never emailed.)
 
 Two tabs, **Summary** then **Transcript** — the Docs API supports tabs now, so
 no more two-section single body. Pass `--account <email>` to every `gdoc` call
