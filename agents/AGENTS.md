@@ -73,6 +73,15 @@ Keep API keys in 1Password and load them on demand with `op` into the project's
 ignored `.env`. Record in `AGENTS.md` where each variable lives in 1Password
 (account, vault, item, field) so the file can be rebuilt.
 
+For personal credentials approved for agent access, use
+`~/best/dotfiles/bin/op-agent` on the Mac (`~/.local/bin/op-agent` on the server).
+It authenticates without prompts to `mac-agents` or `server-agents` in the
+personal 1Password account. Use `op-agent run` with secret references to inject
+credentials into a command, or `op-agent inject` for an ignored `.env`.
+Authenticate for authorized tasks without asking again; never print, commit,
+or disclose secret values. Existing action-specific approval rules still apply.
+Use ordinary `op --account ...` for items outside these vaults.
+
 I have a work Google identity (`alejandro.acelas-contractor@80000hours.org`) and a
 personal one (`alejoacelas@gmail.com`), with matching `gcloud` configurations and
 `FLY_80K_TOKEN` / `FLY_PERSONAL_TOKEN`. Pick the identity from the project's context

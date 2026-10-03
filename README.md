@@ -139,3 +139,11 @@ passwords remain in 1Password and some sites require a fresh login.
 API keys live in 1Password and are retrieved into ignored, owner-only `.env` files.
 The commit guard detects common credential patterns.
 Maintenance rules are in [`AGENTS.md`](AGENTS.md).
+
+## Unattended personal credentials
+
+`bin/op-agent` loads this machine’s service-account token and forwards arguments
+to `op`. The Mac account can read only `mac-agents`; the server account can read
+only `server-agents`. Use `bin/op-agent run --env-file .env.tpl -- your-command`
+with references to the appropriate agent vault. Ordinary `op` retains its existing
+interactive authentication. Token recovery is documented in `AGENTS.md`.

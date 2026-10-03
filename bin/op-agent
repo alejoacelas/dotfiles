@@ -1,0 +1,19 @@
+#!/bin/sh
+# Authenticate with this machine's dedicated personal 1Password service account.
+set -eu
+set +x
+case "$(uname -s)" in
+  Darwin) credentials="$HOME/.config/mac-agents/.env" ;;
+  Linux) credentials="$HOME/.config/agent-server/op.env" ;;
+  *) echo 'op-agent: unsupported operating system' >&2; exit 1 ;;
+esac
+if [ ! -r "$credentials" ]; then
+  echo "op-agent: missing credentials file: $credentials" >&2
+  exit 1
+fi
+unset OP_SERVICE_ACCOUNT_TOKEN OP_CONNECT_HOST OP_CONNECT_TOKEN
+set -a
+. "$credentials"
+set +a
+: "${OP_SERVICE_ACCOUNT_TOKEN:?Missing service-account token}"
+exec op "$@"

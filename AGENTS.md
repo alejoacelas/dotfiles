@@ -1,5 +1,11 @@
 # Dotfiles
 
+`bin/op-agent` loads the Mac’s `OP_SERVICE_ACCOUNT_TOKEN` from
+`~/.config/mac-agents/.env` (directory 700, file 600). Its recovery reference is
+1Password account `my.1password.com`, vault `Personal`, item
+`1Password service account mac-agents`, field `credential`. The service account
+has read-only access to `mac-agents`. Keep this bootstrap token outside that vault.
+
 Read README.md for installation and ownership. The only approved shared group is
 80k; keep its instructions in the separately cloned private source.
 
