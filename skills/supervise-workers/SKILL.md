@@ -53,9 +53,9 @@ Workers that edit code in parallel each get their own worktree
 ### Warp
 
 ```sh
-id=$(warp-agent new --group <project> --dir "$PWD" --name <slug> --model <id> \
+id=$(warp-agent new --agent claude --group <project> --dir "$PWD" --name <slug> --model <id> \
        "Do the task in .supervise/<slug>/task.md")
-# Codex: add --agent codex --agent-args "--profile cli -c model_reasoning_effort=<level>"
+# Codex: --agent codex --agent-args "--profile cli -c model_reasoning_effort=<level>"
 ```
 
 `warp-agent` skips approvals by default, accepts the folder-trust prompt for the
