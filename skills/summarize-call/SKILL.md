@@ -216,7 +216,7 @@ summary is edited or renamed:
    gdoc --account <email> write <id> /tmp/sum-doc.md --tab Summary
    gdoc --account <email> write <id> <trans.md>      --tab Transcript
    ```
-2. Add a bullet to the person's folder `CLAUDE.md` (create it on the first call):
+2. Add a bullet to the person's folder `AGENTS.md` (create it on the first call):
    `**<date> · <slug>**` + a `[gdoc]` link (`.../document/d/<id>/edit`, by ID so a
    rename can't break it) + a one-or-two-sentence gist, newest first.
 3. Update the person's `NOTES.md` (create it on the first call): add a
