@@ -1,0 +1,3 @@
+# Warp custom keybindings (linked from ~/.warp/keybindings.yaml; Warp reads it at startup).
+# warp-agent sends this chord to put the active tab in a new tab group.
+"workspace:new_tab_group_from_active_or_selected_tabs": ctrl-alt-cmd-g
