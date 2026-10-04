@@ -1,0 +1,40 @@
+# One prompt, two independent interactive agents in the selected directory.
+# Quoted heredocs preserve quotes, dollar signs, and backticks in the prompt.
+name = "Codex + Claude"
+title = "Codex + Claude"
+color = "cyan"
+
+[[panes]]
+id = "agents"
+split = "horizontal"
+children = ["codex", "claude"]
+
+[[panes]]
+id = "codex"
+type = "terminal"
+shell = "zsh"
+directory = "{{project}}"
+is_focused = true
+commands = ['''codex --dangerously-bypass-approvals-and-sandbox --profile cli -- "$(cat <<'WARP_PROMPT_END_8a93d729'
+{{prompt}}
+WARP_PROMPT_END_8a93d729
+)"''']
+
+[[panes]]
+id = "claude"
+type = "terminal"
+shell = "zsh"
+directory = "{{project}}"
+commands = ['''claude --dangerously-skip-permissions -- "$(cat <<'WARP_PROMPT_END_8a93d729'
+{{prompt}}
+WARP_PROMPT_END_8a93d729
+)"''']
+
+[params.project]
+type = "text"
+description = "Project folder (both agents share this directory)"
+default = "~/best/fun"
+
+[params.prompt]
+type = "text"
+description = "Prompt to send to both Codex and Claude"

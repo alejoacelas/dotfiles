@@ -101,6 +101,12 @@ link shell/zprofile       "$HOME/.zprofile"
 link git/gitconfig        "$HOME/.gitconfig"
 link claude/settings.json "$HOME/.claude/settings.json"
 
+# Keep Warp presets tracked while preserving other locally created configs.
+for config in "$DOTFILES"/warp/tab_configs/*.toml; do
+  [ -e "$config" ] || continue
+  link "${config#"$DOTFILES"/}" "$HOME/.warp/tab_configs/$(basename "$config")"
+done
+
 # Enable the repo's tracked git hooks (the secret-scan pre-commit guard).
 git -C "$DOTFILES" config core.hooksPath hooks
 

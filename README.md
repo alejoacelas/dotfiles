@@ -34,6 +34,7 @@ Employer context comes from a separate private clone at
 | `codex/hooks.json`, `codex/rules/` | Codex hooks and rules |
 | `codex/cli.config.toml` | CLI settings for `codex --profile cli` |
 | `shell/zprofile`, `git/gitconfig`, `Brewfile` | Shell, Git and Homebrew configuration |
+| `warp/tab_configs/` | Warp tab presets |
 | `workspace/` | Live configuration for ordinary folders under `~/best/` |
 
 `workspace/` mirrors `~/best/`: for example, `workspace/tools/AGENTS.md` supplies
@@ -147,3 +148,15 @@ to `op`. The Mac account can read only `mac-agents`; the server account can read
 only `server-agents`. Use `bin/op-agent run --env-file .env.tpl -- your-command`
 with references to the appropriate agent vault. Ordinary `op` retains its existing
 interactive authentication. Token recovery is documented in `AGENTS.md`.
+
+## Warp agent panes
+
+Choose **Codex + Claude** from Warp’s new-tab menu. Enter a project folder and
+one prompt to start Codex on the left and Claude Code on the right. Both run
+interactively with full permissions in the same directory; use this for parallel
+analysis, or give each agent separate work before letting both edit files.
+Codex uses the existing `cli` profile.
+
+The preset is `warp/tab_configs/codex_claude.toml`. Prompt text is passed through
+a quoted heredoc so ordinary quotes, dollar signs, and backticks stay literal;
+do not include a line containing only `WARP_PROMPT_END_8a93d729`.
