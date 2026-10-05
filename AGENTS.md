@@ -3,8 +3,12 @@
 `bin/op-agent` loads the Mac’s `OP_SERVICE_ACCOUNT_TOKEN` from
 `~/.config/mac-agents/.env` (directory 700, file 600). Its recovery reference is
 1Password account `my.1password.com`, vault `Personal`, item
-`1Password service account mac-agents`, field `credential`. The service account
-has read-only access to `mac-agents`. Keep this bootstrap token outside that vault.
+`1Password service account mac-agents (read-write)`, field `credential`. The service
+account `mac-agents-rw` can read and write `mac-agents`. The server's token in
+`~/.config/agent-server/op.env` is recovered from item
+`1Password service account agent-server (read-write)`; its service account
+`server-agents-rw` can read and write `server-agents`. Keep these bootstrap tokens
+outside the agent vaults.
 
 Read README.md for installation and ownership. The only approved shared group is
 80k; keep its instructions in the separately cloned private source.

@@ -144,8 +144,8 @@ Maintenance rules are in [`AGENTS.md`](AGENTS.md).
 ## Unattended personal credentials
 
 `bin/op-agent` loads this machine’s service-account token and forwards arguments
-to `op`. The Mac account can read only `mac-agents`; the server account can read
-only `server-agents`. Use `bin/op-agent run --env-file .env.tpl -- your-command`
+to `op`. The Mac account can read and write only `mac-agents`; the server account
+can read and write only `server-agents`. Use `bin/op-agent run --env-file .env.tpl -- your-command`
 with references to the appropriate agent vault. Ordinary `op` retains its existing
 interactive authentication. Token recovery is documented in `AGENTS.md`.
 
