@@ -3,16 +3,11 @@
   "projects": {},
   "local_only": [
     "~/best/AGENTS.md",
-    "~/best/tools/AGENTS.md",
-    "~/best/tools/active/twitter/AGENTS.md",
+    "~/best/inbox/AGENTS.md",
     "~/best/projects/AGENTS.md",
-    "~/best/fun/AGENTS.md",
+    "~/best/projects/in-use/twitter/AGENTS.md",
     "~/best/writing/AGENTS.md",
-    "~/best/life/AGENTS.md",
     "~/best/dotfiles/AGENTS.md",
-    "~/best/work/80k/AGENTS.md",
-    "~/best/work/80k/tools/AGENTS.md",
-    "~/best/work/80k/scouting/AGENTS.md",
     "~/best/me/health/AGENTS.md",
     "~/best/me/relationships/people/AGENTS.md"
   ]

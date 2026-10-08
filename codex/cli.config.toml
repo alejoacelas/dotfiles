@@ -65,10 +65,10 @@ screen_reader_detection_done = true
 gpt-6-astra = 4
 "gpt-6.1-sol" = 4
 
-[projects."/Users/alejo/best/projects/live/2026-09-advising-workspace"]
+[projects."/Users/alejo/best/archive/2026-10-80k-work/projects/2026-09-advising-workspace"]
 trust_level = "trusted"
 
 [hooks.state]
 
-[hooks.state."/Users/alejo/best/work/80k/errands/10-06-minerva/.codex/hooks.json:session_start:0:0"]
+[hooks.state."/Users/alejo/best/archive/2026-10-80k-work/errands/10-06-minerva/.codex/hooks.json:session_start:0:0"]
 trusted_hash = "sha256:cedeb4c632523c4d301d6612688ce5a7b95a669fe70728ae75b81a59ed4d0bb5"

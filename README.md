@@ -37,8 +37,8 @@ Employer context comes from a separate private clone at
 | `warp/tab_configs/` | Warp tab presets |
 | `workspace/` | Live configuration for ordinary folders under `~/best/` |
 
-`workspace/` mirrors `~/best/`: for example, `workspace/tools/AGENTS.md` supplies
-`~/best/tools/AGENTS.md` through a symlink. Individual repositories keep their own
+`workspace/` mirrors `~/best/`: for example, `workspace/projects/AGENTS.md` supplies
+`~/best/projects/AGENTS.md` through a symlink. Individual repositories keep their own
 instructions; this tree manages ordinary container folders.
 
 Create custom skills in `skills/<name>/SKILL.md`, then run `bin/install.sh`.
@@ -99,6 +99,10 @@ The [save-skill-case skill](skills/save-skill-case/SKILL.md) writes to it.
 `bin/adb-phone` connects the Android test phone and forwards any supplied `adb`
 arguments to it. Use `~/best/dotfiles/bin/adb-phone`; shared helpers live here rather
 than alongside projects.
+
+`proj <folder>/<name> [--claude|--codex]` creates or reopens a dated project in
+`~/best` (plain `<name>` means `projects/`) and starts an agent there. The
+[today skill](skills/today/SKILL.md) reviews the workspace and says where new work goes.
 
 ## Common maintenance
 

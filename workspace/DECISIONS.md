@@ -7,11 +7,28 @@
 - [Keep best and topic folders as ordinary directories](#keep-containers-out-of-git), with separate repositories for projects and coherent note collections.
 - [Preserve history and privacy when moving work](#move-projects-with-their-history); parking a project does not reactivate it or authorize publication.
 
+### Name folders by who the work is for
+
+- [File work by client, purpose or kind of output](#file-work-by-who-it-is-for), with `inbox/` for anything unclear.
+
 ### Keep shared configuration in one place
 
 - [Maintain container instructions in dotfiles](#maintain-container-instructions-in-dotfiles), adding them only where the folder needs shared rules.
 
 ## Details
+
+### File work by who it is for
+
+Status folders (`live/`, `active/`, `stable/`) and loose topics made every new
+project start with a guess about how important or finished it would be, so client
+work and tool trials ended up scattered across four folders each. The top level
+now answers who the work is for: `clients/<company>/` for client projects, linked
+to `calls/clients/<company>/`; `projects/` for Alejo's own work, with `in-use/`
+for tools he relies on; `trials/` for structured tool tests in one public
+repository; `inbox/` when the home is unclear. `proj` creates projects and the
+`today` skill files stale ones. 80k and AIM work moved to `archive/` as those
+engagements ended. See [projects instructions](projects/AGENTS.md) and
+[clients instructions](clients/AGENTS.md).
 
 ### Keep containers out of Git
 
@@ -44,8 +61,9 @@ and the [workspace source](/Users/alejo/best/dotfiles/workspace/).
 
 ## Decision log
 
-### 2026-09-25
+### 2026-10-08
 
-Keep projects aimed at exploration and fun in `~/best/fun/`. New projects start directly in this
-folder and retain the independent repositories and archiving conventions used
-elsewhere. See [fun instructions](fun/AGENTS.md) and `0b96174`.
+Replace `tools/`, `fun/`, `life/`, `work/` and `projects/live/` with `inbox/`,
+`clients/`, `projects/in-use/`, `trials/` and top-level `strategy/`. Moves are
+recorded in [archive decisions](/Users/alejo/best/archive/DECISIONS.md) and
+[others archive decisions](/Users/alejo/best/projects/others/archive/DECISIONS.md).

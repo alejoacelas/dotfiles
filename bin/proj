@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# proj: create or reopen a dated project folder in ~/best and start an agent there.
+# Usage: proj <name> [--claude|--codex]
+#   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-morning-notes
+#   proj clients/impact-ops/status-tracker --codex -> ~/best/clients/impact-ops/YYYY-MM-status-tracker
+#   proj inbox/odd-idea                          -> create only, print the path
+# An existing folder whose name ends in -<name> is reopened instead of created.
+set -euo pipefail
+
+usage() { sed -n '2,7s/^# \{0,1\}//p' "$0" >&2; exit 2; }
+
+agent="" name=""
+for arg in "$@"; do
+  case "$arg" in
+    --claude) agent=claude ;;
+    --codex) agent=codex ;;
+    -h|--help) usage ;;
+    -*) echo "proj: unknown option $arg" >&2; usage ;;
+    *) [ -z "$name" ] || usage; name="$arg" ;;
+  esac
+done
+[ -n "$name" ] || usage
+
+best="$HOME/best"
+case "$name" in
+  */*) parent="$best/${name%/*}"; slug="${name##*/}" ;;
+  *) parent="$best/projects"; slug="$name" ;;
+esac
+slug="$(printf '%s' "$slug" | tr '[:upper:] _' '[:lower:]--' | tr -cd 'a-z0-9-')"
+[ -n "$slug" ] || { echo "proj: name must contain letters or digits" >&2; exit 2; }
+
+existing="$(find "$parent" -maxdepth 1 -type d -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-$slug" 2>/dev/null | sort | tail -1)"
+if [ -n "$existing" ]; then
+  dir="$existing"
+  echo "Reopening $dir"
+else
+  dir="$parent/$(date +%Y-%m)-$slug"
+  if [ -d "$parent/template" ] && git -C "$parent" rev-parse -q --is-inside-work-tree >/dev/null 2>&1; then
+    # A folder inside a repository with a template, such as trials/: copy it, no new repo.
+    cp -R "$parent/template" "$dir"
+    echo "Created $dir from template"
+  else
+    mkdir -p "$dir"
+    git -C "$dir" init -q -b main
+    cat > "$dir/AGENTS.md" <<EOF
+# $slug
+
+Scope: TODO
+
+- Visibility: TODO
+- Google account: TODO
+- Still running or billing: none
+EOF
+    echo "Created $dir"
+  fi
+fi
+
+cd "$dir"
+case "$agent" in
+  claude) exec claude --dangerously-skip-permissions ;;
+  codex) exec codex --profile cli --dangerously-bypass-approvals-and-sandbox ;;
+esac

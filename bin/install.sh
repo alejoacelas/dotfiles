@@ -113,18 +113,15 @@ git -C "$DOTFILES" config core.hooksPath hooks
 # Session-start context uses only the standard library in an isolated environment.
 uv venv --allow-existing "$HOME/.local/share/agent-context/venv"
 link bin/agent-context "$HOME/.local/bin/agent-context"
+link bin/proj "$HOME/.local/bin/proj"
 
 # Ordinary container configuration lives here; existing repositories keep their own files.
 BEST_ROOT="$HOME/best"
 mkdir -p "$BEST_ROOT"
 # Claude Code 2.1.277+ reads AGENTS.md natively; do not recreate project shims.
-for folder in me archive writing work/aim work/80k; do
+for folder in me archive writing inbox clients projects/in-use; do
   mkdir -p "$BEST_ROOT/$folder"
 done
-# Avoid changing temporary compatibility links or still-active parent repositories.
-if [ ! -e "$BEST_ROOT/tools" ] && [ ! -L "$BEST_ROOT/tools" ]; then
-  mkdir -p "$BEST_ROOT/tools/active" "$BEST_ROOT/tools/stable"
-fi
 while IFS= read -r source; do
   relative="${source#"$DOTFILES/workspace/"}"
   if [ "$relative" = projects/AGENTS.md ] && { [ -L "$BEST_ROOT/projects" ] || [ -e "$BEST_ROOT/projects/.git" ]; }; then
@@ -132,8 +129,8 @@ while IFS= read -r source; do
   fi
   link "workspace/$relative" "$BEST_ROOT/$relative"
 done < <(rg --files --hidden "$DOTFILES/workspace")
-if [ -d "$HOME/.local/share/agent-context/private/workspace/tools/.claude" ] && [ ! -e "$BEST_ROOT/tools/.claude" ]; then
-  ln -s "$HOME/.local/share/agent-context/private/workspace/tools/.claude" "$BEST_ROOT/tools/.claude"
+if [ -d "$HOME/.local/share/agent-context/private/workspace/tools/.claude" ] && [ ! -e "$BEST_ROOT/projects/in-use/.claude" ]; then
+  ln -s "$HOME/.local/share/agent-context/private/workspace/tools/.claude" "$BEST_ROOT/projects/in-use/.claude"
 fi
 # Personal/private sources are separate clones; no private files are copied into dotfiles.
 if [ -f "$HOME/.local/share/agent-context/private/archive/DECISIONS.md" ]; then

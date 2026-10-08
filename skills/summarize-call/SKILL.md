@@ -229,6 +229,12 @@ summary is edited or renamed:
    and fold any remote edits into the local file, then
    `gdoc --account <email> cat <id> > /dev/null && gdoc --account <email> write <id> NOTES.md`. Never recreate the
    doc — the link must stay stable.
+4. Link client calls to client projects. For a call filed under
+   `~/best/calls/clients/<company>/`, make sure `~/best/clients/<company>/calls`
+   is a symlink to that company folder, creating it if missing. If the call is
+   about project work for a company with no folder in `~/best/clients/`, ask
+   whether to create `~/best/clients/<company>/` with the symlink and a short
+   `AGENTS.md` naming the company and where its calls are.
 
 ## Batch runs
 

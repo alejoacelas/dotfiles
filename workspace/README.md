@@ -1,17 +1,17 @@
 # best
 
-My workspace, organized by the work and reference material I want to find.
-This folder is not a Git repository. Projects and coherent note collections own their repositories.
+My workspace. This folder is not a Git repository; projects and note collections
+own their repositories.
 
-- `dotfiles/` — shared instructions, hooks, skills and machine configuration.
-- `work/` — `80k/` employer work, `aim/` engagements and `strategy/` planning.
-- `tools/` — active and stable tools.
-- `projects/` — dated projects grouped by topic, each with a repository and remote.
+- `inbox/` — work I haven't filed yet.
+- `clients/` — client projects, one folder per company, linked to their calls.
+- `projects/` — my own projects; `in-use/` holds the ones I run.
+- `trials/` — tool trials, each ending in a one-page verdict.
+- `strategy/` — planning for the AI-uplift practice.
+- `calls/` — private call transcripts and summaries.
 - `writing/` — reusable explanations and reference material.
-- `me/` — personal material, relationships and people research, blog and website.
-- `calls/` — private call transcripts and related work.
-- `archive/` — retired work and workspace history; project groups also keep local archives.
+- `me/` — personal material, relationships, blog and website.
+- `archive/` — retired work, including 80k and AIM work (October 2026).
+- `dotfiles/` — shared instructions, hooks, skills and machine configuration.
 
-Lifecycle and topic folders are ordinary directories; their configuration lives in dotfiles.
-Original repository history and migration records are preserved under
-`~/.local/state/best-migration/`.
+Run `proj <name> --claude` to start a project, and `/today` at the start of a day.
