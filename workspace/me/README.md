@@ -1,6 +1,6 @@
 # Me
 
-- [Health](health/): food, meals, light, and physical and mental health research.
+- [Health](health/): food, meals, exercise, and bipolar II notes.
 - [Relationships](relationships/): people, meeting research and relationship projects.
 - [Admin](admin/): visas, paperwork and travel.
 - [Stuff](stuff/): purchase history and gear notes.
