@@ -66,4 +66,12 @@ and the [workspace source](/Users/alejo/best/dotfiles/workspace/).
 Replace `tools/`, `fun/`, `life/`, `work/` and `projects/live/` with `inbox/`,
 `clients/`, `projects/in-use/`, `trials/` and top-level `strategy/`. Moves are
 recorded in [archive decisions](/Users/alejo/best/archive/DECISIONS.md) and
-[others archive decisions](/Users/alejo/best/projects/others/archive/DECISIONS.md).
+[project archive decisions](/Users/alejo/best/projects/archive/DECISIONS.md).
+
+### 2026-10-10
+
+At Alejo's request, drop the topic folders in `projects/`. Active projects sit at
+the top as `YYYY-MM-DD-name`, dated to the day they were created; parked ones go
+to `projects/archive/`. `in-use/` keeps plain names, and `clients/`, `trials/` and
+`inbox/` keep `YYYY-MM-` prefixes. Moves are recorded in
+[project archive decisions](/Users/alejo/best/projects/archive/DECISIONS.md).

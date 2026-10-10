@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # proj: create or reopen a dated project folder in ~/best and start an agent there.
 # Usage: proj <name> [--claude|--codex]
-#   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-morning-notes
+#   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes
 #   proj clients/impact-ops/status-tracker --codex -> ~/best/clients/impact-ops/YYYY-MM-status-tracker
 #   proj inbox/odd-idea                          -> create only, print the path
 # An existing folder whose name ends in -<name> is reopened instead of created.
@@ -26,15 +26,19 @@ case "$name" in
   */*) parent="$best/${name%/*}"; slug="${name##*/}" ;;
   *) parent="$best/projects"; slug="$name" ;;
 esac
+# Own projects are dated to the day; clients, trials and inbox use the month.
+date_format=%Y-%m
+[ "$parent" = "$best/projects" ] && date_format=%Y-%m-%d
 slug="$(printf '%s' "$slug" | tr '[:upper:] _' '[:lower:]--' | tr -cd 'a-z0-9-')"
 [ -n "$slug" ] || { echo "proj: name must contain letters or digits" >&2; exit 2; }
 
-existing="$(find "$parent" -maxdepth 1 -type d -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-$slug" 2>/dev/null | sort | tail -1)"
+existing="$(find "$parent" -maxdepth 1 -type d \( -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-$slug" \
+  -o -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-$slug" \) 2>/dev/null | sort | tail -1)"
 if [ -n "$existing" ]; then
   dir="$existing"
   echo "Reopening $dir"
 else
-  dir="$parent/$(date +%Y-%m)-$slug"
+  dir="$parent/$(date +"$date_format")-$slug"
   if [ -d "$parent/template" ] && git -C "$parent" rev-parse -q --is-inside-work-tree >/dev/null 2>&1; then
     # A folder inside a repository with a template, such as trials/: copy it, no new repo.
     cp -R "$parent/template" "$dir"

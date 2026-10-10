@@ -16,9 +16,9 @@ description: Start-of-day review of ~/best, and where to put new work. Use when 
 3. Present one short list, most urgent first:
    - **Calls today:** who, when, and what was promised or left open last time.
    - **Unsaved work:** offer to commit and push.
-   - **To file:** for each stale inbox item or project, suggest its home: a
-     `projects/` topic, `projects/in-use/`, `clients/<company>/`, `trials/`, or
-     an archive.
+   - **To file:** for each stale inbox item or project, suggest its home:
+     `projects/`, `projects/in-use/`, `clients/<company>/`, `trials/`, or an
+     archive.
    - **Still running or billing:** ask whether each should keep running.
    - **Trials still running.**
 4. Change nothing until Alejo picks what to act on. Follow the destination's
@@ -34,7 +34,8 @@ Pick the home:
 - Unsure: `inbox/`.
 
 Create it with `proj <folder>/<name> [--claude|--codex]` (plain `<name>` means
-`projects/`). It adds the `YYYY-MM-` prefix, runs `git init` and writes an
+`projects/`). It adds a `YYYY-MM-DD-` prefix in `projects/` and `YYYY-MM-`
+elsewhere, runs `git init` and writes an
 `AGENTS.md` stub; inside `trials/` it copies the template instead. Fill in the
 stub:
 
