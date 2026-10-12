@@ -118,6 +118,15 @@ grow only when there are more distinct decisions or necessary reasons to preserv
 Follow the
 [decision-record format](/Users/alejo/best/dotfiles/agents/workflows.md#decision-records).
 
+## Model APIs
+
+For application and script model calls, use Anthropic directly: `claude-opus-5-5`
+by default, or `claude-haiku-5-5` for fast turnaround or jobs with more than 20
+parallel model calls. Personal projects should use the Claude Console organization
+linked to the personal plan's monthly API credits. Keep client and employer billing
+separate. Preserve specialized capabilities and project privacy requirements when
+choosing a replacement.
+
 ## Tools
 
 When opening any Claude Code or Codex session, use
