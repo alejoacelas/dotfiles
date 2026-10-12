@@ -188,3 +188,12 @@ in personal 1Password for unattended credential access. Keep bootstrap tokens in
 so ordinary `op` retains interactive access to other accounts and vaults.
 Credential access authorizes authentication within the task, not additional actions
 ([implementation](https://github.com/alejoacelas/dotfiles/commit/f8f4da3)).
+
+### 2026-10-12
+
+Application and script calls use direct Anthropic Opus 5.5 by default, with Haiku
+5.5 for fast turnaround or more than 20 parallel calls. Personal projects use the
+API organization linked to personal monthly credits; employer/client billing and
+project privacy requirements remain separate. The shared instruction is active in
+both clients through their existing symlinks
+([dd71371](https://github.com/alejoacelas/dotfiles/commit/dd71371)).
