@@ -3,7 +3,7 @@
 My workspace. This folder is not a Git repository; projects and note collections
 own their repositories.
 
-- `inbox/` — work I haven't filed yet.
+- `inbox/` — where I start sessions for loose work, plus anything not yet filed.
 - `clients/` — client projects, one folder per company, linked to their calls.
 - `projects/` — my own projects; `in-use/` holds the ones I run.
 - `trials/` — tool trials, each ending in a one-page verdict.
