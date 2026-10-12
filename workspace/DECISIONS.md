@@ -75,3 +75,10 @@ the top as `YYYY-MM-DD-name`, dated to the day they were created; parked ones go
 to `projects/archive/`. `in-use/` keeps plain names, and `clients/`, `trials/` and
 `inbox/` keep `YYYY-MM-` prefixes. Moves are recorded in
 [project archive decisions](/Users/alejo/best/projects/archive/DECISIONS.md).
+
+### 2026-10-12
+
+`inbox/` is the default place to start sessions for loose work that comes up
+during the day, and has no `AGENTS.md` of its own. Sessions do the work in the
+folder it belongs to; only output with no clear home stays in `inbox/`
+(`d26c85b`).
