@@ -80,7 +80,7 @@ personal 1Password account. Use `op-agent run` with secret references to inject
 credentials into a command, or `op-agent inject` for an ignored `.env`.
 Authenticate for authorized tasks without asking again; never print, commit,
 or disclose secret values. Existing action-specific approval rules still apply.
-Use ordinary `op --account ...` for items outside these vaults.
+Use ordinary `op --account my.1password.com` for items outside these vaults.
 
 I have a work Google identity (`alejandro.acelas-contractor@80000hours.org`) and a
 personal one (`alejoacelas@gmail.com`), with matching `gcloud` configurations and
