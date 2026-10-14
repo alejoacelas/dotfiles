@@ -19,7 +19,7 @@ DEFAULT_USER_AGENT = (
     "AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/143.0.0.0 Safari/537.36"
 )
-WORKSPACES = ("80000hours", "ai-uplift")
+WORKSPACES = ("80000hours", "ai-uplift", "impact-ops")
 
 
 def clean_pasted_value(value: str) -> str:

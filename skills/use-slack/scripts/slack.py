@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Minimal Slack web-session client for explicitly configured EA workspaces."""
+"""Minimal Slack web-session client for explicitly configured workspaces."""
 
 import json
 import sys
@@ -22,6 +22,11 @@ WORKSPACES = {
         "team_id": "T094GSSSF3M",
         "team": "AI Uplift for EA",
         "url": "https://ai-uplift.slack.com/",
+    },
+    "impact-ops": {
+        "team_id": "T04SC9TJYQ6",
+        "team": "Impact Ops",
+        "url": "https://impactopsworkspace.slack.com/",
     },
 }
 

@@ -1,12 +1,12 @@
 ---
 name: use-slack
-description: Connect to and work with the 80,000 Hours and AI Uplift for EA Slack workspaces using the signed-in user's Slack web-session credentials. Use for either workspace's setup, authentication checks, channel and DM lookup, message search and history, thread retrieval, permalinks, or user-approved message sending.
+description: Connect to and work with the 80,000 Hours, AI Uplift for EA and Impact Ops Slack workspaces using the signed-in user's Slack web-session credentials. Use for any of these workspaces' setup, authentication checks, channel and DM lookup, message search and history, thread retrieval, permalinks, or user-approved message sending.
 ---
 
-# EA Slack workspaces
+# Slack workspaces
 
 Use `scripts/slack.py` for every Slack command. It defaults to `80000hours`; select
-AI Uplift explicitly with `--workspace ai-uplift` or `-w ai-uplift`. The client
+another workspace explicitly with `--workspace` / `-w`: `ai-uplift` or `impact-ops`. The client
 checks the exact team identity before authentication or sent-DM queries.
 
 Set `SKILL_DIR` to the directory containing this file, then run commands as:
