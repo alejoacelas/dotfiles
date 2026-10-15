@@ -85,7 +85,8 @@ Use ordinary `op --account my.1password.com` for items outside these vaults.
 I have a work Google identity (`alejandro.acelas-contractor@80000hours.org`) and a
 personal one (`alejoacelas@gmail.com`), with matching `gcloud` configurations and
 `FLY_80K_TOKEN` / `FLY_PERSONAL_TOKEN`. Pick the identity from the project's context
-and pass it explicitly on every cloud write. Use `gdoc` for Google Docs and Drive.
+and pass it explicitly on every cloud write. Use `gog --account <email>` for Google Docs
+and Drive; it is signed in to both identities and to `alejo@impact-ops.org`.
 
 ## Project conventions
 
