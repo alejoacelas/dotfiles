@@ -23,7 +23,7 @@ following cases guide the work after invocation; they are not automatic triggers
    render what the reader will see and look at it yourself first.
 
 Prefer a real screenshot when you can reach the surface (browser tools, computer
-use, `gdoc export`). Reconstruct when the state is historical, cannot be
+use, `gog docs export`). Reconstruct when the state is historical, cannot be
 reproduced safely, or needs simplifying to isolate the trigger. Label every
 reconstruction as one.
 
@@ -54,5 +54,7 @@ reconstruction as one.
 Send the images where the reader will look at them. For a set, create a Google
 Doc with one heading per case, the image at 468 pt wide, and one or two sentences
 beneath naming the failure and the condition that triggers it, plus a source
-link. Use `gdoc new` and `gdoc insert-image --width 468` with the account that
-matches the project. For a single case in chat, give the PNG path or publish it.
+link. Use `gog -a <email> docs create` and
+`gog -a <email> docs insert-image <id> --file <png> --width 468 --force` with
+the account that matches the project. `--force` lets gog make the uploaded image
+public for a few seconds so Docs can fetch it, then revoke the link. For a single case in chat, give the PNG path or publish it.

@@ -153,10 +153,9 @@ meeting title and a skim of the transcript (Step 8 may rename it).
 
 ```bash
 printf 'Being written — check back shortly.\n' > /tmp/placeholder.md
-gdoc --account <email> --json new "<title>" --file /tmp/placeholder.md      # → id, url
-gdoc --account <email> --json add-tab <id> "Transcript"
-GDOC_PY=$(head -1 "$(which gdoc)" | cut -c3-)             # gdoc's interpreter
-GDOC_ACCOUNT=<email> "$GDOC_PY" "$CALL_SKILL/scripts/rename_tab.py" <id> t.0 "Summary"        # first tab is born "Tab 1"
+gog -a <email> -j docs create "<title>" --file /tmp/placeholder.md   # → file.id, file.webViewLink
+gog -a <email> docs add-tab <id> --title Transcript
+gog -a <email> docs rename-tab <id> --tab t.0 --title Summary      # first tab is born "Tab 1"
 ```
 
 Post the doc URL (`.../document/d/<id>/edit`) in the reply as soon as it
@@ -185,19 +184,19 @@ When the doc is finished (after Step 9), ask Alejo whether to share it with
 that email as a writer, and share it only if he says yes:
 
 ```bash
-gdoc --account <email> share <id> <participant-email> --role writer
+gog -a <email> drive share <id> --to user --email <participant-email> --role writer
 ```
 
 If neither source yields an email, say so and ask for the address — never
 guess one. (Mirror docs are shared, never emailed.)
 
 Two tabs, **Summary** then **Transcript** — the Docs API supports tabs now, so
-no more two-section single body. Pass `--account <email>` to every `gdoc` call
-(and `GDOC_ACCOUNT=<email>` to `rename_tab.py`), choosing by the call's context:
-80,000 Hours work → `alejandro.acelas-contractor@80000hours.org`, personal →
-`alejoacelas@gmail.com`; ask if unclear. Never use the Google Drive MCP
-`create_file` tool for archive docs — `gdoc diff`/`write` need a doc the chosen
-`gdoc` account owns.
+no more two-section single body. Pass `-a <email>` to every `gog` call, choosing
+by the call's context: 80,000 Hours work →
+`alejandro.acelas-contractor@80000hours.org`, Impact Ops →
+`alejo@impact-ops.org`, personal → `alejoacelas@gmail.com`; ask if unclear.
+Create archive docs with `gog`, not the Google Drive MCP `create_file` tool, so
+the chosen account owns them.
 
 ### Step 5: Garble inventory, then tidied transcript
 
@@ -241,7 +240,7 @@ much with an earlier call's slug — in any folder — rename the new pair to
 something more distinctive of this call's content, and consider renaming the
 earlier colliding pair too (use `git mv` when the old files are committed).
 The test: from the slug alone, could you tell the calls apart? If the slug
-changed, retitle the doc: `gdoc --account <email> rename <id> "<new title>"`.
+changed, retitle the doc: `gog -a <email> drive rename <id> "<new title>"`.
 
 ### Step 9: Fill the Google Doc + folder index + NOTES.md
 
@@ -249,17 +248,18 @@ Push the finished files into the doc from Step 4 and record the call in the
 folder index using the rules below. These also apply when an existing call or
 summary is edited or renamed:
 
-1. Fill both tabs (`write` strips YAML frontmatter itself; `--tab` leaves the
-   sibling tab alone; `cat` sets the read baseline `write` requires). The tab
-   title already names the section, so don't prepend a `# Summary` /
-   `# Transcript` heading. The Summary tab opens with one attribution line
-   linking this skill (update the URL if the repo moves):
+1. Fill both tabs. `gog` would write YAML frontmatter into the doc as text, so
+   strip it first; `--tab` leaves the sibling tab alone. The tab title already
+   names the section, so don't prepend a `# Summary` / `# Transcript` heading.
+   The Summary tab opens with one attribution line linking this skill (update
+   the URL if the repo moves):
    ```bash
    ATTR='*Summary and transcript created with the shared skill available [here](https://github.com/alejoacelas/dotfiles/blob/main/skills/summarize-call/SKILL.md).*'
-   { printf '%s\n\n' "$ATTR"; awk 'NR==1&&/^---$/{f=1;next} f&&/^---$/{f=0;next} !f' <sum.md>; } > /tmp/sum-doc.md  # frontmatter must not sit below the line
-   gdoc --account <email> cat <id> > /dev/null
-   gdoc --account <email> write <id> /tmp/sum-doc.md --tab Summary
-   gdoc --account <email> write <id> <trans.md>      --tab Transcript
+   strip_fm() { awk 'NR==1&&/^---$/{f=1;next} f&&/^---$/{f=0;next} !f' "$1"; }
+   { printf '%s\n\n' "$ATTR"; strip_fm <sum.md>; } > /tmp/sum-doc.md
+   strip_fm <trans.md> > /tmp/trans-doc.md
+   gog -a <email> docs write <id> --tab Summary    --file /tmp/sum-doc.md   --markdown --replace
+   gog -a <email> docs write <id> --tab Transcript --file /tmp/trans-doc.md --markdown --replace
    ```
 2. Add a bullet to the person's folder `AGENTS.md` (create it on the first call):
    `**<date> · <slug>**` + a `[gdoc]` link (`.../document/d/<id>/edit`, by ID so a
@@ -268,12 +268,15 @@ summary is edited or renamed:
    `## <YYYY-MM-DD> <Slug In Title Case>` section, newest first, with 3–10 bullets
    of under 12 words each — written for the people who were on the call, so each
    bullet brings back a moment rather than explains itself. Then sync its mirror
-   doc: on first creation, `gdoc --account <email> new "Alejo-<Other> Call Notes" --file
-   NOTES.md`, append `---` + `Google Doc: <link>` to the file, and push once so
-   the doc includes the footer; on later calls, `gdoc --account <email> diff <id> NOTES.md` first
-   and fold any remote edits into the local file, then
-   `gdoc --account <email> cat <id> > /dev/null && gdoc --account <email> write <id> NOTES.md`. Never recreate the
-   doc — the link must stay stable.
+   doc. On first creation, run
+   `gog -a <email> -j docs create "Alejo-<Other> Call Notes" --file NOTES.md`,
+   append `---` + `Google Doc: <link>` to the file, and push once so the doc
+   includes the footer. On later calls, first fold any remote edits into the
+   local file:
+   `gog -a <email> docs export <id> --format md --out /tmp/notes-remote.md --overwrite && diff -b NOTES.md /tmp/notes-remote.md`
+   (`-b` hides the trailing spaces the export adds). Then push:
+   `gog -a <email> docs write <id> --file NOTES.md --markdown --replace`.
+   Never recreate the doc — the link must stay stable.
 4. Link client calls to client projects. For a call filed under
    `~/best/calls/clients/<company>/`, make sure `~/best/clients/<company>/calls`
    is a symlink to that company folder, creating it if missing. If the call is
