@@ -16,10 +16,28 @@ both every time:
   `list_meetings` and `get_meeting_transcript` with ToolSearch). Impact Ops
   calls are usually recorded here.
 
+## Where to run
+
+Run this workflow from a session whose working directory is inside `~/best/calls`.
+When triggered anywhere else, hand the job to a headless Claude started there and
+carry on with the current task:
+
+```bash
+cd ~/best/calls && nohup claude -p "<request>" --dangerously-skip-permissions > <log> 2>&1 &
+```
+
+Write the request so it stands on its own: ask for this skill, name the call and
+the person, and pass on every link, id or detail the user gave (save a pasted
+transcript to a file and give its path). Say the run is headless, so it must not
+guess names or emails, must not share the doc, and must end by reporting the doc
+link, the files written, the participant's email and any open questions. Keep the
+log outside the repository, such as in the scratchpad. When the run finishes,
+relay the doc link and its questions, and ask Alejo whether to share the doc
+(Step 4).
+
 ## Destination and paths
 
-Always save calls in `~/best/calls`, regardless of the session's working directory.
-Before fetching or writing, read `~/best/calls/AGENTS.md` and any instructions in
+Always save calls in `~/best/calls`. Before fetching or writing, read `~/best/calls/AGENTS.md` and any instructions in
 the destination person's folder. That repository defines the exact filing paths,
 folder conventions, indexes and sync requirements. If it is missing, stop and
 report that; do not create an archive in the current project.
