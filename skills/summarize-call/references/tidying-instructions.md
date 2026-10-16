@@ -40,4 +40,5 @@ stay marked "[unclear]" or "[name unclear]". Never guess names.
 - Use "**Speaker Name**:" format for attribution (bold name). If there are only two participants, use first names only.
 - Separate each conversation turn with a new paragraph (not just a line break)
 - Put direct quotes in "quotation marks"
+- Separate sections with headings alone, without `---` rules
 - Use bullet points for lists or multiple related points

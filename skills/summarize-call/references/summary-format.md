@@ -15,25 +15,17 @@ kind: coaching
 
 **Participants:** [Full names with roles if relevant]
 
----
-
 ## Summary
 
 [3-5 sentence overview of what the call was about and what was concluded. If listing items, use a numbered list with each item on its own line.]
-
----
 
 ## Part 1: [Opening topic/context]
 
 [Chronological narrative of this phase of the conversation...]
 
----
-
 ## Part 2: [Next major topic]
 
 [Continue chronologically...]
-
----
 
 ## Part N: The path forward / Next steps
 
@@ -47,22 +39,16 @@ kind: coaching
 **[Person]'s next step:**
 [Immediate action to take]
 
----
-
 ## Appendix 1: Open questions
 
 - Question 1
 - Question 2
-
----
 
 ## Appendix 2: Key quotes
 
 | Speaker | Quote | Context |
 |---------|-------|---------|
 | Name | "Quote text" | Brief context |
-
----
 
 ## Appendix 3: Underlying dynamics
 
@@ -102,7 +88,6 @@ private: strip it when concatenating the summary into the Google Doc.
   - Insights and realisations
 
 **Structure:**
-- Use `---` horizontal rules to separate major sections
 - Bold speaker names when attributing quotes or positions
 - Use tables for structured comparisons (e.g., concept assessments)
 

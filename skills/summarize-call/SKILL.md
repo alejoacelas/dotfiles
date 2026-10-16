@@ -132,8 +132,7 @@ python3 "$CALL_SKILL/scripts/granola.py" get <doc_id>   # or: recent <n>
 
 For Fathom, call `get_meeting_transcript` with the `recording_id` and `url`
 from `list_meetings`. Fathom transcripts sometimes repeat a passage verbatim;
-keep one copy when tidying. Put the source under the participants line of both
-files: `**Source:** Fathom transcript, [recording](<url>)`.
+keep one copy when tidying.
 
 ### Step 3: Confirm participant names
 
