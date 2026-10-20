@@ -13,11 +13,6 @@ SKILL_DIR = Path(__file__).resolve().parent.parent
 CONFIG_PATH = SKILL_DIR / "config.json"
 API_ROOT = "https://slack.com/api/"
 WORKSPACES = {
-    "80000hours": {
-        "team_id": "T02GR4NPU",
-        "team": "80,000 Hours",
-        "url": "https://80000hours.slack.com/",
-    },
     "ai-uplift": {
         "team_id": "T094GSSSF3M",
         "team": "AI Uplift for EA",
@@ -40,7 +35,7 @@ def load_config(workspace: str | None) -> tuple[dict, dict, str]:
         raise SlackError(f"Missing config: run {SKILL_DIR / 'scripts' / 'setup.py'}")
     with CONFIG_PATH.open() as handle:
         config = json.load(handle)
-    workspace = workspace or config.get("default_workspace") or "80000hours"
+    workspace = workspace or config.get("default_workspace") or "impact-ops"
     if workspace not in WORKSPACES:
         raise SlackError(
             f"Unknown workspace {workspace!r}; choose one of: {', '.join(WORKSPACES)}"
@@ -114,7 +109,7 @@ def usage() -> str:
     return """Usage: slack.py [-w WORKSPACE] COMMAND [ARGS]
 
 Workspaces:
-  80000hours (default)
+  impact-ops (default)
   ai-uplift
 
 Commands:

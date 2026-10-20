@@ -5,8 +5,8 @@ arguments. They are equivalent to the user's signed-in Slack session.
 
 For Codex setup:
 
-1. Choose the workspace and team ID: `80000hours` / `T02GR4NPU`, `ai-uplift` /
-   `T094GSSSF3M`, or `impact-ops` / `T04SC9TJYQ6`.
+1. Choose the workspace and team ID: `impact-ops` / `T04SC9TJYQ6` or `ai-uplift` /
+   `T094GSSSF3M`.
 2. Read and use the available Chrome-control skill. Open or claim a regular Chrome
    tab at `https://app.slack.com/client/TEAM_ID/` and let the user sign in if needed.
 3. Focus that Slack tab before opening DevTools. A console showing
@@ -42,9 +42,8 @@ For Codex setup:
    python3 "$SKILL_DIR/scripts/slack.py" --workspace ai-uplift auth
    ```
 
-Expected identities are `80,000 Hours` / `T02GR4NPU` /
-`https://80000hours.slack.com/`, `AI Uplift for EA` / `T094GSSSF3M` /
-`https://ai-uplift.slack.com/`, and `Impact Ops` / `T04SC9TJYQ6` /
+Expected identities are `AI Uplift for EA` / `T094GSSSF3M` /
+`https://ai-uplift.slack.com/` and `Impact Ops` / `T04SC9TJYQ6` /
 `https://impactopsworkspace.slack.com/`. Stop if authentication resolves to another team.
 If Slack denies access, confirm that the user is a member of this workspace. If auth
 fails after saving, rerun `setup.py --workspace WORKSPACE`, answer `y` to replace

@@ -1,4 +1,4 @@
 interface:
   display_name: "EA Slack Workspaces"
-  short_description: "Work with 80,000 Hours, AI Uplift and Impact Ops Slack"
+  short_description: "Work with Impact Ops and AI Uplift Slack"
   default_prompt: "Use $use-slack to check my recent AI Uplift Slack activity."

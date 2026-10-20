@@ -165,19 +165,15 @@ it didn't share it automatically. Find the other participant's email in this
 order, stopping at the first hit:
 
 1. For a Fathom call, the participant's invitee email from `list_meetings`.
-2. The calendar event for the call — its attendees' emails. Check the 80k
-   calendar first, then the personal one (`gog` picks the right OAuth client
-   from the account):
+2. The calendar event for the call — its attendees' emails. Check the personal
+   calendar first, then the Impact Ops one:
    ```bash
-   gog -a alejandro.acelas-contractor@80000hours.org -j calendar events --from <iso> --to <iso>
    gog -a alejoacelas@gmail.com -j calendar events --from <iso> --to <iso>
+   gog -a alejo@impact-ops.org -j calendar events --from <iso> --to <iso>
    ```
 3. Recent email with them, same two accounts:
    `gog -a <account> -j gmail search "<first> <last>"` — take the address the
    person actually wrote from.
-
-If `gog` reports no auth for a service, the Google Calendar / Gmail MCP
-connectors (80k account) are the fallback.
 
 When the doc is finished (after Step 9), ask Alejo whether to share it with
 that email as a writer, and share it only if he says yes:
@@ -191,9 +187,8 @@ guess one. (Mirror docs are shared, never emailed.)
 
 Two tabs, **Summary** then **Transcript** — the Docs API supports tabs now, so
 no more two-section single body. Pass `-a <email>` to every `gog` call, choosing
-by the call's context: 80,000 Hours work →
-`alejandro.acelas-contractor@80000hours.org`, Impact Ops →
-`alejo@impact-ops.org`, personal → `alejoacelas@gmail.com`; ask if unclear.
+by the call's context: Impact Ops → `alejo@impact-ops.org`, personal →
+`alejoacelas@gmail.com`; ask if unclear.
 Create archive docs with `gog`, not the Google Drive MCP `create_file` tool, so
 the chosen account owns them.
 

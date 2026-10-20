@@ -67,7 +67,7 @@ unambiguous, and something we're confident in.
 Commit before making further changes. Push after every commit.
 Get explicit confirmation before permanently
 deleting anything. Keep repositories public unless they contain credentials,
-employer (80,000 Hours) information, or others' non-public information.
+employer or client information, or others' non-public information.
 
 Keep API keys in 1Password and load them on demand with `op` into the project's
 ignored `.env`. Record in `AGENTS.md` where each variable lives in 1Password
@@ -82,11 +82,11 @@ Authenticate for authorized tasks without asking again; never print, commit,
 or disclose secret values. Existing action-specific approval rules still apply.
 Use ordinary `op --account my.1password.com` for items outside these vaults.
 
-I have a work Google identity (`alejandro.acelas-contractor@80000hours.org`) and a
-personal one (`alejoacelas@gmail.com`), with matching `gcloud` configurations and
-`FLY_80K_TOKEN` / `FLY_PERSONAL_TOKEN`. Pick the identity from the project's context
-and pass it explicitly on every cloud write. Use `gog --account <email>` for Google Docs
-and Drive; it is signed in to both identities and to `alejo@impact-ops.org`.
+I have a personal Google identity (`alejoacelas@gmail.com`) and an Impact Ops one
+(`alejo@impact-ops.org`). `gcloud` and Fly (`FLY_PERSONAL_TOKEN`) use the personal
+identity. Pick the identity from the project's context and pass it explicitly on every
+cloud write. Use `gog --account <email>` for Google Docs and Drive; it is signed in to
+both identities and to `alejo@habere.org`.
 
 ## Project conventions
 
@@ -98,8 +98,6 @@ lifecycle and topic folders as ordinary directories. Folder names use lowercase
 words separated by dashes. Before creating or moving anything, read the
 destination's `AGENTS.md` and the
 [workspace procedures](/Users/alejo/best/dotfiles/agents/workflows.md#creating-or-moving-projects).
-Employer context (the `80k` group) loads only for repositories selected with
-`~/best/dotfiles/bin/agent-context adopt`; the procedures cover when to select it.
 
 Keep `DECISIONS.md` as a concise record of current decisions that future work
 should not accidentally undo. Put grouped core decisions first, with linked reasons
@@ -124,7 +122,7 @@ Follow the
 For application and script model calls, use Anthropic directly: `claude-opus-5-5`
 by default, or `claude-haiku-5-5` for fast turnaround or jobs with more than 20
 parallel model calls. Personal projects should use the Claude Console organization
-linked to the personal plan's monthly API credits. Keep client and employer billing
+linked to the personal plan's monthly API credits. Keep client billing
 separate. Preserve specialized capabilities and project privacy requirements when
 choosing a replacement.
 

@@ -7,10 +7,6 @@ Read only the section relevant to the task.
 - Follow [projects/AGENTS.md](/Users/alejo/best/projects/AGENTS.md) for starting,
   reviewing and organizing projects.
 - Read the destination's `AGENTS.md` before creating or moving anything there.
-- Select the `80k` shared group for relevant private employer work with
-  `~/best/dotfiles/bin/agent-context adopt`. Membership lives in
-  `agents/projects.json` or the private context repository. Update the selection
-  when moving a project.
 - Follow the folder's archive rules. Record moves with their old path and reason;
   preserve repository history and privacy.
 
