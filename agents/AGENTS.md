@@ -88,6 +88,11 @@ identity. Pick the identity from the project's context and pass it explicitly on
 cloud write. Use `gog --account <email>` for Google Docs and Drive; it is signed in to
 both identities and to `alejo@habere.org`.
 
+To replace a whole Google Docs tab, write the new content into a new tab, compare it
+with the original, carrying over any edits made there since your last write, then
+delete the original. Writing over an existing tab can keep its old formatting, such
+as turning every paragraph into a bullet.
+
 ## Project conventions
 
 Put agent instructions in `AGENTS.md` and human-facing overviews in `README.md`.
