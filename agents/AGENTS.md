@@ -82,6 +82,11 @@ Authenticate for authorized tasks without asking again; never print, commit,
 or disclose secret values. Existing action-specific approval rules still apply.
 Use ordinary `op --account my.1password.com` for items outside these vaults.
 
+On the agent server, run agent work as the `agent` user (`sudo -iu agent`). It
+has no sudo or `op-agent`; `gh`, `gog` and git pushes go through a credential
+broker that never returns the tokens. To give it an API key, add a broker
+route ([agent user setup](/Users/alejo/best/projects/2026-09-26-agent-server/docs/setup.md#agent-user)).
+
 I have a personal Google identity (`alejoacelas@gmail.com`) and an Impact Ops one
 (`alejo@impact-ops.org`). `gcloud` and Fly (`FLY_PERSONAL_TOKEN`) use the personal
 identity. Pick the identity from the project's context and pass it explicitly on every
