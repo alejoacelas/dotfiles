@@ -236,7 +236,7 @@ earlier colliding pair too (use `git mv` when the old files are committed).
 The test: from the slug alone, could you tell the calls apart? If the slug
 changed, retitle the doc: `gog -a <email> drive rename <id> "<new title>"`.
 
-### Step 9: Fill the Google Doc + folder index + NOTES.md
+### Step 9: Fill the Google Doc + folder index
 
 Push the finished files into the doc from Step 4 and record the call in the
 folder index using the rules below. These also apply when an existing call or
@@ -258,20 +258,7 @@ summary is edited or renamed:
 2. Add a bullet to the person's folder `AGENTS.md` (create it on the first call):
    `**<date> · <slug>**` + a `[gdoc]` link (`.../document/d/<id>/edit`, by ID so a
    rename can't break it) + a one-or-two-sentence gist, newest first.
-3. Update the person's `NOTES.md` (create it on the first call): add a
-   `## <YYYY-MM-DD> <Slug In Title Case>` section, newest first, with 3–10 bullets
-   of under 12 words each — written for the people who were on the call, so each
-   bullet brings back a moment rather than explains itself. Then sync its mirror
-   doc. On first creation, run
-   `gog -a <email> -j docs create "Alejo-<Other> Call Notes" --file NOTES.md`,
-   append `---` + `Google Doc: <link>` to the file, and push once so the doc
-   includes the footer. On later calls, first fold any remote edits into the
-   local file:
-   `gog -a <email> docs export <id> --format md --out /tmp/notes-remote.md --overwrite && diff -b NOTES.md /tmp/notes-remote.md`
-   (`-b` hides the trailing spaces the export adds). Then push:
-   `gog -a <email> docs write <id> --file NOTES.md --markdown --replace`.
-   Never recreate the doc — the link must stay stable.
-4. Link client calls to client projects. For a call filed under
+3. Link client calls to client projects. For a call filed under
    `~/best/calls/clients/<company>/`, make sure `~/best/clients/<company>/calls`
    is a symlink to that company folder, creating it if missing. If the call is
    about project work for a company with no folder in `~/best/clients/`, ask

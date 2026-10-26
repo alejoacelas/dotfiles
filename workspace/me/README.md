@@ -7,7 +7,7 @@
 - [Sites](sites/): my blog and personal website.
 - [Claude exports](claude-exports/): claude.ai data exports, kept as test material.
 
-Style notes and Peter Hartree’s journal collection live in [writing](../writing/).
+Style notes and Peter Hartree’s journal collection live in [writing](../projects/motif/writing/archive/2026-10-explainers-and-guides/).
 
 My [life document](https://docs.google.com/document/d/1I31IKCweKyaCULwg7WX6Di39CvGs0rxKTtXN1Vv-KyU/edit?tab=t.kzai3s53jeb8)
 sets the context for life projects; read all its tabs before proposing one.

@@ -8,10 +8,10 @@ An ordinary folder of independent repositories. Start new work with `proj`
   `YYYY-MM-name` repository so filing it later is a plain move.
 - `clients/<company>/`: projects for clients, grouped by the company that hires Alejo.
 - `projects/`: Alejo's own projects, dated to the day. Active ones sit at the top,
-  `in-use/` holds the ones he relies on and `archive/` the parked ones.
-  Tool trials live in the `2026-10-08-trials/` project, one public repository.
+  `in-use/` holds the ones he relies on, `motif/` open-ended work he keeps
+  returning to (tool trials, writing, mentoring) and `archive/` the parked ones.
 - `strategy/`: planning for the AI-uplift practice.
-- `calls/`, `writing/`, `me/`: call archive, writing and reference, personal material.
+- `calls/`, `me/`: call archive, personal material.
 - `archive/`: retired work. `projects/archive/` holds parked projects.
 
 Keep shared instructions and container configuration in dotfiles.

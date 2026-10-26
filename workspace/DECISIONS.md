@@ -24,8 +24,8 @@ project start with a guess about how important or finished it would be, so clien
 work and tool trials ended up scattered across four folders each. The top level
 now answers who the work is for: `clients/<company>/` for client projects, linked
 to `calls/clients/<company>/`; `projects/` for Alejo's own work, with `in-use/`
-for tools he relies on and the `2026-10-08-trials/` project for structured tool
-tests in one public repository; `inbox/` when the home is unclear. `proj`
+for tools he relies on and `motif/` for open-ended work he keeps returning to;
+`inbox/` when the home is unclear. `proj`
 creates projects and the `today` skill files stale ones. 80k and AIM work moved to `archive/` as those
 engagements ended. See [projects instructions](projects/AGENTS.md) and
 [clients instructions](clients/AGENTS.md).
@@ -85,7 +85,9 @@ folder it belongs to; only output with no clear home stays in `inbox/`
 
 ### 2026-10-26
 
-At Alejo's request, move `~/best/trials/` to `projects/2026-10-08-trials/`, dated
-to the repository's first commit. Trials are his own work, so they follow the
-projects rules instead of keeping a top-level folder. Trials inside it keep
-their `YYYY-MM-` prefixes.
+At Alejo's request, add `projects/motif/` for open-ended work he keeps returning
+to, with plain names like `in-use/`. `~/best/trials/` moved to `motif/trials/`
+and `~/best/writing/` to `motif/writing/`, whose earlier contents (the AI guides
+behind alejo.wiki, the Claude on-ramp, writing evals and topic notes) went to
+`motif/writing/archive/2026-10-explainers-and-guides/`. `motif/mentors/` is new.
+The `today` scan skips `motif/`, so these projects are never flagged as stale.

@@ -1,7 +1,8 @@
 # Projects
 
-Alejo's own projects. Client work goes in `~/best/clients/`. Tool trials are
-folders inside the [trials project](2026-10-08-trials/); follow its `AGENTS.md`.
+Alejo's own projects. Client work goes in `~/best/clients/`. Open-ended work he
+keeps returning to lives in [motif/](motif/) without date prefixes: tool trials,
+writing and mentoring. Follow the `AGENTS.md` inside each.
 
 Start a project with `proj <name>`, which creates `YYYY-MM-DD-name` at the top of
 this folder. Give it a remote on the first commit and state its scope in
