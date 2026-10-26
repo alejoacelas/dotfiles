@@ -147,7 +147,8 @@ The two Macs SSH into each other and into the agent server over Tailscale:
 `ssh mac-air-2` (the other MacBook Air), `ssh alejo-m4` (the main Mac) and
 `ssh agent-server`.
 SSH sessions on a Mac can't read the keychain, so start Claude there inside
-`tmux` with `CLAUDE_CODE_OAUTH_TOKEN` injected by `op-agent run` from
+`tmux` with `CLAUDE_CODE_OAUTH_TOKEN` injected by `op-agent run --no-masking`
+(masking breaks Claude's terminal UI) from
 `op://mac-agents/6drosdmzu2qb3jefhsh3d5b7dy/credential`.
 
 At the start of project execution, check access to the services the work will need.
