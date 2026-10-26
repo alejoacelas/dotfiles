@@ -5,8 +5,8 @@ own their repositories.
 
 - `inbox/` — where I start sessions for loose work, plus anything not yet filed.
 - `clients/` — client projects, one folder per company, linked to their calls.
-- `projects/` — my own projects; `in-use/` holds the ones I run.
-- `trials/` — tool trials, each ending in a one-page verdict.
+- `projects/` — my own projects; `in-use/` holds the ones I run, and
+  `2026-10-08-trials/` my tool trials.
 - `strategy/` — planning for the AI-uplift practice.
 - `calls/` — private call transcripts and summaries.
 - `writing/` — reusable explanations and reference material.

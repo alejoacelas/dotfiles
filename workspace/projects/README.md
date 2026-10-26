@@ -7,4 +7,5 @@ Active projects sit at the top, sorted by that date.
 - [Archive](archive/): parked projects and finished studies.
 - [Quick wins](quick-wins/): pointer to the Google Doc of small ideas and its completion log.
 
-Client work lives in [clients](../clients/), tool trials in [trials](../trials/).
+Client work lives in [clients](../clients/). Tool trials live in the
+[trials project](2026-10-08-trials/).

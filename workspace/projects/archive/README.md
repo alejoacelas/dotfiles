@@ -19,5 +19,5 @@ to be revisited. See [DECISIONS.md](DECISIONS.md) for why each was parked.
 - [WebFetch prompt tests](2026-09-03-webfetch-prompt-tests/): finished study of WebFetch prompts and search mechanisms; findings in the work Google Doc.
 - [Cliver screening annexes](2026-09-05-cliver-screening-annexes/): collection handoff awaiting source collection and drafting.
 - [Aguita amarilla](2026-09-25-aguita-amarilla/): archived at Alejo's request.
-- [Native browser control](2026-09-26-native-browser-control/): backup; work continues in `~/best/trials/2026-09-agent-browser-rules/native-control/`.
+- [Native browser control](2026-09-26-native-browser-control/): backup; work continues in `~/best/projects/2026-10-08-trials/2026-09-agent-browser-rules/native-control/`.
 - [Errands](2026-10-24-errands/): Mac-only errand job, replaced the same day by errands in gmail-sorting.

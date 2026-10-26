@@ -17,8 +17,8 @@ description: Start-of-day review of ~/best, and where to put new work. Use when 
    - **Calls today:** who, when, and what was promised or left open last time.
    - **Unsaved work:** offer to commit and push.
    - **To file:** for each stale inbox item or project, suggest its home:
-     `projects/`, `projects/in-use/`, `clients/<company>/`, `trials/`, or an
-     archive.
+     `projects/`, `projects/in-use/`, `clients/<company>/`, the trials project,
+     or an archive.
    - **Still running or billing:** ask whether each should keep running.
    - **Trials still running.**
 4. Change nothing until Alejo picks what to act on. Follow the destination's
@@ -29,15 +29,15 @@ description: Start-of-day review of ~/best, and where to put new work. Use when 
 Pick the home:
 
 - Work for a client: `clients/<company>/`.
-- Testing a tool: `trials/`, as a folder in that repository; follow its `AGENTS.md`.
+- Testing a tool: a folder in `projects/2026-10-08-trials/`; follow its `AGENTS.md`.
 - Alejo's own project: `projects/`. It moves to `projects/in-use/` once he relies on it.
 - Unsure: `inbox/`.
 
 Create it with `proj <folder>/<name> [--claude|--codex]` (plain `<name>` means
 `projects/`). It adds a `YYYY-MM-DD-` prefix in `projects/` and `YYYY-MM-`
-elsewhere, runs `git init` and writes an
-`AGENTS.md` stub; inside `trials/` it copies the template instead. Fill in the
-stub:
+elsewhere, runs `git init` and writes an `AGENTS.md` stub. For
+`proj projects/2026-10-08-trials/<tool>` it copies the trials template instead.
+Fill in the stub:
 
 - **Scope:** what the project is for and what done looks like.
 - **Visibility:** public unless it holds credentials, employer information or
