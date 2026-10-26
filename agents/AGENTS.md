@@ -143,6 +143,14 @@ When opening any Claude Code or Codex session, use
 `codex --dangerously-bypass-approvals-and-sandbox`, unless I explicitly request
 restricted permissions.
 
+The two Macs SSH into each other and into the agent server over Tailscale:
+`ssh mac-air-2` (the other MacBook Air), `ssh alejo-m4` (the main Mac) and
+`ssh agent-server`.
+SSH sessions on a Mac can't read the keychain, so start Claude there inside
+`tmux` with `CLAUDE_CODE_OAUTH_TOKEN` injected by `op-agent run` from
+`op://mac-agents/6drosdmzu2qb3jefhsh3d5b7dy/credential`. Keep a Mac awake for
+long runs with `caffeinate -i -w <pid>`.
+
 At the start of project execution, check access to the services the work will need.
 Try existing sessions, saved logins, and credentials available through the browser
 or terminal. Collect any remaining steps that require my involvement and ask me
