@@ -148,8 +148,7 @@ The two Macs SSH into each other and into the agent server over Tailscale:
 `ssh agent-server`.
 SSH sessions on a Mac can't read the keychain, so start Claude there inside
 `tmux` with `CLAUDE_CODE_OAUTH_TOKEN` injected by `op-agent run` from
-`op://mac-agents/6drosdmzu2qb3jefhsh3d5b7dy/credential`. Keep a Mac awake for
-long runs with `caffeinate -i -w <pid>`.
+`op://mac-agents/6drosdmzu2qb3jefhsh3d5b7dy/credential`.
 
 At the start of project execution, check access to the services the work will need.
 Try existing sessions, saved logins, and credentials available through the browser
