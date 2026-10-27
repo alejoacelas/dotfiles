@@ -238,7 +238,8 @@
     "vercel@claude-plugins-official": false,
     "codex@codex-plugin-cc": false,
     "warp@claude-code-warp": false,
-    "airtable@anthropic-plugin-directory": true
+    "airtable@anthropic-plugin-directory": true,
+    "umi@umi": true
   },
   "extraKnownMarketplaces": {
     "codex-plugin-cc": {
@@ -258,6 +259,12 @@
       "source": {
         "source": "github",
         "repo": "warpdotdev/claude-code-warp"
+      }
+    },
+    "umi": {
+      "source": {
+        "source": "directory",
+        "path": "/Applications/Umi.app/Contents/Resources/agent-plugins"
       }
     }
   },
@@ -281,11 +288,11 @@
     "/Users/alejo/best/dotfiles/workspace/inbox/AGENTS.md",
     "/Users/alejo/best/projects/in-use/twitter/AGENTS.md",
     "/Users/alejo/best/dotfiles/workspace/projects/in-use/twitter/AGENTS.md",
+    "/Users/alejo/best/projects/motif/writing/AGENTS.md",
     "/Users/alejo/best/AGENTS.md",
     "/Users/alejo/best/dotfiles/workspace/AGENTS.md",
     "/Users/alejo/best/projects/AGENTS.md",
     "/Users/alejo/best/dotfiles/workspace/projects/AGENTS.md",
-    "/Users/alejo/best/projects/motif/writing/AGENTS.md",
     "/Users/alejo/best/dotfiles/AGENTS.md",
     "/Users/alejo/best/me/health/AGENTS.md",
     "/Users/alejo/best/me/relationships/people/AGENTS.md"
