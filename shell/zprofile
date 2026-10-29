@@ -11,3 +11,12 @@ export PATH="/opt/homebrew/opt/python@3.13/libexec/bin:$PATH"
 # Rust: rustup + cargo/rustc, plus user-installed cargo crates (e.g. tauri-cli)
 export PATH="/opt/homebrew/opt/rustup/bin:$HOME/.cargo/bin:$PATH"
 # <<< dev environment (added by Claude 2026-06-23) <<<
+
+# proj with no name cds into the most recently created project (see bin/proj).
+proj() {
+  if [ $# -eq 0 ]; then
+    cd "$(command proj)"
+  else
+    command proj "$@"
+  fi
+}
