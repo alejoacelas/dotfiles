@@ -21,3 +21,4 @@ to be revisited. See [DECISIONS.md](DECISIONS.md) for why each was parked.
 - [Aguita amarilla](2026-09-25-aguita-amarilla/): archived at Alejo's request.
 - [Native browser control](2026-09-26-native-browser-control/): backup; work continues in `~/best/projects/motif/trials/2026-09-agent-browser-rules/native-control/`.
 - [Errands](2026-10-24-errands/): Mac-only errand job, replaced the same day by errands in gmail-sorting.
+- [Fake GitHub MCP](2026-10-27-fake-github-mcp/): empty stub; scope never written.
