@@ -29,11 +29,12 @@ cd ~/best/calls && nohup claude -p "<request>" --dangerously-skip-permissions > 
 Write the request so it stands on its own: ask for this skill, name the call and
 the person, and pass on every link, id or detail the user gave (save a pasted
 transcript to a file and give its path). Say the run is headless, so it must not
-guess names or emails, must not share the doc, and must end by reporting the doc
-link, the files written, the participant's email and any open questions. Keep the
-log outside the repository, such as in the scratchpad. When the run finishes,
-relay the doc link and its questions, and ask Alejo whether to share the doc
-(Step 4).
+guess names or emails, must share the doc only as Step 4 describes, and must end
+by reporting the doc link, the files written, the participant's email, whether it
+shared the doc, and any open questions. Keep the log outside the repository, such
+as in the scratchpad. When the run finishes, relay the doc link, the sharing
+result and its questions; if the run couldn't confirm an email, ask Alejo for it
+and share the doc yourself.
 
 ## Destination and paths
 
@@ -160,8 +161,8 @@ gog -a <email> docs rename-tab <id> --tab t.0 --title Summary      # first tab i
 Post the doc URL (`.../document/d/<id>/edit`) in the reply as soon as it
 exists, before continuing.
 
-Keep the doc private until Alejo approves sharing it, and check that creating
-it didn't share it automatically. Find the other participant's email in this
+Keep the doc private while it's being written, and check that creating it
+didn't share it automatically. Find the other participant's email in this
 order, stopping at the first hit:
 
 1. For a Fathom call, the participant's invitee email from `list_meetings`.
@@ -175,15 +176,17 @@ order, stopping at the first hit:
    `gog -a <account> -j gmail search "<first> <last>"` — take the address the
    person actually wrote from.
 
-When the doc is finished (after Step 9), ask Alejo whether to share it with
-that email as a writer, and share it only if he says yes:
+When the doc is finished (after Step 9), share it with that email as a writer
+and send the Drive invitation email. `--notify` is what sends it; without the
+flag the person gets access silently:
 
 ```bash
-gog -a <email> drive share <id> --to user --email <participant-email> --role writer
+gog -a <email> drive share <id> --to user --email <participant-email> --role writer --notify
 ```
 
-If neither source yields an email, say so and ask for the address — never
-guess one. (Mirror docs are shared, never emailed.)
+Skip sharing only when Alejo asks to keep the doc private. If none of the
+sources yields an email, say so and ask for the address — never guess one. The
+Drive invitation is the only email the participant gets.
 
 Two tabs, **Summary** then **Transcript** — the Docs API supports tabs now, so
 no more two-section single body. Pass `-a <email>` to every `gog` call, choosing
