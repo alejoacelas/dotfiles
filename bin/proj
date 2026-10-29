@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # proj: create or reopen a dated project folder in ~/best and start an agent there.
 # Usage: proj <name> [--claude|--codex]
-#   proj                                         -> print the most recently created project
+#   proj                                         -> print the newest folder in ~/best/projects
 #   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes
 #   proj clients/impact-ops/status-tracker --codex -> ~/best/clients/impact-ops/YYYY-MM-status-tracker
 #   proj inbox/odd-idea                          -> create only, print the path
@@ -25,10 +25,10 @@ best="$HOME/best"
 
 if [ -z "$name" ]; then
   [ -z "$agent" ] || usage
-  # Newest dated folder by creation time, skipping archives; BSD stat on macOS, GNU on Linux.
+  # Newest dated folder in projects/ by creation time; BSD stat on macOS, GNU on Linux.
   birth=(-f '%B %N'); stat -c %W / >/dev/null 2>&1 && birth=(-c '%W %n')
-  find "$best" -maxdepth 3 -type d -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-*" \
-      -not -path "*/archive/*" -not -path "*/.git/*" -exec stat "${birth[@]}" {} + |
+  find "$best/projects" -mindepth 1 -maxdepth 1 -type d -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-*" \
+      -exec stat "${birth[@]}" {} + |
     sort -n | tail -1 | cut -d' ' -f2-
   exit 0
 fi

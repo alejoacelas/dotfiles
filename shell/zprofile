@@ -12,7 +12,7 @@ export PATH="/opt/homebrew/opt/python@3.13/libexec/bin:$PATH"
 export PATH="/opt/homebrew/opt/rustup/bin:$HOME/.cargo/bin:$PATH"
 # <<< dev environment (added by Claude 2026-06-23) <<<
 
-# proj with no name cds into the most recently created project (see bin/proj).
+# proj with no name cds into the newest folder in ~/best/projects (see bin/proj).
 proj() {
   if [ $# -eq 0 ]; then
     cd "$(command proj)"
