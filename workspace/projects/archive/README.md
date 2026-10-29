@@ -19,6 +19,21 @@ to be revisited. See [DECISIONS.md](DECISIONS.md) for why each was parked.
 - [WebFetch prompt tests](2026-09-03-webfetch-prompt-tests/): finished study of WebFetch prompts and search mechanisms; findings in the work Google Doc.
 - [Cliver screening annexes](2026-09-05-cliver-screening-annexes/): collection handoff awaiting source collection and drafting.
 - [Aguita amarilla](2026-09-25-aguita-amarilla/): archived at Alejo's request.
-- [Native browser control](2026-09-26-native-browser-control/): backup; work continues in `~/best/projects/motif/trials/2026-09-agent-browser-rules/native-control/`.
+- [Native browser control](2026-09-26-native-browser-control/): backup; work continues in `~/best/projects/trials/2026-09-agent-browser-rules/native-control/`.
 - [Errands](2026-10-24-errands/): Mac-only errand job, replaced the same day by errands in gmail-sorting.
 - [Fake GitHub MCP](2026-10-27-fake-github-mcp/): empty stub; scope never written.
+
+Tools moved here from `projects/in-use/` on 2026-10-29:
+
+- [Search bar](2026-04-25-search-bar/): Raycast-style file search app; never opened after building.
+- [gws](2026-07-02-gws/): setup notes for the `gog` Google Workspace CLI and a bounded Drive MCP.
+- [Dictation](2026-07-04-dictation/): FluidVoice setup and the unfinished Murmur replacement.
+- [Fetch URL](2026-07-12-fetch-url/): notes on URL fetching; `llms-fetch-mcp` is configured directly in Claude.
+- [Shortcuts](2026-07-12-shortcuts/): Karabiner and Hammerspoon configuration, no longer loaded.
+- [Launcher](2026-07-13-spotlight/): typo-tolerant app finder, as a native app and a Raycast extension.
+- [Twitter](2026-07-20-twitter/): Chrome extension, follow-graph and list-sync tools.
+- [Roughdraft](2026-07-26-roughdraft/): fork of the Markdown review app.
+- [my-vm](2026-08-26-my-vm/): Hetzner VM provisioning CLI.
+- [Video blur](2026-09-01-video-blur/): recording redaction and experiment reports; recordings stay in calls.
+- [Credentials](2026-09-08-credentials/): research on keeping credentials from agents.
+- [Model router check](2026-09-08-model-router-check/): daily launchd check of GPT routing and the 1M Claude window.

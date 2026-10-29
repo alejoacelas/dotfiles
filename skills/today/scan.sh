@@ -45,5 +45,5 @@ find "$BEST" -maxdepth 5 -name AGENTS.md -not -path '*/node_modules/*' -print0 2
   | grep -vi 'billing: *none *$' | sed "s|^$BEST/||; s|/AGENTS.md:- Still running or billing:| —|"
 
 echo; echo "## Trials still running"
-grep -E '\| *running *\|' "$BEST/projects/motif/trials/README.md" 2>/dev/null | cut -d'|' -f2 | sed 's/^ */- /'
+grep -E '\| *running *\|' "$BEST/projects/trials/README.md" 2>/dev/null | cut -d'|' -f2 | sed 's/^ */- /'
 exit 0

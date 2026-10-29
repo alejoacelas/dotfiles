@@ -5,8 +5,8 @@ own their repositories.
 
 - `inbox/` — where I start sessions for loose work, plus anything not yet filed.
 - `clients/` — client projects, one folder per company, linked to their calls.
-- `projects/` — my own projects; `in-use/` holds the ones I run, and `motif/`
-  open-ended work I keep coming back to: tool trials, writing and mentoring.
+- `projects/` — my own projects; undated folders are the ones I use regularly,
+  including tool trials and writing.
 - `strategy/` — planning for the AI-uplift practice.
 - `calls/` — private call transcripts and summaries.
 - `me/` — personal material, relationships, blog and website.

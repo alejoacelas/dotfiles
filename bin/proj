@@ -51,7 +51,7 @@ if [ -n "$existing" ]; then
 else
   dir="$parent/$(date +"$date_format")-$slug"
   if [ -d "$parent/template" ] && git -C "$parent" rev-parse -q --is-inside-work-tree >/dev/null 2>&1; then
-    # A folder inside a repository with a template, such as projects/motif/trials/: copy it, no new repo.
+    # A folder inside a repository with a template, such as projects/trials/: copy it, no new repo.
     cp -R "$parent/template" "$dir"
     echo "Created $dir from template"
   else

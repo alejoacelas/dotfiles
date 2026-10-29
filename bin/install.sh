@@ -119,7 +119,7 @@ link bin/proj "$HOME/.local/bin/proj"
 BEST_ROOT="$HOME/best"
 mkdir -p "$BEST_ROOT"
 # Claude Code 2.1.277+ reads AGENTS.md natively; do not recreate project shims.
-for folder in me archive writing inbox clients projects/in-use; do
+for folder in me archive writing inbox clients projects; do
   mkdir -p "$BEST_ROOT/$folder"
 done
 while IFS= read -r source; do
@@ -129,9 +129,6 @@ while IFS= read -r source; do
   fi
   link "workspace/$relative" "$BEST_ROOT/$relative"
 done < <(rg --files --hidden "$DOTFILES/workspace")
-if [ -d "$HOME/.local/share/agent-context/private/workspace/tools/.claude" ] && [ ! -e "$BEST_ROOT/projects/in-use/.claude" ]; then
-  ln -s "$HOME/.local/share/agent-context/private/workspace/tools/.claude" "$BEST_ROOT/projects/in-use/.claude"
-fi
 # Personal/private sources are separate clones; no private files are copied into dotfiles.
 if [ -f "$HOME/.local/share/agent-context/private/archive/DECISIONS.md" ]; then
   target="$BEST_ROOT/archive/DECISIONS.md"

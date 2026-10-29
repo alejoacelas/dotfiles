@@ -23,8 +23,8 @@ Status folders (`live/`, `active/`, `stable/`) and loose topics made every new
 project start with a guess about how important or finished it would be, so client
 work and tool trials ended up scattered across four folders each. The top level
 now answers who the work is for: `clients/<company>/` for client projects, linked
-to `calls/clients/<company>/`; `projects/` for Alejo's own work, with `in-use/`
-for tools he relies on and `motif/` for open-ended work he keeps returning to;
+to `calls/clients/<company>/`; `projects/` for Alejo's own work, where undated folders mark what he uses
+regularly and each has a dated pointer in `projects/AGENTS.md`;
 `inbox/` when the home is unclear. `proj`
 creates projects and the `today` skill files stale ones. 80k and AIM work moved to `archive/` as those
 engagements ended. See [projects instructions](projects/AGENTS.md) and
@@ -83,11 +83,14 @@ during the day, and has no `AGENTS.md` of its own. Sessions do the work in the
 folder it belongs to; only output with no clear home stays in `inbox/`
 (`d26c85b`).
 
-### 2026-10-26
+### 2026-10-29
 
-At Alejo's request, add `projects/motif/` for open-ended work he keeps returning
-to, with plain names like `in-use/`. `~/best/trials/` moved to `motif/trials/`
-and `~/best/writing/` to `motif/writing/`, whose earlier contents (the AI guides
-behind alejo.wiki, the Claude on-ramp, writing evals and topic notes) went to
-`motif/writing/archive/2026-10-explainers-and-guides/`. `motif/mentors/` is new.
-The `today` scan skips `motif/`, so these projects are never flagged as stale.
+At Alejo's request, dissolve `projects/in-use/`, `projects/motif/` and
+`projects/quick-wins/`; he never browsed them. Tools in regular use (`cmd-tab`,
+`sleep`, `gdoc`) and `trials/` and `writing/` moved to the top of `projects/`
+without date prefixes; the rest went to `projects/archive/`. Only work in
+recurrent use gets a pointer in `projects/AGENTS.md`, dated to when it was last
+confirmed in use, so stale entries are visible. The quick-wins Doc link moved to
+`projects/README.md`. Writing from before October 2026 (the AI guides behind
+alejo.wiki, the Claude on-ramp, writing evals and topic notes) stays in
+`writing/archive/2026-10-explainers-and-guides/`.
