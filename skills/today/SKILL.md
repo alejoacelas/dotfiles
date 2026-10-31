@@ -11,8 +11,8 @@ description: Start-of-day review of ~/best, and where to put new work. Use when 
    projects untouched for two weeks, projects still running or billing, and
    trials still running.
 2. List today's calendar events on Alejo's personal Google account. For each call
-   with someone who has a folder in `~/best/calls/`, read their latest summary and
-   `NOTES.md`; for client calls, also read `~/best/clients/<company>/AGENTS.md`.
+   with someone who has a folder in `~/best/desk/`, read their latest summary and
+   `README.md`; for client calls, also read `~/best/clients/<company>/AGENTS.md`.
 3. Present one short list, most urgent first:
    - **Calls today:** who, when, and what was promised or left open last time.
    - **Unsaved work:** offer to commit and push.

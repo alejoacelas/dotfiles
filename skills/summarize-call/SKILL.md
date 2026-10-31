@@ -1,22 +1,22 @@
 ---
 name: summarize-call
-description: Fetch a Granola call transcript from the API, clean it, and file a tidied transcript plus a structured summary in ~/best/calls, following that repository's AGENTS.md. Use when the user wants to pull, clean, summarize, or archive Granola calls — "summarise my call", "save my last Granola call", "archive these calls".
+description: Fetch a Granola call transcript from the API, clean it, and file a tidied transcript plus a structured summary in ~/best/desk, following that repository's AGENTS.md. Use when the user wants to pull, clean, summarize, or archive Granola calls — "summarise my call", "save my last Granola call", "archive these calls".
 ---
 
 # Granola call → tidied transcript + summary
 
 Adapted from [HartreeWorks/skill--summarise-granola](https://github.com/HartreeWorks/skill--summarise-granola),
-rewired to file into `~/best/calls`. Reads transcripts over Granola's
+rewired to file into `~/best/desk`. Reads transcripts over Granola's
 [public API](https://docs.granola.ai) with a personal key (`scripts/granola.py`).
 
 ## Where to run
 
-Run this workflow from a session whose working directory is inside `~/best/calls`.
+Run this workflow from a session whose working directory is inside `~/best/desk`.
 When triggered anywhere else, hand the job to a headless Claude started there and
 carry on with the current task:
 
 ```bash
-cd ~/best/calls && nohup claude -p "<request>" --dangerously-skip-permissions > <log> 2>&1 &
+cd ~/best/desk && nohup claude -p "<request>" --dangerously-skip-permissions > <log> 2>&1 &
 ```
 
 Write the request so it stands on its own: ask for this skill, name the call and
@@ -31,13 +31,13 @@ and share the doc yourself.
 
 ## Destination and paths
 
-Always save calls in `~/best/calls`. Before fetching or writing, read `~/best/calls/AGENTS.md` and any instructions in
-the destination person's folder. That repository defines the exact filing paths,
+Always save calls in `~/best/desk`. Before fetching or writing, read `~/best/desk/AGENTS.md` and the destination
+person's `README.md` and any `AGENTS.md` there. That repository defines the exact filing paths,
 folder conventions, indexes and sync requirements. If it is missing, stop and
 report that; do not create an archive in the current project.
 
 Resolve this skill's directory from the `SKILL.md` you loaded and set
-`CALL_SKILL` to that absolute directory. Run archive operations from `~/best/calls`;
+`CALL_SKILL` to that absolute directory. Run archive operations from `~/best/desk`;
 run the bundled helpers by their absolute paths as shown below. References are
 relative to this skill, not the working directory. Temporary transcripts and
 garble inventories stay in `$CALL_SKILL/data/`.
@@ -184,7 +184,7 @@ topic shifts, preserve exact wording for the categories listed there. Repaired
 garbles are fixed silently — no bracket note; only unresolved ones stay marked
 `[unclear]` / `[name unclear]`.
 
-Save to the filing path specified by `~/best/calls/AGENTS.md` with the `-trans.md` suffix.
+Save to the person's `calls/` folder, at the path `~/best/desk/AGENTS.md` specifies, with the `-trans.md` suffix.
 
 ### Step 6: Summary
 
@@ -232,15 +232,17 @@ summary is edited or renamed:
    gog -a <email> docs write <id> --tab Summary    --file /tmp/sum-doc.md   --markdown --replace
    gog -a <email> docs write <id> --tab Transcript --file /tmp/trans-doc.md --markdown --replace
    ```
-2. Add a bullet to the person's folder `AGENTS.md` (create it on the first call):
-   `**<date> · <slug>**` + a `[gdoc]` link (`.../document/d/<id>/edit`, by ID so a
-   rename can't break it) + a one-or-two-sentence gist, newest first.
+2. Add two fields to the summary's frontmatter: `doc:` with the doc link
+   (`.../document/d/<id>/edit`, by ID so a rename can't break it) and `gist:` with
+   a one-or-two-sentence gist in double quotes. On a person's first call, create
+   their `README.md`: `# <Name> — <Organisation> (<role>)` and one line on why you
+   talk.
 3. Link client calls to client projects. For a call filed under
-   `~/best/calls/clients/<company>/`, make sure `~/best/clients/<company>/calls`
+   `~/best/desk/uplift/<company>/`, make sure `~/best/clients/<company>/desk`
    is a symlink to that company folder, creating it if missing. If the call is
    about project work for a company with no folder in `~/best/clients/`, ask
    whether to create `~/best/clients/<company>/` with the symlink and a short
-   `AGENTS.md` naming the company and where its calls are.
+   `AGENTS.md` naming the company and where its people's folders are.
 
 ## Batch runs
 

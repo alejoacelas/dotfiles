@@ -6,12 +6,15 @@ An ordinary folder of independent repositories. Start new work with `proj`
 - `inbox/`: the default place to start a session. Do the work in the folder it
   belongs to; keep in `inbox/` only output with no clear home, as a
   `YYYY-MM-name` repository so filing it later is a plain move.
-- `clients/<company>/`: projects for clients, grouped by the company that hires Alejo.
+- `clients/<company>/`: client repositories, grouped by the company that hires Alejo;
+  finished ones in `clients/<company>/archive/`.
 - `projects/`: Alejo's own projects, dated to the day. Active ones sit at the top
   with undated folders for work he uses regularly (including `trials/` and
   `writing/`); `archive/` holds the parked ones.
 - `strategy/`: planning for the AI-uplift practice.
-- `calls/`, `me/`: call archive, personal material.
-- `archive/`: retired work. `projects/archive/` holds parked projects.
+- `desk/`: one folder per person with their calls and any work for them that
+  doesn't need its own repository.
+- `me/`: personal material.
+- `archive/`: retired work not tied to a client or person. `projects/archive/` holds parked projects.
 
 Keep shared instructions and container configuration in dotfiles.

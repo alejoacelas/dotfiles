@@ -97,9 +97,9 @@ words separated by dashes. Before creating or moving anything, read the
 destination's `AGENTS.md` and the
 [workspace procedures](/Users/alejo/best/dotfiles/agents/workflows.md#creating-or-moving-projects).
 
-Save documents tied to one person, such as call prep, follow-up messages and
-notes, in that person's folder in `~/best/calls/`, named
-`<YYYY-MM-DD>-<slug>.md`.
+Save work for one person that doesn't need its own repository, such as call prep,
+follow-up messages, notes and research, in that person's folder in `~/best/desk/`,
+following [its instructions](/Users/alejo/best/desk/AGENTS.md).
 
 ## Model APIs
 

@@ -14,7 +14,7 @@ description: Gather what Alejo did on a given day from agent sessions, commits, 
    - Chrome history for every profile, by site, with page titles and rough time.
 2. Add what the script can't reach:
    - Calendar events from every calendar the Google Calendar connector lists.
-   - Call summaries filed that day: `find ~/best/calls -name 'YYYY-MM-DD-*-sum.md'`.
+   - Call summaries filed that day: `find ~/best/desk -name 'YYYY-MM-DD-*-sum.md'`.
 3. Answer the question Alejo asked, in the form he asked for. Without a stated
    form, lead with the main threads of work, then meetings, then everything else.
 

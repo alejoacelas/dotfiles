@@ -53,7 +53,7 @@ skips generated agent instructions. Update it against CLI help and Stripe's
 reference; installing an upstream skill is unnecessary.
 
 [`summarize-call`](skills/summarize-call/SKILL.md) is the official
-call workflow for both agents. It files in `~/best/calls` under that repository's
+call workflow for both agents. It files in `~/best/desk` under that repository's
 instructions. Both clients link to the same skill source. The older synced
 `summarise-granola` skill is disabled through Claude's `skillOverrides`, including
 its `anthropic-skills:` name, so account sync cannot reactivate it locally.
