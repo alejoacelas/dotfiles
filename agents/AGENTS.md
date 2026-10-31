@@ -109,6 +109,10 @@ words separated by dashes. Before creating or moving anything, read the
 destination's `AGENTS.md` and the
 [workspace procedures](/Users/alejo/best/dotfiles/agents/workflows.md#creating-or-moving-projects).
 
+Save documents tied to one person, such as call prep, follow-up messages and
+notes, in that person's folder in `~/best/calls/`, named
+`<YYYY-MM-DD>-<slug>.md`.
+
 Keep `DECISIONS.md` as a concise record of current decisions that future work
 should not accidentally undo. Put grouped core decisions first, with linked reasons
 and consequential exceptions below.
