@@ -17,4 +17,7 @@ An ordinary folder of independent repositories. Start new work with `proj`
 - `me/`: personal material.
 - `archive/`: retired work not tied to a client or person. `projects/archive/` holds parked projects.
 
+Register work delivered to someone in their folder in `desk/`, following
+`desk/AGENTS.md`.
+
 Keep shared instructions and container configuration in dotfiles.
