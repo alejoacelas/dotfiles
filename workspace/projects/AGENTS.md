@@ -10,9 +10,9 @@ a remote on the first commit and state its scope in `AGENTS.md`.
 
 The `today` skill lists projects untouched for two weeks. When it does, or when
 asked: read the project, commit pending work and check for running sessions. Then
-leave it here, move it to `~/best/stash/` without the date prefix if Alejo now
-uses it regularly, or move it to `~/best/archive/` with its date prefix if it is
-unlikely to be revisited. Before archiving a tool, stop anything that runs it
+leave it here, move it to `~/best/archive/` with its date prefix if it is unlikely
+to be revisited, or, if Alejo now uses it regularly, propose moving it to
+`~/best/stash/` without the date prefix and move it only once he approves. Before archiving a tool, stop anything that runs it
 (launchd jobs, login items, symlinks on `PATH`). Preserve Git history and privacy,
 record archive moves and their reason in `~/best/archive/README.md`, and update
 links. Move a project back here when work resumes.

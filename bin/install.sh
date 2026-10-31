@@ -111,6 +111,8 @@ done
 git -C "$DOTFILES" config core.hooksPath hooks
 
 link bin/proj "$HOME/.local/bin/proj"
+link bin/op-agent "$HOME/.local/bin/op-agent"
+link warp/keybindings.yaml "$HOME/.warp/keybindings.yaml"
 
 # Ordinary container configuration lives here; existing repositories keep their own files.
 BEST_ROOT="$HOME/best"

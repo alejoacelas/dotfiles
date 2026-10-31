@@ -39,3 +39,9 @@ Tools moved here from `projects/in-use/` on 2026-10-29:
 - [Video blur](2026-09-01-video-blur/): recording redaction and experiment reports; recordings stay in calls.
 - [Credentials](2026-09-08-credentials/): research on keeping credentials from agents.
 - [Model router check](2026-09-08-model-router-check/): daily launchd check of GPT routing and the 1M Claude window.
+
+Client projects moved here from `clients/<company>/archive/` on 2026-10-31: the
+80k folders dated 2026-07 to 2026-10 (start with
+[2026-10-80k-work](2026-10-80k-work/README.md)), AIM's
+[Tanza fellowship hub](2026-07-tanza-fellowship-hub/) and [Nina](2026-09-nina/),
+and Impact Ops' [Varun status tracker](2026-10-varun-status-tracker/).

@@ -28,7 +28,9 @@ route ([agent user setup](/Users/alejo/best/projects/2026-09-26-agent-server/doc
 
 The two Macs SSH into each other and into the agent server over Tailscale:
 `ssh mac-air-2` (the other MacBook Air), `ssh alejo-m4` (the main Mac) and
-`ssh agent-server`.
+`ssh agent-server`. Dotfiles and the `~/best` layout configure only the main Mac;
+the other Mac and the server keep their own configuration and share only
+credentials, through 1Password.
 
 SSH sessions on a Mac can't read the keychain, so start Claude there inside
 `tmux` with `CLAUDE_CODE_OAUTH_TOKEN` injected by `op-agent run --no-masking`

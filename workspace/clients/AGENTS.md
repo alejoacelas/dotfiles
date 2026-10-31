@@ -3,7 +3,7 @@
 Repositories for clients, grouped by the company that hires Alejo:
 `clients/<company>/YYYY-MM-project-name/`. Each project is its own private
 repository, so a deliverable can be shared with one client without exposing others.
-Finished projects move to `clients/<company>/archive/`.
+Finished projects move to `~/best/archive/`; record the move in its README.
 
 A project gets a repository here when it has code that runs or gets deployed, or
 when the client receives the repository itself. Documents, research and prep go in

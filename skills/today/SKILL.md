@@ -30,8 +30,8 @@ Pick the home:
 - Work for a client: `clients/<company>/`.
 - Loose or one-off work for someone outside: their folder in `desk/`.
 - Testing a tool: a folder in `stash/trials/`; follow its `AGENTS.md`.
-- Alejo's own project: `projects/`. Once he uses it regularly it moves to
-  `stash/` without its date prefix.
+- Alejo's own project: `projects/`. Once he uses it regularly, propose moving
+  it to `stash/` without its date prefix; move it only once he approves.
 - Unsure: `inbox/`.
 
 Create it with `proj <folder>/<name> [--claude|--codex]` (plain `<name>` means
