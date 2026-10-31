@@ -44,12 +44,6 @@ with the original, carrying over any edits made there since your last write, the
 delete the original. Writing over an existing tab can keep its old formatting, such
 as turning every paragraph into a bullet.
 
-## Orca Markdown
-
-Use collapsibles only as `<details class="orca-details">` with a plain `<summary>`
-and a Markdown body. Never nest them. Escape HTML-like strings inside collapsible
-code blocks. Split HTML-bearing files before 50,000 characters.
-
 ## Local macOS applications
 
 Sign apps requiring Accessibility, Screen Recording, microphone, camera or similar

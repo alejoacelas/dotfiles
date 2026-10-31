@@ -115,9 +115,6 @@ When opening any Claude Code or Codex session, use
 `codex --dangerously-bypass-approvals-and-sandbox`, unless I explicitly request
 restricted permissions.
 
-When rendering Markdown in Orca, read the
-[Markdown rules](/Users/alejo/best/stash/dotfiles/agents/workflows.md#orca-markdown).
-
 Create custom skills in `~/best/stash/dotfiles/skills/` so Claude Code and Codex share one
 source, or in the private `~/best/stash/dotfiles/private-skills/` checkout, then run
 dotfiles' `bin/install.sh`. The [dotfiles README](/Users/alejo/best/stash/dotfiles/README.md)
