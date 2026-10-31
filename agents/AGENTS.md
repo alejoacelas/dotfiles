@@ -70,11 +70,10 @@ or disclose secret values. Work runs on two Macs and an agent server
 [machines and credentials procedures](/Users/alejo/best/stash/dotfiles/agents/workflows.md#machines-and-credentials)
 before using `op-agent`, SSH or the server.
 
-I have a personal Google identity (`alejoacelas@gmail.com`) and an Impact Ops one
-(`alejo@impact-ops.org`). `gcloud` and Fly (`FLY_PERSONAL_TOKEN`) use the personal
-identity. Pick the identity from the project's context and pass it explicitly on every
-cloud write. Use `gog --account <email>` for Google Docs and Drive; it is signed in to
-both identities and to `alejo@habere.org`. Before replacing a whole tab, read the
+My personal Google identity is `alejoacelas@gmail.com`; `gcloud` and Fly
+(`FLY_PERSONAL_TOKEN`) use it. Pick the identity from the project's context and pass
+it explicitly on every cloud write. Use `gog --account <email>` for Google Docs and
+Drive. Before replacing a whole tab, read the
 [Google Docs procedure](/Users/alejo/best/stash/dotfiles/agents/workflows.md#replacing-a-google-docs-tab).
 
 ## Project conventions
