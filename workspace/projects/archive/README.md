@@ -22,6 +22,7 @@ to be revisited. See [DECISIONS.md](DECISIONS.md) for why each was parked.
 - [Native browser control](2026-09-26-native-browser-control/): backup; work continues in `~/best/projects/trials/2026-09-agent-browser-rules/native-control/`.
 - [Errands](2026-10-24-errands/): Mac-only errand job, replaced the same day by errands in gmail-sorting.
 - [Fake GitHub MCP](2026-10-27-fake-github-mcp/): empty stub; scope never written.
+- [Slackbots](2026-10-27-slackbots/): first version of the Moderation Bot, replaced by `projects/2026-10-31-slack-moderation-bot`.
 
 Tools moved here from `projects/in-use/` on 2026-10-29:
 

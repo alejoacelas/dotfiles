@@ -1,6 +1,7 @@
 # Me
 
-- [Health](health/): food, meals, exercise, and bipolar II notes.
+- [Health](health/): exercise and bipolar II notes.
+- [Meals](meals/): diet research and the recipe catalog.
 - [Relationships](relationships/): people, meeting research and relationship projects.
 - [Admin](admin/): visas, paperwork and travel.
 - [Stuff](stuff/): purchase history and gear notes.

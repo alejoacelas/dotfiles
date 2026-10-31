@@ -68,6 +68,9 @@ gpt-6-astra = 4
 [projects."/Users/alejo/best/archive/2026-10-80k-work/projects/2026-09-advising-workspace"]
 trust_level = "trusted"
 
+[projects."/Users/alejo/best/projects/2026-10-16-uplift-modelling"]
+trust_level = "trusted"
+
 [hooks.state]
 
 [hooks.state."/Users/alejo/best/archive/2026-10-80k-work/errands/10-06-minerva/.codex/hooks.json:session_start:0:0"]
