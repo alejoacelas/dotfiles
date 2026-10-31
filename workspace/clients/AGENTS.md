@@ -8,7 +8,8 @@ Finished projects move to `~/best/archive/`; record the move in its README.
 A project gets a repository here when it has code that runs or gets deployed, or
 when the client receives the repository itself. Documents, research and prep go in
 the person's folder in `~/best/desk/` instead. Register each repository there,
-following `~/best/desk/AGENTS.md`.
+following `~/best/desk/AGENTS.md`. To find the person's folder from a repository,
+search desk for the repository's path.
 
 Each company folder has an `AGENTS.md` and a `desk` symlink to the
 company's folder in `~/best/desk/`, created by the summarize-call skill. Before

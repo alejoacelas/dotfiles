@@ -100,6 +100,7 @@ read the destination's `AGENTS.md` and the
 - `desk/`: loose or one-off work tied to people outside, such as call prep,
   follow-up messages, notes and research, that doesn't merit its own repository.
   One folder per person; follow [its instructions](/Users/alejo/best/desk/AGENTS.md).
+  Register work delivered to someone in their folder there.
 - `clients/`: contracted work and projects, one folder per company that hires me.
 - `projects/`: my own projects, each a repository named `YYYY-MM-DD-name`.
 - `stash/`: things I repeatedly come back to, including `dotfiles/`, `strategy/`,

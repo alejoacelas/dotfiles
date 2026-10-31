@@ -232,7 +232,7 @@ summary is edited or renamed:
    gog -a <email> docs write <id> --tab Summary    --file /tmp/sum-doc.md   --markdown --replace
    gog -a <email> docs write <id> --tab Transcript --file /tmp/trans-doc.md --markdown --replace
    ```
-2. Add two fields to the summary's frontmatter: `doc:` with the doc link
+2. Add two fields to the summary's frontmatter: `gdoc:` with the doc link
    (`.../document/d/<id>/edit`, by ID so a rename can't break it) and `gist:` with
    a one-or-two-sentence gist in double quotes.
 3. Link client calls to client projects. For a call filed under a company's folder in
