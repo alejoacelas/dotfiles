@@ -15,7 +15,7 @@ brew bundle --file ~/best/stash/dotfiles/Brewfile
 
 On an existing machine, run just the last command. The installer links configuration
 and skills, sets up workspace container files, and enables the repository's commit guard. It
-backs up conflicting real files and includes Orca's account-specific Codex homes. The Codex app retains ownership of its base config.
+backs up conflicting real files. The Codex app retains ownership of its base config.
 
 ## Where things live
 

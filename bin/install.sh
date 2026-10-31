@@ -81,8 +81,8 @@ link agents/AGENTS.md   "$HOME/.codex/AGENTS.md"
 link codex/hooks.json   "$HOME/.codex/hooks.json"
 link codex/rules        "$HOME/.codex/rules"
 # Codex owns ~/.codex/skills/.system, so link each compatible skill without replacing
-# the directory. ~/.agents/skills is the universal root used by account-scoped Codex
-# runtimes such as Orca. Shared sources install in both clients automatically.
+# the directory. ~/.agents/skills is the universal skills root. Shared sources
+# install in both clients automatically.
 real_dir "$HOME/.agents/skills"
 for skill in "$DOTFILES"/skills/* "$DOTFILES"/private-skills/skills/* "$DOTFILES"/codex/skills/* "$DOTFILES"/private-skills/codex/skills/*; do
   [ -e "$skill" ] || continue
@@ -92,9 +92,6 @@ for skill in "$DOTFILES"/skills/* "$DOTFILES"/private-skills/skills/* "$DOTFILES
 done
 prune_stale_dotfiles_skill_links "$HOME/.agents/skills"
 prune_stale_dotfiles_skill_links "$HOME/.codex/skills"
-for root in "$HOME"/Library/Application\ Support/orca/codex-accounts/*/home/skills; do
-  prune_stale_dotfiles_skill_links "$root"
-done
 # The app owns config.toml; CLI-only overrides live in the explicit cli profile.
 link codex/cli.config.toml "$HOME/.codex/cli.config.toml"
 link shell/zprofile       "$HOME/.zprofile"
