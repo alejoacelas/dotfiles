@@ -1,20 +1,13 @@
 ---
 name: summarize-call
-description: Fetch a call transcript from Granola or Fathom, clean it, and file a tidied transcript plus a structured summary in ~/best/calls, following that repository's AGENTS.md. Use when the user wants to pull, clean, summarize, or archive Granola or Fathom calls — "summarise my call", "save my last Granola call", "archive these calls".
+description: Fetch a Granola call transcript from the API, clean it, and file a tidied transcript plus a structured summary in ~/best/calls, following that repository's AGENTS.md. Use when the user wants to pull, clean, summarize, or archive Granola calls — "summarise my call", "save my last Granola call", "archive these calls".
 ---
 
-# Granola or Fathom call → tidied transcript + summary
+# Granola call → tidied transcript + summary
 
 Adapted from [HartreeWorks/skill--summarise-granola](https://github.com/HartreeWorks/skill--summarise-granola),
-rewired to file into `~/best/calls`. Calls come from two recorders, so look in
-both every time:
-
-- **Granola**, read over its [public API](https://docs.granola.ai) with a
-  personal key (`scripts/granola.py`).
-- **Fathom**, read through the claude.ai Fathom connector
-  (`mcp__claude_ai_Fathom_Your_Meeting_Intelligence_Layer__*` tools; load
-  `list_meetings` and `get_meeting_transcript` with ToolSearch). Impact Ops
-  calls are usually recorded here.
+rewired to file into `~/best/calls`. Reads transcripts over Granola's
+[public API](https://docs.granola.ai) with a personal key (`scripts/granola.py`).
 
 ## Where to run
 
@@ -61,7 +54,7 @@ terminal output and chat. Record the variable's purpose and the verified
 The environment variable overrides the `.env` file. The helper uses Python's
 standard library; no additional packages are needed.
 
-## Granola commands
+## Commands
 
 ```bash
 python3 "$CALL_SKILL/scripts/granola.py" list [n]      # n most recent meetings (default 20; paginates)
@@ -100,30 +93,18 @@ note was pre-created, not when the call happened.
 
 ### Step 1: Pick the call
 
-Check both recorders, in parallel:
-
 ```bash
 python3 "$CALL_SKILL/scripts/granola.py" check
 ```
 
-and Fathom's `list_meetings` with `created_after` set to two days ago (ISO,
-UTC). Fathom lists recordings Alejo can access, including ones other people
-recorded; when the same call appears twice (one recorded by Alejo, one by the
-other participant), use Alejo's recording.
-
-If the user named a person or call, match it against both lists. Otherwise,
-take the most recent call that ended within 30 minutes from either source, or
-present one merged, numbered list and let the user pick.
-
-`granola.py check` returns JSON in one of two modes:
+Returns JSON in one of two modes:
 
 - **Auto** (`{"mode": "auto", "id": ..., "title": ..., "minutes_ago": ...}`) —
   a call ended within 30 minutes; proceed with it directly.
 - **Select** (`{"mode": "select", "meetings": [...]}`) — no recent call;
   present the numbered list and let the user pick.
 
-If the user gave a Granola doc id or a Fathom link, skip the check (resolve a
-Fathom link with `get_recording_by_url`).
+If the user already named a call or gave a doc id, skip the check.
 
 ### Step 2: Extract the transcript
 
@@ -131,17 +112,11 @@ Fathom link with `get_recording_by_url`).
 python3 "$CALL_SKILL/scripts/granola.py" get <doc_id>   # or: recent <n>
 ```
 
-For Fathom, call `get_meeting_transcript` with the `recording_id` and `url`
-from `list_meetings`. Fathom transcripts sometimes repeat a passage verbatim;
-keep one copy when tidying.
-
 ### Step 3: Confirm participant names
 
-Granola transcripts only label speakers `Me`/`Other`. Take the other
-participant's name from the meeting title when it's clearly there; if the title
-is generic ("Weekly sync"), ask the user. Fathom labels speakers by name, and
-`list_meetings` gives the invitees' emails, which Step 4 can use. **Never guess
-names.**
+The transcript only labels speakers `Me`/`Other`. Take the other participant's
+name from the meeting title when it's clearly there; if the title is generic
+("Weekly sync"), ask the user. **Never guess names.**
 
 ### Step 4: Create the Google Doc and hand over the link
 
@@ -165,14 +140,13 @@ Keep the doc private while it's being written, and check that creating it
 didn't share it automatically. Find the other participant's email in this
 order, stopping at the first hit:
 
-1. For a Fathom call, the participant's invitee email from `list_meetings`.
-2. The calendar event for the call — its attendees' emails. Check the personal
+1. The calendar event for the call — its attendees' emails. Check the personal
    calendar first, then the Impact Ops one:
    ```bash
    gog -a alejoacelas@gmail.com -j calendar events --from <iso> --to <iso>
    gog -a alejo@impact-ops.org -j calendar events --from <iso> --to <iso>
    ```
-3. Recent email with them, same two accounts:
+2. Recent email with them, same two accounts:
    `gog -a <account> -j gmail search "<first> <last>"` — take the address the
    person actually wrote from.
 
