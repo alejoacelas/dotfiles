@@ -9,7 +9,15 @@ Adapted from [HartreeWorks/skill--summarise-granola](https://github.com/HartreeW
 rewired to file into `~/best/desk`. Reads transcripts over Granola's
 [public API](https://docs.granola.ai) with a personal key (`scripts/granola.py`).
 
-## Where to run
+## Where it runs
+
+The agent server runs this pipeline on its own for every new Granola call: within about 20
+minutes of a call ending it files the call in desk, creates the doc, shares it with the
+participants and DMs Alejo the link (`desk-pipeline/calls.py` and `jobs/call.md` in the
+[agent-server repository](https://github.com/alejoacelas/2026-09-agent-server), which follow
+this file). Use this skill by hand as the fallback: for a call the server missed or failed
+on, or to redo one. First check that the call isn't filed already:
+`rg -l '^thread: <note id>' ~/best/desk/comms`.
 
 Run this workflow from a session whose working directory is inside `~/best/desk`.
 When triggered anywhere else, hand the job to a headless Claude started there and
@@ -51,7 +59,8 @@ file is Git-ignored, untracked, and owner-only (`chmod 600`). Keep values out of
 terminal output and chat. Record the variable's purpose and the verified
 1Password account, vault, item, and field in the repository's README.
 
-The environment variable overrides the `.env` file. The helper uses Python's
+The environment variable overrides the `.env` file. When `GRANOLA_API_BASE` is set (the
+agent server sets it to its credential broker, which adds the key), no key is needed. The helper uses Python's
 standard library; no additional packages are needed.
 
 ## Commands
@@ -126,9 +135,13 @@ while the transcript and summary are still being written. Title it
 (e.g. `Alejo-Jørgen`), slug in Title Case; pick a provisional slug from the
 meeting title and a skim of the transcript (Step 8 may rename it).
 
+Files you pass to `gog` go in a scratch folder, `$CALL_TMP`: any temporary folder on a
+Mac; on the agent server, where `gog` runs through the credential broker, a folder under
+`/srv/agent-share`.
+
 ```bash
-printf 'Being written — check back shortly.\n' > /tmp/placeholder.md
-gog -a <email> -j docs create "<title>" --file /tmp/placeholder.md   # → file.id, file.webViewLink
+printf 'Being written — check back shortly.\n' > "$CALL_TMP/placeholder.md"
+gog -a <email> -j docs create "<title>" --file "$CALL_TMP/placeholder.md"   # → file.id, file.webViewLink
 gog -a <email> docs add-tab <id> --title Transcript
 gog -a <email> docs rename-tab <id> --tab t.0 --title Summary      # first tab is born "Tab 1"
 ```
@@ -137,11 +150,12 @@ Post the doc URL (`.../document/d/<id>/edit`) in the reply as soon as it
 exists, before continuing.
 
 Keep the doc private while it's being written, and check that creating it
-didn't share it automatically. Find the other participant's email in this
+didn't share it automatically. Find each other participant's email in this
 order, stopping at the first hit:
 
 1. The `emails:` field of their file in `~/best/desk/people/`.
-2. The calendar event for the call — its attendees' emails. Check the personal
+2. Granola's attendee list for the note (`GET /v1/notes/<id>` returns `attendees` and
+   `calendar_event.invitees`), then the calendar event for the call — its attendees' emails. Check the personal
    calendar first, then the Impact Ops one:
    ```bash
    gog -a alejoacelas@gmail.com -j calendar events --from <iso> --to <iso>
@@ -151,8 +165,8 @@ order, stopping at the first hit:
    `gog -a <account> -j gmail search "<first> <last>"` — take the address the
    person actually wrote from.
 
-When the doc is finished (after Step 9), share it with that email as a writer
-and send the Drive invitation email. `--notify` is what sends it; without the
+When the doc is finished (after Step 9), share it with each participant's email as a
+writer and send the Drive invitation email. `--notify` is what sends it; without the
 flag the person gets access silently:
 
 ```bash
@@ -187,7 +201,8 @@ garbles are fixed silently — no bracket note; only unresolved ones stay marked
 
 Save to `~/best/desk/comms/<YYYY-MM>/<YYYY-MM-DD>-<slug>-trans.md`, opening with
 frontmatter that lists the other participants as `people:` slugs (and `projects:` when
-the call belongs to one), as `~/best/desk/AGENTS.md` specifies. Create a
+the call belongs to one), as `~/best/desk/AGENTS.md` specifies, followed by
+`source: granola`, `thread: <Granola note id>` and `link: <the note's web_url>`. Create a
 `people/<slug>.md` file for any participant who doesn't have one yet, with the email
 you found in Step 4.
 
@@ -196,8 +211,8 @@ you found in Step 4.
 Write a chronological summary following
 [`references/summary-format.md`](references/summary-format.md).
 
-Save next to the transcript with the `-sum.md` suffix and the same `people:` and
-`projects:` frontmatter.
+Save next to the transcript with the `-sum.md` suffix and the same `people:`,
+`projects:`, `source:`, `thread:` and `link:` frontmatter.
 
 ### Step 7: Cross-call clarification pass
 
@@ -232,10 +247,10 @@ apply when an existing call or summary is edited or renamed:
    ```bash
    ATTR='*Summary and transcript created with the shared skill available [here](https://github.com/alejoacelas/dotfiles/blob/main/skills/summarize-call/SKILL.md).*'
    strip_fm() { awk 'NR==1&&/^---$/{f=1;next} f&&/^---$/{f=0;next} !f' "$1"; }
-   { printf '%s\n\n' "$ATTR"; strip_fm <sum.md>; } > /tmp/sum-doc.md
-   strip_fm <trans.md> > /tmp/trans-doc.md
-   gog -a <email> docs write <id> --tab Summary    --file /tmp/sum-doc.md   --markdown --replace
-   gog -a <email> docs write <id> --tab Transcript --file /tmp/trans-doc.md --markdown --replace
+   { printf '%s\n\n' "$ATTR"; strip_fm <sum.md>; } > "$CALL_TMP/sum-doc.md"
+   strip_fm <trans.md> > "$CALL_TMP/trans-doc.md"
+   gog -a <email> docs write <id> --tab Summary    --file "$CALL_TMP/sum-doc.md"   --markdown --replace
+   gog -a <email> docs write <id> --tab Transcript --file "$CALL_TMP/trans-doc.md" --markdown --replace
    ```
 2. Add two fields to the summary's frontmatter: `gdoc:` with the doc link
    (`.../document/d/<id>/edit`, by ID so a rename can't break it) and `gist:` with

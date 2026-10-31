@@ -20,7 +20,9 @@ import re
 import subprocess
 from datetime import datetime, timezone
 
-PUBLIC_API_BASE = "https://public-api.granola.ai/v1"
+# GRANOLA_API_BASE points at a proxy that adds the key itself, such as the agent server's
+# credential broker (http://127.0.0.1:8790/granola/v1); no key is needed then.
+PUBLIC_API_BASE = os.environ.get("GRANOLA_API_BASE", "https://public-api.granola.ai/v1")
 SKILL_DIR = Path(__file__).resolve().parent.parent
 TRANSCRIPTS_DIR = SKILL_DIR / "data" / "transcripts"
 RECENT_THRESHOLD_MINUTES = 30
@@ -52,15 +54,16 @@ def _read_api_key() -> str | None:
 def public_get(path: str, params: dict | None = None) -> any:
     """GET an authenticated request against the public API (Bearer grn_ key)."""
     key = _read_api_key()
-    if not key:
+    if not key and "GRANOLA_API_BASE" not in os.environ:
         print("Error: Set GRANOLA_API_KEY in the environment or the skill's .env file.",
               file=sys.stderr)
         sys.exit(1)
     args = [
         'curl', '-s', '--compressed', '-G', f'{PUBLIC_API_BASE}{path}',
-        '-H', f'Authorization: Bearer {key}',
         '-H', 'Accept: application/json',
     ]
+    if key:
+        args += ['-H', f'Authorization: Bearer {key}']
     for k, v in (params or {}).items():
         args += ['--data-urlencode', f'{k}={v}']
 
