@@ -31,8 +31,8 @@ and share the doc yourself.
 
 ## Destination and paths
 
-Always save calls in `~/best/desk`. Before fetching or writing, read `~/best/desk/AGENTS.md` and the destination
-person's `README.md` and any `AGENTS.md` there. That repository defines the exact filing paths,
+Always save calls in `~/best/desk`. Before fetching or writing, read `~/best/desk/AGENTS.md` and any `README.md`
+or `AGENTS.md` in the destination person's folder. That repository defines the exact filing paths,
 folder conventions, indexes and sync requirements. If it is missing, stop and
 report that; do not create an archive in the current project.
 
@@ -234,9 +234,7 @@ summary is edited or renamed:
    ```
 2. Add two fields to the summary's frontmatter: `doc:` with the doc link
    (`.../document/d/<id>/edit`, by ID so a rename can't break it) and `gist:` with
-   a one-or-two-sentence gist in double quotes. On a person's first call, create
-   their `README.md`: `# <Name> — <Organisation> (<role>)` and one line on why you
-   talk.
+   a one-or-two-sentence gist in double quotes.
 3. Link client calls to client projects. For a call filed under a company's folder in
    `~/best/desk/`, make sure `~/best/clients/<company>/desk` is a symlink to that
    folder, creating it if missing. If the call is
