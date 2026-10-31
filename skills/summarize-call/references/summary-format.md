@@ -61,7 +61,8 @@ kind: coaching
 
 ## Frontmatter
 
-Every summary opens with YAML frontmatter carrying `kind:` — one lowercase
+Every summary opens with YAML frontmatter carrying `people:` and `projects:` (see
+`~/best/desk/AGENTS.md`) and `kind:` — one lowercase
 word for what the call was. `coaching` is the one that matters downstream
 (the wiki's intro articles are mined from coaching calls): use it when the
 user is walking the other person through AI tooling on their work. Otherwise

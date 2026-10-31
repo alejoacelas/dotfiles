@@ -31,10 +31,10 @@ and share the doc yourself.
 
 ## Destination and paths
 
-Always save calls in `~/best/desk`. Before fetching or writing, read `~/best/desk/AGENTS.md` and any `README.md`
-or `AGENTS.md` in the destination person's folder. That repository defines the exact filing paths,
-folder conventions, indexes and sync requirements. If it is missing, stop and
-report that; do not create an archive in the current project.
+Always save calls in `~/best/desk`. Before fetching or writing, read `~/best/desk/AGENTS.md`
+and the `people/` file of each participant. That repository defines the filing paths
+and frontmatter. If it is missing, stop and report that; do not create an archive in
+the current project.
 
 Resolve this skill's directory from the `SKILL.md` you loaded and set
 `CALL_SKILL` to that absolute directory. Run archive operations from `~/best/desk`;
@@ -140,13 +140,14 @@ Keep the doc private while it's being written, and check that creating it
 didn't share it automatically. Find the other participant's email in this
 order, stopping at the first hit:
 
-1. The calendar event for the call — its attendees' emails. Check the personal
+1. The `emails:` field of their file in `~/best/desk/people/`.
+2. The calendar event for the call — its attendees' emails. Check the personal
    calendar first, then the Impact Ops one:
    ```bash
    gog -a alejoacelas@gmail.com -j calendar events --from <iso> --to <iso>
    gog -a alejo@impact-ops.org -j calendar events --from <iso> --to <iso>
    ```
-2. Recent email with them, same two accounts:
+3. Recent email with them, same two accounts:
    `gog -a <account> -j gmail search "<first> <last>"` — take the address the
    person actually wrote from.
 
@@ -184,20 +185,25 @@ topic shifts, preserve exact wording for the categories listed there. Repaired
 garbles are fixed silently — no bracket note; only unresolved ones stay marked
 `[unclear]` / `[name unclear]`.
 
-Save to the person's `calls/` folder, at the path `~/best/desk/AGENTS.md` specifies, with the `-trans.md` suffix.
+Save to `~/best/desk/comms/<YYYY-MM>/<YYYY-MM-DD>-<slug>-trans.md`, opening with
+frontmatter that lists the other participants as `people:` slugs (and `projects:` when
+the call belongs to one), as `~/best/desk/AGENTS.md` specifies. Create a
+`people/<slug>.md` file for any participant who doesn't have one yet, with the email
+you found in Step 4.
 
 ### Step 6: Summary
 
 Write a chronological summary following
 [`references/summary-format.md`](references/summary-format.md).
 
-Save next to the transcript with the `-sum.md` suffix.
+Save next to the transcript with the `-sum.md` suffix and the same `people:` and
+`projects:` frontmatter.
 
 ### Step 7: Cross-call clarification pass
 
 Reread the finished transcript and summary against the garble inventory and
 try to resolve what the single call couldn't — by reading previous calls with
-the **same person** (their folder, plus git history). These files get shared
+the **same person** (items in `comms/` whose `people:` lists them, plus git history). These files get shared
 with the other participant, so never import content from calls with other
 people; the wider archive may only confirm the spelling of a name or tool
 already spoken in this call. Remove `[unclear]` markers as garbles resolve
@@ -213,11 +219,10 @@ earlier colliding pair too (use `git mv` when the old files are committed).
 The test: from the slug alone, could you tell the calls apart? If the slug
 changed, retitle the doc: `gog -a <email> drive rename <id> "<new title>"`.
 
-### Step 9: Fill the Google Doc + folder index
+### Step 9: Fill the Google Doc
 
-Push the finished files into the doc from Step 4 and record the call in the
-folder index using the rules below. These also apply when an existing call or
-summary is edited or renamed:
+Push the finished files into the doc from Step 4 using the rules below. These also
+apply when an existing call or summary is edited or renamed:
 
 1. Fill both tabs. `gog` would write YAML frontmatter into the doc as text, so
    strip it first; `--tab` leaves the sibling tab alone. The tab title already
@@ -235,12 +240,6 @@ summary is edited or renamed:
 2. Add two fields to the summary's frontmatter: `gdoc:` with the doc link
    (`.../document/d/<id>/edit`, by ID so a rename can't break it) and `gist:` with
    a one-or-two-sentence gist in double quotes.
-3. Link client calls to client projects. For a call filed under a company's folder in
-   `~/best/desk/`, make sure `~/best/clients/<company>/desk` is a symlink to that
-   folder, creating it if missing. If the call is
-   about project work for a company with no folder in `~/best/clients/`, ask
-   whether to create `~/best/clients/<company>/` with the symlink and a short
-   `AGENTS.md` naming the company and where its people's folders are.
 
 ## Batch runs
 

@@ -11,8 +11,9 @@ description: Start-of-day review of ~/best, and where to put new work. Use when 
    projects untouched for two weeks, projects still running or billing, and
    trials still running.
 2. List today's calendar events on Alejo's personal Google account. For each call
-   with someone who has a folder in `~/best/desk/`, read their latest summary and
-   `README.md`; for client calls, also read `~/best/clients/<company>/AGENTS.md`.
+   with someone who has a file in `~/best/desk/people/`, read it and their latest
+   summary in `~/best/desk/comms/` (the items whose `people:` lists them); for client
+   calls, also read `~/best/clients/<company>/AGENTS.md`.
 3. Present one short list, most urgent first:
    - **Calls today:** who, when, and what was promised or left open last time.
    - **Unsaved work:** offer to commit and push.
@@ -28,7 +29,7 @@ description: Start-of-day review of ~/best, and where to put new work. Use when 
 Pick the home:
 
 - Work for a client: `clients/<company>/`.
-- Loose or one-off work for someone outside: their folder in `desk/`.
+- Loose or one-off work for someone outside: `desk/requested/`; follow its `AGENTS.md`.
 - Testing a tool: a folder in `stash/trials/`; follow its `AGENTS.md`.
 - Alejo's own project: `projects/`. Once he uses it regularly, propose moving
   it to `stash/` without its date prefix; move it only once he approves.
