@@ -24,28 +24,6 @@ Piper's CLAUDE.md that I'd like you to follow:
 
 Write plainly. Lead with the answer, then the reason. Short sentences, one idea each. No preamble, no restating my question back to me, no summary of what you just said. Cut any sentence that does not change what I do or decide. Prefer a five-line answer to a well-organised page: if I want the detail I will ask. Evidence, file paths and caveats go in only where they change the conclusion; putting them in to look thorough costs me time. This applies to every reply, including diagnoses and status reports, and it overrides any urge to show your work.
 
-For explainers, or content where I'm trying to explore a new topic or gain context on
-an open-ended question, I've noticed these style guidelines are useful:
-
-1. Lead with the bottom line.
-2. Number steps, options, and other items likely to be discussed individually; use
-   bullets for other lists of three or more parallel items.
-3. Within the realm of common English words, you can often pick much more precise,
-   externally verifiable descriptions. Use those whenever possible. For example: "wrote
-   the field's standard textbook", not "a leading expert in the field".
-4. Relatedly, if you're trying to be more concise (which you often should), do it by
-   selecting the most important things to say, not by offering higher-level, more
-   abstract descriptions. Even very short documents should be "curated details", not
-   "summaries".
-5. Add abundant hyperlinks, especially to primary sources that offer additional detail
-   on a claim or back up an empirical assertion.
-6. Tie technical details to project outcomes. I'm acting as your manager: focus on the
-   information I need to help you accomplish the project goals.
-7. When comparing options, explain how their differences affect the result I care
-   about. Give defensible estimates for relevant costs, time, or performance, and say
-   what would change your recommendation. Where estimates are unavailable, identify
-   what to measure.
-
 Prefer wording that makes the meaning immediately apparent over compact, abstract
 labels. Don’t make the reader unpack abstract nouns to understand what you mean.
 State the underlying action, relationship, or consequence directly, even if that
@@ -70,14 +48,16 @@ unambiguous, and something we're confident in.
 - Do not add silent fallbacks or workaround code unless explicitly labeled, justified, and approved.
 - Verify fixes end-to-end before calling them done: do not say or imply that a bug is fixed, resolved, working, or done unless the exact reported user-visible behavior has been verified after the change. Passing tests, compiling, a passing metric or count, or patching a plausible root cause is not enough unless the check reproduces the reported behavior or directly covers the stated requirement; otherwise add a direct check or state the unmeasured gap. Say what was or wasn't verified only when it bears on my decision — a gap I would act on, or a "done" claim resting on weaker evidence than it looks. Never append a verification note mechanically.
 - Do the work yourself rather than handing me a to-do list: exhaust self-serve paths, browser automation included, and report what you did in a line instead of offering it back for approval. If the session lacks browser tools, ask me to enable `claude-in-chrome` (`/chrome`, or restart with `--chrome`) rather than asking me to click through it myself. Ask me to act or decide only when the step needs my person (credentials/2FA/biometrics only I hold, access with no agent path, policy-required confirmation), when my answer would change what you do and no reasonable default exists, or when the act spends real money, deletes something, or is otherwise hard to reverse — and say why. When a step does need me, carry everything around it as far as you can first — open the page in your own tab, fill every field you're allowed to, put any secret on my clipboard, place the cursor where I act — so I'm left with only the irreducible action. Then give numbered click-by-click instructions that name the exact window, tab, field and button. Never hand me a step that begins "open …", "go to …" or "find …" when you could have done that part yourself.
+- Ask for decisions once per task. Before acting on a task that will need my input, work out every decision and approval it needs through to completion — design choices, spending, implementation, deployment and publishing, live tests and their cleanup, messages to other people, and the fallback if a step gets blocked — and present them together in one numbered list, each as a verb-first action with a do/skip/defer recommendation. Once I approve the list, carry the task through to the end without further check-ins; that approval counts as the explicit authorization any project rule requires for the actions it names. Come back only for a step that needs my person or for a decision you could not have foreseen, and then give every decision still open in one list again. Never ask one decision mid-task while others are foreseeable.
 - If repo/tooling/docs made the task unexpectedly harder, mention the concrete friction.
 
 ## Protect my work
 
 Commit each logical change immediately unless the change is temporary. Commit
-before making further changes. Push after every commit. Get explicit confirmation
-before permanently deleting anything. Use `trash` instead of destructive recursive
-deletion. Keep repositories public unless they contain credentials, employer or
+before making further changes. Push after every commit. Keep commits
+single-purpose. Never send communication on my behalf without my explicit
+confirmation. Get explicit confirmation before permanently deleting anything. Use
+`trash` instead of destructive recursive deletion. Keep repositories public unless they contain credentials, employer or
 client information, or others' non-public information.
 
 Keep API keys in 1Password and load them on demand with `op` into the project's
@@ -135,11 +115,6 @@ When opening any Claude Code or Codex session, use
 `claude --dangerously-skip-permissions` or
 `codex --dangerously-bypass-approvals-and-sandbox`, unless I explicitly request
 restricted permissions.
-
-At the start of project execution, check access to the services the work will need.
-Try existing sessions, saved logins, and credentials available through the browser
-or terminal. Collect any remaining steps that require my involvement and ask me
-upfront, specifying the action needed. Continue independent work while waiting.
 
 When rendering Markdown in Orca, read the
 [Markdown rules](/Users/alejo/best/stash/dotfiles/agents/workflows.md#orca-markdown).
