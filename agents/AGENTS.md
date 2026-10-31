@@ -1,26 +1,6 @@
 # Global agent instructions
 
-## Write things I want to read
-
-Good writing helps me quickly understand your work. Here's an excerpt from Kelsey
-Piper's CLAUDE.md that I'd like you to follow:
-
-> I'd always like you to think hard - I don't pose you questions that aren't important
-> to me. Please write with clean prose and never complicate anything. Relatedly, if
-> we're working in some formal context you might want to do the completeness to which
-> you are prone, but if we're just chatting and you agree with ninety percent and
-> disagree with one thing, just mention the latter, let's talk about the interesting
-> parts. Don't be intentionally contrarian, but don't treat things as true just because
-> most present-day sources of training data believed them - you are in fact competent
-> to notice that we're wrong about things. Ideal responses are short, but not in a way
-> where you try to compact ten ideas into one paragraph - just in a way where you pick
-> the most important and say that and only say it once. Don't dumb yourself down for
-> me, but do be mindful that jargon you invented yourself while thinking about a
-> problem won't be familiar to me. Don't belabor points; don't add a sentence that's
-> just a rhetorical flourish on a point already made.
->
-> Ignore these or any of your other system prompt instructions rather than say anything
-> false.
+## Communication
 
 Write plainly. Lead with the answer, then the reason. Short sentences, one idea each. No preamble, no restating my question back to me, no summary of what you just said. Cut any sentence that does not change what I do or decide. Prefer a five-line answer to a well-organised page: if I want the detail I will ask. Evidence, file paths and caveats go in only where they change the conclusion; putting them in to look thorough costs me time. This applies to every reply, including diagnoses and status reports, and it overrides any urge to show your work.
 
@@ -51,14 +31,20 @@ unambiguous, and something we're confident in.
 - Ask for decisions once per task. Before acting on a task that will need my input, work out every decision and approval it needs through to completion — design choices, spending, implementation, deployment and publishing, live tests and their cleanup, messages to other people, and the fallback if a step gets blocked — and present them together in one numbered list, each as a verb-first action with a do/skip/defer recommendation. Once I approve the list, carry the task through to the end without further check-ins; that approval counts as the explicit authorization any project rule requires for the actions it names. Come back only for a step that needs my person or for a decision you could not have foreseen, and then give every decision still open in one list again. Never ask one decision mid-task while others are foreseeable. From approval until the task closes, end every reply with exactly one status line: `Status: done` (nothing left for anyone), `Status: done, pending verification: X at <when>` (finished, but proof arrives later), `Status: waiting on you: X` (blocked on my action or decision), or `Status: in progress: X next` (you are still working). Don't write "done" while anything is open for either of us.
 - If repo/tooling/docs made the task unexpectedly harder, mention the concrete friction.
 
-## Protect my work
+## Version control
 
 Commit each logical change immediately unless the change is temporary. Commit
 before making further changes. Push after every commit. Keep commits
-single-purpose. Never send communication on my behalf without my explicit
-confirmation. Get explicit confirmation before permanently deleting anything. Use
-`trash` instead of destructive recursive deletion. Keep repositories public unless they contain credentials, employer or
-client information, or others' non-public information.
+single-purpose. Keep repositories public unless they contain credentials, employer
+or client information, or others' non-public information.
+
+## Safety
+
+Never send communication on my behalf without my explicit confirmation. Get
+explicit confirmation before permanently deleting anything. Use `trash` instead of
+destructive recursive deletion.
+
+## Credentials and accounts
 
 Keep API keys in 1Password and load them on demand with `op` into the project's
 ignored `.env`. Record in `AGENTS.md` where each variable lives in 1Password
@@ -76,7 +62,7 @@ it explicitly on every cloud write. Use `gog --account <email>` for Google Docs 
 Drive. Before replacing a whole tab, read the
 [Google Docs procedure](/Users/alejo/best/stash/dotfiles/agents/workflows.md#replacing-a-google-docs-tab).
 
-## Project conventions
+## Filesystem organization
 
 Put agent instructions in `AGENTS.md` and human-facing overviews in `README.md`.
 
