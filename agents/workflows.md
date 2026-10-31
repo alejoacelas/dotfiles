@@ -10,49 +10,6 @@ Read only the section relevant to the task.
 - Follow the folder's archive rules. Record moves with their old path and reason;
   preserve repository history and privacy.
 
-## Decision records
-
-Use `DECISIONS.md` to prevent important decisions from being accidentally undone.
-Select choices that answer a real recurring tension or a costly mistake supported
-by the project and its history. Group choices that protect the same outcome. Expand
-each with the current rule, its reason and only the exceptions that affect future
-work. Discard history that no longer changes what someone should do.
-
-Use a short title, then “Core decisions”, then “Details”. Under Core decisions,
-group related choices under descriptive headings, with individual decisions as
-concise bullets. Each bullet links to its matching subsection under Details. Aim
-for 3–5 groups and 6–10 decision bullets; do not pad a small project to meet a count.
-The core section should make sense on its own. Do not add an appendix of omitted
-material.
-
-Read the existing record, relevant instructions and README, and the actual code,
-configuration and tests. Follow substantive commits and diffs to understand reasons,
-reversals and constraints; do not rely on commit titles or merely summarize the old
-log. Use implementation to establish current behavior and history to establish
-reasons. Distinguish recorded intentions, observed behavior and inference. Do not
-invent motivations or treat passing tests as proof of live production behavior.
-
-Keep only decisions whose loss could lead to a consequential mistake. Omit routine
-implementation facts, feature inventories, setup recipes, repeated test counts and
-incidental session activity. Keep past failures only when they explain a current
-constraint or prevent recurrence. Link to relative source files and relevant commit
-hashes instead of reproducing recoverable mechanics. Never include credentials or
-raw private user data.
-
-Add a dated entry under a final “Decision log” heading when we make or change a
-decision worth preserving. Record the decision and enough context to explain why;
-do not add an entry merely because a session happened. When substantial changes
-accumulate, rewrite the current decisions, merge overlapping explanations, remove
-superseded details, and clear log entries whose useful content is now incorporated.
-Preserve relevant reasons and exceptions; Git preserves history. Prefer updating
-an existing explanation over adding another. Grow the document only for distinct
-decisions or necessary reasons.
-
-Commit substantive work first, then update the decision record in a metadata-only
-follow-up commit, citing the relevant substantive hashes. Rewriting an existing
-chronological record needs the same investigation as a new one; do not install a
-stale experimental draft.
-
 ## Orca Markdown
 
 Use collapsibles only as `<details class="orca-details">` with a plain `<summary>`

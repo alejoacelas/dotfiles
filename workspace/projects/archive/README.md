@@ -1,7 +1,7 @@
 # Archived projects
 
 Parked projects, including finished studies and substantial work that is unlikely
-to be revisited. See [DECISIONS.md](DECISIONS.md) for why each was parked.
+to be revisited.
 
 - [Call recording](2026-06-27-call-recording/): problem statement and borrowed prompt, no capture implementation.
 - [Cloudflare domain CLI](2026-06-27-cloudflare-domain-cli/): domain search, availability checks and registration CLI.

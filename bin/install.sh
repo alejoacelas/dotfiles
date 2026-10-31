@@ -129,13 +129,6 @@ while IFS= read -r source; do
   fi
   link "workspace/$relative" "$BEST_ROOT/$relative"
 done < <(rg --files --hidden "$DOTFILES/workspace")
-# Personal/private sources are separate clones; no private files are copied into dotfiles.
-if [ -f "$HOME/.local/share/agent-context/private/archive/DECISIONS.md" ]; then
-  target="$BEST_ROOT/archive/DECISIONS.md"
-  if [ ! -e "$target" ] && [ ! -L "$target" ]; then
-    ln -s "$HOME/.local/share/agent-context/private/archive/DECISIONS.md" "$target"
-  fi
-fi
 
 # Install after workspace symlinks exist so Claude exclusions include their real paths.
 "$HOME/.local/share/agent-context/venv/bin/python" "$DOTFILES/bin/agent-context" install

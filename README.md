@@ -64,8 +64,7 @@ instructions. Both clients link to the same skill source. The older synced
 its `anthropic-skills:` name, so account sync cannot reactivate it locally.
 
 Historical instruction snapshots remain in Git history. Archived workspace files
-live independently under `~/best/archive/`. Current decisions and their reasons live in
-[`DECISIONS.md`](DECISIONS.md).
+live independently under `~/best/archive/`.
 
 Repository tests live in `tests/`; skill-specific tests travel with their skill
 in its own `tests/` directory.

@@ -34,8 +34,7 @@ then leave it at the top, drop the date prefix and add a pointer above if Alejo
 now uses it regularly, or move it to `archive/` if it is unlikely to be
 revisited. Before archiving a tool, stop anything that runs it (launchd jobs,
 login items, symlinks on `PATH`). Preserve Git history and privacy, record
-archive moves and their reason in `archive/DECISIONS.md`, and update links and
-`archive/README.md`. Move a project back to the top when work resumes.
+archive moves and their reason in `archive/README.md`, and update links. Move a project back to the top when work resumes.
 
 ## Android
 

@@ -113,24 +113,6 @@ Save documents tied to one person, such as call prep, follow-up messages and
 notes, in that person's folder in `~/best/calls/`, named
 `<YYYY-MM-DD>-<slug>.md`.
 
-Keep `DECISIONS.md` as a concise record of current decisions that future work
-should not accidentally undo. Put grouped core decisions first, with linked reasons
-and consequential exceptions below.
-
-When we make or change a decision worth preserving, add a dated entry to a log at
-the bottom. Record only the decision and enough context to explain why; skip session
-progress and routine implementation details.
-
-When you notice substantial changes accumulating, rewrite the document to reflect
-the current decisions and fold in the log. Remove superseded decisions, merge
-overlapping explanations, and clear entries whose useful content is now incorporated.
-Preserve relevant reasons and exceptions; rely on Git for history.
-
-Prefer updating an existing explanation over adding another. The document should
-grow only when there are more distinct decisions or necessary reasons to preserve.
-Follow the
-[decision-record format](/Users/alejo/best/dotfiles/agents/workflows.md#decision-records).
-
 ## Model APIs
 
 For application and script model calls, use Anthropic directly: `claude-opus-5-5`
