@@ -110,9 +110,6 @@ done
 # Enable the repo's tracked git hooks (the secret-scan pre-commit guard).
 git -C "$DOTFILES" config core.hooksPath hooks
 
-# Session-start context uses only the standard library in an isolated environment.
-uv venv --allow-existing "$HOME/.local/share/agent-context/venv"
-link bin/agent-context "$HOME/.local/bin/agent-context"
 link bin/proj "$HOME/.local/bin/proj"
 
 # Ordinary container configuration lives here; existing repositories keep their own files.
@@ -129,9 +126,6 @@ while IFS= read -r source; do
   fi
   link "workspace/$relative" "$BEST_ROOT/$relative"
 done < <(rg --files --hidden "$DOTFILES/workspace")
-
-# Install after workspace symlinks exist so Claude exclusions include their real paths.
-"$HOME/.local/share/agent-context/venv/bin/python" "$DOTFILES/bin/agent-context" install
 
 # Keep machine-local or secret settings in ~/.claude/settings.local.json (untracked) —
 # never in the tracked settings.json linked above.

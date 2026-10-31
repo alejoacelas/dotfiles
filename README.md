@@ -14,13 +14,8 @@ brew bundle --file ~/best/dotfiles/Brewfile
 ```
 
 On an existing machine, run just the last command. The installer links configuration
-and skills, sets up workspace container files, enables the repository's commit guard,
-and installs the shared-context startup hook. It backs up conflicting real files.
-It requires `uv`, creates an isolated Python environment, and includes Orca's
-account-specific Codex homes. The Codex app retains ownership of its base config.
-
-Employer context comes from a separate private clone at
-`~/.local/share/agent-context/private`.
+and skills, sets up workspace container files, and enables the repository's commit guard. It
+backs up conflicting real files and includes Orca's account-specific Codex homes. The Codex app retains ownership of its base config.
 
 ## Where things live
 
@@ -108,18 +103,9 @@ moves into the newest project in `~/best/projects`. The
 
 ```sh
 bin/check-agent-config                    # broken links, missing skills, differences
-bin/agent-context check /path/to/project  # inspect selected context
-~/.local/share/agent-context/venv/bin/python -m unittest discover -s tests
-~/.local/share/agent-context/venv/bin/python -m unittest discover -s skills/summarize-call/tests
+python3 -m unittest discover -s tests
+python3 -m unittest discover -s skills/summarize-call/tests
 ```
-
-Shared context is selected explicitly per repository with
-`bin/agent-context adopt /path/to/project --groups 80k --visibility private`.
-An empty `--groups` removes a selection. Public selections live in
-`agents/projects.json`; private selections live in the private clone's
-`projects.json`. Linked worktrees reuse the main checkout's selection.
-Startup reads context without rewriting project files. Errors and installer
-backups live in `~/.local/state/agent-context/`.
 
 Claude's settings-saving behavior can replace its symlink with a copy. The
 session-start relinking hook preserves that copy in this repo and restores the

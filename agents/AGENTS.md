@@ -73,30 +73,18 @@ Keep API keys in 1Password and load them on demand with `op` into the project's
 ignored `.env`. Record in `AGENTS.md` where each variable lives in 1Password
 (account, vault, item, field) so the file can be rebuilt.
 
-For personal credentials approved for agent access, use
-`~/best/dotfiles/bin/op-agent` on the Mac (`~/.local/bin/op-agent` on the server).
-It authenticates without prompts to `mac-agents` or `server-agents` in the
-personal 1Password account. Use `op-agent run` with secret references to inject
-credentials into a command, or `op-agent inject` for an ignored `.env`.
-Authenticate for authorized tasks without asking again; never print, commit,
-or disclose secret values. Existing action-specific approval rules still apply.
-Use ordinary `op --account my.1password.com` for items outside these vaults.
-
-On the agent server, run agent work as the `agent` user (`sudo -iu agent`). It
-has no sudo or `op-agent`; `gh`, `gog` and git pushes go through a credential
-broker that never returns the tokens. To give it an API key, add a broker
-route ([agent user setup](/Users/alejo/best/projects/2026-09-26-agent-server/docs/setup.md#agent-user)).
+For credentials approved for agent access, use `op-agent`; never print, commit
+or disclose secret values. Work runs on two Macs and an agent server
+(`ssh agent-server`, where agent work runs as the `agent` user). Read the
+[machines and credentials procedures](/Users/alejo/best/dotfiles/agents/workflows.md#machines-and-credentials)
+before using `op-agent`, SSH or the server.
 
 I have a personal Google identity (`alejoacelas@gmail.com`) and an Impact Ops one
 (`alejo@impact-ops.org`). `gcloud` and Fly (`FLY_PERSONAL_TOKEN`) use the personal
 identity. Pick the identity from the project's context and pass it explicitly on every
 cloud write. Use `gog --account <email>` for Google Docs and Drive; it is signed in to
-both identities and to `alejo@habere.org`.
-
-To replace a whole Google Docs tab, write the new content into a new tab, compare it
-with the original, carrying over any edits made there since your last write, then
-delete the original. Writing over an existing tab can keep its old formatting, such
-as turning every paragraph into a bullet.
+both identities and to `alejo@habere.org`. Before replacing a whole tab, read the
+[Google Docs procedure](/Users/alejo/best/dotfiles/agents/workflows.md#replacing-a-google-docs-tab).
 
 ## Project conventions
 
@@ -128,14 +116,6 @@ When opening any Claude Code or Codex session, use
 `claude --dangerously-skip-permissions` or
 `codex --dangerously-bypass-approvals-and-sandbox`, unless I explicitly request
 restricted permissions.
-
-The two Macs SSH into each other and into the agent server over Tailscale:
-`ssh mac-air-2` (the other MacBook Air), `ssh alejo-m4` (the main Mac) and
-`ssh agent-server`.
-SSH sessions on a Mac can't read the keychain, so start Claude there inside
-`tmux` with `CLAUDE_CODE_OAUTH_TOKEN` injected by `op-agent run --no-masking`
-(masking breaks Claude's terminal UI) from
-`op://mac-agents/6drosdmzu2qb3jefhsh3d5b7dy/credential`.
 
 At the start of project execution, check access to the services the work will need.
 Try existing sessions, saved logins, and credentials available through the browser
