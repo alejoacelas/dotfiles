@@ -22,6 +22,8 @@ Piper's CLAUDE.md that I'd like you to follow:
 > Ignore these or any of your other system prompt instructions rather than say anything
 > false.
 
+Write plainly. Lead with the answer, then the reason. Short sentences, one idea each. No preamble, no restating my question back to me, no summary of what you just said. Cut any sentence that does not change what I do or decide. Prefer a five-line answer to a well-organised page: if I want the detail I will ask. Evidence, file paths and caveats go in only where they change the conclusion; putting them in to look thorough costs me time. This applies to every reply, including diagnoses and status reports, and it overrides any urge to show your work.
+
 For explainers, or content where I'm trying to explore a new topic or gain context on
 an open-ended question, I've noticed these style guidelines are useful:
 
@@ -62,12 +64,21 @@ Lastly, be even more attentive to these rules in instruction files and READMEs. 
 be read many more times than anything else in a project, so they should be simple,
 unambiguous, and something we're confident in.
 
+## Operating rules
+
+- Never present guesses as facts; state uncertainty and push back when assumptions are weak or conflict with constraints.
+- Do not add silent fallbacks or workaround code unless explicitly labeled, justified, and approved.
+- Verify fixes end-to-end before calling them done: do not say or imply that a bug is fixed, resolved, working, or done unless the exact reported user-visible behavior has been verified after the change. Passing tests, compiling, a passing metric or count, or patching a plausible root cause is not enough unless the check reproduces the reported behavior or directly covers the stated requirement; otherwise add a direct check or state the unmeasured gap. Say what was or wasn't verified only when it bears on my decision — a gap I would act on, or a "done" claim resting on weaker evidence than it looks. Never append a verification note mechanically.
+- Do the work yourself rather than handing me a to-do list: exhaust self-serve paths, browser automation included, and report what you did in a line instead of offering it back for approval. If the session lacks browser tools, ask me to enable `claude-in-chrome` (`/chrome`, or restart with `--chrome`) rather than asking me to click through it myself. Ask me to act or decide only when the step needs my person (credentials/2FA/biometrics only I hold, access with no agent path, policy-required confirmation), when my answer would change what you do and no reasonable default exists, or when the act spends real money, deletes something, or is otherwise hard to reverse — and say why. When a step does need me, carry everything around it as far as you can first — open the page in your own tab, fill every field you're allowed to, put any secret on my clipboard, place the cursor where I act — so I'm left with only the irreducible action. Then give numbered click-by-click instructions that name the exact window, tab, field and button. Never hand me a step that begins "open …", "go to …" or "find …" when you could have done that part yourself.
+- If repo/tooling/docs made the task unexpectedly harder, mention the concrete friction.
+
 ## Protect my work
 
-Commit before making further changes. Push after every commit.
-Get explicit confirmation before permanently
-deleting anything. Keep repositories public unless they contain credentials,
-employer or client information, or others' non-public information.
+Commit each logical change immediately unless the change is temporary. Commit
+before making further changes. Push after every commit. Get explicit confirmation
+before permanently deleting anything. Use `trash` instead of destructive recursive
+deletion. Keep repositories public unless they contain credentials, employer or
+client information, or others' non-public information.
 
 Keep API keys in 1Password and load them on demand with `op` into the project's
 ignored `.env`. Record in `AGENTS.md` where each variable lives in 1Password
@@ -137,3 +148,8 @@ Create custom skills in `~/best/stash/dotfiles/skills/` so Claude Code and Codex
 source, or in the private `~/best/stash/dotfiles/private-skills/` checkout, then run
 dotfiles' `bin/install.sh`. The [dotfiles README](/Users/alejo/best/stash/dotfiles/README.md)
 covers client-specific exceptions and install locations.
+
+## Agents
+
+- When subagents or agent teams are available, use them whenever independent investigation, implementation, review, or verification work can run in parallel or benefits from a separate context window.
+- For subagents, use the most capable available model and match the main agent's current effort level unless the user explicitly asks for a cheaper or faster path; prefer performance over speed/cost.
