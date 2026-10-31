@@ -237,9 +237,9 @@ summary is edited or renamed:
    a one-or-two-sentence gist in double quotes. On a person's first call, create
    their `README.md`: `# <Name> — <Organisation> (<role>)` and one line on why you
    talk.
-3. Link client calls to client projects. For a call filed under
-   `~/best/desk/uplift/<company>/`, make sure `~/best/clients/<company>/desk`
-   is a symlink to that company folder, creating it if missing. If the call is
+3. Link client calls to client projects. For a call filed under a company's folder in
+   `~/best/desk/`, make sure `~/best/clients/<company>/desk` is a symlink to that
+   folder, creating it if missing. If the call is
    about project work for a company with no folder in `~/best/clients/`, ask
    whether to create `~/best/clients/<company>/` with the symlink and a short
    `AGENTS.md` naming the company and where its people's folders are.
