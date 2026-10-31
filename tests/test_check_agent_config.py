@@ -27,9 +27,9 @@ class SkillInstallationTests(unittest.TestCase):
         )
 
     def test_client_specific_skills_are_not_drift(self):
-        self.skill('best/dotfiles/claude/skills', 'claude-only')
+        self.skill('best/stash/dotfiles/claude/skills', 'claude-only')
         self.skill('.claude/skills', 'claude-only')
-        self.skill('best/dotfiles/codex/skills', 'codex-only')
+        self.skill('best/stash/dotfiles/codex/skills', 'codex-only')
         for root in ('.agents/skills', '.codex/skills'):
             self.skill(root, 'codex-only')
         result = self.check()
@@ -39,7 +39,7 @@ class SkillInstallationTests(unittest.TestCase):
 
     def test_shared_sources_require_both_clients(self):
         for source, name in (('skills', 'public'), ('private-skills/skills', 'private')):
-            self.skill('best/dotfiles/' + source, name)
+            self.skill('best/stash/dotfiles/' + source, name)
             for registry in ('.agents/skills', '.codex/skills'):
                 self.skill(registry, name)
         result = self.check()
@@ -53,8 +53,8 @@ class SkillInstallationTests(unittest.TestCase):
         self.assertNotIn('UNMANAGED', result.stdout)
 
     def test_missing_installations_fail_for_each_registry(self):
-        self.skill('best/dotfiles/claude/skills', 'claude-only')
-        self.skill('best/dotfiles/codex/skills', 'codex-only')
+        self.skill('best/stash/dotfiles/claude/skills', 'claude-only')
+        self.skill('best/stash/dotfiles/codex/skills', 'codex-only')
         self.skill('.agents/skills', 'codex-only')
         result = self.check()
         self.assertEqual(result.returncode, 1)
@@ -63,7 +63,7 @@ class SkillInstallationTests(unittest.TestCase):
         self.assertNotIn('~/.agents/skills', result.stdout)
 
     def test_one_correct_codex_copy_does_not_hide_other_copy_drift(self):
-        self.skill('best/dotfiles/codex/skills', 'shared')
+        self.skill('best/stash/dotfiles/codex/skills', 'shared')
         self.skill('.agents/skills', 'shared')
         self.skill('.codex/skills', 'shared', 'stale')
         self.skill('.claude/skills', 'external')
@@ -74,7 +74,7 @@ class SkillInstallationTests(unittest.TestCase):
         self.assertIn('~/.claude/skills: external', result.stdout)
 
     def test_broken_source_links_fail_even_without_installed_copy(self):
-        source = self.home / 'best/dotfiles/claude/skills'
+        source = self.home / 'best/stash/dotfiles/claude/skills'
         source.mkdir(parents=True)
         (source / 'broken').symlink_to(self.home / 'missing')
         result = self.check()
@@ -84,9 +84,9 @@ class SkillInstallationTests(unittest.TestCase):
     def test_private_compatibility_lists_are_optional_and_checked(self):
         result = self.check()
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.skill('best/dotfiles/private-skills/claude/skills', 'private-only')
+        self.skill('best/stash/dotfiles/private-skills/claude/skills', 'private-only')
         self.skill('.claude/skills', 'private-only')
-        self.skill('best/dotfiles/private-skills/codex/skills', 'private-shared')
+        self.skill('best/stash/dotfiles/private-skills/codex/skills', 'private-shared')
         self.skill('.agents/skills', 'private-shared')
         result = self.check()
         self.assertEqual(result.returncode, 1)
@@ -98,8 +98,8 @@ class SkillInstallationTests(unittest.TestCase):
         self.assertNotIn('DRIFT', result.stdout)
 
     def test_public_and_private_name_collision_is_reported(self):
-        self.skill('best/dotfiles/claude/skills', 'same')
-        self.skill('best/dotfiles/private-skills/claude/skills', 'same')
+        self.skill('best/stash/dotfiles/claude/skills', 'same')
+        self.skill('best/stash/dotfiles/private-skills/claude/skills', 'same')
         self.skill('.claude/skills', 'same')
         result = self.check()
         self.assertEqual(result.returncode, 1)

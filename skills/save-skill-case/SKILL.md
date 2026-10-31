@@ -17,7 +17,7 @@ Defer updating the shared case index and searching for related cases until after
 
 Start from what the user points to and their reason for saving it. Give a short provisional suggestion for what the skill would teach and what observable choices the user could grade. Save the available evidence immediately; refine these suggestions as you recover the relevant context.
 
-Save each case as one self-contained folder, `~/best/dotfiles/skill-cases/<short-name>/`, whatever the current project. That folder is the private `alejoacelas/skill-cases` repository; if it is missing, clone it there. Keep everything about the case in its folder: the record, evidence, draft skill, trial runs, review data and the user's feedback. The case must still work if the original project is moved, rewritten or deleted, so copy in what it needs or cite GitHub URLs pinned to full commits; never depend on local project paths, temporary directories or moving branches. Add the idea, status and link to `~/best/dotfiles/skill-cases/README.md`. Save a proposed skill inside the case, separate from installed skills, until the user chooses to adopt it. Commit and push the case repository after each step.
+Save each case as one self-contained folder, `~/best/stash/dotfiles/skill-cases/<short-name>/`, whatever the current project. That folder is the private `alejoacelas/skill-cases` repository; if it is missing, clone it there. Keep everything about the case in its folder: the record, evidence, draft skill, trial runs, review data and the user's feedback. The case must still work if the original project is moved, rewritten or deleted, so copy in what it needs or cite GitHub URLs pinned to full commits; never depend on local project paths, temporary directories or moving branches. Add the idea, status and link to `~/best/stash/dotfiles/skill-cases/README.md`. Save a proposed skill inside the case, separate from installed skills, until the user chooses to adopt it. Commit and push the case repository after each step.
 
 Use [the case record](references/case-record.md) to retain:
 
@@ -46,7 +46,7 @@ Freeze the skill versions, case snapshots, task and criteria. Give each version 
 
 Run agents in temporary checkouts, then save everything into `runs/<date>/` in the case: the frozen skill versions, the exact rendered prompt and launch method, each run's base and result commits, diff, changed files and full transcript. Preserve failures and coordinator corrections separately.
 
-Set up the review in `runs/<date>/review/` with the [review tool](../../skill-cases/review-tool/README.md) at `~/best/dotfiles/skill-cases/review-tool/`: write the manifest, build the page, and give the user the one command that opens it. Hide which version is A or B, and don't let one condition always be A. The user's feedback saves to `review/feedback.json`; commit it with the case so judgments stay linked to the exact outputs and criteria.
+Set up the review in `runs/<date>/review/` with the [review tool](../../skill-cases/review-tool/README.md) at `~/best/stash/dotfiles/skill-cases/review-tool/`: write the manifest, build the page, and give the user the one command that opens it. Hide which version is A or B, and don't let one condition always be A. The user's feedback saves to `review/feedback.json`; commit it with the case so judgments stay linked to the exact outputs and criteria.
 
 ## Look for a broader skill afterward
 

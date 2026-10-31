@@ -76,7 +76,7 @@ ignored `.env`. Record in `AGENTS.md` where each variable lives in 1Password
 For credentials approved for agent access, use `op-agent`; never print, commit
 or disclose secret values. Work runs on two Macs and an agent server
 (`ssh agent-server`, where agent work runs as the `agent` user). Read the
-[machines and credentials procedures](/Users/alejo/best/dotfiles/agents/workflows.md#machines-and-credentials)
+[machines and credentials procedures](/Users/alejo/best/stash/dotfiles/agents/workflows.md#machines-and-credentials)
 before using `op-agent`, SSH or the server.
 
 I have a personal Google identity (`alejoacelas@gmail.com`) and an Impact Ops one
@@ -84,22 +84,29 @@ I have a personal Google identity (`alejoacelas@gmail.com`) and an Impact Ops on
 identity. Pick the identity from the project's context and pass it explicitly on every
 cloud write. Use `gog --account <email>` for Google Docs and Drive; it is signed in to
 both identities and to `alejo@habere.org`. Before replacing a whole tab, read the
-[Google Docs procedure](/Users/alejo/best/dotfiles/agents/workflows.md#replacing-a-google-docs-tab).
+[Google Docs procedure](/Users/alejo/best/stash/dotfiles/agents/workflows.md#replacing-a-google-docs-tab).
 
 ## Project conventions
 
 Put agent instructions in `AGENTS.md` and human-facing overviews in `README.md`.
 
 All our work lives in `~/best/`, a plain folder of independent repositories. Give
-projects and coherent note collections their own repositories and remotes; keep
-lifecycle and topic folders as ordinary directories. Folder names use lowercase
-words separated by dashes. Before creating or moving anything, read the
-destination's `AGENTS.md` and the
-[workspace procedures](/Users/alejo/best/dotfiles/agents/workflows.md#creating-or-moving-projects).
+projects and coherent note collections their own repositories and remotes. Prefer
+each folder to be either a repository or a flat folder of repositories. Folder
+names use lowercase words separated by dashes. Before creating or moving anything,
+read the destination's `AGENTS.md` and the
+[workspace procedures](/Users/alejo/best/stash/dotfiles/agents/workflows.md#creating-or-moving-projects).
 
-Save work for one person that doesn't need its own repository, such as call prep,
-follow-up messages, notes and research, in that person's folder in `~/best/desk/`,
-following [its instructions](/Users/alejo/best/desk/AGENTS.md).
+- `desk/`: loose or one-off work tied to people outside, such as call prep,
+  follow-up messages, notes and research, that doesn't merit its own repository.
+  One folder per person; follow [its instructions](/Users/alejo/best/desk/AGENTS.md).
+- `clients/`: contracted work and projects, one folder per company that hires me.
+- `projects/`: my own projects, each a repository named `YYYY-MM-DD-name`.
+- `stash/`: things I repeatedly come back to, including `dotfiles/`, `strategy/`,
+  writing and personal material.
+- `archive/`: retired work, including parked projects.
+- `inbox/`: where sessions start; keep here only output with no clear home, as a
+  `YYYY-MM-name` repository.
 
 ## Model APIs
 
@@ -123,9 +130,9 @@ or terminal. Collect any remaining steps that require my involvement and ask me
 upfront, specifying the action needed. Continue independent work while waiting.
 
 When rendering Markdown in Orca, read the
-[Markdown rules](/Users/alejo/best/dotfiles/agents/workflows.md#orca-markdown).
+[Markdown rules](/Users/alejo/best/stash/dotfiles/agents/workflows.md#orca-markdown).
 
-Create custom skills in `~/best/dotfiles/skills/` so Claude Code and Codex share one
-source, or in the private `~/best/dotfiles/private-skills/` checkout, then run
-dotfiles' `bin/install.sh`. The [dotfiles README](/Users/alejo/best/dotfiles/README.md)
+Create custom skills in `~/best/stash/dotfiles/skills/` so Claude Code and Codex share one
+source, or in the private `~/best/stash/dotfiles/private-skills/` checkout, then run
+dotfiles' `bin/install.sh`. The [dotfiles README](/Users/alejo/best/stash/dotfiles/README.md)
 covers client-specific exceptions and install locations.

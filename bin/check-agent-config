@@ -12,7 +12,7 @@ import sys
 
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
-DOTFILES = os.path.join(BEST, "dotfiles")
+DOTFILES = os.path.join(BEST, "stash", "dotfiles")
 SHARED_SKILLS = (os.path.join(DOTFILES, "skills"),
                  os.path.join(DOTFILES, "private-skills/skills"))
 CLAUDE_SKILLS = os.path.join(HOME, ".claude/skills")

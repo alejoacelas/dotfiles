@@ -100,8 +100,8 @@ class InstallTests(unittest.TestCase):
                               .replace('$HOME', '$TEST_HOME'))
             home = root / 'home'
             best = home / 'best'
-            best.mkdir(parents=True)
-            (best / 'README.md').write_text('Existing local file')
+            (best / 'projects').mkdir(parents=True)
+            (best / 'projects/README.md').write_text('Existing local file')
             env = dict(os.environ, TEST_HOME=str(home))
             for _ in range(2):
                 result = subprocess.run(['bash', str(script)], env=env, capture_output=True, text=True)
@@ -111,6 +111,6 @@ class InstallTests(unittest.TestCase):
                         live = best / file.relative_to(repo / 'workspace')
                         self.assertTrue(live.is_symlink(), live)
                         self.assertEqual(live.resolve(), file)
-            backups = list(best.glob('README.md.pre-symlink.*'))
+            backups = list((best / 'projects').glob('README.md.pre-symlink.*'))
             self.assertEqual(len(backups), 1)
             self.assertEqual(backups[0].read_text(), 'Existing local file')

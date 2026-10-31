@@ -8,9 +8,9 @@ Inspired by [benthamite/dotfiles](https://github.com/benthamite/dotfiles).
 
 ```sh
 mkdir -p ~/best
-git clone https://github.com/alejoacelas/dotfiles ~/best/dotfiles
-brew bundle --file ~/best/dotfiles/Brewfile
-~/best/dotfiles/bin/install.sh
+git clone https://github.com/alejoacelas/dotfiles ~/best/stash/dotfiles
+brew bundle --file ~/best/stash/dotfiles/Brewfile
+~/best/stash/dotfiles/bin/install.sh
 ```
 
 On an existing machine, run just the last command. The installer links configuration
@@ -69,8 +69,8 @@ in its own `tests/` directory.
 Private skill sources live in an optional, independent repository. To install them:
 
 ```sh
-gh repo clone alejoacelas/private-skills ~/best/dotfiles/private-skills
-~/best/dotfiles/bin/install.sh
+gh repo clone alejoacelas/private-skills ~/best/stash/dotfiles/private-skills
+~/best/stash/dotfiles/bin/install.sh
 ```
 
 `private-skills/` is Git-ignored here and retains its own history and private remote.
@@ -85,13 +85,13 @@ Saved skill cases, their trials and review feedback live in a separate private
 repository, checked out at `skill-cases/` and Git-ignored here:
 
 ```sh
-gh repo clone alejoacelas/skill-cases ~/best/dotfiles/skill-cases
+gh repo clone alejoacelas/skill-cases ~/best/stash/dotfiles/skill-cases
 ```
 
 The [save-skill-case skill](skills/save-skill-case/SKILL.md) writes to it.
 
 `bin/adb-phone` connects the Android test phone and forwards any supplied `adb`
-arguments to it. Use `~/best/dotfiles/bin/adb-phone`; shared helpers live here rather
+arguments to it. Use `~/best/stash/dotfiles/bin/adb-phone`; shared helpers live here rather
 than alongside projects.
 
 `proj <folder>/<name> [--claude|--codex]` creates or reopens a dated project in

@@ -5,7 +5,7 @@ description: Default browser control for website interaction, authenticated brow
 
 # Browser Use Cloud
 
-Use `~/best/dotfiles/bin/bu-cloud` for direct control of a managed Chrome through
+Use `~/best/stash/dotfiles/bin/bu-cloud` for direct control of a managed Chrome through
 the v4 SDK. It loads the API key from personal 1Password into an ignored `.env`.
 Profile mappings and session connection details stay local and Git-ignored.
 
@@ -16,13 +16,13 @@ that could overwrite its state. Profile cookies grant account access, but do not
 expand the user's authorization to send messages, buy things, or change accounts.
 
 ```sh
-~/best/dotfiles/bin/bu-cloud start my-task --profile personal
-~/best/dotfiles/bin/bu-cloud exec my-task <<'PY'
+~/best/stash/dotfiles/bin/bu-cloud start my-task --profile personal
+~/best/stash/dotfiles/bin/bu-cloud exec my-task <<'PY'
 page.goto('https://example.com')
 print(page.title())
 print(page.locator('body').inner_text()[:3000])
 PY
-~/best/dotfiles/bin/bu-cloud stop my-task
+~/best/stash/dotfiles/bin/bu-cloud stop my-task
 ```
 
 `exec` exposes Playwright's synchronous `browser`, existing `context`, and `page`.

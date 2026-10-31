@@ -1,12 +1,8 @@
 # Projects
 
-My own projects, each named `YYYY-MM-DD-name` after the day it was created.
-Active projects sit at the top, sorted by that date. Folders without a date are
-the ones I use regularly; [AGENTS.md](AGENTS.md) lists them with the date each was
-last confirmed in use.
+My own projects, each a repository named `YYYY-MM-DD-name` after the day it was
+created. Work I use regularly lives in [stash](../stash/), parked projects in
+[archive](../archive/) and client work in [clients](../clients/).
 
-- [Archive](archive/): parked projects and finished studies.
-- [Quick wins](https://docs.google.com/document/d/1DrdbvD2ADT_acDSV48-8fdQqdItGwbeX8_qI7OhH0U0/edit):
-  small ideas; record completed ones in its Log tab.
-
-Client work lives in [clients](../clients/).
+[Quick wins](https://docs.google.com/document/d/1DrdbvD2ADT_acDSV48-8fdQqdItGwbeX8_qI7OhH0U0/edit)
+holds small ideas; record completed ones in its Log tab.

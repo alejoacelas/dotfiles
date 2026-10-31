@@ -13,7 +13,7 @@ Read only the section relevant to the task.
 ## Machines and credentials
 
 For personal credentials approved for agent access, use
-`~/best/dotfiles/bin/op-agent` on the Mac (`~/.local/bin/op-agent` on the server).
+`~/best/stash/dotfiles/bin/op-agent` on the Mac (`~/.local/bin/op-agent` on the server).
 It authenticates without prompts to `mac-agents` or `server-agents` in the
 personal 1Password account. Use `op-agent run` with secret references to inject
 credentials into a command, or `op-agent inject` for an ignored `.env`.
