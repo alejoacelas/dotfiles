@@ -115,7 +115,7 @@ link warp/keybindings.yaml "$HOME/.warp/keybindings.yaml"
 BEST_ROOT="$HOME/best"
 mkdir -p "$BEST_ROOT"
 # Claude Code 2.1.277+ reads AGENTS.md natively; do not recreate project shims.
-for folder in stash archive inbox clients projects; do
+for folder in stash archive inbox services projects; do
   mkdir -p "$BEST_ROOT/$folder"
 done
 while IFS= read -r source; do

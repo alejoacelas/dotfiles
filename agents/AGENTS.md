@@ -77,7 +77,7 @@ read the destination's `AGENTS.md` and the
   follow-up messages, notes and research, that doesn't merit its own repository.
   Follow [its instructions](/Users/alejo/best/desk/AGENTS.md). Register work
   delivered to someone in `desk/sent/`.
-- `clients/`: contracted work and projects, one folder per company that hires me.
+- `services/`: contracted work and projects, one folder per company that hires me.
 - `projects/`: my own projects, each a repository named `YYYY-MM-DD-name`.
 - `stash/`: things I repeatedly come back to, including `dotfiles/`, `strategy/`,
   writing and personal material.

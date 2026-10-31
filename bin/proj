@@ -3,7 +3,7 @@
 # Usage: proj <name> [--claude|--codex]
 #   proj                                         -> print the newest folder in ~/best/projects
 #   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes
-#   proj clients/impact-ops/status-tracker --codex -> ~/best/clients/impact-ops/YYYY-MM-status-tracker
+#   proj services/impact-ops/status-tracker --codex -> ~/best/services/impact-ops/YYYY-MM-status-tracker
 #   proj inbox/odd-idea                          -> create only, print the path
 # An existing folder whose name ends in -<name> is reopened instead of created.
 # The proj shell function in shell/zprofile cds into the printed path when no name is given.
@@ -37,7 +37,7 @@ case "$name" in
   */*) parent="$best/${name%/*}"; slug="${name##*/}" ;;
   *) parent="$best/projects"; slug="$name" ;;
 esac
-# Own projects are dated to the day; clients, trials and inbox use the month.
+# Own projects are dated to the day; services, trials and inbox use the month.
 date_format=%Y-%m
 [ "$parent" = "$best/projects" ] && date_format=%Y-%m-%d
 slug="$(printf '%s' "$slug" | tr '[:upper:] _' '[:lower:]--' | tr -cd 'a-z0-9-')"

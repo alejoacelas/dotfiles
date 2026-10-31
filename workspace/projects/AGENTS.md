@@ -1,7 +1,7 @@
 # Projects
 
 Alejo's own projects, each a repository named `YYYY-MM-DD-name`. Client work goes
-in `~/best/clients/`. Follow the `AGENTS.md` inside each.
+in `~/best/services/`. Follow the `AGENTS.md` inside each.
 
 Start a project with `proj <name>`, which creates `YYYY-MM-DD-name` here. Give it
 a remote on the first commit and state its scope in `AGENTS.md`.

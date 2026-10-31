@@ -13,12 +13,12 @@ description: Start-of-day review of ~/best, and where to put new work. Use when 
 2. List today's calendar events on Alejo's personal Google account. For each call
    with someone who has a file in `~/best/desk/people/`, read it and their latest
    summary in `~/best/desk/comms/` (the items whose `people:` lists them); for client
-   calls, also read `~/best/clients/<company>/AGENTS.md`.
+   calls, also read `~/best/services/<company>/AGENTS.md`.
 3. Present one short list, most urgent first:
    - **Calls today:** who, when, and what was promised or left open last time.
    - **Unsaved work:** offer to commit and push.
    - **To file:** for each stale inbox item or project, suggest its home:
-     `projects/`, `clients/<company>/`, `desk/`, `stash/` or `archive/`.
+     `projects/`, `services/<company>/`, `desk/`, `stash/` or `archive/`.
    - **Still running or billing:** ask whether each should keep running.
    - **Trials still running.**
 4. Change nothing until Alejo picks what to act on. Follow the destination's
@@ -28,7 +28,7 @@ description: Start-of-day review of ~/best, and where to put new work. Use when 
 
 Pick the home:
 
-- Work for a client: `clients/<company>/`.
+- Work for a client: `services/<company>/`.
 - Loose or one-off work for someone outside: `desk/requested/`; follow its `AGENTS.md`.
 - Testing a tool: a folder in `stash/trials/`; follow its `AGENTS.md`.
 - Alejo's own project: `projects/`. Once he uses it regularly, propose moving

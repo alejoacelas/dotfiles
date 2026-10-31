@@ -1,7 +1,7 @@
-# Clients
+# Services
 
 Repositories for clients, grouped by the company that hires Alejo:
-`clients/<company>/YYYY-MM-project-name/`. Each project is its own private
+`services/<company>/YYYY-MM-project-name/`. Each project is its own private
 repository, so a deliverable can be shared with one client without exposing others.
 Finished projects move to `~/best/archive/`; record the move in its README.
 

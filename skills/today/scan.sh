@@ -34,7 +34,7 @@ for d in "$BEST"/inbox/*/; do
 done
 
 echo; echo "## Projects untouched for ${DAYS} days"
-for d in "$BEST"/projects/[0-9][0-9][0-9][0-9]-*/ "$BEST"/clients/*/[0-9][0-9][0-9][0-9]-*/; do
+for d in "$BEST"/projects/[0-9][0-9][0-9][0-9]-*/ "$BEST"/services/*/[0-9][0-9][0-9][0-9]-*/; do
   [ -d "$d" ] || continue; t=$(last_touch "$d")
   [ "$t" -lt "$cutoff" ] && echo "- ${d#$BEST/}: untouched $(age "$t")"
 done
