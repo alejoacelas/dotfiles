@@ -101,8 +101,8 @@ read the destination's `AGENTS.md` and the
 
 ## Model APIs
 
-For application and script model calls, use Anthropic directly: `claude-opus-5-5`
-by default, or `claude-haiku-5-5` for fast turnaround or jobs with more than 20
+For application and script model calls, use Anthropic directly: the latest Opus
+model by default, or the latest Haiku model for fast turnaround or jobs with more than 20
 parallel model calls. Personal projects should use the Claude Console organization
 linked to the personal plan's monthly API credits. Keep client billing
 separate. Preserve specialized capabilities and project privacy requirements when
