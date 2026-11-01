@@ -120,11 +120,17 @@ for folder in stash archive inbox services projects; do
 done
 while IFS= read -r source; do
   relative="${source#"$DOTFILES/workspace/"}"
-  if [ "$relative" = projects/AGENTS.md ] && { [ -L "$BEST_ROOT/projects" ] || [ -e "$BEST_ROOT/projects/.git" ]; }; then
-    continue
-  fi
   link "workspace/$relative" "$BEST_ROOT/$relative"
 done < <(rg --files --hidden "$DOTFILES/workspace")
+# Remove links to workspace files that were deleted or moved in this repo.
+while IFS= read -r stale; do
+  case "$(readlink "$stale")" in
+    "$DOTFILES"/workspace/*)
+      unlink "$stale"
+      printf '  pruned  %s (stale workspace file)\n' "${stale/#$HOME/~}"
+      ;;
+  esac
+done < <(find "$BEST_ROOT" -maxdepth 3 -type l ! -exec test -e {} \; -print)
 
 # Keep machine-local or secret settings in ~/.claude/settings.local.json (untracked) —
 # never in the tracked settings.json linked above.

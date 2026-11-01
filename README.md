@@ -32,9 +32,10 @@ backs up conflicting real files. The Codex app retains ownership of its base con
 | `warp/tab_configs/` | Warp tab presets |
 | `workspace/` | Live configuration for ordinary folders under `~/best/` |
 
-`workspace/` mirrors `~/best/`: for example, `workspace/projects/AGENTS.md` supplies
-`~/best/projects/AGENTS.md` through a symlink. Individual repositories keep their own
-instructions; this tree manages ordinary container folders.
+`workspace/` mirrors `~/best/`: for example, `workspace/stash/README.md` supplies
+`~/best/stash/README.md` through a symlink. Rules for folders that aren't
+repositories live in `agents/AGENTS.md`; this tree holds only their READMEs.
+`bin/install.sh` removes links to workspace files that no longer exist.
 
 Create custom skills in `skills/<name>/SKILL.md`, then run `bin/install.sh`.
 They install into `~/.claude/skills/`, `~/.agents/skills/` and `~/.codex/skills/`
