@@ -5,6 +5,10 @@ Things I repeatedly come back to.
 - [Dotfiles](dotfiles/): shared agent instructions, hooks, skills and machine
   configuration.
 - [Strategy](strategy/): planning for the AI-uplift practice.
+- [Agent server](agent-server/): setup, credential broker and list of services of the
+  Hetzner server where agents and recurring systems run (moved from
+  `projects/2026-09-26-agent-server` on 1 Nov 2026). The systems themselves are in
+  [clerk](../inbox/2026-11-clerk/).
 - [Writing](writing/): essays and explainers; work before October 2026, including
   the guides behind [alejo.wiki](https://alejo.wiki), is in its archive.
 - [Trials](trials/): structured tool tests, each ending in a one-page verdict.

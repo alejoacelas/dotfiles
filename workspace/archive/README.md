@@ -22,6 +22,7 @@ its reason.
 - [Aguita amarilla](2026-09-25-aguita-amarilla/): archived at Alejo's request.
 - [Native browser control](2026-09-26-native-browser-control/): backup; work continues in `~/best/archive/2026-09-agent-browser-rules/native-control/`.
 - [Errands](2026-10-24-errands/): Mac-only errand job, replaced the same day by errands in gmail-sorting.
+- [gmail-sorting](2026-10-24-gmail-sorting/): moved on 1 Nov 2026, with its history, into `mail/` of [clerk](../inbox/2026-11-clerk/), which runs it; the GitHub repository is archived.
 - [Fake GitHub MCP](2026-10-27-fake-github-mcp/): empty stub; scope never written.
 - [Slackbots](2026-10-27-slackbots/): first version of the Moderation Bot, replaced by `projects/2026-10-31-slack-moderation-bot`.
 

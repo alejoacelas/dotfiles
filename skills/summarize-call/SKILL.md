@@ -14,7 +14,7 @@ rewired to file into `~/best/desk`. Reads transcripts over Granola's
 The agent server runs this pipeline on its own for every new Granola call: within about 20
 minutes of a call ending it files the call in desk, creates the doc, shares it with the
 participants and DMs Alejo the link (`desk-pipeline/calls.py` and `jobs/call.md` in the
-[agent-server repository](https://github.com/alejoacelas/2026-09-agent-server), which follow
+[clerk repository](https://github.com/alejoacelas/2026-11-clerk), `~/best/inbox/2026-11-clerk`, which follow
 this file). Use this skill by hand as the fallback: for a call the server missed or failed
 on, or to redo one. First check that the call isn't filed already:
 `rg -l '^thread: <note id>' ~/best/desk/comms`.
