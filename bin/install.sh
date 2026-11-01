@@ -111,26 +111,13 @@ link bin/proj "$HOME/.local/bin/proj"
 link bin/op-agent "$HOME/.local/bin/op-agent"
 link warp/keybindings.yaml "$HOME/.warp/keybindings.yaml"
 
-# Ordinary container configuration lives here; existing repositories keep their own files.
+# Create the ~/best container folders.
 BEST_ROOT="$HOME/best"
 mkdir -p "$BEST_ROOT"
 # Claude Code 2.1.277+ reads AGENTS.md natively; do not recreate project shims.
 for folder in stash archive inbox services projects; do
   mkdir -p "$BEST_ROOT/$folder"
 done
-while IFS= read -r source; do
-  relative="${source#"$DOTFILES/workspace/"}"
-  link "workspace/$relative" "$BEST_ROOT/$relative"
-done < <(rg --files --hidden "$DOTFILES/workspace")
-# Remove links to workspace files that were deleted or moved in this repo.
-while IFS= read -r stale; do
-  case "$(readlink "$stale")" in
-    "$DOTFILES"/workspace/*)
-      unlink "$stale"
-      printf '  pruned  %s (stale workspace file)\n' "${stale/#$HOME/~}"
-      ;;
-  esac
-done < <(find "$BEST_ROOT" -maxdepth 3 -type l ! -exec test -e {} \; -print)
 
 # Keep machine-local or secret settings in ~/.claude/settings.local.json (untracked) —
 # never in the tracked settings.json linked above.

@@ -30,12 +30,6 @@ backs up conflicting real files. The Codex app retains ownership of its base con
 | `codex/cli.config.toml` | CLI settings for `codex --profile cli` |
 | `shell/zprofile`, `git/gitconfig`, `Brewfile` | Shell, Git and Homebrew configuration |
 | `warp/tab_configs/` | Warp tab presets |
-| `workspace/` | Live configuration for ordinary folders under `~/best/` |
-
-`workspace/` mirrors `~/best/`: for example, `workspace/stash/README.md` supplies
-`~/best/stash/README.md` through a symlink. Rules for folders that aren't
-repositories live in `agents/AGENTS.md`; this tree holds only their READMEs.
-`bin/install.sh` removes links to workspace files that no longer exist.
 
 Create custom skills in `skills/<name>/SKILL.md`, then run `bin/install.sh`.
 They install into `~/.claude/skills/`, `~/.agents/skills/` and `~/.codex/skills/`
@@ -59,8 +53,8 @@ instructions. Both clients link to the same skill source. The older synced
 `summarise-granola` skill is disabled through Claude's `skillOverrides`, including
 its `anthropic-skills:` name, so account sync cannot reactivate it locally.
 
-Historical instruction snapshots remain in Git history. Archived workspace files
-live independently under `~/best/archive/`.
+Historical instruction snapshots remain in Git history. Retired files
+live in `~/best/archive/dotfiles/`.
 
 Repository tests live in `tests/`; skill-specific tests travel with their skill
 in its own `tests/` directory.

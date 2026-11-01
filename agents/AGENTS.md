@@ -85,9 +85,8 @@ folders that aren't repositories live here.
     extend it as calls add context.
 - `stash/`: things I repeatedly come back to, named without a date. A project
   moves here from `projects/` once I use it regularly; ask before moving one.
-- `archive/`: retired or finished work, listed with reasons in
-  `archive/README.md`. Before archiving a tool, stop anything that runs it
-  (launchd jobs, login items, symlinks on `PATH`).
+- `archive/`: retired or finished work. Before archiving a tool, stop anything
+  that runs it (launchd jobs, login items, symlinks on `PATH`).
 - `inbox/`: systems that handle my recurring tasks.
 
 Start a repository with `proj <folder>/<name>` (plain `<name>` means `projects/`)
