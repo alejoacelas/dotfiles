@@ -64,26 +64,34 @@ Drive. Before replacing a whole tab, read the
 
 ## Filesystem organization
 
-Put agent instructions in `AGENTS.md` and human-facing overviews in `README.md`.
+All our work lives in `~/best/`, a plain folder of independent repositories. Folder
+names use lowercase words separated by dashes. Put agent instructions in `AGENTS.md`
+files inside repositories and human-facing overviews in `README.md`; rules for
+folders that aren't repositories live here.
 
-All our work lives in `~/best/`, a plain folder of independent repositories. Give
-projects and coherent note collections their own repositories and remotes. Prefer
-each folder to be either a repository or a flat folder of repositories. Folder
-names use lowercase words separated by dashes. Before creating or moving anything,
-read the destination's `AGENTS.md` and the
-[workspace procedures](/Users/alejo/best/stash/dotfiles/agents/workflows.md#creating-or-moving-projects).
+- `desk/`: work tied to people outside that needs no repository, such as call
+  prep, follow-up messages, notes and research. Follow
+  [its instructions](/Users/alejo/best/desk/AGENTS.md). Register work delivered to
+  someone in `desk/sent/`.
+- `projects/`: my own one-off projects, each a repository named `YYYY-MM-DD-name`.
+- `services/<company>/`: client projects that run, get deployed or are handed over
+  as a repository, each a private repository named `YYYY-MM-name`. Register each
+  in desk with an item giving its path. Before working on one, read the desk items
+  tagged `projects: [<company>]`, including the latest calls.
+  - `80k/`: the engagement has ended; start at
+    `~/best/archive/2026-10-80k-work/README.md`. Don't restore full 80k call
+    transcripts, Slack exports or coaching intake records.
+  - `impact-ops/`: company facts are in `2026-10-ai-assessment/impact-ops.md`;
+    extend it as calls add context.
+- `stash/`: things I repeatedly come back to, named without a date. A project
+  moves here from `projects/` once I use it regularly; ask before moving one.
+- `archive/`: retired or finished work, listed with reasons in
+  `archive/README.md`. Before archiving a tool, stop anything that runs it
+  (launchd jobs, login items, symlinks on `PATH`).
+- `inbox/`: systems that handle my recurring tasks.
 
-- `desk/`: loose or one-off work tied to people outside, such as call prep,
-  follow-up messages, notes and research, that doesn't merit its own repository.
-  Follow [its instructions](/Users/alejo/best/desk/AGENTS.md). Register work
-  delivered to someone in `desk/sent/`.
-- `services/`: contracted work and projects, one folder per company that hires me.
-- `projects/`: my own projects, each a repository named `YYYY-MM-DD-name`.
-- `stash/`: things I repeatedly come back to, including `dotfiles/`, `strategy/`,
-  writing and personal material.
-- `archive/`: retired work, including parked projects.
-- `inbox/`: where sessions start; keep here only output with no clear home, as a
-  `YYYY-MM-name` repository.
+Start a repository with `proj <folder>/<name>` (plain `<name>` means `projects/`)
+and give it a remote on the first commit.
 
 ## Model APIs
 

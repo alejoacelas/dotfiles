@@ -2,14 +2,6 @@
 
 Read only the section relevant to the task.
 
-## Creating or moving projects
-
-- Follow [projects/AGENTS.md](/Users/alejo/best/projects/AGENTS.md) for starting,
-  reviewing and organizing projects.
-- Read the destination's `AGENTS.md` before creating or moving anything there.
-- Follow the folder's archive rules. Record moves with their old path and reason;
-  preserve repository history and privacy.
-
 ## Machines and credentials
 
 For personal credentials approved for agent access, use
