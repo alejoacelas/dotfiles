@@ -9,19 +9,11 @@ Things I repeatedly come back to.
   the guides behind [alejo.wiki](https://alejo.wiki), is in its archive.
 - [Trials](trials/): structured tool tests, each ending in a one-page verdict.
   Start one with `proj stash/trials/<tool>`.
-- [gdoc](gdoc/): Google Docs CLI clone, MCP wrapper and notes; the
-  `gdoc-fidelity-test` skill works in `cli/`.
-- [cmd-tab](cmd-tab/): the Command-Tab switcher, run as a login item from
-  `.build/CmdTab.app`.
-- [sleep](sleep/): source of the dont-sleep daemon, installed and running from
-  `/usr/local/libexec/dont-sleep.sh`.
 - [Health](health/): exercise and bipolar II notes.
 - [Meals](meals/): diet research and the recipe catalog.
-- [Relationships](relationships/): people, meeting research and relationship projects.
-- [Admin](admin/): visas, paperwork and travel.
+- [Admin](admin/): visas.
 - [Stuff](stuff/): purchase history and gear notes.
 - [Sites](sites/): my blog and personal website.
-- [Claude exports](claude-exports/): claude.ai data exports, kept as test material.
 
 Style notes and Peter Hartree’s journal collection live in
 [writing](writing/archive/2026-10-explainers-and-guides/).

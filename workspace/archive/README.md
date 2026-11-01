@@ -20,7 +20,7 @@ its reason.
 - [WebFetch prompt tests](2026-09-03-webfetch-prompt-tests/): finished study of WebFetch prompts and search mechanisms; findings in the work Google Doc.
 - [Cliver screening annexes](2026-09-05-cliver-screening-annexes/): collection handoff awaiting source collection and drafting.
 - [Aguita amarilla](2026-09-25-aguita-amarilla/): archived at Alejo's request.
-- [Native browser control](2026-09-26-native-browser-control/): backup; work continues in `~/best/stash/trials/2026-09-agent-browser-rules/native-control/`.
+- [Native browser control](2026-09-26-native-browser-control/): backup; work continues in `~/best/archive/2026-09-agent-browser-rules/native-control/`.
 - [Errands](2026-10-24-errands/): Mac-only errand job, replaced the same day by errands in gmail-sorting.
 - [Fake GitHub MCP](2026-10-27-fake-github-mcp/): empty stub; scope never written.
 - [Slackbots](2026-10-27-slackbots/): first version of the Moderation Bot, replaced by `projects/2026-10-31-slack-moderation-bot`.
@@ -45,3 +45,19 @@ Client projects moved here from `clients/<company>/archive/` on 2026-10-31: the
 [2026-10-80k-work](2026-10-80k-work/README.md)), AIM's
 [Tanza fellowship hub](2026-07-tanza-fellowship-hub/) and [Nina](2026-09-nina/),
 and Impact Ops' [Varun status tracker](2026-10-varun-status-tracker/).
+
+Moved here from `~/best/stash/` on 2026-11-01 because they are finished and no longer
+consulted:
+
+- [UK paperwork](2026-08-uk-paperwork/): documents for the September 2026 UK move.
+- [Flights](2026-09-flights/): flight check-in automation design; never scheduled.
+- [Trips](2026-09-trips/): journey-planning idea, not built.
+- [gdoc](2026-09-gdoc/): the gdoc CLI clone with its fidelity tests, the design-review
+  worktree and research notes. The `gdoc-fidelity-test` skill still works in `cli/`.
+- Finished trials, indexed in [stash/trials](../stash/trials/README.md):
+  [agent browser rules](2026-09-agent-browser-rules/),
+  [gdoc structure explorer](2026-09-gdoc-structure-explorer/),
+  [replicate prompt comparison](2026-09-replicate-prompt-comparison/),
+  [workspace tools comparison](2026-09-workspace-tools-comparison/),
+  [writing instructions test](2026-09-writing-instructions-test/) and
+  [Google Docs agent tools](2026-10-google-docs-agent-tools/).
