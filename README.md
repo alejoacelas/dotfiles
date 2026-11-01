@@ -97,8 +97,7 @@ than alongside projects.
 
 `proj <folder>/<name> [--claude|--codex]` creates or reopens a dated project in
 `~/best` (plain `<name>` means `projects/`) and starts an agent there. Plain `proj`
-moves into the newest project in `~/best/projects`. The
-[today skill](skills/today/SKILL.md) reviews the workspace and says where new work goes.
+moves into the newest project in `~/best/projects`.
 
 ## Common maintenance
 
