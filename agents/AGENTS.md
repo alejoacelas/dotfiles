@@ -50,17 +50,38 @@ Keep API keys in 1Password and load them on demand with `op` into the project's
 ignored `.env`. Record in `AGENTS.md` where each variable lives in 1Password
 (account, vault, item, field) so the file can be rebuilt.
 
-For credentials approved for agent access, use `op-agent`; never print, commit
-or disclose secret values. Work runs on two Macs and an agent server
-(`ssh agent-server`, where agent work runs as the `agent` user). Read the
-[machines and credentials procedures](/Users/alejo/best/stash/dotfiles/agents/workflows.md#machines-and-credentials)
-before using `op-agent`, SSH or the server.
+For personal credentials approved for agent access, use
+`~/best/stash/dotfiles/bin/op-agent` on the Mac (`~/.local/bin/op-agent` on the server).
+It authenticates without prompts to `mac-agents` or `server-agents` in the
+personal 1Password account. Use `op-agent run` with secret references to inject
+credentials into a command, or `op-agent inject` for an ignored `.env`.
+Authenticate for authorized tasks without asking again; never print, commit,
+or disclose secret values. Existing action-specific approval rules still apply.
+Use ordinary `op --account my.1password.com` for items outside these vaults.
+
+On the agent server, run agent work as the `agent` user (`sudo -iu agent`). It
+has no sudo or `op-agent`; `gh`, `gog` and git pushes go through a credential
+broker that never returns the tokens. To give it an API key, add a broker
+route ([agent user setup](/Users/alejo/best/stash/server/docs/setup.md#agent-user)).
+
+The two Macs SSH into each other and into the agent server over Tailscale:
+`ssh mac-air-2` (the other MacBook Air), `ssh alejo-m4` (the main Mac) and
+`ssh agent-server`. Dotfiles and the `~/best` layout configure only the main Mac;
+the other Mac and the server keep their own configuration and share only
+credentials, through 1Password.
+
+SSH sessions on a Mac can't read the keychain, so start Claude there inside
+`tmux` with `CLAUDE_CODE_OAUTH_TOKEN` injected by `op-agent run --no-masking`
+(masking breaks Claude's terminal UI) from
+`op://mac-agents/6drosdmzu2qb3jefhsh3d5b7dy/credential`.
 
 My personal Google identity is `alejoacelas@gmail.com`; `gcloud` and Fly
 (`FLY_PERSONAL_TOKEN`) use it. Pick the identity from the project's context and pass
 it explicitly on every cloud write. Use `gog --account <email>` for Google Docs and
-Drive. Before replacing a whole tab, read the
-[Google Docs procedure](/Users/alejo/best/stash/dotfiles/agents/workflows.md#replacing-a-google-docs-tab).
+Drive. To replace a whole Google Docs tab, write the new content into a new tab,
+compare it with the original, carrying over any edits made there since your last
+write, then delete the original. Writing over an existing tab can keep its old
+formatting, such as turning every paragraph into a bullet.
 
 ## Filesystem organization
 
@@ -112,6 +133,15 @@ Create custom skills in `~/best/stash/dotfiles/skills/` so Claude Code and Codex
 source, or in the private `~/best/stash/dotfiles/private-skills/` checkout, then run
 dotfiles' `bin/install.sh`. The [dotfiles README](/Users/alejo/best/stash/dotfiles/README.md)
 covers client-specific exceptions and install locations.
+
+Sign macOS apps requiring Accessibility, Screen Recording, microphone, camera or
+similar grants with a stable local identity. Ad-hoc signatures change identity on
+each build, leaving enabled privacy toggles that the rebuilt app cannot use. Fail
+the build when its expected signing identity is missing; never silently fall back
+to ad-hoc signing.
+
+Open Markdown for my review in Zed: `open -a Zed "/absolute/path/to/file.md"`.
+After I review or edit a document, reread it before making further changes.
 
 ## Agents
 

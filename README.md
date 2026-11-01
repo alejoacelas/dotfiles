@@ -22,7 +22,6 @@ backs up conflicting real files. The Codex app retains ownership of its base con
 | Source | Used by |
 |---|---|
 | `agents/AGENTS.md` | Global Claude and Codex instructions |
-| `agents/workflows.md` | Workspace procedures linked from those instructions |
 | `claude/settings.json`, `claude/hooks/` | Claude settings and hooks |
 | `skills/` | Shared custom skills for Claude Code and Codex |
 | `claude/skills/`, `codex/skills/` | Client-specific exceptions |
