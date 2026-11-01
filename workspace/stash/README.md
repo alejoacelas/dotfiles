@@ -18,6 +18,8 @@ Things I repeatedly come back to.
 - [Admin](admin/): visas.
 - [Stuff](stuff/): purchase history and gear notes.
 - [Sites](sites/): my blog and personal website.
+- [Phone apps](phone-apps/): Android apps for my phone and Boox, starting with the
+  morning reader (moved from `projects/2026-09-25-morning-reader` on 1 Nov 2026).
 
 Style notes and Peter Hartree’s journal collection live in
 [writing](writing/archive/2026-10-explainers-and-guides/).

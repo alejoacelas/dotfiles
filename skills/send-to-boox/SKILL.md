@@ -5,7 +5,7 @@ description: Put books and files on Alejo's Boox Go7 e-reader. Use when he point
 
 # Send to Boox
 
-Run these from `~/best/projects/2026-09-25-morning-reader`, whose `AGENTS.md` and
+Run these from `~/best/stash/phone-apps/morning-reader`, whose `AGENTS.md` and
 README cover the details.
 
 - **Books to read in sittings** (EPUB or text PDF): `./pack file --boox PATH ...`.
