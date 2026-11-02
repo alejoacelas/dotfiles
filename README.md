@@ -90,7 +90,8 @@ than alongside projects.
 
 `proj <folder>/<name> [--claude|--codex]` creates or reopens a dated project in
 `~/best` (plain `<name>` means `projects/`) and starts an agent there. Plain `proj`
-moves into the newest project in `~/best/projects`.
+moves into the newest project in `~/best/projects`; `proj --list` shows every project,
+newest first, filters as you type and moves into the one you pick.
 
 ## Common maintenance
 

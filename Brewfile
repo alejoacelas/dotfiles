@@ -1,4 +1,6 @@
 tap "dopplerhq/cli"
+# Command-line fuzzy finder, used by proj --list
+brew "fzf"
 # GitHub command-line tool
 brew "gh"
 # Secrets manager CLI
