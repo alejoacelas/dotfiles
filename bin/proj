@@ -1,21 +1,24 @@
 #!/usr/bin/env bash
-# proj: create or reopen a dated project folder in ~/best and start an agent there.
-# Usage: proj <name> [--claude|--codex]
+# proj: create or reopen a dated project folder in ~/best, give it a GitHub repo and start an agent there.
+# Usage: proj <name> [--claude|--codex] [--private|--local]
 #   proj                                         -> print the newest folder in ~/best/projects
-#   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes
-#   proj services/impact-ops/status-tracker --codex -> ~/best/services/impact-ops/YYYY-MM-status-tracker
-#   proj inbox/odd-idea                          -> create only, print the path
-# An existing folder whose name ends in -<name> is reopened instead of created.
+#   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes, public repo morning-notes
+#   proj services/impact-ops/status-tracker      -> ~/best/services/impact-ops/YYYY-MM-status-tracker, private repo
+#   proj odd-idea --local                        -> no GitHub repo
+# New folders get a first commit and a GitHub repo named <name>; the URL is printed and copied.
+# An existing folder whose name ends in -<name> is reopened instead, and its remote URL is copied.
 # The proj shell function in shell/zprofile cds into the printed path when no name is given.
 set -euo pipefail
 
-usage() { sed -n '2,8s/^# \{0,1\}//p' "$0" >&2; exit 2; }
+usage() { sed -n '2,10s/^# \{0,1\}//p' "$0" >&2; exit 2; }
 
-agent="" name=""
+agent="" name="" visibility=""
 for arg in "$@"; do
   case "$arg" in
     --claude) agent=claude ;;
     --codex) agent=codex ;;
+    --private) visibility=private ;;
+    --local) visibility=local ;;
     -h|--help) usage ;;
     -*) echo "proj: unknown option $arg" >&2; usage ;;
     *) [ -z "$name" ] || usage; name="$arg" ;;
@@ -24,7 +27,7 @@ done
 best="$HOME/best"
 
 if [ -z "$name" ]; then
-  [ -z "$agent" ] || usage
+  [ -z "$agent$visibility" ] || usage
   # Newest dated folder in projects/ by creation time; BSD stat on macOS, GNU on Linux.
   birth=(-f '%B %N'); stat -c %W / >/dev/null 2>&1 && birth=(-c '%W %n')
   find "$best/projects" -mindepth 1 -maxdepth 1 -type d -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-*" \
@@ -42,31 +45,58 @@ date_format=%Y-%m
 [ "$parent" = "$best/projects" ] && date_format=%Y-%m-%d
 slug="$(printf '%s' "$slug" | tr '[:upper:] _' '[:lower:]--' | tr -cd 'a-z0-9-')"
 [ -n "$slug" ] || { echo "proj: name must contain letters or digits" >&2; exit 2; }
+# Client work under services/ is private; everything else is public unless told otherwise.
+if [ -z "$visibility" ]; then
+  case "$parent/" in
+    "$best/services/"*) visibility=private ;;
+    *) visibility=public ;;
+  esac
+fi
+
+share_url() {
+  echo "$1"
+  if command -v pbcopy >/dev/null; then printf '%s' "$1" | pbcopy; echo "Copied to clipboard"; fi
+}
 
 existing="$(find "$parent" -maxdepth 1 -type d \( -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-$slug" \
   -o -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-$slug" \) 2>/dev/null | sort | tail -1)"
 if [ -n "$existing" ]; then
   dir="$existing"
   echo "Reopening $dir"
+  if url="$(git -C "$dir" remote get-url origin 2>/dev/null)"; then share_url "${url%.git}"; fi
+elif [ -d "$parent/template" ] && git -C "$parent" rev-parse -q --is-inside-work-tree >/dev/null 2>&1; then
+  # A folder inside a repository with a template, such as projects/2026-10-08-trials/: copy it, no new repo.
+  dir="$parent/$(date +"$date_format")-$slug"
+  cp -R "$parent/template" "$dir"
+  echo "Created $dir from template"
 else
   dir="$parent/$(date +"$date_format")-$slug"
-  if [ -d "$parent/template" ] && git -C "$parent" rev-parse -q --is-inside-work-tree >/dev/null 2>&1; then
-    # A folder inside a repository with a template, such as projects/2026-10-08-trials/: copy it, no new repo.
-    cp -R "$parent/template" "$dir"
-    echo "Created $dir from template"
-  else
-    mkdir -p "$dir"
-    git -C "$dir" init -q -b main
-    cat > "$dir/AGENTS.md" <<EOF
+  if [ "$visibility" != local ]; then
+    # Check the repo name before creating anything, so a taken name leaves no half-made folder.
+    owner="$(gh api user --jq .login)"
+    if out="$(gh api "repos/$owner/$slug" --jq .html_url 2>&1)"; then
+      echo "proj: $out already exists; pick another name" >&2; exit 1
+    elif ! grep -q "Not Found" <<<"$out"; then
+      echo "proj: could not check GitHub: $out" >&2; exit 1
+    fi
+  fi
+  mkdir -p "$dir"
+  git -C "$dir" init -q -b main
+  cat > "$dir/AGENTS.md" <<AGENTS
 # $slug
 
 Scope: TODO
 
-- Visibility: TODO
-- Google account: TODO
+- Visibility: $visibility
 - Still running or billing: none
-EOF
-    echo "Created $dir"
+AGENTS
+  git -C "$dir" add AGENTS.md
+  git -C "$dir" commit -q -m "Start $slug"
+  echo "Created $dir"
+  if [ "$visibility" != local ]; then
+    gh repo create "$owner/$slug" "--$visibility" --source "$dir" --push >/dev/null
+    url="$(git -C "$dir" remote get-url origin)"
+    share_url "${url%.git}"
   fi
 fi
 
