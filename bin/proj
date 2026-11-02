@@ -1,26 +1,24 @@
 #!/usr/bin/env bash
 # proj: create or reopen a dated project folder in ~/best, give it a GitHub repo and start an agent there.
 # Usage: proj <name> [--claude|--codex] [--private|--local]
-#   proj                                         -> print the newest folder in ~/best/projects
-#   proj --list                                  -> pick a project, newest first; type to fuzzy filter
+#   proj                                         -> pick a project, newest first; type to fuzzy filter
 #   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes, public repo morning-notes
 #   proj services/impact-ops/status-tracker      -> ~/best/services/impact-ops/YYYY-MM-status-tracker, private repo
 #   proj odd-idea --local                        -> no GitHub repo
 # New folders get a first commit and a GitHub repo named <name>; the URL is printed and copied.
 # An existing folder whose name ends in -<name> is reopened instead, and its remote URL is copied.
-# The proj shell function in shell/zprofile cds into the printed path for plain proj and --list.
+# The proj shell function in shell/zprofile cds into the picked project when no name is given.
 set -euo pipefail
 
 usage() { sed -n '2,10s/^# \{0,1\}//p' "$0" >&2; exit 2; }
 
-agent="" name="" visibility="" list=""
+agent="" name="" visibility=""
 for arg in "$@"; do
   case "$arg" in
     --claude) agent=claude ;;
     --codex) agent=codex ;;
     --private) visibility=private ;;
     --local) visibility=local ;;
-    --list) list=1 ;;
     -h|--help) usage ;;
     -*) echo "proj: unknown option $arg" >&2; usage ;;
     *) [ -z "$name" ] || usage; name="$arg" ;;
@@ -36,9 +34,9 @@ dated_folders() {
     -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-*" -exec stat "${birth[@]}" {} + 2>/dev/null
 }
 
-if [ -n "$list" ]; then
-  [ -z "$name$agent$visibility" ] || usage
-  command -v fzf >/dev/null || { echo "proj: --list needs fzf (brew install fzf)" >&2; exit 1; }
+if [ -z "$name" ]; then
+  [ -z "$agent$visibility" ] || usage
+  command -v fzf >/dev/null || { echo "proj: picking a project needs fzf (brew install fzf)" >&2; exit 1; }
   # List paths relative to ~/best, newest first by the date in the folder name (month-only
   # service folders count as day 00), then by creation time. Typing ranks fuzzy matches;
   # equal matches keep that order.
@@ -49,13 +47,6 @@ if [ -n "$list" ]; then
     sort -k1,1r -k2,2nr | cut -d' ' -f3- |
     fzf --height=40% --reverse --scheme=path --tiebreak=index --prompt='project> ')" || exit 1
   echo "$best/$picked"
-  exit 0
-fi
-
-if [ -z "$name" ]; then
-  [ -z "$agent$visibility" ] || usage
-  # Newest dated folder in projects/ by creation time.
-  dated_folders | grep " $best/projects/" | sort -n | tail -1 | cut -d' ' -f2-
   exit 0
 fi
 
