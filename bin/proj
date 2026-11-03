@@ -5,8 +5,8 @@
 #   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes, public repo morning-notes
 #   proj services/impact-ops/status-tracker      -> ~/best/services/impact-ops/YYYY-MM-status-tracker, private repo
 #   proj odd-idea --local                        -> no GitHub repo
-# New folders get a first commit and a GitHub repo named <name>; the URL is printed and copied.
-# An existing folder whose name ends in -<name> is reopened instead, and its remote URL is copied.
+# New folders get a first commit and a GitHub repo named <name>; the URL is printed.
+# An existing folder whose name ends in -<name> is reopened instead, and its remote URL is printed.
 # The proj shell function in shell/zprofile cds into the picked project when no name is given.
 set -euo pipefail
 
@@ -67,17 +67,12 @@ if [ -z "$visibility" ]; then
   esac
 fi
 
-share_url() {
-  echo "$1"
-  if command -v pbcopy >/dev/null; then printf '%s' "$1" | pbcopy; echo "Copied to clipboard"; fi
-}
-
 existing="$(find "$parent" -maxdepth 1 -type d \( -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-$slug" \
   -o -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-$slug" \) 2>/dev/null | sort | tail -1)"
 if [ -n "$existing" ]; then
   dir="$existing"
   echo "Reopening $dir"
-  if url="$(git -C "$dir" remote get-url origin 2>/dev/null)"; then share_url "${url%.git}"; fi
+  if url="$(git -C "$dir" remote get-url origin 2>/dev/null)"; then echo "${url%.git}"; fi
 elif [ -d "$parent/template" ] && git -C "$parent" rev-parse -q --is-inside-work-tree >/dev/null 2>&1; then
   # A folder inside a repository with a template, such as projects/2026-10-08-trials/: copy it, no new repo.
   dir="$parent/$(date +"$date_format")-$slug"
@@ -110,7 +105,7 @@ AGENTS
   if [ "$visibility" != local ]; then
     gh repo create "$owner/$slug" "--$visibility" --source "$dir" --push >/dev/null
     url="$(git -C "$dir" remote get-url origin)"
-    share_url "${url%.git}"
+    echo "${url%.git}"
   fi
 fi
 
