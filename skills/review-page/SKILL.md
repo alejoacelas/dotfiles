@@ -23,6 +23,14 @@ leaving the page, and keeps every decision he makes.
 - **Keep evidence one step away.** Put the source excerpt, example output or detail
   behind a hover, link or expand on the item it supports. Point links at the exact
   spot, such as a `#:~:text=` fragment, a timestamp or a line number.
+- **Keep the layout still.** Give the page one simple spatial structure and keep every
+  element where it is while he works. Moving between items moves a highlight, not the
+  page; scroll only when the focused item would leave the screen, and only as far as
+  needed. Open detail directly below the item or in a side panel, so nothing above it
+  moves. Good examples: a task list whose detail expands below the
+  focused task, and the
+  [Google Docs agent tools matrix](https://alejoacelas.github.io/google-docs-agent-tools/),
+  a fixed grid where a cell's tasks open in a side panel.
 - **Make it keyboard-first.** Arrow keys move between items, single keys record a
   pick or grade, and one key opens a comment box on the focused item. Show the keys
   on the page.
