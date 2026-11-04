@@ -3,6 +3,7 @@
 # Usage: proj <name> [--claude|--codex] [--private|--local]
 #   proj                                         -> pick a project, newest first; type to fuzzy filter;
 #                                                   Tab then an instruction runs claude -p there in the background
+#                                                   (in desk when Tab comes before any filter text)
 #   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes, public repo morning-notes
 #   proj services/impact-ops/status-tracker      -> ~/best/services/impact-ops/YYYY-MM-status-tracker, private repo
 #   proj odd-idea --local                        -> no GitHub repo
@@ -62,9 +63,11 @@ if [ -z "$name" ]; then
            print d, $2, $3 }' |
     sort -k1,1r -k2,2nr | cut -d' ' -f3- |
     fzf --height=40% --reverse --scheme=path --tiebreak=index --prompt='project> ' \
-      --expect=tab --header='enter: open  tab: give claude an instruction to run in the background')" || exit 1
-  key="$(sed -n 1p <<<"$out")" picked="$(sed -n 2p <<<"$out")"
+      --print-query --expect=tab \
+      --header='enter: open  tab: run claude in the background (in desk if nothing typed)')" || exit 1
+  query="$(sed -n 1p <<<"$out")" key="$(sed -n 2p <<<"$out")" picked="$(sed -n 3p <<<"$out")"
   if [ "$key" = tab ]; then
+    [ -n "$query" ] || picked=desk
     printf 'instruction for claude in %s> ' "$picked" >&2
     IFS= read -r -e instruction </dev/tty
     [ -n "$instruction" ] || { echo "proj: empty instruction, nothing started" >&2; exit 1; }
