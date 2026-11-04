@@ -27,10 +27,7 @@ leaving the page, and keeps every decision he makes.
   element where it is while he works. Moving between items moves a highlight, not the
   page; scroll only when the focused item would leave the screen, and only as far as
   needed. Open detail directly below the item or in a side panel, so nothing above it
-  moves. Good examples: a task list whose detail expands below the
-  focused task, and the
-  [Google Docs agent tools matrix](https://alejoacelas.github.io/google-docs-agent-tools/),
-  a fixed grid where a cell's tasks open in a side panel.
+  moves.
 - **Make it keyboard-first.** Arrow keys move between items, single keys record a
   pick or grade, and one key opens a comment box on the focused item. Show the keys
   on the page.
