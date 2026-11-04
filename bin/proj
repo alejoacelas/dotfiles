@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # proj: create or reopen a dated project folder in ~/best, give it a GitHub repo and start an agent there.
 # Usage: proj <name> [--claude|--codex] [--private|--local]
-#   proj                                         -> pick a project, newest first; type to fuzzy filter
+#   proj                                         -> pick a project, newest first; type to fuzzy filter;
+#                                                   Tab then an instruction runs claude -p there in the background
 #   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes, public repo morning-notes
 #   proj services/impact-ops/status-tracker      -> ~/best/services/impact-ops/YYYY-MM-status-tracker, private repo
 #   proj odd-idea --local                        -> no GitHub repo
@@ -26,26 +27,50 @@ for arg in "$@"; do
 done
 best="$HOME/best"
 
-# Dated folders in projects/ and services/<company>/ as "<creation time> <path>".
-# BSD stat on macOS, GNU on Linux.
-dated_folders() {
-  local birth=(-f '%B %N'); stat -c %W / >/dev/null 2>&1 && birth=(-c '%W %n')
-  find "$best/projects" "$best"/services/* -mindepth 1 -maxdepth 1 -type d \
-    -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-*" -exec stat "${birth[@]}" {} + 2>/dev/null
+# Pickable folders as "<creation date> <creation time> <path>": everything in projects/, inbox/,
+# stash/ and services/<company>/, plus desk. BSD stat and date on macOS, GNU on Linux.
+pickable_folders() {
+  local gnu=""; stat -c %W / >/dev/null 2>&1 && gnu=1
+  { find "$best/projects" "$best/inbox" "$best/stash" "$best"/services/* -mindepth 1 -maxdepth 1 -type d
+    echo "$best/desk"; } | while IFS= read -r dir; do
+    if [ -n "$gnu" ]; then t="$(stat -c %W "$dir")"; d="$(date -d "@$t" +%F)"
+    else t="$(stat -f %B "$dir")"; d="$(date -r "$t" +%F)"; fi
+    echo "$d $t $dir"
+  done
+}
+
+# Start an unsupervised claude -p session in $1 with instruction $2, detached from this terminal.
+run_in_background() {
+  local dir="$1" instruction="$2" logs="${XDG_STATE_HOME:-$HOME/.local/state}/proj/runs"
+  mkdir -p "$logs"
+  local log="$logs/$(date +%Y-%m-%d-%H%M%S)-$(basename "$dir").log"
+  printf 'dir: %s\ninstruction: %s\n\n' "$dir" "$instruction" > "$log"
+  (cd "$dir" && nohup claude -p --dangerously-skip-permissions "$instruction" </dev/null >>"$log" 2>&1 &)
+  echo "Started claude in $dir" >&2
+  echo "Log: $log" >&2
 }
 
 if [ -z "$name" ]; then
   [ -z "$agent$visibility" ] || usage
   command -v fzf >/dev/null || { echo "proj: picking a project needs fzf (brew install fzf)" >&2; exit 1; }
   # List paths relative to ~/best, newest first by the date in the folder name (month-only
-  # service folders count as day 00), then by creation time. Typing ranks fuzzy matches;
-  # equal matches keep that order.
-  picked="$(dated_folders | sed "s|$best/||" |
-    awk '{ n = split($2, p, "/"); d = substr(p[n], 1, 10)
-           if (d !~ /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/) d = substr(d, 1, 7) "-00"
-           print d, $0 }' |
+  # folders count as day 00; undated folders use their creation date), then by creation time.
+  # Typing ranks fuzzy matches; equal matches keep that order.
+  out="$(pickable_folders | sed "s|$best/||" |
+    awk '{ n = split($3, p, "/"); d = substr(p[n], 1, 10)
+           if (d !~ /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/) d = (d ~ /^[0-9]{4}-[0-9]{2}-/) ? substr(d, 1, 7) "-00" : $1
+           print d, $2, $3 }' |
     sort -k1,1r -k2,2nr | cut -d' ' -f3- |
-    fzf --height=40% --reverse --scheme=path --tiebreak=index --prompt='project> ')" || exit 1
+    fzf --height=40% --reverse --scheme=path --tiebreak=index --prompt='project> ' \
+      --expect=tab --header='enter: open  tab: give claude an instruction to run in the background')" || exit 1
+  key="$(sed -n 1p <<<"$out")" picked="$(sed -n 2p <<<"$out")"
+  if [ "$key" = tab ]; then
+    printf 'instruction for claude in %s> ' "$picked" >&2
+    IFS= read -r -e instruction </dev/tty
+    [ -n "$instruction" ] || { echo "proj: empty instruction, nothing started" >&2; exit 1; }
+    run_in_background "$best/$picked" "$instruction"
+    exit 0
+  fi
   echo "$best/$picked"
   exit 0
 fi

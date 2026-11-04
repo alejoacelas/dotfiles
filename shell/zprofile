@@ -12,11 +12,12 @@ export PATH="/opt/homebrew/opt/python@3.13/libexec/bin:$PATH"
 export PATH="/opt/homebrew/opt/rustup/bin:$HOME/.cargo/bin:$PATH"
 # <<< dev environment (added by Claude 2026-06-23) <<<
 
-# proj with no name cds into the project picked from the list (see bin/proj).
+# proj with no name cds into the project picked from the list (see bin/proj);
+# picking with Tab starts a background claude run instead and prints nothing to cd into.
 proj() {
   if [ $# -eq 0 ]; then
     local dir
-    dir="$(command proj "$@")" && cd "$dir"
+    dir="$(command proj "$@")" && [ -n "$dir" ] && cd "$dir"
   else
     command proj "$@"
   fi
