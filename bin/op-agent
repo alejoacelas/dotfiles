@@ -3,8 +3,8 @@
 set -eu
 set +x
 case "$(uname -s)" in
-  Darwin) credentials="$HOME/.config/mac-agents/.env" ;;
-  Linux) credentials="$HOME/.config/agent-server/op.env" ;;
+  Darwin) credentials="$HOME/.config/mac-agents/.env"; real_op=/opt/homebrew/bin/op ;;
+  Linux) credentials="$HOME/.config/agent-server/op.env"; real_op=/usr/bin/op ;;
   *) echo 'op-agent: unsupported operating system' >&2; exit 1 ;;
 esac
 if [ ! -r "$credentials" ]; then
@@ -16,4 +16,10 @@ set -a
 . "$credentials"
 set +a
 : "${OP_SERVICE_ACCOUNT_TOKEN:?Missing service-account token}"
-exec op "$@"
+# Call the 1Password CLI binary itself: an `op` wrapper earlier on PATH may
+# route around the service account (the other Mac has one).
+if [ ! -x "$real_op" ]; then
+  echo "op-agent: 1Password CLI not found at $real_op" >&2
+  exit 1
+fi
+exec "$real_op" "$@"
