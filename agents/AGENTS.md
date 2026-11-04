@@ -91,6 +91,11 @@ names use lowercase words separated by dashes. Put agent instructions in `AGENTS
 files inside repositories and human-facing overviews in `README.md`; rules for
 folders that aren't repositories live here.
 
+Edit an `AGENTS.md` only when I ask you to, except to record where a `.env`
+variable lives in 1Password. Keep each `README.md` to a few lines saying what the
+project is and how to run it, because projects change substantially and longer
+descriptions go stale.
+
 - `desk/`: work tied to people outside that needs no repository, such as call
   prep, follow-up messages, notes and research. Follow
   [its instructions](/Users/alejo/best/desk/AGENTS.md). Register work delivered to
