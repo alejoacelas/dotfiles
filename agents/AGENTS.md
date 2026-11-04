@@ -144,7 +144,7 @@ each build, leaving enabled privacy toggles that the rebuilt app cannot use. Fai
 the build when its expected signing identity is missing; never silently fall back
 to ad-hoc signing.
 
-Open Markdown for my review in Zed: `open -a Zed "/absolute/path/to/file.md"`.
+Open Markdown for my review in Umi: `open -a Umi "/absolute/path/to/file.md"`.
 After I review or edit a document, reread it before making further changes.
 
 ## Agents
