@@ -67,40 +67,19 @@
             "type": "command",
             "command": "bash \"$HOME/best/stash/dotfiles/claude/hooks/relink-settings.sh\"",
             "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "python3 \"$HOME/best/stash/dotfiles/claude/hooks/quiet-plugin-hooks.py\""
           }
         ]
       }
     ]
   },
   "enabledPlugins": {
-    "vercel@claude-plugins-official": false,
-    "codex@codex-plugin-cc": false,
-    "warp@claude-code-warp": false,
-    "airtable@anthropic-plugin-directory": true,
     "umi@umi": true
   },
   "extraKnownMarketplaces": {
-    "codex-plugin-cc": {
-      "source": {
-        "source": "github",
-        "repo": "Crazytieguy/codex-plugin-cc"
-      },
-      "autoUpdate": true
-    },
     "alignment-hive": {
       "source": {
         "source": "github",
         "repo": "Crazytieguy/alignment-hive"
-      }
-    },
-    "claude-code-warp": {
-      "source": {
-        "source": "github",
-        "repo": "warpdotdev/claude-code-warp"
       }
     },
     "umi": {

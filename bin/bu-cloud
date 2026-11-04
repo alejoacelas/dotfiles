@@ -1,3 +1,0 @@
-#!/bin/sh
-set -eu
-exec uv run --quiet --script "$HOME/best/stash/dotfiles/skills/browser-use-cloud/scripts/cloud.py" "$@"
