@@ -105,6 +105,9 @@ folders that aren't repositories live here.
     transcripts, Slack exports or coaching intake records.
   - `impact-ops/`: company facts are in `2026-10-ai-assessment/impact-ops.md`;
     extend it as calls add context.
+  - `templates/`: reusable material for client work, each a private repository
+    named without a date. `sharing-prompts/` holds prompts people run in their
+    own Claude or ChatGPT to share information about their work.
 - `stash/`: things I repeatedly come back to, named without a date. A project
   moves here from `projects/` once I use it regularly; ask before moving one.
 - `archive/`: retired or finished work. Before archiving a tool, stop anything
