@@ -5,7 +5,7 @@
 #                                                   Tab then an instruction runs claude -p there in the background
 #                                                   (in desk when Tab comes before any filter text)
 #   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes, public repo morning-notes
-#   proj services/impact-ops/status-tracker      -> ~/best/services/impact-ops/YYYY-MM-status-tracker, private repo
+#   proj orgs/impact-ops/status-tracker          -> ~/best/orgs/impact-ops/YYYY-MM-status-tracker, private repo
 #   proj odd-idea --local                        -> no GitHub repo
 # New folders get a first commit and a GitHub repo named <name>; the URL is printed.
 # An existing folder whose name ends in -<name> is reopened instead, and its remote URL is printed.
@@ -29,10 +29,10 @@ done
 best="$HOME/best"
 
 # Pickable folders as "<creation date> <creation time> <path>": everything in projects/, inbox/,
-# stash/ and services/<company>/, plus desk. BSD stat and date on macOS, GNU on Linux.
+# stash/, services/ and orgs/<company>/, plus desk. BSD stat and date on macOS, GNU on Linux.
 pickable_folders() {
   local gnu=""; stat -c %W / >/dev/null 2>&1 && gnu=1
-  { find "$best/projects" "$best/inbox" "$best/stash" "$best"/services/* -mindepth 1 -maxdepth 1 -type d
+  { find "$best/projects" "$best/inbox" "$best/stash" "$best/services" "$best"/orgs/* -mindepth 1 -maxdepth 1 -type d
     echo "$best/desk"; } | while IFS= read -r dir; do
     if [ -n "$gnu" ]; then t="$(stat -c %W "$dir")"; d="$(date -d "@$t" +%F)"
     else t="$(stat -f %B "$dir")"; d="$(date -r "$t" +%F)"; fi
@@ -82,15 +82,15 @@ case "$name" in
   */*) parent="$best/${name%/*}"; slug="${name##*/}" ;;
   *) parent="$best/projects"; slug="$name" ;;
 esac
-# Own projects are dated to the day; services, trials and inbox use the month.
+# Own projects are dated to the day; client projects, trials and inbox use the month.
 date_format=%Y-%m
 [ "$parent" = "$best/projects" ] && date_format=%Y-%m-%d
 slug="$(printf '%s' "$slug" | tr '[:upper:] _' '[:lower:]--' | tr -cd 'a-z0-9-')"
 [ -n "$slug" ] || { echo "proj: name must contain letters or digits" >&2; exit 2; }
-# Client work under services/ is private; everything else is public unless told otherwise.
+# Client work under orgs/ and services/ is private; everything else is public unless told otherwise.
 if [ -z "$visibility" ]; then
   case "$parent/" in
-    "$best/services/"*) visibility=private ;;
+    "$best/orgs/"*|"$best/services/"*) visibility=private ;;
     *) visibility=public ;;
   esac
 fi

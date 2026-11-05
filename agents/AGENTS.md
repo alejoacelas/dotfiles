@@ -101,7 +101,7 @@ descriptions go stale.
   [its instructions](/Users/alejo/best/desk/AGENTS.md). Register work delivered to
   someone in `desk/sent/`.
 - `projects/`: my own one-off projects, each a repository named `YYYY-MM-DD-name`.
-- `services/<company>/`: client projects that run, get deployed or are handed over
+- `orgs/<company>/`: client projects that run, get deployed or are handed over
   as a repository, each a private repository named `YYYY-MM-name`. Register each
   in desk with an item giving its path. Before working on one, read the desk items
   tagged `projects: [<company>]`, including the latest calls.
@@ -110,9 +110,10 @@ descriptions go stale.
     transcripts, Slack exports or coaching intake records.
   - `impact-ops/`: company facts are in `2026-10-ai-assessment/impact-ops.md`;
     extend it as calls add context.
-  - `templates/`: reusable material for client work, each a private repository
-    named without a date. `sharing-prompts/` holds prompts people run in their
-    own Claude or ChatGPT to share information about their work.
+- `services/`: reusable material for client work, one private repository per
+  service, named without a date. Client projects copy from here.
+  `sharing-prompts/` holds prompts people run in their own Claude or ChatGPT to
+  share information about their work.
 - `stash/`: things I repeatedly come back to, named without a date. A project
   moves here from `projects/` once I use it regularly; ask before moving one.
 - `archive/`: retired or finished work. Before archiving a tool, stop anything
