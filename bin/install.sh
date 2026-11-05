@@ -7,6 +7,12 @@
 #   - real file/dir in the way, repo already tracks it    -> back it up as <path>.pre-symlink.<timestamp>
 set -euo pipefail
 
+# These files configure only the main Mac; the other Mac and the agent server keep their own.
+if [ "$(uname)" != Darwin ]; then
+  echo "install.sh configures only the Mac; the server keeps its own configuration." >&2
+  exit 1
+fi
+
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 link() {  # link <repo-relative source> <absolute home target>
