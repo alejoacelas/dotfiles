@@ -19,7 +19,7 @@ zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 # fzf-tab must load after compinit and before zsh-autosuggestions.
-source "$HOMEBREW_PREFIX/share/fzf-tab/fzf-tab.zsh"
+source "/opt/homebrew/share/fzf-tab/fzf-tab.zsh"
 zstyle ':fzf-tab:*' fzf-flags --height=12 --layout=reverse --info=hidden --no-separator --border=rounded
 zstyle ':fzf-tab:*' show-group none
 zstyle ':fzf-tab:*' prefix ''
@@ -28,5 +28,5 @@ zstyle ':fzf-tab:*' query-string prefix
 zstyle ':fzf-tab:*' group-colors ''
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
-source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 ZSH_AUTOSUGGEST_STRATEGY=(history)
