@@ -145,7 +145,8 @@ try every action it offers yourself in a browser (each key, button, field and
 save) and confirm the result, such as a saved answer being read back. Choose
 hotkeys for where my hands rest: keys used together sit under one hand, or
 split so one hand moves and the other decides, such as arrows for the right
-hand and nearby letters for the left.
+hand and nearby letters for the left. Consider Enter, Space and Command
+combinations (such as Command+Enter to save) alongside letters.
 
 Create custom skills in `~/best/stash/dotfiles/skills/` so Claude Code and Codex share one
 source, or in the private `~/best/stash/dotfiles/private-skills/` checkout, then run
