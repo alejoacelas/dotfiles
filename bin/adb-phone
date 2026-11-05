@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # adb-phone: make sure the Moto G35 is connected to adb, and print the serial to use with `adb -s`.
+# PHONE_SERIAL=ec27fd9 (or `adb-boox`) does the same for the Boox Go7.
 # Usage: adb-phone            -> connect and print the serial
 #        adb-phone <adb args> -> connect, then run `adb -s <serial> <adb args>`
 #
@@ -11,12 +12,12 @@
 set -euo pipefail
 PHONE_SERIAL="${PHONE_SERIAL:-ZE223HJXDZ}"   # ro.serialno; appears in USB serial and mDNS name
 WAIT_SECONDS="${WAIT_SECONDS:-10}"
-# Only the Moto has a tailnet TCP address; other devices (the Boox) use mDNS or USB.
-if [[ "$PHONE_SERIAL" == "ZE223HJXDZ" ]]; then
-  PHONE_TCP="${PHONE_TCP:-100.110.41.28:5555}"   # moto-g35-5g.tail622085.ts.net
-else
-  PHONE_TCP="${PHONE_TCP:-}"
-fi
+# Tailnet TCP address for each known device; others use mDNS or USB only.
+case "$PHONE_SERIAL" in
+  ZE223HJXDZ) PHONE_TCP="${PHONE_TCP:-100.110.41.28:5555}" ;;   # Moto G35, moto-g35-5g.tail622085.ts.net
+  ec27fd9)    PHONE_TCP="${PHONE_TCP:-100.71.124.18:5555}" ;;   # Boox Go7, go7; only while awake (Wi-Fi sleeps)
+  *)          PHONE_TCP="${PHONE_TCP:-}" ;;
+esac
 
 state_of() { adb devices | awk -v s="$1" 'NR>1 && $1==s {print $2; exit}'; }
 

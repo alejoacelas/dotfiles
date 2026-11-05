@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# adb-boox: adb-phone for the Boox Go7 (USB serial ec27fd9, tailnet 100.71.124.18:5555).
+# The Boox turns Wi-Fi off while asleep, so the tailnet route works only while it's awake.
+PHONE_SERIAL=ec27fd9 exec "$(dirname "$0")/adb-phone" "$@"
