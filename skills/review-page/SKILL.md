@@ -16,10 +16,13 @@ leaving the page, and keeps every decision he makes.
   Do the grouping yourself: related records (an order's shipping emails, one bug's
   failing tests) become one item even when nothing in the data links them. Link to
   the underlying records from inside the item.
-- **Show enough to judge in place.** Give the full snippet, quote or screenshot he
-  needs to decide, and cut everything else, such as pipeline steps or internal labels.
-  When he judges by taste, as with readings or writing, show a passage long enough
-  to tell whether he'd enjoy it, usually a few paragraphs.
+- **Show everything he needs to judge, in place.** Give the full snippet, quote or
+  screenshot each decision needs. When he judges whole outputs, such as reports,
+  documents or prompt versions, show the full documents, rendered, side by side,
+  with the check results and other data that bear on them; don't reduce them to
+  excerpts or scores. Cut only what doesn't bear on the decision, such as pipeline
+  steps or internal labels. When he judges by taste, as with readings, show a
+  passage long enough to tell whether he'd enjoy it, usually a few paragraphs.
 - **Keep evidence one step away.** Put the source excerpt, example output or detail
   behind a hover, link or expand on the item it supports. Point links at the exact
   spot, such as a `#:~:text=` fragment, a timestamp or a line number.
