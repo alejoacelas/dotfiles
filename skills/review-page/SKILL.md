@@ -45,5 +45,5 @@ leaving the page, and keeps every decision he makes.
 ## Conventions
 
 - Default to light mode.
-- Publish as a private claude.ai artifact, or write local HTML and open it in his
-  browser.
+- Write local HTML and open it in his browser. Publish a claude.ai artifact only
+  when he explicitly asks for one.

@@ -139,6 +139,9 @@ When opening any Claude Code or Codex session, use
 `codex --dangerously-bypass-approvals-and-sandbox`, unless I explicitly request
 restricted permissions.
 
+Write web pages as local HTML files and open them in my browser. Publish a
+claude.ai artifact only when I explicitly ask for one.
+
 Create custom skills in `~/best/stash/dotfiles/skills/` so Claude Code and Codex share one
 source, or in the private `~/best/stash/dotfiles/private-skills/` checkout, then run
 dotfiles' `bin/install.sh`. The [dotfiles README](/Users/alejo/best/stash/dotfiles/README.md)
