@@ -1,6 +1,12 @@
 tap "dopplerhq/cli"
-# Command-line fuzzy finder, used by proj --list
+# Command-line fuzzy finder, used by proj --list and fzf-tab
 brew "fzf"
+# Completion descriptions for ~1,000 command-line tools (shell/completion.zsh)
+brew "carapace"
+# Tab completion menu filtered with fzf (shell/completion.zsh)
+brew "fzf-tab"
+# Grey command suggestions from history (shell/completion.zsh)
+brew "zsh-autosuggestions"
 # GitHub command-line tool
 brew "gh"
 # Secrets manager CLI

@@ -28,6 +28,7 @@ backs up conflicting real files. The Codex app retains ownership of its base con
 | `codex/hooks.json`, `codex/rules/` | Codex hooks and rules |
 | `codex/cli.config.toml` | CLI settings for `codex --profile cli` |
 | `shell/zprofile`, `git/gitconfig`, `Brewfile` | Shell, Git and Homebrew configuration |
+| `shell/completion.zsh` | Tab menu and grey suggestions; `~/.zshrc` sources it |
 | `warp/tab_configs/` | Warp tab presets |
 
 Create custom skills in `skills/<name>/SKILL.md`, then run `bin/install.sh`.
