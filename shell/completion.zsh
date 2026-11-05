@@ -3,6 +3,9 @@
 #   →     accepts the grey suggestion from history (zsh-autosuggestions)
 # Needs: brew install fzf fzf-tab carapace zsh-autosuggestions
 
+# Warp has its own completion, and these need a terminal to draw in.
+[[ $TERM_PROGRAM == WarpTerminal || ! -t 0 || ! -t 1 ]] && return
+
 autoload -Uz compinit && compinit
 
 # Descriptions for ~1,000 command-line tools; tools carapace doesn't know fall back to zsh's own.
