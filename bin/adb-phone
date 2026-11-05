@@ -1,16 +1,40 @@
 #!/usr/bin/env bash
-# adb-phone: make sure the Moto G35 is connected to adb (USB or wireless debugging).
-# Usage: adb-phone            -> connect and print the serial to use with `adb -s`
+# adb-phone: make sure the Moto G35 is connected to adb, and print the serial to use with `adb -s`.
+# Usage: adb-phone            -> connect and print the serial
 #        adb-phone <adb args> -> connect, then run `adb -s <serial> <adb args>`
+#
+# Order: (1) legacy TCP port 5555 over Tailscale, which works from anywhere on the tailnet
+# until the phone reboots; (2) Wireless debugging found by mDNS, which only works from the
+# same Wi-Fi. After (2) it runs `adb tcpip 5555` so (1) works again until the next reboot.
+# The phone app dev.alejo.moodphone turns Wireless debugging back on whenever Android turns
+# it off; see ~/best/stash/health/checkin/android/README.md.
 set -euo pipefail
 PHONE_SERIAL="${PHONE_SERIAL:-ZE223HJXDZ}"   # ro.serialno; appears in USB serial and mDNS name
 WAIT_SECONDS="${WAIT_SECONDS:-10}"
+# Only the Moto has a tailnet TCP address; other devices (the Boox) use mDNS or USB.
+if [[ "$PHONE_SERIAL" == "ZE223HJXDZ" ]]; then
+  PHONE_TCP="${PHONE_TCP:-100.110.41.28:5555}"   # moto-g35-5g.tail622085.ts.net
+else
+  PHONE_TCP="${PHONE_TCP:-}"
+fi
+
+state_of() { adb devices | awk -v s="$1" 'NR>1 && $1==s {print $2; exit}'; }
 
 connected_serial() {
+  if [[ -n "$PHONE_TCP" && "$(state_of "$PHONE_TCP")" == "device" ]]; then echo "$PHONE_TCP"; return; fi
   adb devices | awk -v s="$PHONE_SERIAL" 'NR>1 && $2=="device" && index($1,s) {print $1; exit}'
 }
 
 adb start-server >/dev/null 2>&1
+
+if [[ -n "$PHONE_TCP" && "$(state_of "$PHONE_TCP")" != "device" ]]; then
+  adb disconnect "$PHONE_TCP" >/dev/null 2>&1 || true   # clear a stale "offline" entry
+  if nc -z -G 3 "${PHONE_TCP%:*}" "${PHONE_TCP#*:}" >/dev/null 2>&1; then
+    adb connect "$PHONE_TCP" >/dev/null 2>&1 || true
+    sleep 1
+  fi
+fi
+
 serial="$(connected_serial)"
 deadline=$((SECONDS + WAIT_SECONDS))
 while [[ -z "$serial" && $SECONDS -lt $deadline ]]; do
@@ -25,9 +49,29 @@ while [[ -z "$serial" && $SECONDS -lt $deadline ]]; do
 done
 
 if [[ -z "$serial" ]]; then
-  echo "Phone not found. On the phone: Settings > System > Developer options > Wireless debugging ON" >&2
-  echo "(it turns itself off when Wi-Fi drops or the phone joins a different access point)." >&2
+  echo "Phone not found over Tailscale ($PHONE_TCP) or on this Wi-Fi." >&2
+  echo "Port 5555 closes on reboot. On the phone: unlock it, open Tailscale, and check" >&2
+  echo "Settings > System > Developer options > Wireless debugging is on; then run this from the same Wi-Fi." >&2
   exit 1
+fi
+
+# Reached over Wireless debugging: reopen port 5555 so the tailnet route works again.
+if [[ -n "$PHONE_TCP" && "$serial" != "$PHONE_TCP" ]] && \
+   [[ "$(adb -s "$serial" shell getprop service.adb.tcp.port | tr -d '\r')" != "5555" ]]; then
+  lan_ip="$(adb -s "$serial" shell ip -4 -o addr show wlan0 | awk '{split($4,a,"/"); print a[1]}' | tr -d '\r')"
+  adb -s "$serial" tcpip 5555 >/dev/null 2>&1 || true   # restarts adbd; the current connection drops
+  serial=""
+  deadline=$((SECONDS + 15))
+  while [[ -z "$serial" && $SECONDS -lt $deadline ]]; do
+    sleep 2
+    adb connect "$PHONE_TCP" >/dev/null 2>&1 || true
+    serial="$(connected_serial)"
+    if [[ -z "$serial" && -n "$lan_ip" ]]; then
+      adb connect "$lan_ip:5555" >/dev/null 2>&1 || true
+      [[ "$(state_of "$lan_ip:5555")" == "device" ]] && serial="$lan_ip:5555"
+    fi
+  done
+  if [[ -z "$serial" ]]; then echo "Lost the phone after switching it to port 5555." >&2; exit 1; fi
 fi
 
 if [[ $# -gt 0 ]]; then exec adb -s "$serial" "$@"; fi
