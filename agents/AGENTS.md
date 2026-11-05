@@ -140,7 +140,9 @@ When opening any Claude Code or Codex session, use
 restricted permissions.
 
 Write web pages as local HTML files and open them in my browser. Publish a
-claude.ai artifact only when I explicitly ask for one.
+claude.ai artifact only when I explicitly ask for one. Before handing me any UI,
+try every action it offers yourself in a browser (each key, button, field and
+save) and confirm the result, such as a saved answer being read back.
 
 Create custom skills in `~/best/stash/dotfiles/skills/` so Claude Code and Codex share one
 source, or in the private `~/best/stash/dotfiles/private-skills/` checkout, then run
