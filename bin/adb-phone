@@ -5,19 +5,24 @@
 #        adb-phone <adb args> -> connect, then run `adb -s <serial> <adb args>`
 #
 # Order: (1) legacy TCP port 5555 over Tailscale, which works from anywhere on the tailnet
-# until the phone reboots; (2) Wireless debugging found by mDNS, which only works from the
-# same Wi-Fi. After (2) it runs `adb tcpip 5555` so (1) works again until the next reboot.
-# The phone app dev.alejo.moodphone turns Wireless debugging back on whenever Android turns
-# it off; see ~/best/stash/health/checkin/android/README.md.
+# until the phone reboots; (2) Wireless debugging over Tailscale, at the port the phone app
+# reported to the mood bot (GET http://agent-server:8787/devices/<device>/adb, token from
+# 1Password); (3) Wireless debugging found by mDNS, which only works from the same Wi-Fi.
+# After (2) or (3) it runs `adb tcpip 5555` so (1) works again until the next reboot, and
+# leaves Wireless debugging on: it is the route back after the next reboot, and the app
+# would turn it back on anyway. The phone app dev.alejo.moodphone turns Wireless debugging
+# back on whenever Android turns it off; see ~/best/stash/health/checkin/android/README.md.
 set -euo pipefail
 PHONE_SERIAL="${PHONE_SERIAL:-ZE223HJXDZ}"   # ro.serialno; appears in USB serial and mDNS name
 WAIT_SECONDS="${WAIT_SECONDS:-10}"
 # Tailnet TCP address for each known device; others use mDNS or USB only.
 case "$PHONE_SERIAL" in
-  ZE223HJXDZ) PHONE_TCP="${PHONE_TCP:-100.110.41.28:5555}" ;;   # Moto G35, moto-g35-5g.tail622085.ts.net
+  ZE223HJXDZ) PHONE_TCP="${PHONE_TCP:-100.110.41.28:5555}"; BOT_DEVICE=moto-g35 ;;   # Moto G35, moto-g35-5g.tail622085.ts.net
   ec27fd9)    PHONE_TCP="${PHONE_TCP:-100.71.124.18:5555}" ;;   # Boox Go7, go7; only while awake (Wi-Fi sleeps)
   *)          PHONE_TCP="${PHONE_TCP:-}" ;;
 esac
+
+BOT_DEVICE="${BOT_DEVICE:-}"   # the phone app's device name, for the reported Wireless debugging port
 
 state_of() { adb devices | awk -v s="$1" 'NR>1 && $1==s {print $2; exit}'; }
 
@@ -37,6 +42,27 @@ if [[ -n "$PHONE_TCP" && "$(state_of "$PHONE_TCP")" != "device" ]]; then
 fi
 
 serial="$(connected_serial)"
+
+# Wireless debugging over Tailscale, at the port the app last reported to the bot.
+tls_target=""
+if [[ -z "$serial" && -n "$BOT_DEVICE" ]]; then
+  token="$(op --account my.1password.com read op://server-agents/mood-bot-screen-token/credential 2>/dev/null || true)"
+  port=""
+  if [[ -n "$token" ]]; then
+    port="$(curl -s -m 5 -H "Authorization: Bearer $token" "http://agent-server:8787/devices/$BOT_DEVICE/adb" |
+      python3 -c 'import json,sys; print(json.load(sys.stdin).get("port",""))' 2>/dev/null || true)"
+  else
+    echo "Couldn't read the mood bot token from 1Password; skipping Wireless debugging over Tailscale." >&2
+  fi
+  unset token
+  if [[ -n "$port" ]]; then
+    tls_target="${PHONE_TCP%:*}:$port"
+    adb connect "$tls_target" >/dev/null 2>&1 || true
+    sleep 1
+    [[ "$(state_of "$tls_target")" == "device" ]] && serial="$tls_target"
+  fi
+fi
+
 deadline=$((SECONDS + WAIT_SECONDS))
 while [[ -z "$serial" && $SECONDS -lt $deadline ]]; do
   # mDNS line: adb-ZE223HJXDZ-xxxxxx  _adb-tls-connect._tcp  192.168.1.148:45811
@@ -50,7 +76,7 @@ while [[ -z "$serial" && $SECONDS -lt $deadline ]]; do
 done
 
 if [[ -z "$serial" ]]; then
-  echo "Phone not found over Tailscale ($PHONE_TCP) or on this Wi-Fi." >&2
+  echo "Phone not found over Tailscale ($PHONE_TCP, or the reported Wireless debugging port) or on this Wi-Fi." >&2
   echo "Port 5555 closes on reboot. On the phone: unlock it, open Tailscale, and check" >&2
   echo "Settings > System > Developer options > Wireless debugging is on; then run this from the same Wi-Fi." >&2
   exit 1
@@ -72,6 +98,7 @@ if [[ -n "$PHONE_TCP" && "$serial" != "$PHONE_TCP" ]] && \
       [[ "$(state_of "$lan_ip:5555")" == "device" ]] && serial="$lan_ip:5555"
     fi
   done
+  if [[ -n "$tls_target" ]]; then adb disconnect "$tls_target" >/dev/null 2>&1 || true; fi   # adbd restarted; drop the stale entry
   if [[ -z "$serial" ]]; then echo "Lost the phone after switching it to port 5555." >&2; exit 1; fi
 fi
 
