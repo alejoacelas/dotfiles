@@ -181,7 +181,7 @@ def commits():
 
 def plans():
     cmd = (f"cd {PLANS_DIR}/days 2>/dev/null || exit 0; "
-           f"cat {DAY}.md 2>/dev/null; for f in {DAY}/*.md; do [ -f \"$f\" ] && "
+           f"{{ grep -q '\"{DAY}\"' ../page.json 2>/dev/null && cat ../page.md; }} || cat {DAY}.md 2>/dev/null; for f in {DAY}/*.md; do [ -f \"$f\" ] && "
            f"printf '\\n## Tab: %s\\n' \"$(basename \"$f\" .md)\" && cat \"$f\"; done; true")
     try:
         r = subprocess.run(["ssh", "-o", "ConnectTimeout=5", "-o", "BatchMode=yes", PLANS_HOST, cmd],
