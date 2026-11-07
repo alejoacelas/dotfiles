@@ -56,7 +56,27 @@
   "skillOverrides": {
     "anthropic-skills:summarise-granola": "off",
     "summarise-granola": "off",
-    "resolve-denied-toolcall": "off"
+    "resolve-denied-toolcall": "off",
+    "dataviz": "off",
+    "artifact-diagramming": "off",
+    "artifact-capabilities": "off",
+    "update-config": "off",
+    "keybindings-help": "off",
+    "claude-api": "off",
+    "workflow-authoring": "off",
+    "claude-in-chrome": "off",
+    "plugin-authoring": "off",
+    "anthropic-skills:built-in-browser": "off",
+    "anthropic-skills:chrome-browser": "off",
+    "anthropic-skills:computer-use": "off",
+    "anthropic-skills:docs": "off",
+    "anthropic-skills:docx": "off",
+    "anthropic-skills:google-workspace": "off",
+    "anthropic-skills:mic-image-test": "off",
+    "anthropic-skills:notion-cli": "off",
+    "anthropic-skills:pdf": "off",
+    "anthropic-skills:pptx": "off",
+    "anthropic-skills:xlsx": "off"
   },
   "hooks": {
     "SessionStart": [
