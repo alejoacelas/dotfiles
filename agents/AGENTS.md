@@ -70,7 +70,7 @@ The two Macs SSH into each other and into the agent server over Tailscale:
 the other Mac and the server keep their own configuration and share only
 credentials, through 1Password. The other Mac holds only the projects started
 on it; leave other repositories uncloned there. Do computer use and browser
-testing on the other Mac by default, copying over only what the test needs.
+testing on the other Mac by default.
 
 SSH sessions on a Mac can't read the keychain, so start Claude there inside
 `tmux` with `CLAUDE_CODE_OAUTH_TOKEN` injected by `op-agent run --no-masking`
