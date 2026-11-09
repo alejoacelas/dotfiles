@@ -167,6 +167,14 @@ to ad-hoc signing.
 Open Markdown for my review in Umi: `open -a Umi "/absolute/path/to/file.md"`.
 After I review or edit a document, reread it before making further changes.
 
+My terminals run inside Umi, the app that also hosts the Markdown editor. When I
+ask for anything about panes, tabs or windows (open a session "here" or "in a
+pane", split, move, rename, read or type into another pane, show a file in the
+editor), run `umi help` and use the `umi` command it lists. Inside Umi, these
+commands act on your own pane, tab and window by default. To reopen a past
+Claude session in a pane, run
+`umi split right --cwd <dir> --cmd "claude --dangerously-skip-permissions --resume <session-id>"`.
+
 ## Agents
 
 - When subagents or agent teams are available, use them whenever independent investigation, implementation, review, or verification work can run in parallel or benefits from a separate context window.
