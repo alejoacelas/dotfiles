@@ -117,6 +117,11 @@ link bin/proj "$HOME/.local/bin/proj"
 link bin/op-agent "$HOME/.local/bin/op-agent"
 link warp/keybindings.yaml "$HOME/.warp/keybindings.yaml"
 
+# Umi: attention config (included from ~/.config/umi/config, which stays local) and palette commands.
+mkdir -p "$HOME/.config/umi"
+link umi/umi.config "$HOME/.config/umi/dotfiles.config"
+link umi/commands   "$HOME/.config/umi/commands"
+
 # Create the ~/best container folders.
 BEST_ROOT="$HOME/best"
 mkdir -p "$BEST_ROOT"
