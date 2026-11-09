@@ -4,7 +4,7 @@
 set -eu
 umi="${UMI_CLI:-umi}"
 pane="${UMI_PANE:?run from the Umi palette or a key}"
-if ! "$umi" ls --where 'role=manager' | grep -q ' pane '; then
+if ! "$umi" ls --where 'role=manager' | grep -q '^pane '; then
   echo "No manager pane: run the umi-manager skill in one first" >&2; exit 1
 fi
 "$umi" pane set "$pane" owner=manager >/dev/null
