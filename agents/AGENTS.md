@@ -51,7 +51,7 @@ ignored `.env`. Record in `AGENTS.md` where each variable lives in 1Password
 (account, vault, item, field) so the file can be rebuilt.
 
 For personal credentials approved for agent access, use
-`~/best/stash/dotfiles/bin/op-agent` on the Mac (`~/.local/bin/op-agent` on the server).
+`~/best/areas/dotfiles/bin/op-agent` on the Mac (`~/.local/bin/op-agent` on the server).
 It authenticates without prompts to `mac-agents` or `server-agents` in the
 personal 1Password account. Use `op-agent run` with secret references to inject
 credentials into a command, or `op-agent inject` for an ignored `.env`.
@@ -62,7 +62,7 @@ Use ordinary `op --account my.1password.com` for items outside these vaults.
 On the agent server, run agent work as the `agent` user (`sudo -iu agent`). It
 has no sudo or `op-agent`; `gh`, `gog` and git pushes go through a credential
 broker that never returns the tokens. To give it an API key, add a broker
-route ([agent user setup](/Users/alejo/best/stash/server/docs/setup.md#agent-user)).
+route ([agent user setup](/Users/alejo/best/areas/server/docs/setup.md#agent-user)).
 
 The two Macs SSH into each other and into the agent server over Tailscale:
 `ssh mac-air-2` (the other MacBook Air), `ssh alejo-m4` (the main Mac) and
@@ -111,15 +111,18 @@ descriptions go stale.
     transcripts, Slack exports or coaching intake records.
   - `impact-ops/`: company facts are in `2026-10-ai-assessment/impact-ops.md`;
     extend it as calls add context.
-- `services/`: reusable material for client work, one private repository per
-  service, named without a date. Client projects copy from here.
-  `sharing-prompts/` holds prompts people run in their own Claude or ChatGPT to
-  share information about their work.
-- `stash/`: things I repeatedly come back to, named without a date. A project
-  moves here from `projects/` once I use it regularly; ask before moving one.
+- `playbooks/`: work I do many times and want to get deliberately better at,
+  one private repository per kind of work, named without a date. Each holds the
+  current method, plus the prep and reviews from past runs that feed it. Client
+  projects copy from here. `sharing-prompts/` holds prompts people run in their
+  own Claude or ChatGPT to share information about their work.
+- `areas/`: long-running parts of my life and setup that I work on as needs
+  come up, named without a date. A project moves here from `projects/` once I
+  use it regularly; ask before moving one.
+- `ops/`: the systems that run my work: capturing tasks, prioritising them and
+  planning each day. Named without a date.
 - `archive/`: retired or finished work. Before archiving a tool, stop anything
   that runs it (launchd jobs, login items, symlinks on `PATH`).
-- `inbox/`: systems that handle my recurring tasks.
 
 Start a repository with `proj <folder>/<name>` (plain `<name>` means `projects/`)
 and give it a remote on the first commit.
@@ -149,9 +152,9 @@ split so one hand moves and the other decides, such as arrows for the right
 hand and nearby letters for the left. Consider Enter, Space and Command
 combinations (such as Command+Enter to save) alongside letters.
 
-Create custom skills in `~/best/stash/dotfiles/skills/` so Claude Code and Codex share one
-source, or in the private `~/best/stash/dotfiles/private-skills/` checkout, then run
-dotfiles' `bin/install.sh`. The [dotfiles README](/Users/alejo/best/stash/dotfiles/README.md)
+Create custom skills in `~/best/areas/dotfiles/skills/` so Claude Code and Codex share one
+source, or in the private `~/best/areas/dotfiles/private-skills/` checkout, then run
+dotfiles' `bin/install.sh`. The [dotfiles README](/Users/alejo/best/areas/dotfiles/README.md)
 covers client-specific exceptions and install locations.
 
 Sign macOS apps requiring Accessibility, Screen Recording, microphone, camera or

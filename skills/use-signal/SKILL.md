@@ -37,4 +37,4 @@ python3 "$SKILL_DIR/scripts/desktop.py" "SELECT datetime(sent_at/1000,'unixepoch
 `type` is `incoming` or `outgoing`.
 
 Neither source can send. Setup and relinking are in
-[clerk's signal/README.md](/Users/alejo/best/inbox/2026-11-clerk/signal/README.md).
+[clerk's signal/README.md](/Users/alejo/best/ops/clerk/signal/README.md).

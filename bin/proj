@@ -28,11 +28,11 @@ for arg in "$@"; do
 done
 best="$HOME/best"
 
-# Pickable folders as "<creation date> <creation time> <path>": everything in projects/, inbox/,
-# stash/, services/ and orgs/<company>/, plus desk. BSD stat and date on macOS, GNU on Linux.
+# Pickable folders as "<creation date> <creation time> <path>": everything in projects/, ops/,
+# areas/, playbooks/ and orgs/<company>/, plus desk. BSD stat and date on macOS, GNU on Linux.
 pickable_folders() {
   local gnu=""; stat -c %W / >/dev/null 2>&1 && gnu=1
-  { find "$best/projects" "$best/inbox" "$best/stash" "$best/services" "$best"/orgs/* -mindepth 1 -maxdepth 1 -type d
+  { find "$best/projects" "$best/ops" "$best/areas" "$best/playbooks" "$best"/orgs/* -mindepth 1 -maxdepth 1 -type d
     echo "$best/desk"; } | while IFS= read -r dir; do
     if [ -n "$gnu" ]; then t="$(stat -c %W "$dir")"; d="$(date -d "@$t" +%F)"
     else t="$(stat -f %B "$dir")"; d="$(date -r "$t" +%F)"; fi
@@ -82,15 +82,15 @@ case "$name" in
   */*) parent="$best/${name%/*}"; slug="${name##*/}" ;;
   *) parent="$best/projects"; slug="$name" ;;
 esac
-# Own projects are dated to the day; client projects, trials and inbox use the month.
+# Own projects are dated to the day; client projects, trials and the other folders use the month.
 date_format=%Y-%m
 [ "$parent" = "$best/projects" ] && date_format=%Y-%m-%d
 slug="$(printf '%s' "$slug" | tr '[:upper:] _' '[:lower:]--' | tr -cd 'a-z0-9-')"
 [ -n "$slug" ] || { echo "proj: name must contain letters or digits" >&2; exit 2; }
-# Client work under orgs/ and services/ is private; everything else is public unless told otherwise.
+# Client work under orgs/ and playbooks/ is private; everything else is public unless told otherwise.
 if [ -z "$visibility" ]; then
   case "$parent/" in
-    "$best/orgs/"*|"$best/services/"*) visibility=private ;;
+    "$best/orgs/"*|"$best/playbooks/"*) visibility=private ;;
     *) visibility=public ;;
   esac
 fi

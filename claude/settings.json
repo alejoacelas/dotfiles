@@ -85,7 +85,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$HOME/best/stash/dotfiles/claude/hooks/relink-settings.sh\"",
+            "command": "bash \"$HOME/best/areas/dotfiles/claude/hooks/relink-settings.sh\"",
             "timeout": 10
           }
         ]

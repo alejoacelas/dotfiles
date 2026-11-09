@@ -11,7 +11,7 @@
 # After (2) or (3) it runs `adb tcpip 5555` so (1) works again until the next reboot, and
 # leaves Wireless debugging on: it is the route back after the next reboot, and the app
 # would turn it back on anyway. The phone app dev.alejo.moodphone turns Wireless debugging
-# back on whenever Android turns it off; see ~/best/stash/telegram-bots/bots/mood/android/README.md.
+# back on whenever Android turns it off; see ~/best/areas/telegram-bots/bots/mood/android/README.md.
 set -euo pipefail
 PHONE_SERIAL="${PHONE_SERIAL:-ZE223HJXDZ}"   # ro.serialno; appears in USB serial and mDNS name
 WAIT_SECONDS="${WAIT_SECONDS:-10}"

@@ -6,7 +6,7 @@ description: Put something from the current session on Alejo's next morning dock
 # Queue for the docket
 
 The docket is the 08:00 London Slack DM from Clerk, the agent server's pipeline
-(`~/best/inbox/2026-11-clerk`; see "Queued items" in its `docs/desk-pipeline.md`).
+(`~/best/ops/clerk`; see "Queued items" in its `docs/desk-pipeline.md`).
 It lists every `requested/` item whose `queued:` date has arrived until the item has
 `closed:`.
 
