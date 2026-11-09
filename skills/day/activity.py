@@ -165,7 +165,7 @@ def codex_sessions():
 
 def commits():
     repos = subprocess.run(
-        ["find", BEST, "-maxdepth", "6", "-name", ".git", "-not", "-path", "*/node_modules/*"],
+        ["find", BEST, "-maxdepth", "6", "-name", ".git", "-type", "d", "-not", "-path", "*/node_modules/*"],
         capture_output=True, text=True).stdout.split()
     out = []
     for git in sorted(repos):
