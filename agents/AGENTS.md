@@ -102,8 +102,9 @@ descriptions go stale.
   [its instructions](/Users/alejo/best/desk/AGENTS.md). Register work delivered to
   someone in `desk/sent/`.
 - `projects/`: my own one-off projects, each a repository named `YYYY-MM-DD-name`.
-- `orgs/<company>/`: client projects that run, get deployed or are handed over
-  as a repository, each a private repository named `YYYY-MM-name`. Register each
+- `orgs/<company>/`: substantial work delivered to the organisation, such as a
+  project that runs, gets deployed or is handed over as a repository. Each is a
+  private repository named `YYYY-MM-name`. Register each
   in desk with an item giving its path. Before working on one, read the desk items
   tagged `projects: [<company>]`, including the latest calls.
   - `80k/`: the engagement has ended; start at
