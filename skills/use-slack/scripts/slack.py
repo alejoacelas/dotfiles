@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Minimal Slack web-session client for explicitly configured workspaces."""
 
+import os
 import json
 import sys
 import urllib.error
@@ -49,6 +50,9 @@ def load_config(workspace: str | None) -> tuple[dict, dict, str]:
     return config, credentials, workspace
 
 
+READ_METHODS = {"test", "list", "history", "replies", "info", "members", "messages", "all", "files", "get", "getPermalink", "lookupByEmail"}
+
+
 class SlackClient:
     def __init__(self, credentials: dict):
         self.token = credentials["xoxc_token"]
@@ -56,6 +60,9 @@ class SlackClient:
         self.user_agent = credentials.get("user_agent") or "Mozilla/5.0"
 
     def call(self, endpoint: str, **data) -> dict:
+        # SLACK_READONLY=1 refuses any API method that isn't a read (list, history, info, search...).
+        if os.environ.get("SLACK_READONLY") and endpoint.split(".")[-1] not in READ_METHODS:
+            raise SystemExit(f"SLACK_READONLY is set: refusing write call {endpoint}")
         payload = urllib.parse.urlencode(
             {
                 "token": self.token,
