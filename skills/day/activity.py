@@ -230,8 +230,11 @@ def umi_focus():
     """Umi's focus time for the day, summed per agent session, file, page or plain-terminal folder."""
     if not shutil.which("umi"):
         return {"error": "Umi isn't installed."}
-    out = subprocess.run(["umi", "focus-log", "--since", START.isoformat(), "--until", END.isoformat(),
-                          "--by", "session", "--json"], capture_output=True, text=True, timeout=20)
+    try:
+        out = subprocess.run(["umi", "focus-log", "--since", START.isoformat(), "--until", END.isoformat(),
+                              "--by", "session", "--json"], capture_output=True, text=True, timeout=90)
+    except subprocess.TimeoutExpired:
+        return {"error": "Umi didn't answer within 90 seconds"}
     if out.returncode != 0:  # Umi before focus-log --by
         return {"error": short(out.stderr or out.stdout, 200)}
     return json.loads(out.stdout)

@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day</title>
+<style>
+:root {
+  --bg: #f7f6f3; --card: #ffffff; --ink: #1f1e1c; --muted: #6f6b64; --line: #e4e1da;
+  --accent: #2f6f62; --accent-soft: #e2efeb; --chip: #efede8;
+  --p0: #2f6f62; --p1: #c0793a; --p2: #5b6fb3; --p3: #a8566e; --p4: #7d8a3c; --p5: #6d5aa8; --p6: #9a8f80;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171716; --card: #201f1d; --ink: #ecebe7; --muted: #a29d94; --line: #34322e;
+    --accent: #6fb8a6; --accent-soft: #23332f; --chip: #2a2926;
+    --p0: #6fb8a6; --p1: #e0a06a; --p2: #8fa2e6; --p3: #d98aa2; --p4: #b3c06d; --p5: #a996e0; --p6: #8c8478;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 20px 16px 60px; }
+header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+h1 { font-size: 22px; margin: 0; font-weight: 650; }
+.keys { color: var(--muted); font-size: 12.5px; margin-left: auto; }
+kbd { font: 11.5px ui-monospace, Menlo, monospace; border: 1px solid var(--line); border-bottom-width: 2px;
+  border-radius: 4px; padding: 0 5px; background: var(--card); }
+button { font: inherit; color: inherit; background: var(--card); border: 1px solid var(--line);
+  border-radius: 8px; padding: 4px 10px; cursor: pointer; }
+button:hover:not(:disabled) { border-color: var(--accent); }
+button:disabled { opacity: .35; cursor: default; }
+.strip { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 6px; margin: 16px 0 6px; }
+.daychip { text-align: left; padding: 7px 9px; border-radius: 10px; }
+.daychip.on { border-color: var(--accent); background: var(--accent-soft); }
+.daychip .d { font-size: 12.5px; font-weight: 600; }
+.daychip .m { font-size: 12px; color: var(--muted); }
+.daychip .bar { height: 4px; border-radius: 2px; background: var(--accent); margin-top: 5px; min-width: 2px; }
+.summary { margin: 14px 0 4px; font-size: 15px; }
+.summary .muted { color: var(--muted); }
+.stack { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin: 10px 0 6px; background: var(--chip); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--muted); }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; margin-top: 18px; }
+@media (min-width: 1050px) { .grid { grid-template-columns: minmax(0, 1fr) 380px; } }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; }
+.card h2 { font-size: 15px; margin: 0 0 6px; display: flex; gap: 8px; align-items: baseline; }
+.card h2 .dot { width: 9px; height: 9px; border-radius: 2px; flex: none; align-self: center; }
+.card h2 .meta { margin-left: auto; font-weight: 400; font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+.sess { border-top: 1px solid var(--line); padding: 7px 0 6px; }
+.sess:first-of-type { border-top: 0; }
+.sess .row { display: flex; gap: 10px; align-items: baseline; cursor: pointer; }
+.sess .t { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; width: 88px; flex: none; }
+.sess .title { font-weight: 560; min-width: 0; overflow-wrap: anywhere; }
+.sess .f { margin-left: auto; font-size: 12px; padding: 0 7px; border-radius: 9px; background: var(--accent-soft);
+  color: var(--accent); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.sess .ended { color: var(--muted); font-size: 13.5px; margin: 2px 0 0 98px; }
+.sess .prompts { display: none; font-size: 13px; margin: 6px 0 2px 98px; color: var(--muted); }
+.sess.open .prompts { display: block; }
+.prompts p { margin: 0 0 4px; } .prompts b { color: var(--ink); font-weight: 560; }
+.other { font-size: 13.5px; color: var(--muted); padding: 3px 0 0 98px; }
+details { font-size: 13.5px; margin-top: 6px; }
+summary { cursor: pointer; color: var(--muted); }
+ul.commits { margin: 6px 0 0; padding-left: 18px; color: var(--muted); }
+.compact { font-size: 13.5px; color: var(--muted); }
+.compact span { white-space: nowrap; }
+.side h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 8px; }
+.plans { font-size: 14px; }
+.plans h4 { font-size: 14px; margin: 12px 0 4px; } .plans h4:first-child { margin-top: 0; }
+.plans p { margin: 0 0 6px; }
+.site { display: flex; gap: 8px; font-size: 13px; padding: 2px 0; }
+.site .h { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.site .n { margin-left: auto; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.err { color: var(--p3); font-size: 13px; }
+@media (max-width: 640px) {
+  .keys { display: none; }
+  .sess .t { width: auto; } .sess .ended, .sess .prompts, .other { margin-left: 0; padding-left: 0; }
+  .sess .row { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <button id="older" title="Older day (←)">←</button>
+    <h1 id="title"></h1>
+    <button id="newer" title="Newer day (→)">→</button>
+    <span class="keys"><kbd>←</kbd> <kbd>→</kbd> day · <kbd>T</kbd> today · <kbd>E</kbd> expand prompts</span>
+  </header>
+  <div class="strip" id="strip"></div>
+  <div class="summary" id="summary"></div>
+  <div class="stack" id="stack"></div>
+  <div class="legend" id="legend"></div>
+  <div class="grid">
+    <main id="projects"></main>
+    <aside class="side" id="side"></aside>
+  </div>
+</div>
+<script>
+const DAYS = /*DATA*/[];
+let i = 0, expanded = false;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const mins = s => { const m = Math.round((s || 0) / 60); return m >= 60 ? `${Math.floor(m / 60)}h${String(m % 60).padStart(2, "0")}` : `${m}m`; };
+const color = k => `var(--p${k % 7})`;
+const isTemp = p => p.name === "temporary folders";
+const plural = (n, w) => `${n} ${w}${n === 1 ? "" : "s"}`;
+
+function md(text) {
+  const inline = s => esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\*(.+?)\*/g, "<i>$1</i>").replace(/\\([~*_])/g, "$1");
+  return text.split(/\n{2,}/).map(block => {
+    const lines = block.split("\n");
+    if (/^#+ /.test(lines[0])) return `<h4>${inline(lines[0].replace(/^#+ /, ""))}</h4>` + (lines.length > 1 ? `<p>${lines.slice(1).map(inline).join("<br>")}</p>` : "");
+    return `<p>${lines.map(inline).join("<br>")}</p>`;
+  }).join("");
+}
+
+function strip() {
+  const max = Math.max(1, ...DAYS.map(d => d.focus?.total_seconds || 0));
+  $("strip").style.setProperty("--n", DAYS.length);
+  $("strip").innerHTML = DAYS.slice().reverse().map((d, r) => {
+    const k = DAYS.length - 1 - r, t = d.focus?.total_seconds || 0;
+    const label = (d.weekday || d.date).split(" ").slice(0, 2).join(" ");
+    return `<button class="daychip${k === i ? " on" : ""}" data-k="${k}"><div class="d">${esc(label)}</div>
+      <div class="m">${t ? mins(t) + " focus" : d.error ? "error" : plural(d.projects.reduce((a, p) => a + (isTemp(p) ? 0 : p.sessions.length), 0), "session")}</div>
+      ${t ? `<div class="bar" style="width:${Math.max(4, 100 * t / max)}%"></div>` : ""}</button>`;
+  }).join("");
+  $("strip").querySelectorAll(".daychip").forEach(b => b.onclick = () => show(+b.dataset.k));
+}
+
+function show(k) {
+  i = Math.max(0, Math.min(DAYS.length - 1, k));
+  const d = DAYS[i];
+  $("older").disabled = i === DAYS.length - 1;
+  $("newer").disabled = i === 0;
+  $("title").textContent = d.weekday || d.date;
+  strip();
+  if (d.error) { $("summary").innerHTML = `<div class="err">${esc(d.error)}</div>`; ["stack", "legend", "projects", "side"].forEach(x => $(x).innerHTML = ""); return; }
+
+  const f = d.focus;
+  $("summary").innerHTML = f
+    ? `<b>${mins(f.total_seconds)}</b> focus in Umi, ${f.first}–${f.last}` +
+      (f.breaks.length ? ` <span class="muted">· breaks ${f.breaks.map(b => `${b.start}–${b.end}`).join(", ")}</span>` : "")
+    : `<span class="muted">No Umi focus data${d.focus_error ? ": " + esc(d.focus_error) : ""}.</span>`;
+
+  const projects = d.projects.filter(p => !isTemp(p));
+  const main = projects.filter(p => p.sessions.length || p.focus_seconds >= 60);
+  const onlyCommits = projects.filter(p => !main.includes(p) && p.commits.length);
+  const focused = main.filter(p => p.focus_seconds >= 60);
+  const total = focused.reduce((a, p) => a + p.focus_seconds, 0);
+  $("stack").style.display = total ? "" : "none";
+  $("stack").innerHTML = focused.map((p, k) => `<div title="${esc(p.name)} ${mins(p.focus_seconds)}" style="width:${100 * p.focus_seconds / total}%;background:${color(k)}"></div>`).join("");
+  $("legend").innerHTML = focused.map((p, k) => `<span><i style="background:${color(k)}"></i>${esc(p.name)} ${mins(p.focus_seconds)}</span>`).join("");
+
+  let html = main.map(p => {
+    const k = focused.indexOf(p);
+    const meta = [p.focus_seconds >= 60 ? mins(p.focus_seconds) + " focus" : "", p.sessions.length ? plural(p.sessions.length, "session") : "", p.commits.length ? plural(p.commits.length, "commit") : ""].filter(Boolean).join(" · ");
+    const sessions = p.sessions.map(s => `<div class="sess"><div class="row">
+        <span class="t">${s.first}–${s.last}</span><span class="title">${esc(s.title)}</span>
+        ${s.focus_seconds >= 60 ? `<span class="f">${mins(s.focus_seconds)}</span>` : ""}</div>
+        ${s.summary ? `<div class="ended">${esc(s.summary)}</div>` : ""}
+        <div class="prompts"><p><b>${s.tool}, ${s.prompt_count} prompt${s.prompt_count === 1 ? "" : "s"}, ${esc(s.cwd)}</b></p>
+        <p>${esc(s.first_prompt)}</p>${s.prompt_count > 1 ? `<p><b>Last:</b> ${esc(s.last_prompt)}</p>` : ""}</div></div>`).join("");
+    const other = p.focus.filter(g => g.seconds >= 60).map(g => `<div class="other">${mins(g.seconds)} on ${esc(g.kind)} ${esc(g.label)}, ${g.first}–${g.last}</div>`).join("");
+    const commits = p.commits.length ? `<details><summary>${p.commits.length} commit${p.commits.length === 1 ? "" : "s"}</summary><ul class="commits">${p.commits.map(c => `<li>${esc(c)}</li>`).join("")}</ul></details>` : "";
+    return `<section class="card"><h2>${k >= 0 ? `<span class="dot" style="background:${color(k)}"></span>` : ""}${esc(p.name)}<span class="meta">${meta}</span></h2>${sessions}${other}${commits}</section>`;
+  }).join("");
+  const temp = d.projects.find(isTemp);
+  const extras = [];
+  if (onlyCommits.length) extras.push(`Commits only: ${onlyCommits.map(p => `<span>${esc(p.name)} (${p.commits.length})</span>`).join(", ")}`);
+  if (temp) extras.push(`${temp.sessions.length} sessions in temporary folders`);
+  const runs = Object.entries(d.scripted_runs || {});
+  if (runs.length) extras.push(`Scripted runs: ${runs.map(([w, n]) => `${n} in ${esc(w)}`).join(", ")}`);
+  if (extras.length) html += `<section class="card compact">${extras.map(x => `<div>${x}</div>`).join("")}</section>`;
+  $("projects").innerHTML = html || `<section class="card compact">Nothing recorded.</section>`;
+
+  let side = `<section class="card"><h3>Plans app</h3><div class="plans">${d.plans ? md(d.plans) : '<p class="compact">No day page.</p>'}</div></section>`;
+  side += (d.chrome || []).map(c => `<section class="card"><h3>Chrome · ${esc(c.profile.split(" (")[0])} · ${c.visits} visits</h3>
+    ${c.sites.slice(0, 12).map(s => `<div class="site" title="${esc(s.titles.slice(0, 4).join(" · "))}"><span class="h">${esc(s.host)}</span><span class="n">${s.visits} · ~${s.minutes}m · ${s.first}–${s.last}</span></div>`).join("")}
+    ${c.sites.length > 12 ? `<details><summary>${c.sites.length - 12} more sites</summary>${c.sites.slice(12).map(s => `<div class="site"><span class="h">${esc(s.host)}</span><span class="n">${s.visits} · ~${s.minutes}m</span></div>`).join("")}</details>` : ""}</section>`).join("");
+  $("side").innerHTML = side;
+
+  document.querySelectorAll(".sess").forEach(el => {
+    if (expanded) el.classList.add("open");
+    el.querySelector(".row").onclick = () => el.classList.toggle("open");
+  });
+}
+
+$("older").onclick = () => show(i + 1);
+$("newer").onclick = () => show(i - 1);
+document.addEventListener("keydown", e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === "ArrowLeft") show(i + 1);
+  else if (e.key === "ArrowRight") show(i - 1);
+  else if (e.key === "t" || e.key === "T") show(0);
+  else if (e.key === "e" || e.key === "E") { expanded = !expanded; show(i); }
+  else return;
+  e.preventDefault();
+});
+show(0);
+</script>
+</body>
+</html>

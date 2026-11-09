@@ -19,6 +19,10 @@ description: Gather what Alejo did on a given day from agent sessions, Umi's foc
    - That day's page from the plans app: his priorities, then notes and his
      evening reflection.
    - Chrome history for every profile, by site, with page titles and rough time.
+
+   For a page of the last days, run `view.py [--days N]`: it writes
+   `~/.local/share/day/index.html` and opens it (← → between days, T today, E
+   expands prompts).
 2. Add what the script can't reach:
    - Calendar events from every calendar the Google Calendar connector lists.
    - Call summaries filed that day: `find ~/best/desk -name 'YYYY-MM-DD-*-sum.md'`.
