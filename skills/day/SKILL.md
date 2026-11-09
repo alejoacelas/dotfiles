@@ -1,6 +1,6 @@
 ---
 name: day
-description: Gather what Alejo did on a given day from agent sessions, commits, the plans app, Chrome history, calendar and calls. Use when he asks what he worked on, where his time went, or wants a summary, log or update covering one or more days.
+description: Gather what Alejo did on a given day from agent sessions, Umi's focus log, commits, the plans app, Chrome history, calendar and calls. Use when he asks what he worked on, where his time went, or wants a summary, log or update covering one or more days.
 ---
 
 # Day
@@ -10,6 +10,8 @@ description: Gather what Alejo did on a given day from agent sessions, commits, 
    - Claude Code and Codex sessions: start folder, title, first and last prompt.
      Scripted `claude -p` runs appear only as counts per folder.
    - Commits in every repository under `~/best`.
+   - Umi's focus log: minutes of keyboard focus per agent session, file or
+     folder, which is the best measure of where his attention went.
    - That day's file from the plans app: the plan, then notes.
    - Chrome history for every profile, by site, with page titles and rough time.
 2. Add what the script can't reach:

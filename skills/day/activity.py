@@ -230,6 +230,37 @@ def chrome():
     return out
 
 
+def umi_focus():
+    """Time with keyboard focus in each Umi pane, grouped by what the pane was (agent session, file, folder)."""
+    if not shutil.which("umi"):
+        return None
+    try:
+        out = subprocess.run(["umi", "focus-log", "--since", START.isoformat(), "--until", END.isoformat(), "--json"],
+                             capture_output=True, text=True, timeout=20)
+        stretches = json.loads(out.stdout)["stretches"]
+    except Exception as e:  # Umi older than 0.10 has no focus log
+        return f"Unavailable: {e}"
+    groups = {}
+    for st in stretches:
+        a = st.get("agent")
+        if a:
+            key = (f"{a['kind']} session", a.get("session") or st["pane"], where(st.get("cwd")))
+            label = a.get("title") or st.get("title") or ""
+        elif st.get("file"):
+            key, label = ("file", st["file"], where(os.path.dirname(st["file"]))), os.path.basename(st["file"])
+        elif st.get("url"):
+            key, label = ("web", st["url"], ""), st.get("title") or st["url"]
+        else:
+            key, label = ("terminal", where(st.get("cwd")), where(st.get("cwd"))), st.get("title") or ""
+        g = groups.setdefault(key, {"secs": 0, "first": local(st["start"]), "last": local(st["end"]), "labels": []})
+        g["secs"] += st["seconds"]
+        g["last"] = max(g["last"], local(st["end"]))
+        label = short(label, 80)
+        if label and label not in g["labels"]:
+            g["labels"].append(label)
+    return sorted(groups.items(), key=lambda kv: -kv[1]["secs"])
+
+
 def main():
     print(f"# Activity for {DAY:%a %d %b %Y}\n")
 
@@ -249,6 +280,20 @@ def main():
             print(f"  - {line}")
     if not found:
         print("None.")
+
+    print("\n## Umi focus\n")
+    print("Keyboard focus per pane while Umi was in front, the screen unlocked and Alejo active in the last 3 minutes.\n")
+    focus = umi_focus()
+    if isinstance(focus, str):
+        print(focus)
+    elif not focus:
+        print("None." if focus is not None else "Umi isn't installed.")
+    else:
+        for (kind, _, place), g in focus:
+            if g["secs"] < 60:
+                continue
+            labels = "; ".join(g["labels"][:3])
+            print(f"- {round(g['secs'] / 60)} min, {kind} in `{place}`, {g['first']:%H:%M}–{g['last']:%H:%M}. {labels}")
 
     print("\n## Plans app\n")
     print(plans() or "No day file.")
