@@ -48,5 +48,15 @@ leaving the page, and keeps every decision he makes.
 ## Conventions
 
 - Default to light mode.
-- Write local HTML and open it in his browser. Publish a claude.ai artifact only
-  when he explicitly asks for one.
+- For a desk item, put the page in the item's folder
+  (`~/best/desk/generated/YYYY-MM/<item>/page.html`, or `requested/`) and link it on /o as
+  `https://agent-server.tail622085.ts.net/o?p=desk/<path to page.html>&run=1`. Keep it
+  self-contained: inline scripts and styles, no external scripts, no `onclick=` attributes
+  (use `addEventListener`). Save his decisions as JSON with
+  `fetch('/o' + location.search.replace('run=1', 'answers=1'), {method: 'POST', headers:
+  {'Content-Type': 'application/json'}, body: JSON.stringify(answers)})`; /o writes them to
+  `answers.json` beside the page and commits it, so the next run reads that file. Load
+  earlier answers from `/o?p=<item folder>/answers.json&raw=1`. Details: the "Item pages"
+  paragraph of `~/work/clerk/docs/desk-pipeline.md`.
+- Outside desk, write local HTML and open it in his browser. Publish a claude.ai
+  artifact only when he explicitly asks for one.
