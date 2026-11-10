@@ -130,6 +130,10 @@ and give it a remote on the first commit.
 
 ## Model APIs
 
+Prefer the Claude subscription (`claude -p` or the Agent SDK with
+`CLAUDE_CODE_OAUTH_TOKEN`) over the API for model calls only I run, because it costs
+far less.
+
 For application and script model calls, use Anthropic directly: the latest Opus
 model by default, or the latest Haiku model for fast turnaround or jobs with more than 20
 parallel model calls. Personal projects should use the Claude Console organization
