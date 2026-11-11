@@ -32,9 +32,9 @@ main{padding:10px 16px 40px}
 </head>
 <body>
 <div class="top">
-  <button class="navbtn" id="prev" title="Previous day (←)">‹</button>
+  <button class="navbtn" id="prev" title="Previous day (⌘⇧[)">‹</button>
   <div class="days" id="days"></div>
-  <button class="navbtn" id="next" title="Next day (→)">›</button>
+  <button class="navbtn" id="next" title="Next day (⌘⇧])">›</button>
   <div class="seg" id="views">
     <button data-view="attention"><kbd>1</kbd>Attention</button>
     <button data-view="tasks"><kbd>2</kbd>Tasks</button>
@@ -56,7 +56,7 @@ main{padding:10px 16px 40px}
   <table>
     <tr><td><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></td><td>Attention, Tasks, Agents</td></tr>
     <tr><td><kbd>R</kbd></td><td>rows by topic, task, kind or priority</td></tr>
-    <tr><td><kbd>←</kbd> <kbd>→</kbd> · <kbd>T</kbd></td><td>previous / next day · today</td></tr>
+    <tr><td><kbd>⌘</kbd><kbd>⇧</kbd><kbd>[</kbd> <kbd>]</kbd> · <kbd>T</kbd></td><td>previous / next day · today</td></tr>
     <tr><td>click</td><td>a bar, hour or row for what it was about, in your words</td></tr>
     <tr><td>drag</td><td>across the timeline to select a window; <kbd>Z</kbd> zooms to it, <kbd>0</kbd> zooms out</td></tr>
     <tr><td><kbd>E</kbd></td><td>split every topic into its tasks</td></tr>
@@ -104,11 +104,12 @@ document.getElementById("keys").addEventListener("click", () => help.hidden = fa
 help.addEventListener("click", () => help.hidden = true);
 const ROWS = ["topics", "tasks", "kinds", "priorities"], VIEWS = ["attention", "tasks", "agents"];
 document.addEventListener("keydown", e => {
+  const dayStep = {BracketLeft: -1, BracketRight: 1}[e.code];
+  if (dayStep && (e.metaKey || e.ctrlKey) && e.shiftKey && !e.altKey) { e.preventDefault(); tl.step(dayStep); return; }  // same keys as the Plans app
   if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest?.("input,select,textarea")) return;
   const k = e.key.toLowerCase();
   if (!help.hidden) { help.hidden = true; if (k === "escape") return; }
-  if (e.key === "ArrowLeft") tl.step(-1); else if (e.key === "ArrowRight") tl.step(1);
-  else if (/^[123]$/.test(k)) setOpt("view", VIEWS[+k - 1]);
+  if (/^[123]$/.test(k)) setOpt("view", VIEWS[+k - 1]);
   else if (k === "r") setOpt("rows", ROWS[(ROWS.indexOf(tl.cfg.rows) + 1) % ROWS.length]);
   else if (k === "s") setOpt("taskSort", tl.cfg.taskSort === "time" ? "attention" : "time");
   else if (k === "f") setOpt("range", tl.cfg.range === "fixed" ? "fit" : "fixed");
