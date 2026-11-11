@@ -115,7 +115,7 @@ descriptions go stale.
 - `playbooks/`: work I do many times and want to get deliberately better at,
   one private repository per kind of work, named without a date. Each holds the
   current method, plus the prep and reviews from past runs that feed it. Client
-  projects copy from here. `sharing-prompts/` holds prompts people run in their
+  projects copy from here. `prompt-reports/` holds prompts people run in their
   own Claude or ChatGPT to share information about their work.
 - `areas/`: long-running parts of my life and setup that I work on as needs
   come up, named without a date. A project moves here from `projects/` once I
