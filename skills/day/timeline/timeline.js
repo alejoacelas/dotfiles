@@ -136,7 +136,7 @@ const DT = (() => {
   // ---------- render ----------
   function render(root, data, cfgIn, opts = {}) {
     const cfg = {...DEFAULTS, ...cfgIn};
-    let M, dayIdx = opts.day ?? data.days.length - 1, view = null, sel = null, brush = null, query = "", pin = null;
+    let M, dayIdx = opts.day ?? data.days.length - 1, view = null, sel = null, brush = null, query = "", pin = null, win = null;
     const expanded = new Set();
     root.classList.add("dt");
     root.innerHTML = `<div class="dt-wrap dt-insp-${cfg.inspector}"><div class="dt-main"></div><aside class="dt-insp"></aside></div><div class="dt-tip" hidden></div>`;
@@ -145,7 +145,7 @@ const DT = (() => {
     const reg = it => { items.push(it); return items.length - 1; };
     const story = d => data.stories?.[d.date];
     function load(i) { dayIdx = Math.max(0, Math.min(data.days.length - 1, i)); M = model(data.days[dayIdx], story(data.days[dayIdx]), cfg);
-      view = null; sel = null; brush = null; pin = null; expanded.clear(); draw(); opts.onDay?.(M); }
+      view = null; win = null; sel = null; brush = null; pin = null; expanded.clear(); draw(); opts.onDay?.(M); }
     const domain = () => view || M.range;
     const X = m => { const [a, b] = domain(); return (m - a) / (b - a) * 100; };
     const W = (a, b) => Math.max(X(b) - X(a), 0);
@@ -347,7 +347,7 @@ const DT = (() => {
     function windowInsp([a, b]) {
       const per = new Map(); for (const r of M.runs) { const o = Math.min(r.b, b) - Math.max(r.a, a); if (o > 0) per.set(r.task, (per.get(r.task) || 0) + o); }
       const tot = [...per.values()].reduce((x, y) => x + y, 0);
-      let h = `<div class="dt-ih"><b>${hm(a)}–${hm(b)}</b> <span class="dt-mute">${dur(b - a)} · Z zooms in · Esc clears</span></div>`;
+      let h = `<div class="dt-ih"><b>${hm(a)}–${hm(b)}</b> <span class="dt-mute">${dur(b - a)} · double-click the timeline for the whole day</span></div>`;
       h += `<div class="dt-share">${[...per].sort((x, y) => y[1] - x[1]).map(([k, v]) => `<b style="width:${v / (b - a) * 100}%;background:${k.topicObj.color}" title="${esc(k.label)} ${dur(v)}"></b>`).join("")}</div>`;
       h += [...per].sort((x, y) => y[1] - x[1]).map(([k, v]) => `<div class="dt-tk" data-task="${esc(k.id)}">${sw(k.topicObj.color)}${esc(k.label)} <span class="dt-min">${dur(v)}</span></div>`).join("") + `<div class="dt-tk dt-mute">idle or unknown <span class="dt-min">${dur(b - a - tot)}</span></div>`;
       h += `<h4>In your words</h4><ul class="dt-qlist">${snippets(new Set(per.keys()), a, b, 8).map(e => quote(e)).join("")}</ul>`;
@@ -380,10 +380,10 @@ const DT = (() => {
       if (sel?.item) h = itemInsp(sel.item);
       if (h == null && sel?.task) h = `<div class="dt-mute">${sw(sel.task.topicObj.color)}${esc(sel.task.topicObj.label)}</div>` + taskBlock(sel.task, true);
       if (h == null && sel?.topic) h = topicInsp(sel.topic);
-      if (h == null && brush) h = windowInsp(brush);
+      if (h == null && win) h = windowInsp(win);
       if (h == null && query) h = searchInsp();
       if (h == null) h = cfg.view === "agents" ? agentsOverview() : overview();
-      insp.innerHTML = (sel || brush || query ? `<button class="dt-back" data-back>← Day overview</button>` : "") + h;
+      insp.innerHTML = (sel || win || query ? `<button class="dt-back" data-back>← Day overview</button>` : "") + h;
     }
 
     // ---------- interaction ----------
@@ -403,13 +403,15 @@ const DT = (() => {
     });
     window.addEventListener("mouseup", ev => {
       if (!drag) return; const d = drag; drag = null;
-      if (d.moved) { sel = null; brush = brush && brush[1] - brush[0] >= 1 ? brush.map(Math.round) : null; draw(); return; }
+      if (d.moved) { sel = null; if (brush && brush[1] - brush[0] >= 2) { view = brush.map(Math.round); win = view; } brush = null; draw(); return; }
       const el = ev.target.closest("[data-i]");
       if (el && root.contains(el)) { const it = items[+el.dataset.i]; sel = {item: it, topic: it.t || it.block?.topic || it.x?.topic}; draw(); return; }
-      if (brush || sel) { brush = null; sel = null; draw(); }
+      if (sel) { sel = null; draw(); }
     });
+    // double-click anywhere on the timeline returns to the whole day
+    main.addEventListener("dblclick", ev => { if (!grid || ev.target.closest(".dt-lab")) return; ev.preventDefault(); view = null; win = null; sel = null; pin = null; draw(); });
     root.addEventListener("click", ev => {
-      if (ev.target.closest("[data-back]")) { sel = null; brush = null; query = ""; opts.onQuery?.(""); draw(); return; }
+      if (ev.target.closest("[data-back]")) { sel = null; win = null; view = null; query = ""; opts.onQuery?.(""); draw(); return; }
       const uf = ev.target.closest("[data-unfold]"); if (uf) { view = uf.dataset.unfold === "left" ? [0, M.range[1]] : [M.range[0], 1440]; draw(); return; }
       const g = ev.target.closest("[data-group]"); if (g) { const k = g.dataset.group; expanded.has(k) ? expanded.delete(k) : expanded.add(k); draw(); return; }
       const tk = ev.target.closest("[data-task]"); if (tk) { sel = {task: M.tasks.find(k => k.id === tk.dataset.task)}; draw(); return; }
@@ -436,11 +438,10 @@ const DT = (() => {
     const api = {
       get model() { return M; }, get day() { return dayIdx; }, get cfg() { return cfg; },
       load, step: d => load(dayIdx + d),
-      zoom() { if (brush) { view = brush; brush = null; draw(); } },
-      reset() { view = null; brush = null; sel = null; draw(); },
-      clear() { if (sel || brush) { sel = null; brush = null; } else if (view) view = null; else if (query) { query = ""; opts.onQuery?.(""); } draw(); },
+      reset() { view = null; win = null; sel = null; draw(); },
+      clear() { if (sel) sel = null; else if (view || win) { view = null; win = null; } else if (query) { query = ""; opts.onQuery?.(""); } draw(); },
       search(q) { query = (q || "").trim().toLowerCase(); sel = null; draw(); },
-      set(k, v) { cfg[k] = v; if (k === "view") { sel = null; brush = null; } if (k !== "view" && k !== "rows" && k !== "taskSort") M = model(data.days[dayIdx], story(data.days[dayIdx]), cfg); draw.measured = false; draw(); },
+      set(k, v) { cfg[k] = v; if (k === "view") { sel = null; win = null; view = null; } if (k !== "view" && k !== "rows" && k !== "taskSort") M = model(data.days[dayIdx], story(data.days[dayIdx]), cfg); draw.measured = false; draw(); },
       toggleAll() { const ks = M.topics.map(t => t.id); const all = ks.every(k => expanded.has(k)); ks.forEach(k => all ? expanded.delete(k) : expanded.add(k)); draw(); },
     };
     load(dayIdx);

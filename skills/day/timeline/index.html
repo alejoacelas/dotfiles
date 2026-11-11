@@ -58,12 +58,12 @@ main{padding:10px 16px 40px}
     <tr><td><kbd>R</kbd></td><td>rows by topic, task, kind or priority</td></tr>
     <tr><td><kbd>⌘</kbd><kbd>⇧</kbd><kbd>[</kbd> <kbd>]</kbd> · <kbd>T</kbd></td><td>previous / next day · today</td></tr>
     <tr><td>click</td><td>a bar, hour or row for what it was about, in your words</td></tr>
-    <tr><td>drag</td><td>across the timeline to select a window; <kbd>Z</kbd> zooms to it, <kbd>0</kbd> zooms out</td></tr>
+    <tr><td>drag</td><td>across the timeline to zoom into that time; double-click or <kbd>0</kbd> shows the whole day</td></tr>
     <tr><td><kbd>E</kbd></td><td>split every topic into its tasks</td></tr>
     <tr><td><kbd>S</kbd></td><td>tasks by attention or by start time</td></tr>
     <tr><td><kbd>F</kbd></td><td>axis 06–24 or fit to the day</td></tr>
     <tr><td><kbd>/</kbd> · <kbd>D</kbd></td><td>search · dark mode</td></tr>
-    <tr><td><kbd>Esc</kbd></td><td>clear selection, then zoom, then search</td></tr>
+    <tr><td><kbd>Esc</kbd></td><td>clear the selection, then the zoom, then the search</td></tr>
   </table>
 </div></div>
 <script>/*DATA*/</script>
@@ -115,7 +115,7 @@ document.addEventListener("keydown", e => {
   else if (k === "f") setOpt("range", tl.cfg.range === "fixed" ? "fit" : "fixed");
   else if (k === "t") tl.load(days.length - 1);
   else if (k === "/") { e.preventDefault(); q.focus(); q.select(); }
-  else if (k === "z") tl.zoom(); else if (k === "0") tl.reset();
+  else if (k === "0") tl.reset();
   else if (k === "e") tl.toggleAll();
   else if (k === "d") { const r = document.documentElement; r.dataset.theme = r.dataset.theme === "dark" ? "" : "dark"; store.set("dt-theme", r.dataset.theme); }
   else if (k === "?") help.hidden = false;
