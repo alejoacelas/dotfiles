@@ -159,8 +159,8 @@ combinations (such as Command+Enter to save) alongside letters.
 
 Create custom skills in `~/best/areas/dotfiles/skills/` so Claude Code and Codex share one
 source, or in the private `~/best/areas/dotfiles/private-skills/` checkout, then run
-dotfiles' `bin/install.sh`. The [dotfiles README](/Users/alejo/best/areas/dotfiles/README.md)
-covers client-specific exceptions and install locations.
+dotfiles' `bin/install.sh`. [Dotfiles' `AGENTS.md`](/Users/alejo/best/areas/dotfiles/AGENTS.md)
+covers client-specific exceptions.
 
 Sign macOS apps requiring Accessibility, Screen Recording, microphone, camera or
 similar grants with a stable local identity. Ad-hoc signatures change identity on

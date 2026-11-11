@@ -10,8 +10,6 @@ account `mac-agents-rw` can read and write `mac-agents`. The server's token in
 `server-agents-rw` can read and write `server-agents`. Keep these bootstrap tokens
 outside the agent vaults.
 
-Read README.md for installation and ownership.
-
 Archive all files retired from dotfiles in `~/best/archive/dotfiles/`.
 
 The Codex app owns its base config; CLI overrides stay in codex/cli.config.toml.
