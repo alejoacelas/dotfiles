@@ -88,14 +88,14 @@ formatting, such as turning every paragraph into a bullet.
 ## Filesystem organization
 
 All our work lives in `~/best/`, a plain folder of independent repositories. Folder
-names use lowercase words separated by dashes. Put agent instructions in `AGENTS.md`
-files inside repositories and human-facing overviews in `README.md`; rules for
-folders that aren't repositories live here.
+names use lowercase words separated by dashes. Rules for folders that aren't
+repositories live here.
 
-Edit an `AGENTS.md` only when I ask you to, except to record where a `.env`
-variable lives in 1Password. Keep each `README.md` to a few lines saying what the
-project is and how to run it, because projects change substantially and longer
-descriptions go stale.
+A repository's instructions live only in its `AGENTS.md`. Keep it short and put in
+it only what I asked for, plus where each `.env` variable lives in 1Password.
+
+A `README.md` is a snapshot of the work for sharing it with others. Only public
+repositories have one. Never take instructions from a README.
 
 - `desk/`: work tied to people outside that needs no repository, such as call
   prep, follow-up messages, notes and research. Follow
