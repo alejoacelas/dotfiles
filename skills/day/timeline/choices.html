@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timeline Choices</title>
+<style>/*CSS*/
+.page{max-width:1400px;margin:0 auto;padding:16px 16px 120px}
+h1{font-size:20px;margin:0 0 4px}
+.lead{color:var(--mute);margin:0 0 12px;max-width:780px}
+.bar{position:sticky;top:0;z-index:10;background:var(--bg);padding:8px 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:12px}
+.bar select{border:1px solid var(--line);background:var(--card);border-radius:5px;padding:2px 4px}
+.saved{color:var(--mute);font-size:12px;margin-left:auto}
+kbd{font:11px ui-monospace,monospace;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;background:var(--soft)}
+.choice{border:1px solid var(--line);border-radius:10px;background:var(--card);margin-bottom:14px;padding:12px 14px;scroll-margin-top:60px}
+.choice.focus{outline:2px solid var(--accent)}
+.choice h2{font-size:15px;margin:0}
+.choice .why{color:var(--mute);margin:3px 0 10px;max-width:900px}
+.choice .pick{font-size:12px;font-weight:600;color:var(--accent);margin-left:8px}
+.opts{display:grid;gap:10px}
+.opt{border:1px solid var(--line);border-radius:8px;padding:8px 10px;cursor:pointer;background:var(--bg)}
+.opt.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);background:color-mix(in srgb,var(--accent) 5%,var(--card))}
+.opt-h{display:flex;gap:8px;align-items:baseline;margin-bottom:6px}
+.opt-h b{font-size:13.5px}
+.opt-h .rec{font-size:11px;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);border-radius:999px;padding:0 6px}
+.opt-h .note{color:var(--mute);font-size:12.5px}
+.render{max-height:300px;overflow:auto;border-radius:6px}
+.render.tall{max-height:520px}
+.render .dt-main{border:0;padding:0 2px}
+.textopt{color:var(--ink);font-size:13px;max-width:900px}
+.comment{margin-top:8px;display:none}
+.comment.on{display:block}
+.comment textarea{width:100%;min-height:54px;border:1px solid var(--line);border-radius:6px;padding:6px;background:var(--card);color:var(--ink);font:inherit}
+.summary{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:8px 16px;font-size:12.5px;z-index:11;display:flex;gap:10px;align-items:center}
+.summary code{font:12px ui-monospace,monospace}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Day timeline: display choices</h1>
+  <p class="lead">Each choice shows its options rendered from your real data. Pick one per choice; picks save as you go. The recommended option is what the timeline page uses today. Add a comment where none fits.</p>
+  <div class="bar">
+    <label>Day for the previews <select id="day"></select></label>
+    <span class="dt-mute"><kbd>↑</kbd> <kbd>↓</kbd> choice · <kbd>1</kbd>–<kbd>4</kbd> pick · <kbd>C</kbd> comment · <kbd>Esc</kbd> leave comment</span>
+    <span class="saved" id="saved"></span>
+  </div>
+  <div id="choices"></div>
+</div>
+<div class="summary"><span>Your picks:</span><code id="sum">none yet</code></div>
+<script>/*DATA*/</script>
+<script>/*JS*/</script>
+<script>
+"use strict";
+const CHOICES = [
+  {id: 1, title: "How a minute is assigned to a thread", key: "attention",
+   why: "This sets every duration on the page. Umi's focus log is the most direct evidence but only exists from 9 Nov evening and only covers Umi; prompts and page visits cover every day but only mark moments.",
+   opts: [{v: "inferred", label: "Inferred", rec: true, note: "Calls, then Umi focus, then prompts (3 min before each, gaps under 10 min filled), then page visits. Works on every day."},
+          {v: "focus", label: "Umi focus only", note: "Exact where the focus log exists; empty before 9 Nov 17:00 and blind to the browser."},
+          {v: "spans", label: "Session spans", note: "Each session counts from its first prompt to its last turn. Simple, but long-open sessions swallow the day."}]},
+  {id: 2, title: "Top attention strip", key: "strip",
+   why: "The strip answers 'what were the main blocks of my day' at a glance. Raw switching is accurate but reads as a barcode on busy days.",
+   opts: [{v: "coarse", label: "Main thread per 15 minutes", rec: true, note: "Browsing counts a third, so a thread interleaved with its docs reads as one block. Labels fit on wide blocks."},
+          {v: "blocks", label: "Every switch", note: "Each minute's winner, merged; shows how fragmented the day was."},
+          {v: "hourly", label: "Hourly stacked bars", note: "Each hour's mix of threads, tallest at the bottom."},
+          {v: "none", label: "No strip", note: "Lanes only."}]},
+  {id: 3, title: "What each thread lane shows", key: "detail",
+   why: "More marks per lane means more to read at a glance but more to discover on hover.",
+   opts: [{v: "full", label: "Attention, agent turns, prompts and commits", rec: true, note: "Bars = your attention, thin line = agent working, black ticks = prompts, triangles = commits."},
+          {v: "minimal", label: "Attention and commits only", note: "Prompts and agent turns appear when you expand a lane into sessions."}]},
+  {id: 4, title: "Browser activity", key: "browser",
+   why: "Chrome holds 3–6 hours a day of visits, but can't tell which thread a page belonged to.",
+   opts: [{v: "lane", label: "One Browser lane", rec: true, note: "Coloured by site category; click the lane name for one row per category."},
+          {v: "categories", label: "Always one row per category", note: "Docs, mail, video calls, AI chat, social and video, reading…"},
+          {v: "off", label: "Hidden", note: "Browsing still fills gaps in the attention strip; pages stay searchable."}]},
+  {id: 5, title: "Repositories with commits but no prompts or attention", key: "commitOnly",
+   why: "Agents and the other Mac commit to many repos; on 5 Nov that's 15 repos and 139 commits you never looked at that day.",
+   opts: [{v: "group", label: "One 'Commits elsewhere' lane", rec: true, note: "Click it to list each repository."},
+          {v: "lanes", label: "A lane per repository", note: "Everything visible, much taller."}]},
+  {id: 6, title: "Time axis", key: "range",
+   why: "Late-night activity after midnight and overnight agent commits otherwise stretch the axis to 24 hours.",
+   opts: [{v: "trim", label: "Fit your presence, fold the night", rec: true, note: "Axis spans your attention and calls; a marker at each edge counts what's outside and reveals it on click."},
+          {v: "fit", label: "Fit everything", note: "Includes your own commits and after-midnight activity."},
+          {v: "fixed", label: "Always 06:00–24:00", note: "Days line up for comparison; quiet days look empty."}]},
+  {id: 7, title: "How long a pause inside one thread still counts as that thread", key: "gapFill",
+   why: "Between two prompts in the same session you are usually reading the agent's answer. Longer fills make blocks look more continuous and add minutes.",
+   opts: [{v: 5, label: "5 minutes", note: "Conservative; more idle gaps."},
+          {v: 10, label: "10 minutes", rec: true, note: ""},
+          {v: 20, label: "20 minutes", note: "Generous; long agent turns count as your time."}]},
+  {id: 8, title: "What counts as one thread", key: "grouping",
+   why: "Threads come from the repository each session ran in. Some work spans repositories with the same name.",
+   opts: [{v: "name", label: "Project name", rec: true, note: "Merges repos sharing a name, such as playbooks/ and services/sharing-prompts; drops date prefixes."},
+          {v: "repo", label: "Exact repository", note: "One lane per repository path."},
+          {v: "area", label: "Top-level area", note: "projects, orgs, playbooks, areas, ops: a coarse view."}]},
+  {id: 9, title: "Plans priorities on the timeline", key: "priorities", tall: true, inspector: "right",
+   why: "Matching priorities to threads by shared words works for named work ('sharing prompts', 'call with Kate') and misses vaguer items. Shown here with the side panel, where the matches live.",
+   opts: [{v: "auto", label: "Matched automatically, plus your additions", rec: true, note: "Badges on lanes; + in the panel adds a thread, kept per day in this browser."},
+          {v: "manual", label: "Only threads you assign", note: "No guessing; empty until you assign."},
+          {v: "off", label: "Not shown", note: ""}]},
+  {id: 10, title: "Detail panel placement", key: "inspector", tall: true,
+   why: "The panel shows the day summary, a thread, an item or a dragged time window.",
+   opts: [{v: "right", label: "Right side", rec: true, note: "Timeline and detail side by side on wide screens; drops below under 1100 px."},
+          {v: "bottom", label: "Below the timeline", note: "Timeline gets the full width; detail needs scrolling."}]},
+  {id: 11, title: "Commits made by automations (Desk pipeline, Mood bot)", key: "auto",
+   why: "They're 10–70 commits a day and say nothing about your work.",
+   opts: [{v: "hide", label: "Hidden", rec: true, note: "Counted in the panel's Data notes; A toggles them."},
+          {v: "faint", label: "Shown faint", note: "Hollow triangles in their repository's lane."}]},
+  {id: 12, title: "Where the timeline lives", text: true,
+   why: "Today it's a page the day skill builds on this Mac. The Plans app runs on the agent server, which doesn't have your session logs, Umi focus log or Chrome history.",
+   opts: [{v: "skill-page", label: "A page from the day skill, rebuilt on demand and each evening", rec: true, note: "Simplest; the data stays on this Mac."},
+          {v: "plans-tab", label: "A tab in the Plans app", note: "Next to your priorities and reflection; this Mac would push each day's data to the server."},
+          {v: "both", label: "Both: full page here, a summary strip in Plans", note: ""}]},
+];
+const days = DATA.days; let dayIdx = Math.max(0, days.findIndex(d => d.date === "2026-11-09")); if (dayIdx < 0) dayIdx = days.length - 1;
+let answers = {}; let focusIdx = 0;
+const daySel = document.getElementById("day");
+daySel.innerHTML = days.map((d, i) => `<option value="${i}">${d.weekday}</option>`).join(""); daySel.value = dayIdx;
+const root = document.getElementById("choices");
+const L = "abcd";
+root.innerHTML = CHOICES.map(c => `<section class="choice" id="c${c.id}" data-id="${c.id}"><h2>${c.id}. ${c.title}<span class="pick" data-pick></span></h2><p class="why">${c.why}</p>
+  <div class="opts">${c.opts.map((o, i) => `<div class="opt" data-c="${c.id}" data-o="${i}"><div class="opt-h"><kbd>${i + 1}</kbd><b>${c.id}${L[i]}. ${o.label}</b>${o.rec ? `<span class="rec">recommended</span>` : ""}<span class="note">${o.note}</span></div>${c.text ? "" : `<div class="render${c.tall ? " tall" : ""}" data-render></div>`}</div>`).join("")}</div>
+  <div class="comment"><textarea placeholder="Comment on choice ${c.id}"></textarea></div></section>`).join("");
+
+// lazy renders
+const rendered = new Map();
+function renderOpt(el) {
+  const c = CHOICES.find(x => x.id === +el.dataset.c), o = c.opts[+el.dataset.o];
+  const host = el.querySelector("[data-render]"); if (!host) return;
+  const cfg = {compact: true, inspector: c.inspector || "off", [c.key]: o.v};
+  host.innerHTML = ""; rendered.set(el, DT.render(host, DATA, cfg, {day: dayIdx}));
+}
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && !rendered.has(e.target)) renderOpt(e.target); }), {rootMargin: "400px"});
+document.querySelectorAll(".opt").forEach(el => io.observe(el));
+daySel.addEventListener("change", () => { dayIdx = +daySel.value; for (const [el, api] of rendered) api.load(dayIdx); });
+
+function show() {
+  document.querySelectorAll(".choice").forEach((s, i) => { const a = answers[s.dataset.id] || {};
+    s.classList.toggle("focus", i === focusIdx);
+    s.querySelectorAll(".opt").forEach(o => o.classList.toggle("sel", a.pick === L[+o.dataset.o]));
+    s.querySelector("[data-pick]").textContent = a.pick ? `picked ${s.dataset.id}${a.pick}` : "";
+    const ta = s.querySelector("textarea"); if (document.activeElement !== ta) ta.value = a.comment || "";
+    if (a.comment) s.querySelector(".comment").classList.add("on"); });
+  const parts = CHOICES.map(c => answers[c.id]?.pick ? `${c.id}${answers[c.id].pick}` : null).filter(Boolean);
+  document.getElementById("sum").textContent = parts.length ? parts.join(" ") + (parts.length < CHOICES.length ? `  (${CHOICES.length - parts.length} open)` : "") : "none yet";
+}
+let st;
+function save() { clearTimeout(st); st = setTimeout(async () => {
+  const body = {saved: new Date().toISOString(), day: days[dayIdx].date, choices: Object.fromEntries(CHOICES.map(c => [c.id, {title: c.title,
+    pick: answers[c.id]?.pick ? `${c.id}${answers[c.id].pick}` : null, label: answers[c.id]?.pick ? c.opts[L.indexOf(answers[c.id].pick)].label : null,
+    comment: answers[c.id]?.comment || ""}]))};
+  const el = document.getElementById("saved");
+  try { const r = await fetch("/answers", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+    el.textContent = r.ok ? `saved ${new Date().toLocaleTimeString().slice(0, 5)}` : `not saved: server answered ${r.status}`;
+  } catch (e) { el.textContent = "not saved: open this page from build.py --serve"; }
+}, 300); }
+function pick(id, i) { const c = CHOICES.find(x => x.id === id); if (!c || i >= c.opts.length) return;
+  answers[id] = {...(answers[id] || {}), pick: L[i]}; show(); save(); }
+root.addEventListener("click", e => { const o = e.target.closest(".opt"); if (!o || e.target.closest(".dt-insp, .dt-lbtn, [data-i], select, details")) return;
+  focusIdx = CHOICES.findIndex(c => c.id === +o.dataset.c); pick(+o.dataset.c, +o.dataset.o); });
+root.addEventListener("input", e => { const ta = e.target.closest("textarea"); if (!ta) return; const id = +ta.closest(".choice").dataset.id;
+  answers[id] = {...(answers[id] || {}), comment: ta.value}; show(); save(); });
+function moveTo(i) { focusIdx = Math.max(0, Math.min(CHOICES.length - 1, i)); show();
+  const el = document.querySelectorAll(".choice")[focusIdx]; const r = el.getBoundingClientRect();
+  if (r.top < 60 || r.top > innerHeight * 0.6) el.scrollIntoView({block: "start"}); }
+document.addEventListener("keydown", e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.target.closest("textarea")) { if (e.key === "Escape") e.target.blur(); return; }
+  if (e.target.closest("input,select")) return;
+  if (e.key === "ArrowDown" || e.key === "j") moveTo(focusIdx + 1);
+  else if (e.key === "ArrowUp" || e.key === "k") moveTo(focusIdx - 1);
+  else if (/^[1-4]$/.test(e.key)) pick(CHOICES[focusIdx].id, +e.key - 1);
+  else if (e.key === "c" || e.key === "C") { const s = document.querySelectorAll(".choice")[focusIdx]; s.querySelector(".comment").classList.add("on"); s.querySelector("textarea").focus(); }
+  else return;
+  e.preventDefault();
+});
+fetch("answers.json", {cache: "no-store"}).then(r => r.ok ? r.json() : null).then(a => {
+  if (a?.choices) for (const [id, v] of Object.entries(a.choices)) answers[id] = {pick: v.pick ? v.pick.slice(-1) : null, comment: v.comment};
+  show(); }).catch(() => show());
+show();
+</script>
+</body>
+</html>
