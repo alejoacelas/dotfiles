@@ -13,8 +13,10 @@ him. ⌃⌘M shows you in the window's drawer.
 
 1. `umi pane set role=manager`. Only one pane holds the role; this takes it from any other.
 2. `umi ls --where 'owner=manager'` lists the panes already delegated. Handle each as below.
-3. Watch for changes: run `umi events --filter pane.changed` in the background and act on events
-   for a pane with `owner=manager` whose `agent.status` became `idle`, `needs_input` or `error`.
+3. Watch for changes: run this skill's `watch.sh` as a background monitor (re-arm it when it
+   expires). It prints `STOPPED <pane> <status>` when a delegated pane becomes `idle`,
+   `needs_input` or `error`, and `OWNER <pane> <owner>` when a pane is handed over or given back.
+   Use it rather than filtering `umi events` yourself: status events don't name the pane's owner.
 
 ## Each delegated pane that stopped
 
