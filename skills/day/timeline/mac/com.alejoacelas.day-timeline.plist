@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>com.alejoacelas.day-timeline</string>
+  <key>ProgramArguments</key><array><string>/Users/alejo/best/areas/dotfiles/skills/day/timeline/publish</string></array>
+  <key>EnvironmentVariables</key><dict><key>PATH</key><string>/Users/alejo/.local/bin:/opt/homebrew/bin:/usr/bin:/bin</string></dict>
+  <key>RunAtLoad</key><true/>
+  <key>StartInterval</key><integer>3600</integer>
+  <key>StandardOutPath</key><string>/Users/alejo/Library/Logs/day-timeline.log</string>
+  <key>StandardErrorPath</key><string>/Users/alejo/Library/Logs/day-timeline.log</string>
+</dict></plist>

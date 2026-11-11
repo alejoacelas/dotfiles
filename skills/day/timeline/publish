@@ -1,0 +1,10 @@
+#!/bin/bash
+# Rebuild the day timeline from this Mac's activity and copy it to the agent server, which serves it at
+# https://agent-server.tail622085.ts.net/day (tailnet only). Run by launchd every hour; safe to run by hand.
+set -euo pipefail
+here="$(cd "$(dirname "$0")" && pwd)"
+python3 "$here/build.py" --days 14 --no-open
+ssh agent-server 'mkdir -p ~/.local/share/day-timeline'
+scp -q "$HOME/.local/share/day/timeline/index.html" agent-server:.local/share/day-timeline/index.html.new
+ssh agent-server 'mv ~/.local/share/day-timeline/index.html.new ~/.local/share/day-timeline/index.html'
+date -u +"%Y-%m-%dT%H:%M:%SZ published"

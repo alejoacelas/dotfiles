@@ -20,6 +20,9 @@ description: Gather what Alejo did on a given day from agent sessions, Umi's foc
      evening reflection.
    - Chrome history for every profile, by site, with page titles and rough time.
 
+   The day timeline at https://agent-server.tail622085.ts.net/day shows the last 14 days by topic and task;
+   `timeline/publish` rebuilds it (launchd runs it hourly).
+
    For a page of the last days, run `view.py [--days N]`: it writes
    `~/.local/share/day/index.html` and opens it (← → between days, T today, E
    expands prompts).
