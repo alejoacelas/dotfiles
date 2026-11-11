@@ -116,7 +116,12 @@ descriptions go stale.
   one private repository per kind of work, named without a date. Each holds the
   current method, plus the prep and reviews from past runs that feed it. Client
   projects copy from here. `prompt-reports/` holds prompts people run in their
-  own Claude or ChatGPT to share information about their work.
+  own Claude or ChatGPT to share information about their work. Each method
+  folder's `AGENTS.md` ends with a `## Runs` list, one bullet per engagement: the
+  client and months, the repository's GitHub URL, the desk tag that collects its
+  calls and messages (`projects: [<slug>]`), and links to the Google Docs or
+  Sheets it delivered. Link to these rather than local paths or single desk
+  files, so the list stays right as folders move and calls are added.
 - `areas/`: long-running parts of my life and setup that I work on as needs
   come up, named without a date. A project moves here from `projects/` once I
   use it regularly; ask before moving one.
