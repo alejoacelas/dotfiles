@@ -23,10 +23,8 @@ WORKSPACES = ("impact-ops", "ai-uplift")
 
 
 def clean_pasted_value(value: str) -> str:
-    value = value.strip()
-    if len(value) >= 2 and value[0] in "\"'`" and value[-1] == value[0]:
-        value = value[1:-1].strip()
-    return value
+    # Console and DevTools copies come wrapped in quotes, sometimes only on one side.
+    return value.strip().strip("\"'`‘’“”").strip()
 
 
 def read_secret(label: str, prefix: str) -> str:
