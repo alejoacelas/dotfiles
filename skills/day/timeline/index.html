@@ -12,16 +12,22 @@
 .days button[aria-current=true]{color:var(--ink);font-weight:700}
 .days button[aria-current=true] i{background:var(--ink)}
 .navbtn{border:1px solid var(--line);background:var(--card);border-radius:6px;padding:3px 9px;cursor:pointer}
-#q{border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 8px;width:220px}
-.opts{display:flex;gap:10px;align-items:center;color:var(--mute);font-size:12px;margin-left:auto}
-.opts select{border:1px solid var(--line);background:var(--card);border-radius:5px;padding:1px 3px}
+.seg{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;padding:4px 10px;cursor:pointer;font-size:12.5px}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--card)}
+.seg kbd{margin-right:4px}
+.seg button[aria-pressed=true] kbd{background:transparent;color:inherit;border-color:currentColor;opacity:.7}
+.lbl{color:var(--mute);font-size:12px}
+#q{border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 8px;width:200px;margin-left:auto}
 .keys{color:var(--mute);font-size:11.5px;cursor:pointer;border:0;background:none}
 #help{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:30;display:flex;align-items:center;justify-content:center}
 #help[hidden]{display:none}
-#help div{background:var(--card);border-radius:10px;padding:16px 20px;max-width:440px}
+#help>div{background:var(--card);border-radius:10px;padding:16px 20px;max-width:460px}
 #help table td{padding:2px 10px 2px 0}
 kbd{font:11px ui-monospace,monospace;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;background:var(--soft)}
 main{padding:10px 16px 40px}
+#rowsbox[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -29,30 +35,36 @@ main{padding:10px 16px 40px}
   <button class="navbtn" id="prev" title="Previous day (←)">‹</button>
   <div class="days" id="days"></div>
   <button class="navbtn" id="next" title="Next day (→)">›</button>
-  <input id="q" placeholder="Search prompts, commits, pages  ( / )" autocomplete="off">
-  <div class="opts">
-    <label title="How each minute is assigned to a thread">attention <select data-opt="attention"><option value="inferred">inferred</option><option value="focus">Umi focus only</option><option value="spans">session spans</option></select></label>
-    <label>browser <select data-opt="browser"><option value="lane">one lane</option><option value="categories">by category</option><option value="off">off</option></select></label>
-    <label>automations <select data-opt="auto"><option value="hide">hidden</option><option value="faint">faint</option></select></label>
-    <label>axis <select data-opt="range"><option value="trim">fit, fold night</option><option value="fit">fit all</option><option value="fixed">06–24</option></select></label>
-    <button class="keys" id="keys" title="Keyboard shortcuts (?)">⌨ keys</button>
+  <div class="seg" id="views">
+    <button data-view="attention"><kbd>1</kbd>Attention</button>
+    <button data-view="tasks"><kbd>2</kbd>Tasks</button>
+    <button data-view="agents"><kbd>3</kbd>Agents</button>
   </div>
+  <span id="rowsbox"><span class="lbl">rows</span>
+  <span class="seg" id="rows" style="display:inline-flex">
+    <button data-rows="topics" title="One row per topic; click a topic to split it into tasks">Topic</button>
+    <button data-rows="tasks">Task</button>
+    <button data-rows="kinds" title="Building, calls, messages, admin, reading, personal, leisure">Kind</button>
+    <button data-rows="priorities" title="Your Plans priorities, then other work, then personal and leisure">Priority</button>
+  </span></span>
+  <input id="q" placeholder="Search  ( / )" autocomplete="off">
+  <button class="keys" id="keys" title="Keyboard shortcuts (?)">⌨ keys</button>
 </div>
 <main><div id="tl"></div></main>
 <div id="help" hidden><div>
   <b>Keys</b>
   <table>
-    <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>previous / next day</td></tr>
-    <tr><td><kbd>T</kbd></td><td>today</td></tr>
-    <tr><td>drag on the timeline</td><td>select a time window</td></tr>
-    <tr><td><kbd>Z</kbd> / <kbd>0</kbd></td><td>zoom to the window / back to the whole day</td></tr>
-    <tr><td><kbd>E</kbd></td><td>expand or collapse all threads into sessions</td></tr>
-    <tr><td><kbd>/</kbd></td><td>search</td></tr>
-    <tr><td><kbd>A</kbd> <kbd>B</kbd></td><td>automation commits / browser lane</td></tr>
-    <tr><td><kbd>D</kbd></td><td>dark mode</td></tr>
+    <tr><td><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></td><td>Attention, Tasks, Agents</td></tr>
+    <tr><td><kbd>R</kbd></td><td>rows by topic, task, kind or priority</td></tr>
+    <tr><td><kbd>←</kbd> <kbd>→</kbd> · <kbd>T</kbd></td><td>previous / next day · today</td></tr>
+    <tr><td>click</td><td>a bar, hour or row for what it was about, in your words</td></tr>
+    <tr><td>drag</td><td>across the timeline to select a window; <kbd>Z</kbd> zooms to it, <kbd>0</kbd> zooms out</td></tr>
+    <tr><td><kbd>E</kbd></td><td>split every topic into its tasks</td></tr>
+    <tr><td><kbd>S</kbd></td><td>tasks by attention or by start time</td></tr>
+    <tr><td><kbd>F</kbd></td><td>axis 06–24 or fit to the day</td></tr>
+    <tr><td><kbd>/</kbd> · <kbd>D</kbd></td><td>search · dark mode</td></tr>
     <tr><td><kbd>Esc</kbd></td><td>clear selection, then zoom, then search</td></tr>
   </table>
-  <p class="dt-mute">Click a lane name to split it into sessions and commits. Click anything for its detail on the right.</p>
 </div></div>
 <script>/*DATA*/</script>
 <script>/*JS*/</script>
@@ -60,23 +72,29 @@ main{padding:10px 16px 40px}
 "use strict";
 const days = DATA.days;
 let start = days.length - 1;
-const want = location.hash.slice(1); const wi = days.findIndex(d => d.date === want); if (wi >= 0) start = wi;
-try { if (localStorage.getItem("dt-theme") === "dark") document.documentElement.dataset.theme = "dark"; } catch {}
-let saved = {}; try { saved = JSON.parse(localStorage.getItem("dt-opts") || "{}"); } catch {}
+const wi = days.findIndex(d => d.date === location.hash.slice(1)); if (wi >= 0) start = wi;
+const store = {get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }};
+if (store.get("dt-theme", "") === "dark") document.documentElement.dataset.theme = "dark";
+const saved = store.get("dt2-opts", {});
 const q = document.getElementById("q");
 let tl;
 tl = DT.render(document.getElementById("tl"), DATA, saved, {day: start, onDay: m => {
   history.replaceState(null, "", "#" + m.day.date); if (tl) drawDays(); document.title = "Day Timeline · " + m.day.weekday.replace(/ \d{4}$/, ""); },
   onQuery: v => q.value = v});
-document.querySelectorAll("[data-opt]").forEach(s => { s.value = tl.cfg[s.dataset.opt]; s.addEventListener("change", () => {
-  tl.set(s.dataset.opt, s.value); saved[s.dataset.opt] = s.value; try { localStorage.setItem("dt-opts", JSON.stringify(saved)); } catch {} drawDays(); }); });
-function drawDays() {
-  const ms = days.map(d => DT.model(d, tl.cfg)); const max = Math.max(...ms.map(m => m.stats.att + m.stats.calls), 60);
-  document.getElementById("days").innerHTML = ms.map((m, i) => { const v = m.stats.att + m.stats.calls;
-    return `<button data-d="${i}" aria-current="${i === tl.day}" title="${m.day.weekday}: ${DT.dur(m.stats.att)} attention, ${m.stats.prompts} prompts, ${m.stats.commits} commits"><i style="height:${Math.max(2, v / max * 22)}px"></i>${m.day.date.slice(8)}</button>`; }).join("");
+function setOpt(k, v) { tl.set(k, v); saved[k] = v; store.set("dt2-opts", saved); syncButtons(); if (k === "range") drawDays(); }
+function syncButtons() {
+  document.querySelectorAll("[data-view]").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === tl.cfg.view));
+  document.querySelectorAll("[data-rows]").forEach(b => b.setAttribute("aria-pressed", b.dataset.rows === tl.cfg.rows));
+  document.getElementById("rowsbox").hidden = tl.cfg.view !== "attention";
 }
-drawDays();
+function drawDays() {
+  const ms = days.map(d => DT.model(d, DATA.stories?.[d.date], tl.cfg)); const max = Math.max(...ms.map(m => m.stats.att), 60);
+  document.getElementById("days").innerHTML = ms.map((m, i) => `<button data-d="${i}" aria-current="${i === tl.day}" title="${m.day.weekday}: ${DT.dur(m.stats.att)} attention, ${DT.dur(m.stats.work)} on work${m.fromFolders ? " (no story yet)" : ""}"><i style="height:${Math.max(2, m.stats.att / max * 22)}px"></i>${m.day.date.slice(8)}</button>`).join("");
+}
+drawDays(); syncButtons();
 document.getElementById("days").addEventListener("click", e => { const b = e.target.closest("[data-d]"); if (b) tl.load(+b.dataset.d); });
+document.getElementById("views").addEventListener("click", e => { const b = e.target.closest("[data-view]"); if (b) setOpt("view", b.dataset.view); });
+document.getElementById("rows").addEventListener("click", e => { const b = e.target.closest("[data-rows]"); if (b) setOpt("rows", b.dataset.rows); });
 document.getElementById("prev").addEventListener("click", () => tl.step(-1));
 document.getElementById("next").addEventListener("click", () => tl.step(1));
 let qt; q.addEventListener("input", () => { clearTimeout(qt); qt = setTimeout(() => tl.search(q.value), 150); });
@@ -84,21 +102,23 @@ q.addEventListener("keydown", e => { if (e.key === "Escape" || e.key === "Enter"
 const help = document.getElementById("help");
 document.getElementById("keys").addEventListener("click", () => help.hidden = false);
 help.addEventListener("click", () => help.hidden = true);
-function flip(k, a, b) { const s = document.querySelector(`[data-opt=${k}]`); s.value = s.value === a ? b : a; s.dispatchEvent(new Event("change")); }
+const ROWS = ["topics", "tasks", "kinds", "priorities"], VIEWS = ["attention", "tasks", "agents"];
 document.addEventListener("keydown", e => {
-  if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest("input,select,textarea")) return;
-  const k = e.key;
-  if (!help.hidden) { help.hidden = true; if (k === "Escape") return; }
-  if (k === "ArrowLeft") tl.step(-1); else if (k === "ArrowRight") tl.step(1);
-  else if (k === "t" || k === "T") tl.load(days.length - 1);
+  if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest?.("input,select,textarea")) return;
+  const k = e.key.toLowerCase();
+  if (!help.hidden) { help.hidden = true; if (k === "escape") return; }
+  if (e.key === "ArrowLeft") tl.step(-1); else if (e.key === "ArrowRight") tl.step(1);
+  else if (/^[123]$/.test(k)) setOpt("view", VIEWS[+k - 1]);
+  else if (k === "r") setOpt("rows", ROWS[(ROWS.indexOf(tl.cfg.rows) + 1) % ROWS.length]);
+  else if (k === "s") setOpt("taskSort", tl.cfg.taskSort === "time" ? "attention" : "time");
+  else if (k === "f") setOpt("range", tl.cfg.range === "fixed" ? "fit" : "fixed");
+  else if (k === "t") tl.load(days.length - 1);
   else if (k === "/") { e.preventDefault(); q.focus(); q.select(); }
-  else if (k === "z" || k === "Z") tl.zoom(); else if (k === "0") tl.reset();
-  else if (k === "e" || k === "E") tl.toggleAll();
-  else if (k === "a" || k === "A") flip("auto", "hide", "faint");
-  else if (k === "b" || k === "B") flip("browser", "lane", "off");
-  else if (k === "d" || k === "D") { const r = document.documentElement; r.dataset.theme = r.dataset.theme === "dark" ? "" : "dark"; try { localStorage.setItem("dt-theme", r.dataset.theme); } catch {} }
+  else if (k === "z") tl.zoom(); else if (k === "0") tl.reset();
+  else if (k === "e") tl.toggleAll();
+  else if (k === "d") { const r = document.documentElement; r.dataset.theme = r.dataset.theme === "dark" ? "" : "dark"; store.set("dt-theme", r.dataset.theme); }
   else if (k === "?") help.hidden = false;
-  else if (k === "Escape") tl.clear();
+  else if (k === "escape") tl.clear();
   else return;
   e.preventDefault();
 });

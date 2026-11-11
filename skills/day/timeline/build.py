@@ -2,8 +2,8 @@
 """build.py: collect the last days and write the timeline pages, then open the timeline.
 
 Usage: build.py [--days N] [--from YYYY-MM-DD] [--no-open] [--serve]
-Writes index.html (the timeline) and choices.html (display alternatives) into ~/.local/share/day/timeline/.
---serve keeps a local server running so choices.html can save picks to answers.json beside it.
+Collects raw activity (collect.py), labels each changed day with topics and tasks (story.py, one claude -p call
+a day), and writes index.html into ~/.local/share/day/timeline/. --serve keeps a local server running.
 """
 import datetime as dt
 import http.server
@@ -24,7 +24,11 @@ def arg(name, default=None):
 def page(template, data):
     html = open(os.path.join(HERE, template)).read()
     css, js = open(os.path.join(HERE, "timeline.css")).read(), open(os.path.join(HERE, "timeline.js")).read()
-    blob = "const DATA = " + data.replace("</", "<\\/") + ";"
+    raw = json.loads(data)
+    sdir = os.path.join(OUT, "story")
+    raw["stories"] = {d["date"]: json.load(open(os.path.join(sdir, d["date"] + ".json")))
+                      for d in raw["days"] if os.path.exists(os.path.join(sdir, d["date"] + ".json"))}
+    blob = "const DATA = " + json.dumps(raw, ensure_ascii=False).replace("</", "<\\/") + ";"
     return html.replace("/*CSS*/", css).replace("/*JS*/", js).replace("/*DATA*/", blob)
 
 
@@ -55,8 +59,9 @@ def main():
         raw = os.path.join(OUT, "raw.json")
         subprocess.run([sys.executable, os.path.join(HERE, "collect.py"), first.isoformat(), last.isoformat(), "--out", raw],
                        check=True)
+        subprocess.run([sys.executable, os.path.join(HERE, "story.py"), raw], check=True)
         data = open(raw).read()
-        for tpl in [t for t in ("index.html", "choices.html") if os.path.exists(os.path.join(HERE, t))]:
+        for tpl in ("index.html",):
             open(os.path.join(OUT, tpl), "w").write(page(tpl, data))
         print(os.path.join(OUT, "index.html"))
     if "--serve" in sys.argv or "--serve-only" in sys.argv:

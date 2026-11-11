@@ -123,3 +123,54 @@ details summary{cursor:pointer}
 .dt-insp li[data-m]:hover{background:var(--soft)}
 li.dt-pinned{outline:1px solid var(--accent)}
 .dt-pr-lo{opacity:.55;border-style:dashed}
+/* v2: attention-first */
+.dt-hours .dt-track{height:46px}
+.dt-hour{position:absolute;top:0;height:44px}
+.dt-hour b{position:absolute;left:1px;right:1px;border-radius:2px 2px 0 0;cursor:pointer}
+.dt-hours{border-bottom:0}
+.dt-hlabels .dt-track{height:16px}
+.dt-hlab{position:absolute;top:0;font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;cursor:pointer}
+.dt-hlabels{border-bottom:1px solid var(--line)}
+.dt-lane .dt-track{height:22px}
+.dt-att{top:5px;height:12px;border-radius:2px;opacity:.95}
+.dt-taskbar{opacity:.7;top:3px;height:9px}
+.dt-you{position:absolute;top:3px;height:16px;border-radius:2px;opacity:.16;cursor:pointer}
+.dt-turnbar{position:absolute;top:7px;height:8px;border-radius:1px;opacity:.8;cursor:pointer;mix-blend-mode:multiply}
+:root[data-theme=dark] .dt-turnbar{mix-blend-mode:screen}
+.dt-agentlane .dt-commit{bottom:0}
+.dt-conc{position:absolute;bottom:0;background:var(--ink);opacity:.45}
+.dt-notice{background:var(--hl);border-radius:6px;padding:6px 10px;margin:6px 0;font-size:12.5px}
+.dt-ov{display:grid;gap:3px;font-size:13px;margin-bottom:4px}
+.dt-ov b{font-size:15px}
+.dt-topic{padding:7px 4px;border-top:1px solid var(--grid);cursor:pointer;border-radius:4px}
+.dt-topic:hover{background:var(--soft)}
+.dt-topic-h{display:flex;gap:6px;align-items:center}
+.dt-topic-h .dt-min{margin-left:auto}
+.dt-topic .dt-mute{margin:2px 0 3px 13px;font-size:12px}
+.dt-tk{display:flex;gap:6px;margin-left:13px;font-size:12px;cursor:pointer;padding:1px 0}
+.dt-tk .dt-min{margin-left:auto}
+.dt-tk:hover{color:var(--accent)}
+.dt-qlist{list-style:none;margin:6px 0 0;padding:0}
+.dt-qlist li{display:flex;gap:7px;padding:3px 0}
+.dt-qlist q{quotes:"“" "”"}
+.dt-qlist q::before{content:open-quote;color:var(--mute)}
+.dt-qlist q::after{content:close-quote;color:var(--mute)}
+.dt-small{font-size:11.5px}
+.dt-it{cursor:pointer}
+.dt-it .dt-min{float:right}
+.dt-prio{display:flex;gap:6px;align-items:baseline;padding:3px 0;border-top:1px solid var(--grid)}
+.dt-prio .dt-min{margin-left:auto}
+/* tasks view */
+.dt-tasks{font-size:12.5px}
+.dt-tasks-h,.dt-taskrow{display:grid;grid-template-columns:minmax(220px,1.3fr) 130px minmax(160px,1fr) minmax(200px,1.4fr);gap:12px;align-items:center}
+.dt-tasks-h{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;padding:6px 6px;border-bottom:1px solid var(--line)}
+.dt-taskrow{padding:7px 6px;border-bottom:1px solid var(--grid);cursor:pointer}
+.dt-taskrow:hover{background:var(--soft)}
+.dt-tl{display:flex;gap:7px;align-items:flex-start}
+.dt-tl .dt-sw{margin-top:4px}
+.dt-ta{display:flex;gap:6px;align-items:center}
+.dt-tbar{flex:1;height:8px;background:var(--soft);border-radius:3px;overflow:hidden}
+.dt-tbar b{display:block;height:100%}
+.dt-spark{position:relative;height:10px;background:var(--soft);border-radius:2px;overflow:hidden}
+.dt-spark b{position:absolute;top:0;bottom:0}
+.dt-to{color:var(--mute)}
