@@ -150,20 +150,25 @@ Post the doc URL (`.../document/d/<id>/edit`) in the reply as soon as it
 exists, before continuing.
 
 Keep the doc private while it's being written, and check that creating it
-didn't share it automatically. Find each other participant's email in this
+didn't share it automatically. Share with the address each other participant
+uses to email Alejo, since that's where they read mail from him. Find it in this
 order, stopping at the first hit:
 
-1. The `emails:` field of their file in `~/best/desk/people/`.
-2. Granola's attendee list for the note (`GET /v1/notes/<id>` returns `attendees` and
+1. Recent email with them, personal account first, then Impact Ops:
+   `gog -a <account> -j gmail search "from:<address or name>"` — search each
+   address in their `people/` file and their name, and take the address they most
+   recently wrote from.
+2. The `emails:` field of their file in `~/best/desk/people/`, when it lists one
+   address.
+3. Granola's attendee list for the note (`GET /v1/notes/<id>` returns `attendees` and
    `calendar_event.invitees`), then the calendar event for the call — its attendees' emails. Check the personal
    calendar first, then the Impact Ops one:
    ```bash
    gog -a alejoacelas@gmail.com -j calendar events --from <iso> --to <iso>
    gog -a alejo@impact-ops.org -j calendar events --from <iso> --to <iso>
    ```
-3. Recent email with them, same two accounts:
-   `gog -a <account> -j gmail search "<first> <last>"` — take the address the
-   person actually wrote from.
+
+Add any new address you find to their `people/` file.
 
 When the doc is finished (after Step 9), share it with each participant's email as a
 writer and send the Drive invitation email. `--notify` is what sends it; without the
