@@ -2,21 +2,25 @@
 # proj: create or reopen a dated project folder in ~/best, give it a GitHub repo and start an agent there.
 # Usage: proj <name> [--claude|--codex] [--private|--local]
 #   proj                                         -> pick a project, newest first; type to fuzzy filter;
+#                                                   inside an area (areas/<x>, playbooks/<x>, orgs/<company>) it lists
+#                                                   that area's folders first and Ctrl-A widens to all of ~/best;
 #                                                   Tab then an instruction runs claude -p there in the background
 #                                                   (in desk when Tab comes before any filter text)
-#   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes, public repo morning-notes
+#   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes, public repo morning-notes;
+#                                                   inside an area repo, <area>/YYYY-MM-DD-morning-notes with no new repo
 #   proj orgs/impact-ops/status-tracker          -> ~/best/orgs/impact-ops/YYYY-MM-status-tracker, private repo
 #   proj odd-idea --local                        -> no GitHub repo
 # New folders get a first commit and a GitHub repo named <name>; the URL is printed.
 # An existing folder whose name ends in -<name> is reopened instead, and its remote URL is printed.
-# The proj shell function in shell/zprofile cds into the picked project when no name is given.
+# The proj shell function in shell/zprofile cds into the picked or created folder.
 set -euo pipefail
 
-usage() { sed -n '2,10s/^# \{0,1\}//p' "$0" >&2; exit 2; }
+usage() { sed -n '2,14s/^# \{0,1\}//p' "$0" >&2; exit 2; }
 
-agent="" name="" visibility=""
+agent="" name="" visibility="" list=""
 for arg in "$@"; do
   case "$arg" in
+    --list) list=1 ;;  # internal: print the picker's list, for the Ctrl-A reload
     --claude) agent=claude ;;
     --codex) agent=codex ;;
     --private) visibility=private ;;
@@ -27,13 +31,28 @@ for arg in "$@"; do
   esac
 done
 best="$HOME/best"
+self="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 
-# Pickable folders as "<creation date> <creation time> <path>": everything in projects/, ops/,
-# areas/, playbooks/ and orgs/<company>/, plus desk. BSD stat and date on macOS, GNU on Linux.
+# The area the shell is in, as areas/<x>, playbooks/<x> or orgs/<company>; empty elsewhere.
+current_area() {
+  local rel="${PWD#"$best"/}" a b
+  [ "$rel" != "$PWD" ] || return 0
+  case "$rel" in
+    areas/?*|playbooks/?*|orgs/?*) IFS=/ read -r a b _ <<<"$rel"; echo "$a/$b" ;;
+  esac
+}
+
+# Pickable folders as "<creation date> <creation time> <path>". With an area, that area's folders;
+# otherwise everything in projects/, ops/, areas/, playbooks/ and orgs/<company>/, plus desk.
+# BSD stat and date on macOS, GNU on Linux.
 pickable_folders() {
   local gnu=""; stat -c %W / >/dev/null 2>&1 && gnu=1
-  { find "$best/projects" "$best/ops" "$best/areas" "$best/playbooks" "$best"/orgs/* -mindepth 1 -maxdepth 1 -type d
-    echo "$best/desk"; } | while IFS= read -r dir; do
+  { if [ -n "${1:-}" ]; then
+      find "$best/$1" -mindepth 1 -maxdepth 1 -type d ! -name '.*' ! -name node_modules
+    else
+      find "$best/projects" "$best/ops" "$best/areas" "$best/playbooks" "$best"/orgs/* -mindepth 1 -maxdepth 1 -type d
+      echo "$best/desk"
+    fi; } | while IFS= read -r dir; do
     if [ -n "$gnu" ]; then t="$(stat -c %W "$dir")"; d="$(date -d "@$t" +%F)"
     else t="$(stat -f %B "$dir")"; d="$(date -r "$t" +%F)"; fi
     echo "$d $t $dir"
@@ -51,20 +70,32 @@ run_in_background() {
   echo "Log: $log" >&2
 }
 
-if [ -z "$name" ]; then
-  [ -z "$agent$visibility" ] || usage
-  command -v fzf >/dev/null || { echo "proj: picking a project needs fzf (brew install fzf)" >&2; exit 1; }
-  # List paths relative to ~/best, newest first by the date in the folder name (month-only
-  # folders count as day 00; undated folders use their creation date), then by creation time.
-  # Typing ranks fuzzy matches; equal matches keep that order.
-  out="$(pickable_folders | sed "s|$best/||" |
+# List paths relative to ~/best, newest first by the date in the folder name (month-only
+# folders count as day 00; undated folders use their creation date), then by creation time.
+sorted_folders() {
+  pickable_folders "${1:-}" | sed "s|$best/||" |
     awk '{ n = split($3, p, "/"); d = substr(p[n], 1, 10)
            if (d !~ /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/) d = (d ~ /^[0-9]{4}-[0-9]{2}-/) ? substr(d, 1, 7) "-00" : $1
            print d, $2, $3 }' |
-    sort -k1,1r -k2,2nr | cut -d' ' -f3- |
+    sort -k1,1r -k2,2nr | cut -d' ' -f3-
+}
+
+if [ -n "$list" ]; then sorted_folders "$name"; exit 0; fi
+
+if [ -z "$name" ]; then
+  [ -z "$agent$visibility" ] || usage
+  command -v fzf >/dev/null || { echo "proj: picking a project needs fzf (brew install fzf)" >&2; exit 1; }
+  # Inside an area, start with its folders; Ctrl-A reloads the list with all of ~/best.
+  # Typing ranks fuzzy matches; equal matches keep that order.
+  area="$(current_area)"
+  all_header='enter: open  tab: run claude in the background (in desk if nothing typed)'
+  header="$all_header"
+  [ -z "$area" ] || header="in $area  ctrl-a: all of ~/best  $all_header"
+  out="$(sorted_folders "$area" |
     fzf --height=40% --reverse --scheme=path --tiebreak=index --prompt='project> ' \
       --print-query --expect=tab \
-      --header='enter: open  tab: run claude in the background (in desk if nothing typed)')" || exit 1
+      --bind "ctrl-a:reload('$self' --list)+change-header($all_header)" \
+      --header="$header")" || exit 1
   query="$(sed -n 1p <<<"$out")" key="$(sed -n 2p <<<"$out")" picked="$(sed -n 3p <<<"$out")"
   if [ "$key" = tab ]; then
     [ -n "$query" ] || picked=desk
@@ -78,13 +109,21 @@ if [ -z "$name" ]; then
   exit 0
 fi
 
+# A bare name goes into the current area, or into projects/ outside one.
+area="$(current_area)"
 case "$name" in
   */*) parent="$best/${name%/*}"; slug="${name##*/}" ;;
-  *) parent="$best/projects"; slug="$name" ;;
+  *) parent="$best/${area:-projects}"; slug="$name" ;;
 esac
-# Own projects are dated to the day; client projects, trials and the other folders use the month.
+# An area that is itself a repository holds its entries as plain folders, with no repo of their own.
+monorepo=""
+case "$parent" in
+  "$best"/areas/*|"$best"/playbooks/*)
+    [ "$(git -C "$parent" rev-parse --show-toplevel 2>/dev/null)" = "$parent" ] && monorepo=1 ;;
+esac
+# Own projects and area entries are dated to the day; client projects, trials and the rest use the month.
 date_format=%Y-%m
-[ "$parent" = "$best/projects" ] && date_format=%Y-%m-%d
+[ "$parent" = "$best/projects" ] || [ -n "$monorepo" ] && date_format=%Y-%m-%d
 slug="$(printf '%s' "$slug" | tr '[:upper:] _' '[:lower:]--' | tr -cd 'a-z0-9-')"
 [ -n "$slug" ] || { echo "proj: name must contain letters or digits" >&2; exit 2; }
 # Client work under orgs/ and playbooks/ is private; everything else is public unless told otherwise.
@@ -106,6 +145,10 @@ elif [ -d "$parent/template" ] && git -C "$parent" rev-parse -q --is-inside-work
   dir="$parent/$(date +"$date_format")-$slug"
   cp -R "$parent/template" "$dir"
   echo "Created $dir from template"
+elif [ -n "$monorepo" ]; then
+  dir="$parent/$(date +"$date_format")-$slug"
+  mkdir -p "$dir"
+  echo "Created $dir"
 else
   dir="$parent/$(date +"$date_format")-$slug"
   if [ "$visibility" != local ]; then
@@ -138,6 +181,8 @@ AGENTS
 fi
 
 cd "$dir"
+# The proj shell function cds here afterwards.
+[ -z "${PROJ_CD_FILE:-}" ] || echo "$dir" > "$PROJ_CD_FILE"
 case "$agent" in
   claude) exec claude --dangerously-skip-permissions ;;
   codex) exec codex --profile cli --dangerously-bypass-approvals-and-sandbox ;;
