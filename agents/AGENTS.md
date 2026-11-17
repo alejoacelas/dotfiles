@@ -136,6 +136,11 @@ commands act on your own pane, tab and window by default. To reopen a past
 Claude session in a pane, run
 `umi split right --cwd <dir> --cmd "claude --dangerously-skip-permissions --resume <session-id>"`.
 
+Put each Google Doc you create in my personal Drive (`alejoacelas@gmail.com`) into the
+top-level folder it belongs to (Work, Calls, Know-how, Thinking, Life, Events, or a
+subfolder of one), never loose in My Drive's root. Create a subfolder when a group of
+docs needs one.
+
 To replace a whole Google Docs tab, write the new content into a new tab, carry
 over any edits made to the original since your last write, then delete the
 original. Writing over a tab can keep its old formatting, such as turning every
