@@ -67,7 +67,7 @@ context and pass it explicitly on every cloud write.
   Do computer use and browser testing on the other Mac.
 - On the server, work as the `agent` user (`sudo -iu agent`). Its `gh`, `gog` and
   git pushes go through a credential broker; to give it an API key, add a broker
-  route ([agent user setup](/Users/alejo/best/areas/server/docs/setup.md#agent-user)).
+  route ([agent user setup](/Users/alejo/best/ops/server/docs/setup.md#agent-user)).
 - Over SSH a Mac can't read the keychain, so start Claude there inside `tmux` with
   `op-agent run --no-masking`, injecting `CLAUDE_CODE_OAUTH_TOKEN` from
   `op://mac-agents/6drosdmzu2qb3jefhsh3d5b7dy/credential`. Masking breaks Claude's
