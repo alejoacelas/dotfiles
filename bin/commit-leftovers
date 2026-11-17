@@ -139,6 +139,8 @@ def report(problems, dry_run):
     lines = "\n".join(f"- `{repo}`: {why}" for repo, why in problems)
     body = f"""---
 people: []
+source: commit-leftovers
+from: https://github.com/alejoacelas/ops/blob/main/clerk/desk-pipeline/sources/commit-leftovers.md
 projects: [dotfiles]
 why: commit-leftovers found uncommitted work it could not commit on its own
 next: Fix or clean up each repository below, then the next run commits it (do|defer)
