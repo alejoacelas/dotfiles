@@ -1,0 +1,219 @@
+#!/usr/bin/env python3
+"""UmiNext's docket hook: turn a session sent to the docket into a queued desk item.
+
+UmiNext runs this (as ~/.config/umi-next/docket-hook) once a docketed session's turn ends,
+with the session as JSON on stdin (next/DESIGN.md in the umi repository). It reads the end of
+the session's transcript, has `claude -p` write the item in the queue skill's format, makes a
+session link with `umi-link --app next` on the agent server, then commits and pushes the item
+to ~/best/desk. Any failure exits non-zero with the reason on stderr, and UmiNext shows the
+session in Review with it.
+
+    docket-session < session.json        # what UmiNext does
+    docket-session --dry-run < s.json    # print the item instead of writing it
+"""
+
+import json
+import re
+import shlex
+import subprocess
+import sys
+from datetime import date
+from pathlib import Path
+
+HOME = Path.home()
+BEST = HOME / "best"
+DESK = BEST / "desk"
+TAIL_CHARS = 40_000
+
+
+def fail(msg):
+    print(f"docket-session: {msg}", file=sys.stderr)
+    sys.exit(1)
+
+
+def run(*args, cwd=None, input=None):
+    r = subprocess.run(args, cwd=cwd, input=input, capture_output=True, text=True)
+    if r.returncode != 0:
+        fail(f"{' '.join(args[:3])} failed: {r.stderr.strip() or r.stdout.strip()}")
+    return r.stdout
+
+
+def git(cwd, *args):
+    r = subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True)
+    return r.stdout.strip() if r.returncode == 0 else ""
+
+
+def claude_transcript(cwd, session_id):
+    encoded = re.sub(r"[/.]", "-", str(cwd))
+    f = HOME / ".claude" / "projects" / encoded / f"{session_id}.jsonl"
+    if not f.exists():
+        found = list((HOME / ".claude" / "projects").glob(f"*/{session_id}.jsonl"))
+        f = found[0] if found else None
+    if not f:
+        fail(f"no Claude transcript for session {session_id}")
+    turns = []
+    for line in f.read_text(errors="replace").splitlines():
+        try:
+            e = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if e.get("type") not in ("user", "assistant") or e.get("isMeta"):
+            continue
+        content = (e.get("message") or {}).get("content")
+        texts = [content] if isinstance(content, str) else \
+            [c.get("text", "") for c in content or [] if isinstance(c, dict) and c.get("type") == "text"]
+        text = "\n".join(t for t in texts if t.strip())
+        if text:
+            turns.append(f"{e['type'].upper()}: {text}")
+    return turns
+
+
+def codex_transcript(session_id):
+    found = sorted((HOME / ".codex" / "sessions").rglob(f"*{session_id}*.jsonl"))
+    if not found:
+        fail(f"no Codex transcript for session {session_id}")
+    turns = []
+    for line in found[-1].read_text(errors="replace").splitlines():
+        try:
+            e = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        p = e.get("payload") or {}
+        if e.get("type") != "response_item" or p.get("type") != "message" or p.get("role") not in ("user", "assistant"):
+            continue
+        text = "\n".join(c.get("text", "") for c in p.get("content") or [] if isinstance(c, dict))
+        if text.strip():
+            turns.append(f"{p['role'].upper()}: {text}")
+    return turns
+
+
+def tail(turns):
+    out, size = [], 0
+    for t in reversed(turns):
+        if size + len(t) > TAIL_CHARS and out:
+            break
+        out.append(t)
+        size += len(t)
+    return "\n\n".join(reversed(out))
+
+
+PROMPT = """You are filing an agent coding session on Alejo's morning docket. He sent the session \
+there from his terminal so he can review it tomorrow instead of now. Read the end of the \
+transcript below and answer with ONLY a JSON object, no prose and no code fence:
+
+{{"slug": "<3-6 lowercase words joined by dashes naming the work>",
+  "title": "<the work in a few plain words>",
+  "why": "<one line: what the session was doing and why it is on the docket>",
+  "next": "<the decision Alejo should take, verb-first, ending (do), (skip) or (defer)>",
+  "summary": "<two to five short lines: what was done, what's left, what the decision depends on>"}}
+
+Write plainly, short sentences, no jargon he'd have to unpack. Base everything on the transcript; \
+say when something is unclear rather than guessing. The session ended with {ending}.
+
+Transcript (folder {cwd}, {agent}):
+
+{transcript}
+"""
+
+
+def ending(s):
+    if s.get("dialog"):
+        return "a question or permission dialog waiting for Alejo"
+    st = s.get("status") or {}
+    return f"the status line \"{st['line']}\"" if st.get("line") else "no status line"
+
+
+def draft(s, transcript):
+    out = run("claude", "-p", "--output-format", "json",
+              input=PROMPT.format(ending=ending(s), cwd=s["cwd"], agent=s["agent"], transcript=transcript))
+    try:
+        text = json.loads(out)["result"].strip()
+        text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text)
+        d = json.loads(text[text.index("{"):text.rindex("}") + 1])
+    except (ValueError, KeyError, json.JSONDecodeError) as e:
+        fail(f"claude -p didn't return the item as JSON ({e}): {out[:300]}")
+    for k in ("slug", "title", "why", "next", "summary"):
+        if not str(d.get(k, "")).strip():
+            fail(f"claude -p left out {k}")
+    d["slug"] = re.sub(r"[^a-z0-9]+", "-", d["slug"].lower()).strip("-")[:60] or "session"
+    return d
+
+
+def session_link(s, d, folder, remote, branch):
+    q = shlex.quote
+    args = ["new", "--json", "--title", d["title"], "--folder", folder, "--agent", s["agent"],
+            "--resume", s["agent_session"], "--where", "mac", "--from", s.get("host") or "mac",
+            "--app", "next", "--next-session", s["session"]]
+    if remote and branch:
+        args += ["--remote", remote, "--branch", branch]
+    cmd = "sudo -u agent -H /home/agent/.local/bin/umi-link " + " ".join(q(a) for a in args)
+    return json.loads(run("ssh", "agent-server", cmd))
+
+
+def main():
+    dry = "--dry-run" in sys.argv[1:]
+    try:
+        s = json.load(sys.stdin)
+    except json.JSONDecodeError as e:
+        fail(f"stdin isn't the session JSON: {e}")
+    for k in ("session", "cwd", "agent"):
+        if not s.get(k):
+            fail(f"the session JSON has no {k}")
+    if not s.get("agent_session"):
+        fail("the session has no Claude or Codex session id, so there's no transcript to file")
+    cwd = Path(s["cwd"]).resolve()
+    try:
+        folder = str(cwd.relative_to(BEST))
+    except ValueError:
+        fail(f"{cwd} isn't under ~/best, so a session link can't name it")
+
+    turns = claude_transcript(cwd, s["agent_session"]) if s["agent"] == "claude" else codex_transcript(s["agent_session"])
+    if not turns:
+        fail("the transcript has no messages yet")
+    d = draft(s, tail(turns))
+
+    remote = git(cwd, "config", "--get", "remote.origin.url")
+    branch = git(cwd, "branch", "--show-current")
+    common = git(cwd, "rev-parse", "--path-format=absolute", "--git-common-dir")
+    project = Path(common).parent.name if common else cwd.name
+
+    today = date.today().isoformat()
+    link = {"umi": "<umi-next link>", "page": "<page link>"} if dry else session_link(s, d, folder, remote, branch)
+    item = f"""---
+people: []
+projects: [{project}]
+why: {d['why']}
+next: {d['next']}
+queued: {today}
+umi: {link['umi']}
+umi_page: {link['page']}
+---
+
+Sent to the docket by Alejo from UmiNext ({s['agent']} session "{s.get('name') or d['title']}") on {s.get('host') or 'mac'} on {today}.
+
+- Folder: `~/best/{folder}`{f" ({remote}, branch `{branch}`)" if remote and branch else ""}
+- Session: [work on this in UmiNext]({link['page']})
+
+{d['summary'].strip()}
+"""
+    if dry:
+        print(item)
+        return
+    month = DESK / "requested" / today[:7]
+    month.mkdir(parents=True, exist_ok=True)
+    path = month / f"{today}-{d['slug']}.md"
+    n = 2
+    while path.exists():
+        path = month / f"{today}-{d['slug']}-{n}.md"
+        n += 1
+    run("git", "pull", "--rebase", "--autostash", "-q", cwd=DESK)
+    path.write_text(item)
+    rel = str(path.relative_to(DESK))
+    run("git", "add", rel, cwd=DESK)
+    run("git", "commit", "-q", "-m", f"Queue {path.stem[11:]} for the docket (from UmiNext)", "--", rel, cwd=DESK)
+    run("git", "push", "-q", cwd=DESK)
+    print(rel)
+
+
+if __name__ == "__main__":
+    main()

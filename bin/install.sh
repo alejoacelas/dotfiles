@@ -121,6 +121,9 @@ link warp/keybindings.yaml "$HOME/.warp/keybindings.yaml"
 mkdir -p "$HOME/.config/umi"
 link umi/umi.config "$HOME/.config/umi/dotfiles.config"
 link umi/commands   "$HOME/.config/umi/commands"
+# UmiNext: the docket hook (umi-next/docket-session) it runs when a session sent to the docket finishes.
+mkdir -p "$HOME/.config/umi-next"
+link umi-next/docket-session "$HOME/.config/umi-next/docket-hook"
 
 # Create the ~/best container folders.
 BEST_ROOT="$HOME/best"
