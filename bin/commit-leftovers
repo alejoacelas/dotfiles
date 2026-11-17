@@ -1,0 +1,218 @@
+#!/usr/bin/env python3
+"""Commit and push work left uncommitted in the repositories under ~/best.
+
+A repository's uncommitted state (tracked changes plus untracked, unignored files) is
+committed once it has stayed exactly the same for three days, so work someone is
+still doing is never swept up. launchd runs this daily
+(launchd/com.alejoacelas.commit-leftovers.plist).
+
+A repository is left alone and reported on the docket, as one desk generated/ item,
+when its changes hold a secret-looking file or a file too big for GitHub, when it is
+mid-merge or rebase, on a detached HEAD, has no remote, or the push fails.
+
+  commit-leftovers            commit what has been stable for 3 days
+  commit-leftovers --dry-run  say what it would do, change nothing
+"""
+
+import json
+import os
+import re
+import subprocess
+import sys
+import tempfile
+import shutil
+from datetime import date, datetime, timedelta
+from pathlib import Path
+
+ROOT = Path(os.environ.get("COMMIT_LEFTOVERS_ROOT", Path.home() / "best"))  # override for tests
+DESK = ROOT / "desk"
+STATE = Path(os.environ.get("COMMIT_LEFTOVERS_STATE", Path.home() / ".local/state/commit-leftovers.json"))
+STABLE_FOR = timedelta(days=3)
+MAX_DEPTH = 4
+SKIP_DIRS = {".git", "node_modules", ".venv", "venv", "__pycache__", ".next", "dist", "build"}
+EMPTY_TREE = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+TOO_BIG = 95 * 1024 * 1024  # GitHub rejects files over 100 MB
+
+SECRET_NAME = re.compile(
+    r"(^|/)(\.env(\.(?!example$|sample$|tpl$|template$)[^/]*)?|[^/]*\.(pem|key|p12|pfx)|id_(rsa|ed25519|ecdsa)[^/]*|credentials\.json)$"
+)
+SECRET_TEXT = re.compile(
+    rb"sk-ant-[A-Za-z0-9_-]{20,}|sk-[A-Za-z0-9]{32,}|gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}"
+    rb"|xox[abposc]-[A-Za-z0-9-]{10,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|ops_[A-Za-z0-9_-]{40,}"
+)
+
+
+def git(repo, *args, env=None, check=True):
+    r = subprocess.run(["git", "-C", str(repo), *args], capture_output=True, text=True,
+                       env={**os.environ, **(env or {})})
+    if check and r.returncode:
+        raise RuntimeError(f"git {' '.join(args)}: {(r.stderr or r.stdout).strip().splitlines()[:1]}")
+    return r.stdout.strip()
+
+
+def find_repos(base, depth=0):
+    try:
+        entries = list(os.scandir(base))
+    except OSError:
+        return
+    if any(e.name == ".git" for e in entries):
+        yield Path(base)
+    if depth >= MAX_DEPTH:
+        return
+    for e in entries:
+        if e.is_dir(follow_symlinks=False) and e.name not in SKIP_DIRS:
+            yield from find_repos(e.path, depth + 1)
+
+
+def working_tree(repo):
+    """Tree object for the working directory as `git add -A` would stage it."""
+    index = Path(git(repo, "rev-parse", "--path-format=absolute", "--git-path", "index"))
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_index = Path(tmp) / "index"
+        if index.exists():
+            shutil.copy(index, tmp_index)
+        env = {"GIT_INDEX_FILE": str(tmp_index)}
+        git(repo, "add", "-A", env=env)
+        tree = git(repo, "write-tree", env=env)
+    return tree
+
+
+def head_tree(repo):
+    r = git(repo, "rev-parse", "-q", "--verify", "HEAD^{tree}", check=False)
+    return r or EMPTY_TREE
+
+
+def busy(repo):
+    for name in ("MERGE_HEAD", "rebase-merge", "rebase-apply", "CHERRY_PICK_HEAD", "REVERT_HEAD", "BISECT_LOG"):
+        if Path(git(repo, "rev-parse", "--path-format=absolute", "--git-path", name)).exists():
+            return name
+    return None
+
+
+def blockers(repo, base, tree):
+    """Reasons not to commit `tree`: secret-looking or oversized files among the changes."""
+    found = []
+    raw = git(repo, "diff-tree", "-r", "--no-renames", "--diff-filter=A", base, tree)
+    for line in raw.splitlines():
+        if line.split()[1] == "160000":
+            found.append(f"`{line.split(chr(9))[-1]}` is another repository inside this one; ignore it or make it a submodule")
+    out = git(repo, "diff-tree", "-r", "--no-renames", "--diff-filter=AM", "--name-only", base, tree)
+    for path in filter(None, out.splitlines()):
+        full = repo / path
+        if SECRET_NAME.search(path):
+            found.append(f"`{path}` looks like a secret file")
+            continue
+        if not full.is_file() or full.is_symlink():
+            continue  # gitlinks are reported above; symlinks hold no content
+        size = full.stat().st_size
+        if size > TOO_BIG:
+            found.append(f"`{path}` is {size // 2**20} MB, over GitHub's file limit")
+            continue
+        with open(full, "rb") as f:
+            if SECRET_TEXT.search(f.read(4 * 2**20)):
+                found.append(f"`{path}` contains something that looks like a token or key")
+    return found
+
+
+def push(repo):
+    if git(repo, "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}", check=False):
+        git(repo, "push", "-q")
+    elif "origin" in git(repo, "remote").split():
+        git(repo, "push", "-q", "-u", "origin", "HEAD")
+    else:
+        raise RuntimeError("no remote, so the commit stayed on this Mac")
+
+
+def commit(repo, tree, since):
+    parent = git(repo, "rev-parse", "-q", "--verify", "HEAD", check=False)
+    msg = f"Commit work left uncommitted since {since}\n\nCommitted by commit-leftovers after three days unchanged."
+    args = ["commit-tree", tree, "-m", msg] + (["-p", parent] if parent else [])
+    new = git(repo, *args)
+    git(repo, "update-ref", "-m", "commit-leftovers", "HEAD", new, parent or "0" * 40)
+    git(repo, "reset", "-q")  # index to the new HEAD; the working tree is untouched
+    return new
+
+
+def report(problems, dry_run):
+    """One generated/ item per run, listing each repository that needs Alejo."""
+    today = date.today().isoformat()
+    lines = "\n".join(f"- `{repo}`: {why}" for repo, why in problems)
+    body = f"""---
+people: []
+projects: [dotfiles]
+why: commit-leftovers found uncommitted work it could not commit on its own
+next: Fix or clean up each repository below, then the next run commits it (do|defer)
+---
+
+`bin/commit-leftovers` in dotfiles commits work left unchanged for three days. It left
+these alone:
+
+{lines}
+"""
+    if dry_run:
+        print(body)
+        return
+    git(DESK, "pull", "-q", "--rebase", "--autostash")
+    path = DESK / "generated" / today[:7] / f"{today}-uncommitted-work.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(body)
+    rel = str(path.relative_to(DESK))
+    git(DESK, "add", rel)
+    git(DESK, "commit", "-q", "-m", "Report uncommitted work commit-leftovers left alone", "--", rel)
+    git(DESK, "push", "-q")
+
+
+def main():
+    dry_run = "--dry-run" in sys.argv
+    now = datetime.now().replace(microsecond=0)
+    try:
+        state = json.loads(STATE.read_text())
+    except (OSError, ValueError):
+        state = {}
+    new_state, problems = {}, []
+
+    for repo in sorted(find_repos(ROOT)):
+        key = str(repo.relative_to(ROOT))
+        try:
+            tree = working_tree(repo)
+            base = head_tree(repo)
+            if tree == base:
+                continue
+            prev = state.get(key, {})
+            entry = prev if prev.get("tree") == tree else {"tree": tree, "since": now.isoformat()}
+            new_state[key] = entry
+            since = datetime.fromisoformat(entry["since"])
+            if now - since < STABLE_FOR:
+                continue
+            why = busy(repo)
+            if why:
+                reasons = [f"stuck mid-operation ({why})"]
+            elif not git(repo, "symbolic-ref", "-q", "HEAD", check=False):
+                reasons = ["detached HEAD, so there is no branch to commit to"]
+            else:
+                reasons = blockers(repo, base, tree)
+            if reasons:
+                if entry.get("reported") != tree:
+                    problems += [(key, r) for r in reasons]
+                    entry["reported"] = tree
+                continue
+            if dry_run:
+                print(f"would commit {key} (unchanged since {since.date()})")
+                continue
+            sha = commit(repo, tree, since.date().isoformat())
+            new_state.pop(key)
+            print(f"{now.isoformat()} committed {key} {sha[:8]}")
+            push(repo)
+        except Exception as e:  # one broken repository must not stop the rest
+            problems.append((key, str(e)))
+            print(f"{now.isoformat()} {key}: {e}", file=sys.stderr)
+
+    if problems:
+        report(problems, dry_run)
+    if not dry_run:
+        STATE.parent.mkdir(parents=True, exist_ok=True)
+        STATE.write_text(json.dumps(new_state, indent=1, sort_keys=True))
+
+
+if __name__ == "__main__":
+    main()
