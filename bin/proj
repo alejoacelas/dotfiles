@@ -2,7 +2,7 @@
 # proj: create or reopen a dated project folder in ~/best, give it a GitHub repo and start an agent there.
 # Usage: proj <name> [--claude|--codex] [--private|--local]
 #   proj                                         -> pick a project, newest first; type to fuzzy filter;
-#                                                   inside an area (areas/<x>, playbooks/<x>, orgs/<company>) it lists
+#                                                   inside an area (a top-level monorepo such as work/, areas/<x>, orgs/<company>) it lists
 #                                                   that area's folders first and Ctrl-A widens to all of ~/best;
 #                                                   Tab then an instruction runs claude -p there in the background
 #                                                   (in desk when Tab comes before any filter text)
@@ -33,24 +33,33 @@ done
 best="$HOME/best"
 self="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 
-# The area the shell is in, as areas/<x>, playbooks/<x> or orgs/<company>; empty elsewhere.
+# Top-level folders that are not areas themselves.
+not_area='archive desk projects areas orgs'
+
+# The area the shell is in: a top-level area folder such as work, or areas/<x> or
+# orgs/<company>; empty elsewhere.
 current_area() {
   local rel="${PWD#"$best"/}" a b
   [ "$rel" != "$PWD" ] || return 0
-  case "$rel" in
-    areas/?*|playbooks/?*|orgs/?*) IFS=/ read -r a b _ <<<"$rel"; echo "$a/$b" ;;
+  IFS=/ read -r a b _ <<<"$rel"
+  case "$a" in
+    areas|orgs) [ -n "$b" ] && echo "$a/$b" ;;
+    archive|desk|projects) ;;
+    *) echo "$a" ;;
   esac
 }
 
 # Pickable folders as "<creation date> <creation time> <path>". With an area, that area's folders;
-# otherwise everything in projects/, ops/, areas/, playbooks/ and orgs/<company>/, plus desk.
+# otherwise everything in projects/, areas/, orgs/<company>/ and the top-level areas, plus desk.
 # BSD stat and date on macOS, GNU on Linux.
 pickable_folders() {
   local gnu=""; stat -c %W / >/dev/null 2>&1 && gnu=1
   { if [ -n "${1:-}" ]; then
       find "$best/$1" -mindepth 1 -maxdepth 1 -type d ! -name '.*' ! -name node_modules
     else
-      find "$best/projects" "$best/ops" "$best/areas" "$best/playbooks" "$best"/orgs/* -mindepth 1 -maxdepth 1 -type d
+      local tops=() t
+      for t in "$best"/*/; do t="${t%/}"; case " $not_area " in *" ${t##*/} "*) ;; *) tops+=("$t") ;; esac; done
+      find "$best/projects" "$best/areas" "$best"/orgs/* "${tops[@]}" -mindepth 1 -maxdepth 1 -type d ! -name '.*'
       echo "$best/desk"
     fi; } | while IFS= read -r dir; do
     if [ -n "$gnu" ]; then t="$(stat -c %W "$dir")"; d="$(date -d "@$t" +%F)"
@@ -118,7 +127,7 @@ esac
 # An area that is itself a repository holds its entries as plain folders, with no repo of their own.
 monorepo=""
 case "$parent" in
-  "$best"/areas/*|"$best"/playbooks/*)
+  "$best"/areas/*|"$best"/*)
     [ "$(git -C "$parent" rev-parse --show-toplevel 2>/dev/null)" = "$parent" ] && monorepo=1 ;;
 esac
 # Own projects and area entries are dated to the day; client projects, trials and the rest use the month.
@@ -126,10 +135,10 @@ date_format=%Y-%m
 [ "$parent" = "$best/projects" ] || [ -n "$monorepo" ] && date_format=%Y-%m-%d
 slug="$(printf '%s' "$slug" | tr '[:upper:] _' '[:lower:]--' | tr -cd 'a-z0-9-')"
 [ -n "$slug" ] || { echo "proj: name must contain letters or digits" >&2; exit 2; }
-# Client work under orgs/ and playbooks/ is private; everything else is public unless told otherwise.
+# Client work under orgs/ is private; everything else is public unless told otherwise.
 if [ -z "$visibility" ]; then
   case "$parent/" in
-    "$best/orgs/"*|"$best/playbooks/"*) visibility=private ;;
+    "$best/orgs/"*) visibility=private ;;
     *) visibility=public ;;
   esac
 fi

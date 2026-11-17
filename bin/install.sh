@@ -126,7 +126,7 @@ link umi/commands   "$HOME/.config/umi/commands"
 BEST_ROOT="$HOME/best"
 mkdir -p "$BEST_ROOT"
 # Claude Code 2.1.277+ reads AGENTS.md natively; do not recreate project shims.
-for folder in areas archive ops playbooks projects; do
+for folder in areas archive ops projects; do
   mkdir -p "$BEST_ROOT/$folder"
 done
 
