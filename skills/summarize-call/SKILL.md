@@ -141,7 +141,7 @@ Mac; on the agent server, where `gog` runs through the credential broker, a fold
 
 ```bash
 printf 'Being written — check back shortly.\n' > "$CALL_TMP/placeholder.md"
-gog -a <email> -j docs create "<title>" --file "$CALL_TMP/placeholder.md"   # → file.id, file.webViewLink
+gog -a <email> -j docs create "<title>" --file "$CALL_TMP/placeholder.md" [--parent <folder>]   # → file.id, file.webViewLink
 gog -a <email> docs add-tab <id> --title Transcript
 gog -a <email> docs rename-tab <id> --tab t.0 --title Summary      # first tab is born "Tab 1"
 ```
@@ -188,6 +188,8 @@ by the call's context: Impact Ops → `alejo@impact-ops.org`, personal →
 `alejoacelas@gmail.com`; ask if unclear.
 Create archive docs with `gog`, not the Google Drive MCP `create_file` tool, so
 the chosen account owns them.
+For `alejoacelas@gmail.com`, pass `--parent 1VihJf2iQY6h1tSYDTuIW1bgqUi0OT5A8`, the
+Calls folder in My Drive, so the doc doesn't land loose in the Drive root.
 
 ### Step 5: Garble inventory, then tidied transcript
 
