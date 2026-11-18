@@ -1,6 +1,6 @@
 ---
 name: day
-description: Gather what Alejo did on a given day from agent sessions, Umi's focus log, commits, the plans app, Chrome history, calendar and calls. Use when he asks what he worked on, where his time went, or wants a summary, log or update covering one or more days.
+description: Gather what Alejo did on a given day from agent sessions, the focus logs of Umi and Umi Next, commits, the plans app, Chrome history, calendar and calls. Use when he asks what he worked on, where his time went, or wants a summary, log or update covering one or more days.
 ---
 
 # Day
@@ -8,9 +8,11 @@ description: Gather what Alejo did on a given day from agent sessions, Umi's foc
 1. Run `activity.py [YYYY-MM-DD | -N]` from this skill's folder (default today,
    `-1` yesterday) once per day asked about. Add `--json` for the same data as
    JSON. It prints:
-   - Umi's focus for the day: total minutes of keyboard focus in Umi, first and
-     last focus, and breaks of 30 minutes or more. Focus is the best measure of
-     where his attention went. Umi computes it (`umi focus-log --by session`).
+   - Focus for the day across Umi and Umi Next: total minutes of keyboard
+     focus, first and last focus, and breaks of 30 minutes or more. Focus is
+     the best measure of where his attention went. Each app's log is read with
+     `umi-next focus-log --by session`; on days with focus in both apps, rows
+     name their app.
    - Per project (the repository under `~/best`), largest focus first: agent
      sessions with their title, first and last prompt, focus minutes and the
      agent's last summary ("ended with"); other focus, such as files, pages and
@@ -19,6 +21,8 @@ description: Gather what Alejo did on a given day from agent sessions, Umi's foc
    - That day's page from the plans app: his priorities, then notes and his
      evening reflection.
    - Chrome history for every profile, by site, with page titles and rough time.
+   - Last, "Umi unused for N days: retire it?" once Umi has logged no focus for
+     over 7 days. Pass that line on to Alejo.
 
    The day timeline at https://agent-server.tail622085.ts.net/day shows the last 14 days by topic and task;
    `timeline/publish` rebuilds it (launchd runs it hourly).
@@ -39,7 +43,7 @@ description: Gather what Alejo did on a given day from agent sessions, Umi's foc
    what he worked on, in order of time, and how it compared with his
    priorities. Show the draft to him; the plans page is his to edit.
 
-Focus covers only Umi. Time in Chrome, Slack or calls shows up only through
+Focus covers only Umi and Umi Next. Time in Chrome, Slack or calls shows up only through
 Chrome history, the calendar and call summaries.
 
 The output includes private browsing and personal notes. Show it to Alejo, but

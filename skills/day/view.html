@@ -38,6 +38,7 @@ button:disabled { opacity: .35; cursor: default; }
 .daychip .bar { height: 4px; border-radius: 2px; background: var(--accent); margin-top: 5px; min-width: 2px; }
 .summary { margin: 14px 0 4px; font-size: 15px; }
 .summary .muted { color: var(--muted); }
+.f .muted, .other .muted { color: var(--muted); font-weight: normal; }
 .stack { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin: 10px 0 6px; background: var(--chip); }
 .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--muted); }
 .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; }
@@ -139,9 +140,11 @@ function show(k) {
 
   const f = d.focus;
   $("summary").innerHTML = f
-    ? `<b>${mins(f.total_seconds)}</b> focus in Umi, ${f.first}–${f.last}` +
+    ? `<b>${mins(f.total_seconds)}</b> focus` +
+      (Object.keys(f.by_app || {}).length > 1 ? ` <span class="muted">(${Object.entries(f.by_app).map(([a, t]) => `${esc(a)} ${mins(t)}`).join(", ")})</span>` : "") +
+      `, ${f.first}–${f.last}` +
       (f.breaks.length ? ` <span class="muted">· breaks ${f.breaks.map(b => `${b.start}–${b.end}`).join(", ")}</span>` : "")
-    : `<span class="muted">No Umi focus data${d.focus_error ? ": " + esc(d.focus_error) : ""}.</span>`;
+    : `<span class="muted">No focus data${d.focus_error ? ": " + esc(d.focus_error) : ""}.</span>`;
 
   const projects = d.projects.filter(p => !isTemp(p));
   const main = projects.filter(p => p.sessions.length || p.focus_seconds >= 60);
@@ -157,11 +160,11 @@ function show(k) {
     const meta = [p.focus_seconds >= 60 ? mins(p.focus_seconds) + " focus" : "", p.sessions.length ? plural(p.sessions.length, "session") : "", p.commits.length ? plural(p.commits.length, "commit") : ""].filter(Boolean).join(" · ");
     const sessions = p.sessions.map(s => `<div class="sess"><div class="row">
         <span class="t">${s.first}–${s.last}</span><span class="title">${esc(s.title)}</span>
-        ${s.focus_seconds >= 60 ? `<span class="f">${mins(s.focus_seconds)}</span>` : ""}</div>
+        ${s.focus_seconds >= 60 ? `<span class="f">${mins(s.focus_seconds)}${(s.apps || []).length ? ` <span class="muted">${esc(s.apps.join(", "))}</span>` : ""}</span>` : ""}</div>
         ${s.summary ? `<div class="ended">${esc(s.summary)}</div>` : ""}
         <div class="prompts"><p><b>${s.tool}, ${s.prompt_count} prompt${s.prompt_count === 1 ? "" : "s"}, ${esc(s.cwd)}</b></p>
         <p>${esc(s.first_prompt)}</p>${s.prompt_count > 1 ? `<p><b>Last:</b> ${esc(s.last_prompt)}</p>` : ""}</div></div>`).join("");
-    const other = p.focus.filter(g => g.seconds >= 60).map(g => `<div class="other">${mins(g.seconds)} on ${esc(g.kind)} ${esc(g.label)}, ${g.first}–${g.last}</div>`).join("");
+    const other = p.focus.filter(g => g.seconds >= 60).map(g => `<div class="other">${mins(g.seconds)} on ${esc(g.kind)} ${esc(g.label)}, ${g.first}–${g.last}${g.app ? ` <span class="muted">${esc(g.app)}</span>` : ""}</div>`).join("");
     const commits = p.commits.length ? `<details><summary>${p.commits.length} commit${p.commits.length === 1 ? "" : "s"}</summary><ul class="commits">${p.commits.map(c => `<li>${esc(c)}</li>`).join("")}</ul></details>` : "";
     return `<section class="card"><h2>${k >= 0 ? `<span class="dot" style="background:${color(k)}"></span>` : ""}${esc(p.name)}<span class="meta">${meta}</span></h2>${sessions}${other}${commits}</section>`;
   }).join("");
@@ -171,6 +174,7 @@ function show(k) {
   if (temp) extras.push(`${temp.sessions.length} sessions in temporary folders`);
   const runs = Object.entries(d.scripted_runs || {});
   if (runs.length) extras.push(`Scripted runs: ${runs.map(([w, n]) => `${n} in ${esc(w)}`).join(", ")}`);
+  if (d.retire_umi) extras.push(esc(d.retire_umi));
   if (extras.length) html += `<section class="card compact">${extras.map(x => `<div>${x}</div>`).join("")}</section>`;
   $("projects").innerHTML = html || `<section class="card compact">Nothing recorded.</section>`;
 
