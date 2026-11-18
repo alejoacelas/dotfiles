@@ -316,7 +316,7 @@ const DT = (() => {
       if (M.reflection) h += `<h4>Your reflection</h4><details><summary class="dt-mute">${esc(cut(M.reflection, 110))}</summary><div class="dt-refl">${esc(M.reflection)}</div></details>`;
       const notes = [];
       if (M.fromFolders) notes.push("No story yet: topics are folders and all browsing is one topic.");
-      if (!M.day.focus.length) notes.push("No Umi focus log for this day: attention comes from prompts, calls and page visits.");
+      if (!M.day.focus.length) notes.push("No focus log from Umi or Umi Next for this day: attention comes from prompts, calls and page visits.");
       if (M.unassigned) notes.push(`${M.unassigned} events weren't placed in a task.`);
       (data.errors || []).forEach(e => notes.push(e));
       if (notes.length) h += `<h4>Data</h4><ul class="dt-notes">${notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul>`;

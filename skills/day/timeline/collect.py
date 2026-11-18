@@ -2,7 +2,7 @@
 """collect.py: raw, timestamped activity for a range of days, as JSON for the timeline page. Read-only.
 
 Usage: collect.py FIRST_DAY [LAST_DAY] [--out FILE]   (days as YYYY-MM-DD or -N; LAST_DAY defaults to FIRST_DAY)
-Per day: agent sessions with every prompt and when each agent turn ended, Umi focus stretches, commits
+Per day: agent sessions with every prompt and when each agent turn ended, focus stretches from Umi and Umi Next, commits
 (marked when an automation committed them), Chrome visits, calendar events with their filed call
 summaries, and the plans app's page. Times are local "HH:MM:SS"-free minutes since midnight (floats).
 """
@@ -18,6 +18,9 @@ import sys
 import tempfile
 from collections import defaultdict
 from urllib.parse import urlparse
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import focus as focuslog  # noqa: E402  (the skill's folder)
 
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
@@ -222,16 +225,15 @@ def codex_sessions(D):
 
 
 def umi_focus(D):
-    if not shutil.which("umi"):
-        return "Umi isn't installed"
-    try:
-        r = subprocess.run(["umi", "focus-log", "--since", D.start.isoformat(), "--until", D.end.isoformat(), "--json"],
-                           capture_output=True, text=True, timeout=120)
-    except subprocess.TimeoutExpired:
-        return "Umi didn't answer within 120 seconds"
-    if r.returncode != 0:
-        return short(r.stderr or r.stdout, 200)
-    for st in json.loads(r.stdout).get("stretches", []):
+    """Focus stretches from Umi and Umi Next together: one stream of attention."""
+    stretches, errors = [], []
+    for app in focuslog.APPS:
+        log = focuslog.read(app, D.start, D.end)
+        if log and "error" in log:
+            errors.append(log["error"])
+        elif log:
+            stretches += log.get("stretches", [])
+    for st in stretches:
         a, b = local(st["start_ts"]), local(st["end_ts"])
         k, m0 = D.key(a)
         if not k:
@@ -244,7 +246,7 @@ def umi_focus(D):
                                   "session": (st.get("agent") or {}).get("session"),
                                   "title": short(st.get("title", ""), 120), "project": project(path),
                                   "path": where(path)})
-    return None
+    return "; ".join(errors) or None
 
 
 def commits(D):
