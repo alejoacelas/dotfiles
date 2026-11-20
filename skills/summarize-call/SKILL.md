@@ -13,7 +13,7 @@ rewired to file into `~/best/desk`. Reads transcripts over Granola's
 
 The agent server runs this pipeline on its own for every new Granola call: within about 20
 minutes of a call ending it files the call in desk, creates the doc, shares it with the
-participants and DMs Alejo the link (`desk-pipeline/calls.py` and `jobs/call.md` in the
+participants and emails Alejo the doc with links he could share (Step 10) (`desk-pipeline/calls.py` and `jobs/call.md` in the
 [clerk repository](https://github.com/alejoacelas/2026-11-clerk), `~/best/ops/clerk`, which follow
 this file). Use this skill by hand as the fallback: for a call the server missed or failed
 on, or to redo one. First check that the call isn't filed already:
@@ -32,7 +32,7 @@ the person, and pass on every link, id or detail the user gave (save a pasted
 transcript to a file and give its path). Say the run is headless, so it must not
 guess names or emails, must share the doc only as Step 4 describes, and must end
 by reporting the doc link, the files written, the participant's email, whether it
-shared the doc, and any open questions. Keep the log outside the repository, such
+shared the doc, whether it sent Alejo the links email, and any open questions. Keep the log outside the repository, such
 as in the scratchpad. When the run finishes, relay the doc link, the sharing
 result and its questions; if the run couldn't confirm an email, ask Alejo for it
 and share the doc yourself.
@@ -180,7 +180,8 @@ gog -a <email> drive share <id> --to user --email <participant-email> --role wri
 
 Skip sharing only when Alejo asks to keep the doc private. If none of the
 sources yields an email, say so and ask for the address — never guess one. The
-Drive invitation is the only email the participant gets.
+Drive invitation is the only email the participant gets; Alejo gets the links email
+of Step 10.
 
 Two tabs, **Summary** then **Transcript** — the Docs API supports tabs now, so
 no more two-section single body. Pass `-a <email>` to every `gog` call, choosing
@@ -263,6 +264,15 @@ apply when an existing call or summary is edited or renamed:
    (`.../document/d/<id>/edit`, by ID so a rename can't break it) and `gist:` with
    a one-or-two-sentence gist in double quotes.
 
+### Step 10: Email Alejo the links to share
+
+Once the doc is filled and shared, send Alejo one email, to himself only, with the doc
+link, the links hinted at in the call and at most 7 others he could share with the other
+participants, each marked private or public. What to collect, where to look and the
+email's exact shape are in [`references/call-links.md`](references/call-links.md). Send
+it even when the doc stayed private. On the agent server the job sends it, from the
+links the run returns.
+
 ## Batch runs
 
 For a batch, dispatch one subagent per call so cleaning stays off the main
@@ -270,5 +280,5 @@ context. Give each: the doc id, the confirmed participant names, the full
 contents of both reference files (subagents can also Read them from this
 skill folder), and the exact output paths. Create every doc (Step 4) and post
 all links first, then have each agent run its own Steps 5–7 (earlier
-same-person calls are already committed); run Steps 8–9 once at the end, over
+same-person calls are already committed); run Steps 8–10 once at the end, over
 the whole batch — parallel agents can't see each other's slugs.
