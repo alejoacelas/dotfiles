@@ -64,7 +64,8 @@ context and pass it explicitly on every cloud write.
 - `alejo-m4` is the main Mac, `mac-air-2` the other Mac and `agent-server` the
   server; each reaches the others with `ssh <name>` over Tailscale. Only the main
   Mac has dotfiles and `~/best`. The other Mac holds only projects started on it.
-  Do computer use and browser testing on the other Mac.
+  Do computer use and browser testing on the other Mac. When a browser step needs
+  me (signing in, 2FA, a confirmation), use the browser on the Mac I'm working on.
 - On the server, work as the `agent` user (`sudo -iu agent`). Its `gh`, `gog` and
   git pushes go through a credential broker; to give it an API key, add a broker
   route ([agent user setup](/Users/alejo/best/ops/server/docs/setup.md#agent-user)).
