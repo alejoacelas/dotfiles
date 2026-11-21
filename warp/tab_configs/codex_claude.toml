@@ -33,7 +33,7 @@ WARP_PROMPT_END_8a93d729
 [params.project]
 type = "text"
 description = "Project folder (both agents share this directory)"
-default = "~/best/fun"
+default = "~/best"
 
 [params.prompt]
 type = "text"
