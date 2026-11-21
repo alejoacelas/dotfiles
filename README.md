@@ -14,7 +14,7 @@ brew bundle --file ~/best/areas/dotfiles/Brewfile
 ```
 
 On an existing machine, run just the last command. The installer links configuration
-and skills, sets up workspace container files, and enables the repository's commit guard. It
+and skills, creates the `~/best` container folders, and enables the repository's commit guard. It
 backs up conflicting real files. The Codex app retains ownership of its base config.
 
 ## Where things live
@@ -82,6 +82,8 @@ repository, checked out at `skill-cases/` and Git-ignored here:
 ```sh
 gh repo clone alejoacelas/skill-cases ~/best/areas/dotfiles/skill-cases
 ```
+
+## Helpers
 
 `bin/adb-phone` connects the Android test phone and forwards any supplied `adb`
 arguments to it. Use `~/best/areas/dotfiles/bin/adb-phone`; shared helpers live here rather
