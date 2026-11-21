@@ -10,6 +10,9 @@ account `mac-agents-rw` can read and write `mac-agents`. The server's token in
 `server-agents-rw` can read and write `server-agents`. Keep these bootstrap tokens
 outside the agent vaults.
 
+`summarize-call` reads `GRANOLA_API_KEY` from its ignored `.env`: account `my.1password.com`,
+vault `server-agents`, item `GRANOLA_API_KEY — desk-pipeline`, field `credential`.
+
 Archive all files retired from dotfiles in `~/best/archive/dotfiles/`.
 
 `codex/config.toml` is the one Codex configuration; Codex writes changes such as
