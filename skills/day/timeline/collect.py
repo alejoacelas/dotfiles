@@ -11,20 +11,17 @@ import glob
 import json
 import os
 import re
-import shutil
-import sqlite3
 import subprocess
 import sys
-import tempfile
 from collections import defaultdict
 from urllib.parse import urlparse
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import focus as focuslog  # noqa: E402  (the skill's folder)
+from sources import chrome_profiles, chrome_visits, git_repos, is_noise  # noqa: E402
 
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
-CHROME = os.path.join(HOME, "Library/Application Support/Google/Chrome")
 PLANS_HOST = "agent-server"
 PLANS_DIR = "~/.local/share/daily-plans"
 ACCOUNT = "alejoacelas@gmail.com"
@@ -86,12 +83,6 @@ class Days:
 
     def day(self, k):
         return self.out[k]
-
-
-def is_noise(text):
-    return not text.strip() or text.lstrip().startswith(
-        ("<local-command", "<system-reminder", "<task-notification", "<bash-", "Caveat:", "# AGENTS.md",
-         "<environment_context", "<user_instructions", "This session is being continued", "[Request interrupted"))
 
 
 def add_session(D, s):
@@ -250,11 +241,8 @@ def umi_focus(D):
 
 
 def commits(D):
-    repos = subprocess.run(["find", BEST, "-maxdepth", "6", "-name", ".git", "-type", "d", "-not", "-path",
-                            "*/node_modules/*"], capture_output=True, text=True).stdout.split()
     seen = set()
-    for git in sorted(repos):
-        repo = os.path.dirname(git)
+    for repo in git_repos(BEST):
         log = subprocess.run(["git", "-C", repo, "log", "--all", "--no-merges", f"--since={D.start.isoformat()}",
                               f"--until={D.end.isoformat()}", "--format=@@%h|%ct|%cn|%s", "--shortstat"],
                              capture_output=True, text=True).stdout
@@ -280,29 +268,14 @@ def commits(D):
 
 
 def chrome(D):
-    try:
-        info = json.load(open(os.path.join(CHROME, "Local State")))["profile"]["info_cache"]
-    except (OSError, ValueError, KeyError):
-        return
-    epoch = dt.datetime(1601, 1, 1, tzinfo=dt.timezone.utc)
-    lo, hi = (int((x - epoch).total_seconds() * 1e6) for x in (D.start, D.end))
-    for folder, meta in info.items():
-        src = os.path.join(CHROME, folder, "History")
-        if not os.path.exists(src):
-            continue
-        with tempfile.TemporaryDirectory() as tmp:
-            db = os.path.join(tmp, "History")
-            shutil.copy(src, db)
-            rows = sqlite3.connect(db).execute(
-                "SELECT v.visit_time, v.visit_duration, u.url, u.title FROM visits v JOIN urls u ON u.id = v.url "
-                "WHERE v.visit_time >= ? AND v.visit_time < ? ORDER BY v.visit_time", (lo, hi)).fetchall()
-        for when, dur, url, title in rows:
-            k, m = D.key((epoch + dt.timedelta(microseconds=when)).astimezone())
+    for folder, name, _ in chrome_profiles():
+        for t, dur, url, title in chrome_visits(folder, D.start, D.end):
+            k, m = D.key(t)
             if not k:
                 continue
             host = (urlparse(url).hostname or url.split(":")[0]).removeprefix("www.")
-            D.day(k)["visits"].append({"m": round(m, 2), "dur": round(min(dur / 6e7, 120), 2), "host": host,
-                                       "title": short(title or url, 140), "profile": meta.get("name", folder)})
+            D.day(k)["visits"].append({"m": round(m, 2), "dur": round(min(dur / 60, 120), 2), "host": host,
+                                       "title": short(title or url, 140), "profile": name})
 
 
 def calendar(D):

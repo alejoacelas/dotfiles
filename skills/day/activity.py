@@ -10,19 +10,16 @@ import datetime as dt
 import glob
 import json
 import os
-import shutil
-import sqlite3
 import subprocess
 import sys
-import tempfile
 from collections import defaultdict
 from urllib.parse import urlparse
 
 import focus as focuslog
+from sources import chrome_profiles, chrome_visits, git_repos, is_noise
 
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
-CHROME = os.path.join(HOME, "Library/Application Support/Google/Chrome")
 PLANS_HOST = "agent-server"
 PLANS_DIR = "~/.local/share/daily-plans"
 
@@ -61,12 +58,6 @@ def touched_today(path):
 
 def where(cwd):
     return cwd.replace(BEST + "/", "").replace(HOME, "~") if cwd else "?"
-
-
-def is_noise(text):
-    return not text.strip() or text.lstrip().startswith(
-        ("<local-command", "<system-reminder", "<task-notification", "<bash-", "Caveat:", "# AGENTS.md",
-         "<environment_context", "<user_instructions", "This session is being continued"))
 
 
 def claude_sessions():
@@ -162,12 +153,8 @@ def codex_sessions():
 
 
 def commits():
-    repos = subprocess.run(
-        ["find", BEST, "-maxdepth", "6", "-name", ".git", "-type", "d", "-not", "-path", "*/node_modules/*"],
-        capture_output=True, text=True).stdout.split()
     out = []
-    for git in sorted(repos):
-        repo = os.path.dirname(git)
+    for repo in git_repos(BEST):
         log = subprocess.run(
             ["git", "-C", repo, "log", "--all", "--no-merges", "--date=format-local:%H:%M",
              f"--since={START.isoformat()}", f"--until={END.isoformat()}", "--format=%ad %s"],
@@ -191,39 +178,22 @@ def plans():
 
 def chrome():
     """Per profile: sites by time on page, each with its distinct page titles."""
-    try:
-        info = json.load(open(os.path.join(CHROME, "Local State")))["profile"]["info_cache"]
-    except (OSError, ValueError, KeyError):
-        return []
-    epoch = dt.datetime(1601, 1, 1, tzinfo=dt.timezone.utc)
-    lo = int((START - epoch).total_seconds() * 1e6)
-    hi = int((END - epoch).total_seconds() * 1e6)
     out = []
-    for folder, meta in info.items():
-        src = os.path.join(CHROME, folder, "History")
-        if not os.path.exists(src):
-            continue
-        with tempfile.TemporaryDirectory() as tmp:  # Chrome locks the live file
-            db = os.path.join(tmp, "History")
-            shutil.copy(src, db)
-            rows = sqlite3.connect(db).execute(
-                "SELECT v.visit_time, v.visit_duration, u.url, u.title FROM visits v "
-                "JOIN urls u ON u.id = v.url WHERE v.visit_time >= ? AND v.visit_time < ? "
-                "ORDER BY v.visit_time", (lo, hi)).fetchall()
+    for folder, name, account in chrome_profiles():
+        rows = chrome_visits(folder, START, END)
         sites = defaultdict(lambda: {"visits": 0, "secs": 0, "first": None, "last": None, "titles": []})
-        for when, dur, url, title in rows:
+        for t, dur, url, title in rows:
             host = urlparse(url).hostname or url.split(":")[0]
             host = host.removeprefix("www.")
-            t = (epoch + dt.timedelta(microseconds=when)).astimezone()
             s = sites[host]
             s["visits"] += 1
-            s["secs"] += min(dur / 1e6, 1800)  # cap tabs left open at 30 min a visit
+            s["secs"] += min(dur, 1800)  # cap tabs left open at 30 min a visit
             s["first"] = s["first"] or t
             s["last"] = t
             title = short(title or url, 90)
             if title not in s["titles"]:
                 s["titles"].append(title)
-        label = f"{meta.get('name', folder)} ({meta.get('user_name') or folder})"
+        label = f"{name} ({account})"
         out.append((label, len(rows), sorted(sites.items(), key=lambda kv: -kv[1]["secs"])))
     return out
 

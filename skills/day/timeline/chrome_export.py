@@ -10,36 +10,19 @@ read into ~/best/desk/links/. Each visit: t (local ISO time), url, title, dur (s
 import datetime as dt
 import json
 import os
-import shutil
-import sqlite3
 import sys
-import tempfile
 
-CHROME = os.path.expanduser("~/Library/Application Support/Google/Chrome")
-EPOCH = dt.datetime(1601, 1, 1, tzinfo=dt.timezone.utc)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from sources import chrome_profiles, chrome_visits  # noqa: E402  (the skill's folder)
 
 
 def visits(days):
-    try:
-        info = json.load(open(os.path.join(CHROME, "Local State")))["profile"]["info_cache"]
-    except (OSError, ValueError, KeyError):
-        return []
-    lo = int((dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=days) - EPOCH).total_seconds() * 1e6)
+    start = dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=days)
     out = []
-    for folder, meta in info.items():
-        src = os.path.join(CHROME, folder, "History")
-        if not os.path.exists(src):
-            continue
-        with tempfile.TemporaryDirectory() as tmp:  # Chrome locks the live file
-            db = os.path.join(tmp, "History")
-            shutil.copy(src, db)
-            rows = sqlite3.connect(db).execute(
-                "SELECT v.visit_time, v.visit_duration, u.url, u.title FROM visits v JOIN urls u ON u.id = v.url "
-                "WHERE v.visit_time >= ? ORDER BY v.visit_time", (lo,)).fetchall()
-        for when, dur, url, title in rows:
-            t = (EPOCH + dt.timedelta(microseconds=when)).astimezone()
+    for folder, name, _ in chrome_profiles():
+        for t, dur, url, title in chrome_visits(folder, start):
             out.append({"t": t.isoformat(timespec="seconds"), "url": url, "title": title or "",
-                        "dur": round(min(dur / 1e6, 1800)), "profile": meta.get("name", folder)})
+                        "dur": round(min(dur, 1800)), "profile": name})
     return sorted(out, key=lambda v: v["t"])
 
 
