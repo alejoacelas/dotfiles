@@ -8,4 +8,4 @@ live="$HOME/.claude/settings.json"
 [ -L "$live" ] && exit 0
 cp "$live" "$repo" && ln -sf "$repo" "$live" || {
   echo '{"systemMessage":"dotfiles: ~/.claude/settings.json is not a symlink and relinking failed"}'; exit 0; }
-echo '{"systemMessage":"dotfiles: ~/.claude/settings.json had been replaced by a plain file; copied it into the repo and relinked. Commit ai/dotfiles."}'
+echo '{"systemMessage":"dotfiles: ~/.claude/settings.json had been replaced by a plain file; copied it into the repo and relinked. Commit ~/best/areas/dotfiles."}'
