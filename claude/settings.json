@@ -35,28 +35,14 @@
       "Bash(python3:*)",
       "Bash(pip3:*)",
       "Bash(pip:*)",
-      "Bash(gh:*)",
-      "Bash(codex-companion)",
-      "Bash(codex-companion help)",
-      "Bash(codex-companion help *)",
-      "Bash(codex-companion review)",
-      "Bash(codex-companion review *)",
-      "Bash(codex-companion adversarial-review)",
-      "Bash(codex-companion adversarial-review *)",
-      "Bash(codex-companion plan-review *)",
-      "Bash(codex-companion status)",
-      "Bash(codex-companion status *)",
-      "Bash(codex-companion result)",
-      "Bash(codex-companion result *)",
-      "Bash(codex-companion cancel)",
-      "Bash(codex-companion cancel *)"
+      "Bash(gh:*)"
     ],
     "defaultMode": "auto"
   },
+  "model": "opus",
   "skillOverrides": {
     "anthropic-skills:summarise-granola": "off",
     "summarise-granola": "off",
-    "resolve-denied-toolcall": "off",
     "dataviz": "off",
     "artifact-diagramming": "off",
     "artifact-capabilities": "off",
@@ -93,7 +79,9 @@
     ]
   },
   "enabledPlugins": {
-    "umi@umi": true
+    "umi@umi": true,
+    "swift-lsp@claude-plugins-official": true,
+    "cc-plugin-privacy@builtin": false
   },
   "extraKnownMarketplaces": {
     "alignment-hive": {
@@ -115,7 +103,7 @@
       "effortLevel": "xhigh"
     },
     "claude-opus-5-5": {
-      "effortLevel": "high"
+      "effortLevel": "medium"
     }
   },
   "remote": {
@@ -127,5 +115,34 @@
   "theme": "dark",
   "switchModelsOnFlag": true,
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None; personal setup of one person",
+      "**Cloud provider(s)**: Fly.io, Cloudflare, Vercel and Google Cloud on the personal account",
+      "**Repository visibility**: every folder under `~/best` is its own GitHub repository under `alejoacelas`; public unless it holds credentials, employer or client information, or others' non-public information",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: 1Password (`op`, `op-agent`); API keys loaded on demand into ignored `.env` files; never print, commit, or disclose secret values",
+      "**Default / protected branches**: `main`, unprotected; agents commit and push to it directly",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: Tailscale tailnet joining this Mac, `mac-air-2` and `agent-server`",
+      "**Host containment**: None configured — assume an ordinary developer machine with open internet",
+      "**Source control**: github.com/alejoacelas",
+      "**Trusted internal domains**: agent-server.tail622085.ts.net",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: agent-server.tail622085.ts.net (Tailscale-reachable agent server)",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: ignored `.env` files in any repository and `~/.config/mac-agents/.env` — treat as credential-bearing",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development and personal task/inbox management across the repositories in `~/best`",
+      "**Trusted repos**: every repository under `/Users/alejo/best`",
+      "**Org-specific CLIs**: `gog` (Google Workspace), `op` / `op-agent` (1Password), `umi` / `umi-next` (terminal app), `tg` (Telegram), `warp-agent`, `hcloud` (Hetzner Cloud)",
+      "Routine under `/Users/alejo/best/`: file, git and task operations local to these repositories"
+    ]
+  }
 }
