@@ -1,10 +1,8 @@
 tap "dopplerhq/cli"
-# Command-line fuzzy finder, used by proj --list and fzf-tab
+# Command-line fuzzy finder, used by proj's project picker
 brew "fzf"
 # Completion descriptions for ~1,000 command-line tools (shell/completion.zsh)
 brew "carapace"
-# Tab completion menu filtered with fzf (shell/completion.zsh)
-brew "fzf-tab"
 # Grey command suggestions from history (shell/completion.zsh)
 brew "zsh-autosuggestions"
 # GitHub command-line tool
@@ -19,6 +17,8 @@ brew "node@24", link: true
 brew "python@3.13"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# Encrypted SQLite, for reading the Signal Desktop database (skills/use-signal)
+brew "sqlcipher"
 # Rust toolchain installer
 brew "rustup"
 # Extremely fast Python package installer and resolver, written in Rust
