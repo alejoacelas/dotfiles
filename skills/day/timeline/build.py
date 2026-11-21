@@ -36,17 +36,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *a, **k):
         super().__init__(*a, directory=OUT, **k)
 
-    def do_POST(self):
-        if self.path != "/answers":
-            self.send_error(404)
-            return
-        body = self.rfile.read(int(self.headers.get("Content-Length", 0)))
-        json.loads(body)  # refuse anything that isn't JSON
-        with open(os.path.join(OUT, "answers.json"), "wb") as f:
-            f.write(body)
-        self.send_response(204)
-        self.end_headers()
-
     def log_message(self, *a):
         pass
 
@@ -61,11 +50,10 @@ def main():
                        check=True)
         subprocess.run([sys.executable, os.path.join(HERE, "story.py"), raw], check=True)
         data = open(raw).read()
-        for tpl in ("index.html",):
-            open(os.path.join(OUT, tpl), "w").write(page(tpl, data))
+        open(os.path.join(OUT, "index.html"), "w").write(page("index.html", data))
         print(os.path.join(OUT, "index.html"))
     if "--serve" in sys.argv or "--serve-only" in sys.argv:
-        print(f"http://127.0.0.1:{PORT}/choices.html")
+        print(f"http://127.0.0.1:{PORT}/index.html")
         if "--no-open" not in sys.argv:
             subprocess.run(["open", f"http://127.0.0.1:{PORT}/index.html"])
         http.server.ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
