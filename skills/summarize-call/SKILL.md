@@ -13,8 +13,8 @@ rewired to file into `~/best/desk`. Reads transcripts over Granola's
 
 The agent server runs this pipeline on its own for every new Granola call: within about 20
 minutes of a call ending it files the call in desk, creates the doc, shares it with the
-participants and emails Alejo the doc with links he could share (Step 10) (`desk-pipeline/calls.py` and `jobs/call.md` in the
-[clerk repository](https://github.com/alejoacelas/2026-11-clerk), `~/best/ops/clerk`, which follow
+participants and emails Alejo the doc with links he could share (Step 10) (`desk-pipeline/calls.py` and
+`desk-pipeline/jobs/call.md` in [clerk](https://github.com/alejoacelas/ops/tree/main/clerk), `~/best/ops/clerk`, which follow
 this file). Use this skill by hand as the fallback: for a call the server missed or failed
 on, or to redo one. First check that the call isn't filed already:
 `rg -l '^thread: <note id>' ~/best/desk/comms`.
@@ -57,7 +57,7 @@ valid key. Store new keys in 1Password, explicitly verifying the account and vau
 Retrieve the key on demand with `op` into `$CALL_SKILL/.env` after confirming the
 file is Git-ignored, untracked, and owner-only (`chmod 600`). Keep values out of
 terminal output and chat. Record the variable's purpose and the verified
-1Password account, vault, item, and field in the repository's README.
+1Password account, vault, item, and field in the repository's `AGENTS.md`.
 
 The environment variable overrides the `.env` file. When `GRANOLA_API_BASE` is set (the
 agent server sets it to its credential broker, which adds the key), no key is needed. The helper uses Python's

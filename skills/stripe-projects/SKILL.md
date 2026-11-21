@@ -32,7 +32,7 @@ The CLI manages `.projects/` and writes credentials to the configured environmen
 file. Before credential writes, ensure the destination is Git-ignored, untracked,
 and owner-only (`chmod 600`); reuse `.env`. Store newly obtained keys in 1Password,
 verifying the account and vault. Retrieve keys with `op` and document variable
-purposes and 1Password account, vault, item, and field in the project's README.
+purposes and 1Password account, vault, item, and field in the project's `AGENTS.md`.
 Keep secret values out of command output and chat.
 
 Apply confirmation flags to choices already authorized by the user. Follow the
