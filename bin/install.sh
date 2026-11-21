@@ -125,6 +125,19 @@ link umi/commands   "$HOME/.config/umi/commands"
 mkdir -p "$HOME/.config/umi-next"
 link umi-next/docket-session "$HOME/.config/umi-next/docket-hook"
 
+# launchd jobs: copy each tracked job into ~/Library/LaunchAgents (launchd won't load a
+# symlinked job) and reload it when it changed.
+for plist in "$DOTFILES"/launchd/*.plist "$DOTFILES"/skills/day/timeline/mac/*.plist; do
+  [ -e "$plist" ] || continue
+  dst="$HOME/Library/LaunchAgents/$(basename "$plist")"
+  if cmp -s "$plist" "$dst"; then printf '  ok      %s\n' "${dst/#$HOME/~}"; continue; fi
+  mkdir -p "$(dirname "$dst")"
+  cp "$plist" "$dst"
+  launchctl bootout "gui/$(id -u)" "$dst" 2>/dev/null || true
+  launchctl bootstrap "gui/$(id -u)" "$dst"
+  printf '  loaded  %s\n' "${dst/#$HOME/~}"
+done
+
 # Create the ~/best container folders.
 BEST_ROOT="$HOME/best"
 mkdir -p "$BEST_ROOT"
