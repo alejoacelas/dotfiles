@@ -15,7 +15,7 @@ type = "terminal"
 shell = "zsh"
 directory = "{{project}}"
 is_focused = true
-commands = ['''codex --dangerously-bypass-approvals-and-sandbox --profile cli -- "$(cat <<'WARP_PROMPT_END_8a93d729'
+commands = ['''codex --dangerously-bypass-approvals-and-sandbox -- "$(cat <<'WARP_PROMPT_END_8a93d729'
 {{prompt}}
 WARP_PROMPT_END_8a93d729
 )"''']

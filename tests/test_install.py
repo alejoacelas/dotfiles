@@ -8,7 +8,7 @@ import unittest
 class InstallTests(unittest.TestCase):
     def test_optional_private_skills_install_for_selected_clients(self):
         source = Path(__file__).resolve().parents[1] / 'bin/install.sh'
-        phase = source.read_text().split('# The app owns config.toml;')[0]
+        phase = source.read_text().split('# One Codex configuration for every session.')[0]
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
             repo = root / 'dotfiles'

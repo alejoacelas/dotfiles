@@ -12,8 +12,8 @@ outside the agent vaults.
 
 Archive all files retired from dotfiles in `~/best/archive/dotfiles/`.
 
-The Codex app owns its base config; CLI overrides stay in codex/cli.config.toml.
-Verify both clients with fresh sessions after hook changes.
+`codex/config.toml` is the one Codex configuration; Codex writes changes such as
+folder trust through its link, so commit them. Verify both clients with fresh sessions after hook changes.
 
 Before editing Claude settings, check that `~/.claude/settings.json` still links to
 this repo; Claude can replace that link when saving settings. Neither settings file

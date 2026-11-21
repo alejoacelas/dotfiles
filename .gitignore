@@ -1,8 +1,6 @@
 .DS_Store
 *.bak
 *.pre-symlink.*
-# The Codex app owns its base config; CLI settings live in codex/cli.config.toml.
-codex/config.toml
 **/__pycache__/
 *.pyc
 # Independently versioned private skill sources.

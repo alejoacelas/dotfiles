@@ -98,8 +98,8 @@ for skill in "$DOTFILES"/skills/* "$DOTFILES"/private-skills/skills/* "$DOTFILES
 done
 prune_stale_dotfiles_skill_links "$HOME/.agents/skills"
 prune_stale_dotfiles_skill_links "$HOME/.codex/skills"
-# The app owns config.toml; CLI-only overrides live in the explicit cli profile.
-link codex/cli.config.toml "$HOME/.codex/cli.config.toml"
+# One Codex configuration for every session.
+link codex/config.toml "$HOME/.codex/config.toml"
 link shell/zprofile       "$HOME/.zprofile"
 link git/gitconfig        "$HOME/.gitconfig"
 link claude/settings.json "$HOME/.claude/settings.json"

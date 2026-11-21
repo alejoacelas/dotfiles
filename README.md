@@ -15,7 +15,7 @@ brew bundle --file ~/best/areas/dotfiles/Brewfile
 
 On an existing machine, run just the last command. The installer links configuration
 and skills, creates the `~/best` container folders, and enables the repository's commit guard. It
-backs up conflicting real files. The Codex app retains ownership of its base config.
+backs up conflicting real files.
 
 ## Where things live
 
@@ -26,7 +26,7 @@ backs up conflicting real files. The Codex app retains ownership of its base con
 | `skills/` | Shared custom skills for Claude Code and Codex |
 | `claude/skills/`, `codex/skills/` | Client-specific exceptions |
 | `codex/hooks.json`, `codex/rules/` | Codex hooks and rules |
-| `codex/cli.config.toml` | CLI settings for `codex --profile cli` |
+| `codex/config.toml` | Codex settings |
 | `shell/zprofile`, `git/gitconfig`, `Brewfile` | Shell, Git and Homebrew configuration |
 | `shell/completion.zsh` | Tab menu and grey suggestions; `~/.zshrc` sources it |
 | `warp/tab_configs/` | Warp tab presets |
@@ -123,7 +123,6 @@ Choose **Codex + Claude** from Warp’s new-tab menu. Enter a project folder and
 one prompt to start Codex on the left and Claude Code on the right. Both run
 interactively with full permissions in the same directory; use this for parallel
 analysis, or give each agent separate work before letting both edit files.
-Codex uses the existing `cli` profile.
 
 The preset is `warp/tab_configs/codex_claude.toml`. Prompt text is passed through
 a quoted heredoc so ordinary quotes, dollar signs, and backticks stay literal;

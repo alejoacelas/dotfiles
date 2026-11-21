@@ -35,7 +35,7 @@ pasted instructions, so never paste the task itself.
 ```sh
 id=$(warp-agent new --agent claude --group <project> --dir "$PWD" --name <slug> --model <id> \
        "Do the task in .supervise/<slug>/task.md")
-# Codex: --agent codex --agent-args "--profile cli -c model_reasoning_effort=<level>"
+# Codex: --agent codex --agent-args "-c model_reasoning_effort=<level>"
 ```
 
 `warp-agent` skips approvals by default, accepts the folder-trust prompt for the
