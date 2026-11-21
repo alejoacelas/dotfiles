@@ -24,6 +24,8 @@ CODEX_SKILL_ROOTS = [
     os.path.join(HOME, ".codex/skills"),
 ]
 SKIP_DIRS = {".git", "node_modules", "archive", ".venv", "venv", "__pycache__"}
+# Worktrees repeat their main checkout's instruction files.
+PAIR_SKIP_DIRS = SKIP_DIRS | {".worktrees", ".claude"}
 
 hard = []   # (path, message) — dangling links, real breakage
 unmanaged = []  # Installed skills outside the configured sources.
@@ -52,7 +54,7 @@ def check_instruction_pairs():
     """CLAUDE.md + AGENTS.md in the same dir: flag when both are real files and differ.
     A symlinked AGENTS.md (intentional identity) is fine and skipped."""
     for dirpath, dirnames, filenames in os.walk(BEST):
-        dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
+        dirnames[:] = [d for d in dirnames if d not in PAIR_SKIP_DIRS]
         if "CLAUDE.md" in filenames and "AGENTS.md" in filenames:
             c = os.path.join(dirpath, "CLAUDE.md")
             a = os.path.join(dirpath, "AGENTS.md")
