@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # proj: create or reopen a dated project folder in ~/best, give it a GitHub repo and start an agent there.
-# Usage: proj <name> [--claude|--codex] [--private|--local]
+# Usage: proj <name> [--claude|--codex] [--private|--local] [--repo-later]
 #   proj                                         -> pick a project, newest first; type to fuzzy filter;
 #                                                   inside an area (a top-level monorepo such as work/, areas/<x>, orgs/<company>) it lists
 #                                                   that area's folders first and Ctrl-A widens to all of ~/best;
@@ -10,6 +10,11 @@
 #                                                   inside an area repo, <area>/YYYY-MM-DD-morning-notes with no new repo
 #   proj orgs/impact-ops/status-tracker          -> ~/best/orgs/impact-ops/YYYY-MM-status-tracker, private repo
 #   proj odd-idea --local                        -> no GitHub repo
+#   proj odd-idea --repo-later                   -> the folder at once; the GitHub repo is made in the
+#                                                   background (log in ~/.local/state/proj/repos)
+#   proj --list [--here]                         -> the picker's list, one path per line relative to ~/best;
+#                                                   --here puts the current area's folders first
+# A name inside any repository (areas/dotfiles/x, areas/agent-tools/mac/x) is a plain dated folder, no repo.
 # New folders get a first commit and a GitHub repo named <name>; the URL is printed.
 # An existing folder whose name ends in -<name> is reopened instead, and its remote URL is printed.
 # The proj shell function in shell/zprofile cds into the picked or created folder.
@@ -17,10 +22,12 @@ set -euo pipefail
 
 usage() { sed -n '2,14s/^# \{0,1\}//p' "$0" >&2; exit 2; }
 
-agent="" name="" visibility="" list=""
+agent="" name="" visibility="" list="" here="" repo_later=""
 for arg in "$@"; do
   case "$arg" in
-    --list) list=1 ;;  # internal: print the picker's list, for the Ctrl-A reload
+    --list) list=1 ;;  # the picker's list (also the Ctrl-A reload)
+    --here) here=1 ;;
+    --repo-later) repo_later=1 ;;
     --claude) agent=claude ;;
     --codex) agent=codex ;;
     --private) visibility=private ;;
@@ -89,7 +96,15 @@ sorted_folders() {
     sort -k1,1r -k2,2nr | cut -d' ' -f3-
 }
 
-if [ -n "$list" ]; then sorted_folders "$name"; exit 0; fi
+if [ -n "$list" ]; then
+  if [ -n "$here" ]; then
+    area="$(current_area)"
+    { [ -z "$area" ] || sorted_folders "$area"; sorted_folders; } | awk '!seen[$0]++'
+  else
+    sorted_folders "$name"
+  fi
+  exit 0
+fi
 
 if [ -z "$name" ]; then
   [ -z "$agent$visibility" ] || usage
@@ -124,12 +139,10 @@ case "$name" in
   */*) parent="$best/${name%/*}"; slug="${name##*/}" ;;
   *) parent="$best/${area:-projects}"; slug="$name" ;;
 esac
-# An area that is itself a repository holds its entries as plain folders, with no repo of their own.
+# A folder inside a repository (an area that is a repository, or any folder in one) holds its
+# entries as plain folders, with no repo of their own.
 monorepo=""
-case "$parent" in
-  "$best"/areas/*|"$best"/*)
-    [ "$(git -C "$parent" rev-parse --show-toplevel 2>/dev/null)" = "$parent" ] && monorepo=1 ;;
-esac
+[ "$(git -C "$parent" rev-parse --is-inside-work-tree 2>/dev/null)" = true ] && monorepo=1
 # Own projects and area entries are dated to the day; client projects, trials and the rest use the month.
 date_format=%Y-%m
 [ "$parent" = "$best/projects" ] || [ -n "$monorepo" ] && date_format=%Y-%m-%d
@@ -160,7 +173,7 @@ elif [ -n "$monorepo" ]; then
   echo "Created $dir"
 else
   dir="$parent/$(date +"$date_format")-$slug"
-  if [ "$visibility" != local ]; then
+  if [ "$visibility" != local ] && [ -z "$repo_later" ]; then
     # Check the repo name before creating anything, so a taken name leaves no half-made folder.
     owner="$(gh api user --jq .login)"
     if out="$(gh api "repos/$owner/$slug" --jq .html_url 2>&1)"; then
@@ -182,7 +195,23 @@ AGENTS
   git -C "$dir" add AGENTS.md
   git -C "$dir" commit -q -m "Start $slug"
   echo "Created $dir"
-  if [ "$visibility" != local ]; then
+  if [ "$visibility" != local ] && [ -n "$repo_later" ]; then
+    # The repo comes later: a taken name leaves the folder without a remote, said in the log and a
+    # notification.
+    logs="${XDG_STATE_HOME:-$HOME/.local/state}/proj/repos"; mkdir -p "$logs"
+    log="$logs/$(date +%Y-%m-%d-%H%M%S)-$slug.log"
+    (
+      set +e
+      if owner="$(gh api user --jq .login)" && ! gh api "repos/$owner/$slug" >/dev/null 2>&1 &&
+         gh repo create "$owner/$slug" "--$visibility" --source "$dir" --push >/dev/null; then
+        echo "created $(git -C "$dir" remote get-url origin)"
+      else
+        echo "proj: no GitHub repo for $dir (name taken or gh failed); run gh repo create yourself"
+        osascript -e "display notification \"No GitHub repo for $slug: see $log\" with title \"proj\"" 2>/dev/null
+      fi
+    ) </dev/null >"$log" 2>&1 &
+    echo "GitHub repo $slug: being created in the background (log: $log)"
+  elif [ "$visibility" != local ]; then
     gh repo create "$owner/$slug" "--$visibility" --source "$dir" --push >/dev/null
     url="$(git -C "$dir" remote get-url origin)"
     echo "${url%.git}"
