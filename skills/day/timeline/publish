@@ -1,10 +1,12 @@
 #!/bin/bash
 # Rebuild the day timeline from this Mac's activity and copy it to the agent server, which serves it at
 # https://agent-server.tail622085.ts.net/day (tailnet only). Run by launchd every hour; safe to run by hand.
+# First pulls dotfiles and clerk (bin/pull-agent-repos), so pushed fixes to Mac scripts arrive within the hour.
 # Also copies the last 3 days of Chrome history (chrome_export.py) to /srv/agent-share/chrome-history/ on the
 # server, for clerk's desk-links job; a failure there doesn't stop the timeline.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
+"$here/../../../bin/pull-agent-repos" || true
 python3 "$here/build.py" --days 14 --no-open
 ssh agent-server 'mkdir -p ~/.local/share/day-timeline'
 scp -q "$HOME/.local/share/day/timeline/index.html" agent-server:.local/share/day-timeline/index.html.new

@@ -1,0 +1,13 @@
+#!/bin/bash
+# Fast-forward the checkouts whose scripts the Mac's launchd jobs run (dotfiles, clerk), so fixes the
+# server agents push reach the Mac within the hour. Run first by the hourly day-timeline publish job.
+# Never merges or discards: a dirty or diverged checkout is left alone and logged.
+# launchd plists aren't reloaded here; a changed plist still needs bin/install.sh.
+for repo in "$HOME/best/areas/dotfiles" "$HOME/best/ops/clerk"; do
+  [ -d "$repo/.git" ] || continue
+  if git -C "$repo" pull --ff-only -q 2>&1; then
+    date -u +"%Y-%m-%dT%H:%M:%SZ pulled ${repo/#$HOME/~} at $(git -C "$repo" rev-parse --short HEAD)"
+  else
+    echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) pull failed for ${repo/#$HOME/~}" >&2
+  fi
+done
