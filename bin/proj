@@ -66,8 +66,10 @@ pickable_folders() {
     else
       local tops=() t
       for t in "$best"/*/; do t="${t%/}"; case " $not_area " in *" ${t##*/} "*) ;; *) tops+=("$t") ;; esac; done
-      find "$best/projects" "$best/areas" "$best"/orgs/* "${tops[@]}" -mindepth 1 -maxdepth 1 -type d ! -name '.*'
-      echo "$best/desk"
+      local roots=() r
+      for r in "$best/projects" "$best/areas" "$best"/orgs/* "${tops[@]}"; do [ -d "$r" ] && roots+=("$r"); done
+      [ ${#roots[@]} -eq 0 ] || find "${roots[@]}" -mindepth 1 -maxdepth 1 -type d ! -name '.*'
+      [ ! -d "$best/desk" ] || echo "$best/desk"
     fi; } | while IFS= read -r dir; do
     if [ -n "$gnu" ]; then t="$(stat -c %W "$dir")"; d="$(date -d "@$t" +%F)"
     else t="$(stat -f %B "$dir")"; d="$(date -r "$t" +%F)"; fi
