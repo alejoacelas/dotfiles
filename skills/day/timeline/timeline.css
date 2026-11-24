@@ -174,3 +174,5 @@ li.dt-pinned{outline:1px solid var(--accent)}
 .dt-spark{position:relative;height:10px;background:var(--soft);border-radius:2px;overflow:hidden}
 .dt-spark b{position:absolute;top:0;bottom:0}
 .dt-to{color:var(--mute)}
+.dt-goday{cursor:pointer}
+.dt-goday:hover{color:var(--accent)}

@@ -371,9 +371,33 @@ const DT = (() => {
         <ul class="dt-qlist dt-small">${t.commits.slice(-4).map(c => quote({type: "commit", m: c.m, msg: c.msg})).join("")}</ul>${t.commits.length > 4 ? `<div class="dt-mute">${t.commits.length - 4} more commits</div>` : ""}</div>`).join("");
       return h;
     }
+    // search: every day's tasks whose name, outcome or topic matches, with their attention, then this day's matching events
+    const dayModels = new Map();
+    const modelFor = i => { if (i === dayIdx) return M; const key = `${i}:${cfg.gapFill}`;
+      if (!dayModels.has(key)) dayModels.set(key, model(data.days[i], story(data.days[i]), cfg)); return dayModels.get(key); };
+    const evHit = e => matches(e.text) || matches(e.title) || matches(e.msg) || matches(e.gist);
+    function searchDays() {
+      return data.days.map((d, i) => { const m = modelFor(i);
+        const named = [], inside = [];
+        for (const k of m.tasks) { const n = k.events.filter(evHit).length;
+          if (matches(k.label) || matches(k.outcome) || matches(k.topicObj.label)) named.push({k, n}); else if (n) inside.push({k, n}); }
+        return {i, m, named, inside, att: named.reduce((a, x) => a + x.k.att, 0), insideAtt: inside.reduce((a, x) => a + x.k.att, 0)};
+      }).filter(r => r.named.length || r.inside.length).reverse();
+    }
     function searchInsp() {
-      const hits = M.evs.filter(e => matches(e.text) || matches(e.title) || matches(e.msg) || matches(e.task?.label)).sort((a, b) => a.m - b.m);
-      return `<div class="dt-ih"><b>${hits.length}</b> matches for “${esc(query)}”</div><ul class="dt-qlist">${hits.slice(0, 200).map(e => quote(e)).join("")}</ul>`;
+      const res = searchDays(), tot = res.reduce((a, r) => a + r.att, 0), totIn = res.reduce((a, r) => a + r.insideAtt, 0);
+      const taskLine = ({k, n}, i) => `<div class="dt-tk"${i === dayIdx ? ` data-task="${esc(k.id)}"` : ` data-goday="${i}"`}>${sw(k.topicObj.color || "#999")}${esc(k.label)} <span class="dt-mute">· ${esc(cut(k.topicObj.label, 30))}${n ? ` · ${n} matching event${n > 1 ? "s" : ""}` : ""}</span> <span class="dt-min">${k.att ? dur(k.att) : "agents only"}</span></div>`;
+      let h = `<div class="dt-ih"><b>${dur(tot)}</b> on tasks matching “${esc(query)}” <span class="dt-mute">across ${res.filter(r => r.named.length).length} of ${data.days.length} days</span></div>`;
+      if (totIn) h += `<div class="dt-mute">plus ${dur(totIn)} on tasks where only some prompts, pages or commits match</div>`;
+      if (!res.length) h += `<p class="dt-mute">No task, prompt, page or commit matches in the last ${data.days.length} days.</p>`;
+      for (const r of res) {
+        h += `<h4${r.i === dayIdx ? "" : ` data-goday="${r.i}" class="dt-goday"`}>${esc(r.m.day.weekday.replace(/ \d{4}$/, ""))} <span class="dt-min">${dur(r.att)}${r.insideAtt ? ` <span class="dt-mute">+ ${dur(r.insideAtt)}</span>` : ""}</span></h4>`;
+        h += r.named.sort((a, b) => b.k.att - a.k.att).map(x => taskLine(x, r.i)).join("");
+        h += r.inside.sort((a, b) => b.k.att - a.k.att).map(x => taskLine(x, r.i)).join("");
+      }
+      const hits = M.evs.filter(e => evHit(e) || matches(e.task?.label)).sort((a, b) => a.m - b.m);
+      if (hits.length) h += `<h4>${hits.length} matching events on ${esc(M.day.weekday.replace(/ \d{4}$/, ""))}</h4><ul class="dt-qlist">${hits.slice(0, 200).map(e => quote(e)).join("")}</ul>`;
+      return h;
     }
     function inspector() {
       let h = null;
@@ -412,6 +436,7 @@ const DT = (() => {
     main.addEventListener("dblclick", ev => { if (!grid || ev.target.closest(".dt-lab")) return; ev.preventDefault(); view = null; win = null; sel = null; pin = null; draw(); });
     root.addEventListener("click", ev => {
       if (ev.target.closest("[data-back]")) { sel = null; win = null; view = null; query = ""; opts.onQuery?.(""); draw(); return; }
+      const gd = ev.target.closest("[data-goday]"); if (gd) { load(+gd.dataset.goday); return; }
       const uf = ev.target.closest("[data-unfold]"); if (uf) { view = uf.dataset.unfold === "left" ? [0, M.range[1]] : [M.range[0], 1440]; draw(); return; }
       const g = ev.target.closest("[data-group]"); if (g) { const k = g.dataset.group; expanded.has(k) ? expanded.delete(k) : expanded.add(k); draw(); return; }
       const tk = ev.target.closest("[data-task]"); if (tk) { sel = {task: M.tasks.find(k => k.id === tk.dataset.task)}; draw(); return; }
@@ -441,7 +466,7 @@ const DT = (() => {
       reset() { view = null; win = null; sel = null; draw(); },
       clear() { if (sel) sel = null; else if (view || win) { view = null; win = null; } else if (query) { query = ""; opts.onQuery?.(""); } draw(); },
       search(q) { query = (q || "").trim().toLowerCase(); sel = null; draw(); },
-      set(k, v) { cfg[k] = v; if (k === "view") { sel = null; win = null; view = null; } if (k !== "view" && k !== "rows" && k !== "taskSort") M = model(data.days[dayIdx], story(data.days[dayIdx]), cfg); draw.measured = false; draw(); },
+      set(k, v) { cfg[k] = v; dayModels.clear(); if (k === "view") { sel = null; win = null; view = null; } if (k !== "view" && k !== "rows" && k !== "taskSort") M = model(data.days[dayIdx], story(data.days[dayIdx]), cfg); draw.measured = false; draw(); },
       toggleAll() { const ks = M.topics.map(t => t.id); const all = ks.every(k => expanded.has(k)); ks.forEach(k => all ? expanded.delete(k) : expanded.add(k)); draw(); },
     };
     load(dayIdx);
