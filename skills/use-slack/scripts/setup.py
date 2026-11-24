@@ -19,7 +19,7 @@ DEFAULT_USER_AGENT = (
     "AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/143.0.0.0 Safari/537.36"
 )
-WORKSPACES = ("impact-ops", "ai-uplift")
+WORKSPACES = ("ai-uplift", "impact-ops")
 
 
 def clean_pasted_value(value: str) -> str:
@@ -49,7 +49,7 @@ def write_private_json(path: Path, value: dict) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("-w", "--workspace", choices=WORKSPACES, default="impact-ops")
+    parser.add_argument("-w", "--workspace", choices=WORKSPACES, default="ai-uplift")
     args = parser.parse_args()
 
     config = {}
@@ -72,7 +72,7 @@ def main() -> None:
         "xoxd_token": xoxd,
         "user_agent": user_agent,
     }
-    config.setdefault("default_workspace", "impact-ops")
+    config.setdefault("default_workspace", "ai-uplift")
     config.setdefault("link_style", "app")
     write_private_json(CONFIG_PATH, config)
 

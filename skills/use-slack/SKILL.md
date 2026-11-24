@@ -1,20 +1,22 @@
 ---
 name: use-slack
-description: Connect to and work with the Impact Ops and AI Uplift for EA Slack workspaces using the signed-in user's Slack web-session credentials. Use for any of these workspaces' setup, authentication checks, channel and DM lookup, message search and history, thread retrieval, permalinks, or user-approved message sending.
+description: Connect to and work with the AI Uplift for EA Slack workspace using the signed-in user's Slack web-session credentials. Also reads the Impact Ops workspace, which Alejo has left. Use for setup, authentication checks, channel and DM lookup, message search and history, thread retrieval, permalinks, or user-approved message sending.
 ---
 
 # Slack workspaces
 
-Use `scripts/slack.py` for every Slack command. It defaults to `impact-ops`; select
-`ai-uplift` explicitly with `--workspace` / `-w`. The client
+Use `scripts/slack.py` for every Slack command. It defaults to `ai-uplift`. The client
 checks the exact team identity before authentication or sent-DM queries.
+
+Alejo left Impact Ops in early November 2026 and no longer uses its Slack. `-w impact-ops`
+stays only for reading old history when he asks, while its saved session still works.
+Never send there, and don't ask him to sign in again or refresh that session.
 
 Set `SKILL_DIR` to the directory containing this file, then run commands as:
 
 ```bash
 python3 "$SKILL_DIR/scripts/slack.py" auth
-python3 "$SKILL_DIR/scripts/slack.py" -w ai-uplift auth
-python3 "$SKILL_DIR/scripts/slack.py" -w ai-uplift sent-dms 5
+python3 "$SKILL_DIR/scripts/slack.py" sent-dms 5
 ```
 
 ## Setup
@@ -29,7 +31,6 @@ Resolve Slack user IDs before presenting or attributing messages:
 
 ```bash
 python3 "$SKILL_DIR/scripts/slack.py" user-lookup
-python3 "$SKILL_DIR/scripts/slack.py" -w ai-uplift user-lookup
 ```
 
 Use the resulting ID-to-name map for history, replies, and search results. Slack
@@ -43,7 +44,7 @@ python3 "$SKILL_DIR/scripts/slack.py" history CHANNEL_ID 50
 python3 "$SKILL_DIR/scripts/slack.py" replies CHANNEL_ID THREAD_TS
 python3 "$SKILL_DIR/scripts/slack.py" search "QUERY" 50
 python3 "$SKILL_DIR/scripts/slack.py" permalink CHANNEL_ID MESSAGE_TS
-python3 "$SKILL_DIR/scripts/slack.py" -w ai-uplift sent-dms 5
+python3 "$SKILL_DIR/scripts/slack.py" sent-dms 5
 ```
 
 ## Sending Slack

@@ -5,8 +5,8 @@ arguments. They are equivalent to the user's signed-in Slack session.
 
 For Codex setup:
 
-1. Choose the workspace and team ID: `impact-ops` / `T04SC9TJYQ6` or `ai-uplift` /
-   `T094GSSSF3M`.
+1. The workspace is `ai-uplift`, team ID `T094GSSSF3M`. (Alejo has left `impact-ops`,
+   `T04SC9TJYQ6`; don't set it up again.)
 2. Read and use the available Chrome-control skill. Open or claim a regular Chrome
    tab at `https://app.slack.com/client/TEAM_ID/` and let the user sign in if needed.
 3. Focus that Slack tab before opening DevTools. A console showing

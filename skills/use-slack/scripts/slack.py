@@ -36,7 +36,7 @@ def load_config(workspace: str | None) -> tuple[dict, dict, str]:
         raise SlackError(f"Missing config: run {SKILL_DIR / 'scripts' / 'setup.py'}")
     with CONFIG_PATH.open() as handle:
         config = json.load(handle)
-    workspace = workspace or config.get("default_workspace") or "impact-ops"
+    workspace = workspace or config.get("default_workspace") or "ai-uplift"
     if workspace not in WORKSPACES:
         raise SlackError(
             f"Unknown workspace {workspace!r}; choose one of: {', '.join(WORKSPACES)}"
@@ -116,8 +116,8 @@ def usage() -> str:
     return """Usage: slack.py [-w WORKSPACE] COMMAND [ARGS]
 
 Workspaces:
-  impact-ops (default)
-  ai-uplift
+  ai-uplift (default)
+  impact-ops (Alejo has left it: old history only, never send)
 
 Commands:
   auth
