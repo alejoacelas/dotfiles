@@ -4,7 +4,8 @@
 Usage: collect.py FIRST_DAY [LAST_DAY] [--out FILE]   (days as YYYY-MM-DD or -N; LAST_DAY defaults to FIRST_DAY)
 Per day: agent sessions with every prompt and when each agent turn ended, focus stretches from Umi and Umi Next, commits
 (marked when an automation committed them), Chrome visits, calendar events with their filed call
-summaries, and the plans app's page. Times are local "HH:MM:SS"-free minutes since midnight (floats).
+summaries, the plans app's page, and Dayflow's screen record (activity cards, minute-level observations, and
+stretches when keyboard or mouse input was recent). Times are local "HH:MM:SS"-free minutes since midnight (floats).
 """
 import datetime as dt
 import glob
@@ -18,7 +19,7 @@ from urllib.parse import urlparse
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import focus as focuslog  # noqa: E402  (the skill's folder)
-from sources import chrome_profiles, chrome_visits, git_repos, is_noise  # noqa: E402
+from sources import chrome_profiles, chrome_visits, dayflow, git_repos, is_noise  # noqa: E402
 
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
@@ -73,7 +74,8 @@ class Days:
         self.end = dt.datetime.combine(last + dt.timedelta(1), dt.time()).astimezone()
         self.out = {d.isoformat(): {"date": d.isoformat(), "weekday": f"{d:%a %d %b %Y}", "sessions": [],
                                     "focus": [], "commits": [], "visits": [], "events": [], "calls": [],
-                                    "scripted": defaultdict(int), "plans": ""} for d in self.days}
+                                    "scripted": defaultdict(int), "plans": "",
+                                    "screen": [], "observations": [], "present": [], "apps": []} for d in self.days}
 
     def key(self, t):
         """(day key, minutes since that day's midnight) or (None, None) outside the range."""
@@ -310,6 +312,40 @@ def calendar(D):
     return None
 
 
+def spans(D, a, b):
+    """(day key, start minute, end minute) for each day a span touches."""
+    for day in D.days:
+        d0 = dt.datetime.combine(day, dt.time()).astimezone()
+        lo, hi = max(a, d0), min(b, d0 + dt.timedelta(1))
+        if lo < hi:
+            yield day.isoformat(), round((lo - d0).total_seconds() / 60, 2), round((hi - d0).total_seconds() / 60, 2)
+
+
+def screen(D):
+    """Dayflow: what was on screen, in any app, from screenshots Claude describes every 15 minutes."""
+    try:
+        r = dayflow(D.start, D.end)
+    except Exception as e:  # a schema change in a Dayflow update shouldn't stop the timeline
+        return f"dayflow: {e}"
+    if r is None:
+        return None
+    for c in r["cards"]:
+        for k, a, b in spans(D, c["start"], c["end"]):
+            D.day(k)["screen"].append({"a": a, "b": b, "title": short(c["title"], 120), "summary": short(c["summary"], 500),
+                                       "category": c["category"], "subcategory": c["subcategory"], "apps": c["apps"],
+                                       "distractions": [short(x["title"], 80) for x in c["distractions"]]})
+    for o in r["observations"]:
+        for k, a, b in spans(D, o["start"], o["end"]):
+            D.day(k)["observations"].append({"a": a, "b": b, "text": short(o["text"], 400)})
+    for st, en, app, win in r["apps"]:
+        for k, a, b in spans(D, st, en):
+            D.day(k)["apps"].append({"a": a, "b": b, "app": app, "window": short(win, 120)})
+    for st, en in r["present"]:
+        for k, a, b in spans(D, st, en):
+            D.day(k)["present"].append([a, b])
+    return None
+
+
 def call_summaries(D):
     """Filed call summaries in ~/best/desk, joined to that day's calendar event by a shared name."""
     for day in D.days:
@@ -357,7 +393,7 @@ def main():
     first = parse_day(args[0]) if args else dt.date.today()
     last = parse_day(args[1]) if len(args) > 1 else first
     D = Days(first, last)
-    errors = [umi_focus(D), calendar(D), plans(D)]
+    errors = [umi_focus(D), calendar(D), plans(D), screen(D)]
     claude_sessions(D)
     codex_sessions(D)
     commits(D)
@@ -368,7 +404,8 @@ def main():
         for x in ("commits", "visits"):
             d[x].sort(key=lambda c: c["m"])
         d["focus"].sort(key=lambda f: f["a"])
-        d["events"].sort(key=lambda e: e["a"])
+        for x in ("events", "screen", "observations", "apps"):
+            d[x].sort(key=lambda e: e["a"])
         d["scripted"] = dict(d["scripted"])
     result = {"generated": dt.datetime.now().astimezone().isoformat(timespec="minutes"),
               "today": dt.date.today().isoformat(), "errors": [e for e in errors if e],

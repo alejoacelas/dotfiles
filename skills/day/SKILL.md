@@ -20,6 +20,8 @@ description: Gather what Alejo did on a given day from agent sessions, the focus
      `claude -p` runs appear only as counts.
    - That day's page from the plans app: his priorities, then notes and his
      evening reflection.
+   - Dayflow's screen record (from 25 Nov 2026): minutes at the Mac and its activity cards, which describe the
+     screen in any app every 15 minutes. Use it for time the other sources miss, such as Slack, docs or video.
    - Chrome history for every profile, by site, with page titles and rough time.
    - Last, "Umi unused for N days: retire it?" once Umi has logged no focus for
      over 7 days. Pass that line on to Alejo.
@@ -43,8 +45,9 @@ description: Gather what Alejo did on a given day from agent sessions, the focus
    what he worked on, in order of time, and how it compared with his
    priorities. Show the draft to him; the plans page is his to edit.
 
-Focus covers only Umi and Umi Next. Time in Chrome, Slack or calls shows up only through
-Chrome history, the calendar and call summaries.
+Focus covers only Umi and Umi Next. Time in other apps shows up through Dayflow's screen
+record, Chrome history, the calendar and call summaries. Dayflow's cards are Claude's reading of
+screenshots: trust them for what app and subject were on screen, less for exact times or results.
 
 The output includes private browsing and personal notes. Show it to Alejo, but
 write it into a file only when he asks, and only into a private repository.

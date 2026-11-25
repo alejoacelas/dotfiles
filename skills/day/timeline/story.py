@@ -43,12 +43,24 @@ def stream(day):
     for f in day["focus"]:
         if not f.get("session") and f["b"] - f["a"] >= 1:
             ev.append({"m": f["a"], "m2": f["b"], "type": "focus", "title": f["title"], "path": f["path"]})
+    # Dayflow: what was on screen in any app. Observations are finer-grained than cards; a card is used only for
+    # time no observation covers. Only screen time while keyboard or mouse input was recent goes in.
+    present = day.get("present") or []
+    near = lambda a, b: any(p0 < b and p1 > a for p0, p1 in present)
+    obs = [o for o in day.get("observations") or [] if near(o["a"], o["b"])]
+    card_at = lambda m: next((c for c in day.get("screen") or [] if c["a"] <= m < c["b"]), None)
+    for o in obs:
+        c = card_at(o["a"])
+        ev.append({"m": o["a"], "m2": o["b"], "type": "screen", "title": c["title"] if c else "", "text": o["text"]})
+    for c in day.get("screen") or []:
+        if near(c["a"], c["b"]) and not any(o["a"] < c["b"] and o["b"] > c["a"] for o in obs):
+            ev.append({"m": c["a"], "m2": c["b"], "type": "screen", "title": c["title"], "text": c["summary"]})
     for c in day["commits"]:
         if not c["auto"]:
             ev.append({"m": c["m"], "type": "commit", "repo": c["repo"], "msg": c["msg"]})
     ev.sort(key=lambda e: e["m"])
     for i, e in enumerate(ev):
-        e["id"] = f"{ {'prompt': 'p', 'page': 'w', 'call': 'c', 'calendar': 'k', 'focus': 'f', 'commit': 'g'}[e['type']]}{i}"
+        e["id"] = f"{ {'prompt': 'p', 'page': 'w', 'call': 'c', 'calendar': 'k', 'focus': 'f', 'commit': 'g', 'screen': 's'}[e['type']]}{i}"
     return ev
 
 
@@ -61,6 +73,8 @@ def line(e):
         return f"{e['id']} {t}{span} PAGE {e['host']} | {e['title'][:140]}"
     if e["type"] in ("call", "calendar"):
         return f"{e['id']} {t}–{hm(e['m2'])} {e['type'].upper()} {e['title']}" + (f" | summary: {e['gist'][:400]}" if e["gist"] else "")
+    if e["type"] == "screen":
+        return f"{e['id']} {t}–{hm(e['m2'])} SCREEN" + (f" [{e['title'][:80]}]" if e["title"] else "") + f" {e['text'][:400]}"
     if e["type"] == "focus":
         return f"{e['id']} {t}–{hm(e['m2'])} FOCUS {e['title'][:80]} ({e['path'][-80:]})"
     return f"{e['id']} {t} COMMIT {e['repo'].split('/')[-1]}: {e['msg'][:160]}"
@@ -73,6 +87,9 @@ The stream below is everything recorded on their computer that day, in time orde
 - PAGE: a Chrome page they opened (×N = reopened N times within minutes of each other). Page titles usually tell what the page served.
 - CALL / CALENDAR: calendar events they attended, with a call summary when one was filed.
 - FOCUS: time with a file or terminal focused in their terminal app, outside agent sessions.
+- SCREEN: what a screen recorder saw on their display in any app (Slack, docs, video, terminals), described from
+  screenshots, with the activity title it belongs to in [brackets]. It covers time the other records miss; where a
+  PROMPT or PAGE says the same thing, both belong to the same task.
 - COMMIT: a commit their agents (or they) made. Commits show what agents produced; they are not the person's attention.
 
 Their priorities for the day, from their planning page:

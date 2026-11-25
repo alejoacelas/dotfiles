@@ -67,6 +67,17 @@ const DT = (() => {
     const visits = day.visits.map(v => ({...v, task: visitTask(v)}));
     visits.forEach((v, i) => { put(v.task, v.m, v.m + Math.min(Math.max(v.dur, 1), 3), 0.8);
       const n = visits[i + 1]; if (n && n.task === v.task && n.m - v.m <= 4) put(v.task, v.m, n.m, 0.6); });
+    // Dayflow's screen record: the weakest evidence, so it only fills minutes nothing else claims, and only
+    // minutes when keyboard or mouse input was recent
+    const present = new Uint8Array(1440);
+    for (const [a, b] of day.present || []) for (let m = Math.max(0, Math.floor(a)); m < Math.min(1440, Math.ceil(b)); m++) present[m] = 1;
+    const screens = evs.filter(e => e.type === "screen");
+    for (const e of screens) for (let m = Math.max(0, Math.floor(e.m)); m < Math.min(1440, Math.ceil(e.m2)); m++) if (present[m]) put(e.task, m, m + 1, 0.5);
+    // the front app from Dayflow's accessibility recorder, merged across switches shorter than a minute apart
+    const apps = [];
+    for (const x of day.apps || []) { const p = apps[apps.length - 1];
+      if (p && p.app === x.app && x.a - p.b <= 1) { p.b = x.b; p.min += x.b - x.a; if (x.window) p.windows.set(x.window, (p.windows.get(x.window) || 0) + x.b - x.a); }
+      else apps.push({app: x.app, a: x.a, b: x.b, min: x.b - x.a, windows: new Map(x.window ? [[x.window, x.b - x.a]] : [])}); }
     // each minute goes to the task with the strongest evidence
     const win = new Array(1440).fill(null);
     for (let m = 0; m < 1440; m++) { let best = null, bw = 0.4; for (const [k, arr] of score) if (arr[m] > bw) { bw = arr[m]; best = k; } win[m] = best; }
@@ -114,10 +125,11 @@ const DT = (() => {
     const stats = {att: runs.reduce((a, r) => a + r.b - r.a, 0), calls: calls.reduce((a, e) => a + e.b - e.a, 0), ncalls: calls.length,
       first: runs[0]?.a, last: runs[runs.length - 1]?.b, prompts: sessions.reduce((a, s) => a + s.prompts.length, 0),
       agent: conc.reduce((a, v) => a + (v > 0), 0), peak: Math.max(0, ...conc), commits: commits.length,
+      mac: present.reduce((a, v) => a + v, 0),
       work: topicList.filter(t => !["personal", "leisure"].includes(t.kind)).reduce((a, t) => a + t.att, 0)};
     return {day, story: S, fromFolders: !story, cfg, topics: topicList, tasks: taskList, runs, blocks, calls, visits, sessions, turns, conc, commits,
       range, folded: {left: outside(-1), right: outside(1)}, prios, reflection: reflection(day.plans), stats,
-      sleep: day.events.filter(e => e.kind === "sleep"), evs, unassigned: (S.missing || []).length};
+      sleep: day.events.filter(e => e.kind === "sleep"), evs, screens, present, apps, cards: day.screen || [], unassigned: (S.missing || []).length};
   }
 
   // A day without a story yet: one topic per folder, browsing as one topic. Shown with a notice.
@@ -204,6 +216,20 @@ const DT = (() => {
         h += `<b class="dt-ev ${e.kind}${matches(e.title) ? " dt-hit" : ""}" data-i="${reg({type: "call", e: c || e})}" style="left:${X(e.a)}%;width:${w}%">${w * px > 40 ? `<span>${esc(e.title)}</span>` : ""}</b>`; }
       return row("dt-cal", `<span class="dt-striplab">Calendar <span class="dt-min">${M.stats.ncalls ? dur(M.stats.calls) : ""}</span></span>`, h);
     }
+    // Dayflow: what was on screen; each stretch takes the colour of the topic it was placed in
+    function screenRow() {
+      if (!M.screens.length) return "";
+      const h = M.screens.map(e => bar("dt-scr" + (matches(e.text) || matches(e.title) ? " dt-hit" : ""), e.m, e.m2, e.task ? e.task.topicObj.color : "#9aa3ad", {type: "screen", e})).join("");
+      return row("dt-cal", `<span class="dt-striplab" title="Dayflow's description of the screen, in any app. Fills attention only where nothing stronger says what you were doing, and only while you were at the Mac.">Screen <span class="dt-min">${dur(M.stats.mac)} at Mac</span></span>`, h);
+    }
+    const appColors = new Map(), appUsed = new Set(); const appColor = a => appColors.get(a) || (appColors.set(a, hashColor(a, appUsed)), appColors.get(a));
+    function appsRow() {
+      if (!M.apps.length) return "";
+      const tot = M.apps.reduce((a, x) => a + x.min, 0);
+      return row("dt-cal", `<span class="dt-striplab" title="The app in front, from Dayflow's accessibility recorder, while you were at the Mac">Apps <span class="dt-min">${dur(tot)}</span></span>`,
+        M.apps.map(x => bar("dt-scr" + ([...x.windows.keys()].some(matches) || matches(x.app) ? " dt-hit" : ""), x.a, x.b, appColor(x.app), {type: "app", x})).join(""));
+    }
+    const appMinutes = (a, b) => { const per = new Map(); for (const x of M.day.apps || []) { const o = Math.min(x.b, b) - Math.max(x.a, a); if (o > 0) per.set(x.app, (per.get(x.app) || 0) + o); } return [...per].sort((x, y) => y[1] - x[1]); };
     const runBars = (runs, opt = {}) => runs.map(r => bar("dt-att" + (opt.cls || ""), r.a, r.b, r.task.topicObj.color, {type: "block", r, block: M.blocks.find(b => b.runs.includes(r))})).join("");
     const topicLabel = (t, open) => `<button class="dt-lbtn" data-topic="${esc(t.id)}" aria-expanded="${open}"><span class="dt-caret">${open ? "▾" : "▸"}</span>${sw(t.color)}<span class="dt-name" title="${esc(t.label)}">${esc(t.label)}</span>${prioBadge(t)}<span class="dt-min">${dur(t.att)}</span></button>`;
     const taskLabel = k => `<button class="dt-lbtn dt-sublab" data-task="${esc(k.id)}" title="${esc(k.label)}"><span class="dt-name">${esc(k.label)}</span><span class="dt-min">${k.att ? dur(k.att) : ""}</span></button>`;
@@ -271,7 +297,7 @@ const DT = (() => {
       items = []; tip.hidden = true;
       let h = "";
       if (cfg.view === "tasks") h = tasksList();
-      else h = `<div class="dt-grid">${axisRow()}${cfg.view === "agents" ? agentRows() : hourRows() + calRow() + attentionRows()}<div class="dt-gridlines"></div></div>`;
+      else h = `<div class="dt-grid">${axisRow()}${cfg.view === "agents" ? agentRows() : hourRows() + calRow() + screenRow() + appsRow() + attentionRows()}<div class="dt-gridlines"></div></div>`;
       main.innerHTML = (M.fromFolders ? `<div class="dt-notice">No story for this day yet, so topics are folders. Run build.py to label it.</div>` : "") + h;
       grid = main.querySelector(".dt-grid");
       if (grid) { main.querySelector(".dt-gridlines").innerHTML = gridlines();
@@ -287,6 +313,7 @@ const DT = (() => {
       if (e.type === "prompt") return `<li data-m="${e.m}"${extra}><span class="dt-tm">${t}</span><span><q title="${esc(e.text)}">${esc(cut(e.text, 240))}</q>${e.session ? ` <span class="dt-mute">· ${esc(cut(e.session, 50))}</span>` : ""}</span></li>`;
       if (e.type === "page") return `<li data-m="${e.m}"${extra}><span class="dt-tm">${t}</span><span><span class="dt-mute">opened</span> ${esc(e.title)} <span class="dt-mute">· ${esc(e.host || "")}</span></span></li>`;
       if (e.type === "call" || e.type === "calendar") return `<li data-m="${e.m}"${extra}><span class="dt-tm">${t}</span><span><b>${esc(e.title)}</b>${e.gist ? `<br><q>${esc(e.gist)}</q>` : ""}</span></li>`;
+      if (e.type === "screen") return `<li data-m="${e.m}"${extra}><span class="dt-tm">${t}</span><span><span class="dt-mute">on screen${e.title ? " · " + esc(cut(e.title, 60)) : ""}</span> ${esc(cut(e.text, 240))}</span></li>`;
       if (e.type === "commit") return `<li data-m="${e.m}"${extra}><span class="dt-tm">${t}</span><span><span class="dt-mute">agent committed</span> ${esc(e.msg)}</span></li>`;
       return `<li data-m="${e.m}"${extra}><span class="dt-tm">${t}</span><span>${esc(e.title || e.text || "")}</span></li>`;
     };
@@ -301,11 +328,13 @@ const DT = (() => {
         .sort((x, y) => Math.min(y.text.length, 300) - Math.min(x.text.length, 300));
       const calls = evs.filter(e => e.type === "call" && e.m < b && (e.m2 ?? e.m) > a && !hl.includes(e));
       const seen = new Set(); const pages = evs.filter(e => e.type === "page" && inWin(e) && !hl.includes(e) && !/sign.?in|log in|redirect|^https?:|^(inbox|new tab|new session)/i.test(e.title || "") && !seen.has(e.title) && seen.add(e.title));
-      return [...calls, ...hl, ...prompts.slice(0, Math.max(0, n - hl.length - calls.length)), ...pages.slice(0, 2)].sort((x, y) => x.m - y.m);
+      const picked = [...calls, ...hl, ...prompts.slice(0, Math.max(0, n - hl.length - calls.length)), ...pages.slice(0, 2)];
+      const screen = evs.filter(e => e.type === "screen" && e.m < b && e.m2 > a && !hl.includes(e)).slice(0, Math.max(0, n - picked.length));
+      return [...picked, ...screen].sort((x, y) => x.m - y.m);
     }
     function overview() {
       const s = M.stats;
-      let h = `<div class="dt-ov"><div><b>${dur(s.att)}</b> attention${s.first != null ? ` <span class="dt-mute">${hm(s.first)}–${hm(s.last)}</span>` : ""}</div><div><b>${dur(s.work)}</b> on work · <b>${dur(s.att - s.work)}</b> personal & leisure</div>
+      let h = `<div class="dt-ov"><div><b>${dur(s.att)}</b> attention${s.first != null ? ` <span class="dt-mute">${hm(s.first)}–${hm(s.last)}</span>` : ""}</div><div><b>${dur(s.work)}</b> on work · <b>${dur(s.att - s.work)}</b> personal & leisure</div>${s.mac ? `<div class="dt-mute">${dur(s.mac)} at the Mac by Dayflow (input in the last 5 minutes)</div>` : ""}
         <div class="dt-mute">${s.ncalls ? `${s.ncalls} call${s.ncalls > 1 ? "s" : ""} ${dur(s.calls)} · ` : ""}${s.prompts} prompts · agents ran ${dur(s.agent)}, up to ${s.peak} at once</div></div>`;
       h += `<h4>Where your attention went</h4><div class="dt-share">${M.topics.filter(t => t.att).map(t => `<b style="width:${t.att / Math.max(1, s.att) * 100}%;background:${t.color}" title="${esc(t.label)} ${dur(t.att)}"></b>`).join("")}</div>`;
       h += M.topics.filter(t => t.att).map(t => `<div class="dt-topic" data-topic="${esc(t.id)}"><div class="dt-topic-h">${sw(t.color)}<b>${esc(t.label)}</b>${prioBadge(t)}<span class="dt-min">${dur(t.att)} · ${Math.round(t.att / Math.max(1, s.att) * 100)}%</span></div>
@@ -349,7 +378,11 @@ const DT = (() => {
       const tot = [...per.values()].reduce((x, y) => x + y, 0);
       let h = `<div class="dt-ih"><b>${hm(a)}–${hm(b)}</b> <span class="dt-mute">${dur(b - a)} · double-click the timeline for the whole day</span></div>`;
       h += `<div class="dt-share">${[...per].sort((x, y) => y[1] - x[1]).map(([k, v]) => `<b style="width:${v / (b - a) * 100}%;background:${k.topicObj.color}" title="${esc(k.label)} ${dur(v)}"></b>`).join("")}</div>`;
-      h += [...per].sort((x, y) => y[1] - x[1]).map(([k, v]) => `<div class="dt-tk" data-task="${esc(k.id)}">${sw(k.topicObj.color)}${esc(k.label)} <span class="dt-min">${dur(v)}</span></div>`).join("") + `<div class="dt-tk dt-mute">idle or unknown <span class="dt-min">${dur(b - a - tot)}</span></div>`;
+      h += [...per].sort((x, y) => y[1] - x[1]).map(([k, v]) => `<div class="dt-tk" data-task="${esc(k.id)}">${sw(k.topicObj.color)}${esc(k.label)} <span class="dt-min">${dur(v)}</span></div>`).join("") + `${M.stats.mac ? (() => { let here = 0; for (let m = Math.floor(a); m < Math.ceil(b); m++) here += M.present[m] || 0; const lab = Math.min(here, tot);
+        return `<div class="dt-tk dt-mute">at the Mac, not placed in a task <span class="dt-min">${dur(Math.max(0, here - lab))}</span></div><div class="dt-tk dt-mute">away or no record <span class="dt-min">${dur(Math.max(0, b - a - tot - Math.max(0, here - lab)))}</span></div>`; })()
+        : `<div class="dt-tk dt-mute">idle or unknown <span class="dt-min">${dur(b - a - tot)}</span></div>`}`;
+      const am = appMinutes(a, b).filter(x => x[1] >= 1);
+      if (am.length) h += `<h4>Apps in front</h4>` + am.map(([app, v]) => `<div class="dt-tk">${sw(appColor(app))}${esc(app)} <span class="dt-min">${dur(v)}</span></div>`).join("");
       h += `<h4>In your words</h4><ul class="dt-qlist">${snippets(new Set(per.keys()), a, b, 8).map(e => quote(e)).join("")}</ul>`;
       return h;
     }
@@ -359,6 +392,10 @@ const DT = (() => {
       if (it.type === "topic") return topicInsp(it.t);
       if (it.type === "call") { const e = it.e; const k = e.task;
         return `<div class="dt-ih"><b>${esc(e.title)}</b></div><div class="dt-mute">${hm(e.a)}–${hm(e.b)}${e.people?.length ? " · " + esc(e.people.join(", ")) : ""}</div>${e.summary ? `<p><q>${esc(e.summary.gist)}</q></p><div class="dt-links">${e.summary.link ? `<a href="${esc(e.summary.link)}" target="_blank">Granola</a>` : ""} <span class="dt-mute">${esc(e.summary.path)}</span></div>` : ""}${k ? taskBlock(k) : ""}`; }
+      if (it.type === "screen") { const e = it.e; const c = M.cards.find(c => c.a <= e.m && e.m < c.b);
+        return `<div class="dt-ih">${e.task ? sw(e.task.topicObj.color) : ""}<b>${esc(e.title || "On screen")}</b></div><div class="dt-mute">${hm(e.m)}–${hm(e.m2)}${c ? ` · ${esc(c.category)}${c.subcategory ? " / " + esc(c.subcategory) : ""}${c.apps.length ? " · " + esc(c.apps.join(", ")) : ""}` : ""} · from Dayflow</div><p>${esc(e.text)}</p>${c && c.summary !== e.text ? `<h4>Dayflow card</h4><p class="dt-q">${esc(c.summary)}</p>${c.distractions.length ? `<div class="dt-mute">Distractions: ${esc(c.distractions.join("; "))}</div>` : ""}` : ""}${e.task ? taskBlock(e.task) : ""}`; }
+      if (it.type === "app") { const x = it.x;
+        return `<div class="dt-ih">${sw(appColor(x.app))}<b>${esc(x.app)}</b></div><div class="dt-mute">${hm(x.a)}–${hm(x.b)} · ${dur(x.min)} in front · from Dayflow</div><h4>Windows</h4>${[...x.windows].sort((p, q) => q[1] - p[1]).slice(0, 15).map(([w, v]) => `<div class="dt-tk">${esc(w)} <span class="dt-min">${dur(v)}</span></div>`).join("") || `<div class="dt-mute">No window titles.</div>`}`; }
       if (it.type === "turn") return `<div class="dt-ih">${sw(it.x.topic.color)}<b>${esc(it.x.task.label)}</b></div><div class="dt-mute">agent turn ${hm(it.x.a)}–${hm(it.x.b)} (${dur(it.x.b - it.x.a)}) · ${esc(it.x.s.title)}</div><ul class="dt-qlist">${quote({type: "prompt", m: it.x.p.m, text: it.x.p.text})}</ul>${it.x.s.last_reply ? `<h4>Session's last reply</h4><p class="dt-q">${esc(it.x.s.last_reply)}</p>` : ""}`;
       if (it.type === "commit") { const near = M.commits.filter(c => c.repo === it.c.repo && Math.abs(c.m - it.c.m) <= 30).sort((a, b) => a.m - b.m);
         return `<div class="dt-ih"><b>${esc(it.c.msg)}</b></div><div class="dt-mute">${esc(it.c.repo)} · ${it.c.hash} · ${hm(it.c.m)} · +${it.c.add} −${it.c.del}${it.c.task ? " · " + esc(it.c.task.label) : ""}</div><h4>Same repository within 30 minutes</h4><ul class="dt-qlist">${near.map(c => quote({type: "commit", m: c.m, msg: c.msg})).join("")}</ul>`; }
@@ -454,6 +491,8 @@ const DT = (() => {
       else if (it.type === "call") h = `<b>${hm(it.e.a)}–${hm(it.e.b)}</b> ${esc(it.e.title)}`;
       else if (it.type === "turn") h = `<b>agent ${hm(it.x.a)}–${hm(it.x.b)}</b> ${esc(it.x.task.label)}<br>${esc(cut(it.x.p.text, 200))}`;
       else if (it.type === "commit") h = `<b>${hm(it.c.m)} commit</b> ${esc(it.c.repo.split("/").pop())}<br>${esc(it.c.msg)}`;
+      else if (it.type === "screen") h = `<b>${hm(it.e.m)}–${hm(it.e.m2)} on screen</b>${it.e.title ? " " + esc(it.e.title) : ""}<br>${esc(cut(it.e.text, 200))}`;
+      else if (it.type === "app") h = `<b>${esc(it.x.app)}</b> ${hm(it.x.a)}–${hm(it.x.b)} · ${dur(it.x.min)}<br>${esc(cut([...it.x.windows.keys()].slice(0, 3).join(" · "), 200))}`;
       else if (it.type === "conc") h = `${hm(it.m)}: ${it.v} agent turn${it.v > 1 ? "s" : ""} running`;
       tip.innerHTML = h; tip.hidden = false;
       const rr = root.getBoundingClientRect(); tip.style.left = Math.min(ev.clientX - rr.left + 12, rr.width - 330) + "px"; tip.style.top = (ev.clientY - rr.top + 14) + "px";

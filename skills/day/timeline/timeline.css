@@ -39,6 +39,7 @@ button,select,input{font:inherit;color:inherit}
 .dt-ev.block{border:1px dashed var(--mute)}
 .dt-ev span{font-size:11px;padding:0 4px;line-height:16px;white-space:nowrap;color:#fff}
 .dt-ev.block span{color:var(--mute)}
+.dt-scr{position:absolute;top:5px;height:12px;border-radius:2px;cursor:pointer;opacity:.75}
 /* lanes */
 .dt-lane{border-bottom:1px solid var(--grid)}
 .dt-lane:hover,.dt-selrow{background:color-mix(in srgb,var(--soft) 60%,transparent)}

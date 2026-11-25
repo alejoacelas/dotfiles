@@ -16,7 +16,7 @@ from collections import defaultdict
 from urllib.parse import urlparse
 
 import focus as focuslog
-from sources import chrome_profiles, chrome_visits, git_repos, is_noise
+from sources import chrome_profiles, chrome_visits, dayflow, git_repos, is_noise
 
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
@@ -277,7 +277,20 @@ def build():
             "focus_error": "; ".join(focus["errors"]) or None, "retire_umi": focuslog.retire_note(),
             "projects": [{"name": name, **p} for name, p in ordered],
             "scripted_runs": dict(sorted(scripted.items(), key=lambda kv: -kv[1])),
-            "plans": plans(), "chrome": browsing}
+            "plans": plans(), "chrome": browsing, "screen": screen()}
+
+
+def screen():
+    """Dayflow's activity cards for the day, with minutes at the Mac (keyboard or mouse input in the last 5 minutes)."""
+    try:
+        r = dayflow(START, END)
+    except Exception as e:  # a Dayflow update can change its database
+        return {"error": str(e)}
+    if r is None:
+        return None
+    return {"present_minutes": round(sum((min(b, END) - max(a, START)).total_seconds() for a, b in r["present"]) / 60),
+            "cards": [{"start": hm(c["start"]), "end": hm(c["end"]), "title": c["title"], "category": c["category"],
+                       "summary": c["summary"], "apps": c["apps"]} for c in r["cards"]]}
 
 
 def mins(seconds):
@@ -339,6 +352,16 @@ def render(d):
 
     print("## Plans app\n")
     print(d["plans"] or "No day file.")
+
+    sc = d["screen"]
+    if sc:
+        print("\n## Screen (Dayflow)\n")
+        if sc.get("error"):
+            print(f"Dayflow error: {sc['error']}.")
+        else:
+            print(f"At the Mac {sc['present_minutes']} min. Cards describe the screen in any app, every 15 minutes.\n")
+            for c in sc["cards"]:
+                print(f"- {c['start']}–{c['end']} **{c['title']}** ({c['category']}; {', '.join(c['apps'])}). {short(c['summary'], 300)}")
 
     print("\n## Chrome history\n")
     print("Time is Chrome's visit duration, capped at 30 minutes a visit; background tabs inflate it.\n")
