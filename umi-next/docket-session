@@ -22,7 +22,7 @@ from pathlib import Path
 
 HOME = Path.home()
 BEST = HOME / "best"
-DESK = BEST / "desk"
+DESK = BEST / "systems" / "desk"
 TAIL_CHARS = 40_000
 
 
@@ -150,6 +150,14 @@ def session_link(s, d, folder, remote, branch):
     return json.loads(run("ssh", "agent-server", cmd))
 
 
+def project_name(folder):
+    """The project a folder under ~/best is in: the child of its top folder (coaching, dotfiles), or of
+    projects/ or orgs/<org>/ (2026-11-04-access-form); worktrees count as their main checkout."""
+    parts = re.split(r"/\.(?:claude/)?worktrees/", folder)[0].split("/")
+    deep = parts[0] == "orgs" or (len(parts) > 2 and parts[1] == "projects")
+    return parts[min(len(parts) - 1, 2 if deep else 1)]
+
+
 def main():
     dry = "--dry-run" in sys.argv[1:]
     try:
@@ -174,8 +182,7 @@ def main():
 
     remote = git(cwd, "config", "--get", "remote.origin.url")
     branch = git(cwd, "branch", "--show-current")
-    common = git(cwd, "rev-parse", "--path-format=absolute", "--git-common-dir")
-    project = Path(common).parent.name if common else cwd.name
+    project = project_name(folder)
 
     today = date.today().isoformat()
     link = {"umi": "<umi-next link>", "page": "<page link>"} if dry else session_link(s, d, folder, remote, branch)
