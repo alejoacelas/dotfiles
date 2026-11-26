@@ -1,9 +1,9 @@
 #!/bin/bash
-# Fast-forward the checkouts whose scripts the Mac's launchd jobs run (dotfiles, clerk), so fixes the
+# Fast-forward the checkouts whose scripts the Mac's launchd jobs run (dotfiles, and systems for clerk), so fixes the
 # server agents push reach the Mac within the hour. Run first by the hourly day-timeline publish job.
 # Never merges or discards: a dirty or diverged checkout is left alone and logged.
 # launchd plists aren't reloaded here; a changed plist still needs bin/install.sh.
-for repo in "$HOME/best/systems/dotfiles" "$HOME/best/systems/clerk"; do
+for repo in "$HOME/best/systems/dotfiles" "$HOME/best/systems"; do
   [ -d "$repo/.git" ] || continue
   if git -C "$repo" pull --ff-only -q 2>&1; then
     date -u +"%Y-%m-%dT%H:%M:%SZ pulled ${repo/#$HOME/~} at $(git -C "$repo" rev-parse --short HEAD)"

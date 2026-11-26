@@ -2,7 +2,7 @@
 """activity.py: what Alejo did on one day, as a markdown timeline. Read-only.
 
 Usage: activity.py [YYYY-MM-DD | -N] [--json]   (default today; -1 is yesterday)
-Focus time in Umi and Umi Next, then per project (the repository under ~/best): agent sessions (Claude Code,
+Focus time in Umi and Umi Next, then per project (top folder and child under ~/best): agent sessions (Claude Code,
 Codex) with their focus time and how they ended, other focus, commits. Then the plans app's day and
 Chrome history for every profile. Prints markdown (or --json) to stdout and saves nothing.
 """
@@ -16,7 +16,7 @@ from collections import defaultdict
 from urllib.parse import urlparse
 
 import focus as focuslog
-from sources import chrome_profiles, chrome_visits, dayflow, git_repos, is_noise
+from sources import best_project, chrome_profiles, chrome_visits, dayflow, git_repos, is_noise
 
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
@@ -199,17 +199,12 @@ def chrome():
 
 
 def project(path):
-    """The repository under ~/best holding `path` (worktrees count as their main repository), else its folder."""
+    """The project under ~/best holding `path` (see sources.best_project), else its folder."""
     if not path:
         return "other"
     if path.startswith(("/tmp/", "/private/", "/var/folders/")):
         return TEMP
-    d = path if os.path.isdir(path) else os.path.dirname(path)
-    while d.startswith(BEST + "/"):
-        if os.path.isdir(os.path.join(d, ".git")):
-            return d.replace(BEST + "/", "")
-        d = os.path.dirname(d)
-    return where(path)
+    return best_project(BEST, path) or where(path)
 
 
 TEMP = "temporary folders"  # scripted tests and scratch runs: shown as a count

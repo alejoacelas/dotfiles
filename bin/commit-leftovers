@@ -25,7 +25,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 ROOT = Path(os.environ.get("COMMIT_LEFTOVERS_ROOT", Path.home() / "best"))  # override for tests
-DESK = ROOT / "desk"
+DESK = ROOT / "systems" / "desk"
 STATE = Path(os.environ.get("COMMIT_LEFTOVERS_STATE", Path.home() / ".local/state/commit-leftovers.json"))
 STABLE_FOR = timedelta(days=3)
 MAX_DEPTH = 4

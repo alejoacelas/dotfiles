@@ -19,7 +19,7 @@ from urllib.parse import urlparse
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import focus as focuslog  # noqa: E402  (the skill's folder)
-from sources import chrome_profiles, chrome_visits, dayflow, git_repos, is_noise  # noqa: E402
+from sources import best_project, chrome_profiles, chrome_visits, dayflow, git_repos, is_noise  # noqa: E402
 
 HOME = os.path.expanduser("~")
 BEST = os.path.join(HOME, "best")
@@ -52,19 +52,12 @@ def where(path):
 
 
 def project(path):
-    """The repository under ~/best holding `path` (worktrees count as their main repository), else its folder."""
+    """The project under ~/best holding `path` (see sources.best_project), else its folder."""
     if not path:
         return ""
     if path.startswith(TEMP):
         return "(temporary)"
-    if "/.claude/worktrees/" in path or "/.worktrees/" in path:
-        path = re.split(r"/\.(?:claude/)?worktrees/", path)[0]
-    d = path if os.path.isdir(path) else os.path.dirname(path)
-    while d.startswith(BEST + "/"):
-        if os.path.exists(os.path.join(d, ".git")):
-            return d.replace(BEST + "/", "")
-        d = os.path.dirname(d)
-    return where(path) or path
+    return best_project(BEST, path) or where(path) or path
 
 
 class Days:
@@ -350,7 +343,7 @@ def call_summaries(D):
     """Filed call summaries in ~/best/systems/desk, joined to that day's calendar event by a shared name."""
     for day in D.days:
         k = day.isoformat()
-        for path in glob.glob(os.path.join(BEST, "desk", "**", f"{k}-*-sum.md"), recursive=True):
+        for path in glob.glob(os.path.join(BEST, "systems", "desk", "**", f"{k}-*-sum.md"), recursive=True):
             text = open(path, errors="replace").read()
             fm = text.split("---", 2)[1] if text.startswith("---") else ""
             people = re.findall(r"[\w-]+", (re.search(r"^people:\s*\[(.*)\]", fm, re.M) or [None, ""])[1])

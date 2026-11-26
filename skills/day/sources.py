@@ -3,6 +3,7 @@ import datetime as dt
 import glob
 import json
 import os
+import re
 import shutil
 import sqlite3
 import subprocess
@@ -36,6 +37,19 @@ def chrome_visits(folder, start, end=None):
             "SELECT v.visit_time, v.visit_duration, u.url, u.title FROM visits v JOIN urls u ON u.id = v.url "
             "WHERE v.visit_time >= ? AND v.visit_time < ? ORDER BY v.visit_time", (lo, hi)).fetchall()
     return [((EPOCH + dt.timedelta(microseconds=when)).astimezone(), dur / 1e6, url, title) for when, dur, url, title in rows]
+
+
+def best_project(best, path):
+    """The project under ~/best that `path` is in, named by its top folder and child: work/coaching,
+    systems/projects/2026-11-22-claude-rotate, orgs/aim/2026-10-novah-demo, archive/x. Worktrees count
+    as their main checkout. None outside ~/best."""
+    path = re.split(r"/\.(?:claude/)?worktrees/", path)[0]
+    if not path.startswith(best + "/"):
+        return None
+    parts = path[len(best) + 1:].split("/")
+    if parts[0] == "orgs" or (len(parts) > 2 and parts[1] == "projects"):
+        return "/".join(parts[:3])
+    return "/".join(parts[:2])
 
 
 def is_noise(text):
