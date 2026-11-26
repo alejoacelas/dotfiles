@@ -1,28 +1,30 @@
 #!/usr/bin/env bash
-# proj: create or reopen a dated project folder in ~/best, give it a GitHub repo and start an agent there.
-# Usage: proj <name> [--claude|--codex] [--private|--local] [--repo-later]
-#   proj                                         -> pick a project, newest first; type to fuzzy filter;
-#                                                   inside an area (a top-level monorepo such as work/, areas/<x>, orgs/<company>) it lists
-#                                                   that area's folders first and Ctrl-A widens to all of ~/best;
-#                                                   Tab then an instruction runs claude -p there in the background
-#                                                   (in desk when Tab comes before any filter text)
-#   proj morning-notes --claude                  -> ~/best/projects/YYYY-MM-DD-morning-notes, public repo morning-notes;
-#                                                   inside an area repo, <area>/YYYY-MM-DD-morning-notes with no new repo
-#   proj orgs/impact-ops/status-tracker          -> ~/best/orgs/impact-ops/YYYY-MM-status-tracker, private repo
-#   proj odd-idea --local                        -> no GitHub repo
-#   proj odd-idea --repo-later                   -> the folder at once; the GitHub repo is made in the
-#                                                   background (log in ~/.local/state/proj/repos)
-#   proj --list [--here]                         -> the picker's list, one path per line relative to ~/best;
-#                                                   --here puts the current area's folders first
-# A name inside any repository (areas/dotfiles/x, areas/agent-tools/mac/x) is a plain dated folder, no repo.
-# New folders get a first commit and a GitHub repo named <name>; the URL is printed.
+# proj: create or reopen a dated project folder in ~/best and start an agent there.
+# Usage: proj <name> [--claude|--codex] [--local] [--repo-later]
+#   proj                                  -> pick a folder, newest first; type to fuzzy filter;
+#                                            inside an area (work, personal, systems or orgs/<org>) it lists
+#                                            that area's folders first and Ctrl-A widens to all of ~/best;
+#                                            Tab then an instruction runs claude -p there in the background
+#                                            (in systems/desk when Tab comes before any filter text)
+#   proj morning-notes --claude           -> inside an area, <area>/projects/YYYY-MM-DD-morning-notes;
+#                                            from ~/best itself it asks which area (work, personal, systems)
+#   proj work/morning-notes               -> work/projects/YYYY-MM-DD-morning-notes, from anywhere
+#   proj orgs/impact-ops/status-tracker   -> orgs/impact-ops/YYYY-MM-status-tracker in that org's repo;
+#                                            a new org gets its own private GitHub repo orgs-<org>
+#   proj orgs/new-org/x --local           -> the new org's repo stays local, with no GitHub repo
+#   proj orgs/new-org/x --repo-later      -> the folder at once; the org's GitHub repo is made in the
+#                                            background (log in ~/.local/state/proj/repos)
+#   proj --list [--here]                  -> the picker's list, one path per line relative to ~/best;
+#                                            --here puts the current area's folders first
+# Any other path (systems/dotfiles/x, work/projects/x) is a plain dated folder in that folder.
+# Folders are plain folders in their area's repository; only a new org gets a new repo.
 # An existing folder whose name ends in -<name> is reopened instead, and its remote URL is printed.
 # The proj shell function in shell/zprofile cds into the picked or created folder.
 set -euo pipefail
 
-usage() { sed -n '2,14s/^# \{0,1\}//p' "$0" >&2; exit 2; }
+usage() { sed -n '2,22s/^# \{0,1\}//p' "$0" >&2; exit 2; }
 
-agent="" name="" visibility="" list="" here="" repo_later=""
+agent="" name="" local_only="" list="" here="" repo_later=""
 for arg in "$@"; do
   case "$arg" in
     --list) list=1 ;;  # the picker's list (also the Ctrl-A reload)
@@ -30,8 +32,7 @@ for arg in "$@"; do
     --repo-later) repo_later=1 ;;
     --claude) agent=claude ;;
     --codex) agent=codex ;;
-    --private) visibility=private ;;
-    --local) visibility=local ;;
+    --local) local_only=1 ;;
     -h|--help) usage ;;
     -*) echo "proj: unknown option $arg" >&2; usage ;;
     *) [ -z "$name" ] || usage; name="$arg" ;;
@@ -40,38 +41,40 @@ done
 best="$HOME/best"
 self="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 
-# Top-level folders that are not areas themselves.
-not_area='archive desk projects areas orgs'
+# The areas: each holds undated ongoing folders plus projects/YYYY-MM-DD-name one-offs.
+areas='work personal systems'
+is_area() { case " $areas " in *" $1 "*) return 0 ;; esac; return 1; }
 
-# The area the shell is in: a top-level area folder such as work, or areas/<x> or
-# orgs/<company>; empty elsewhere.
+# The area the shell is in: work, personal, systems or orgs/<org>; empty elsewhere.
 current_area() {
   local rel="${PWD#"$best"/}" a b
   [ "$rel" != "$PWD" ] || return 0
   IFS=/ read -r a b _ <<<"$rel"
-  case "$a" in
-    areas|orgs) [ -n "$b" ] && echo "$a/$b" ;;
-    archive|desk|projects) ;;
-    *) echo "$a" ;;
-  esac
+  if is_area "$a"; then echo "$a"
+  elif [ "$a" = orgs ] && [ -n "$b" ]; then echo "orgs/$b"
+  fi
 }
 
-# Pickable folders as "<creation date> <creation time> <path>". With an area, that area's folders;
-# otherwise projects, named areas and their immediate children, org folders, top-level area
-# children, and desk.
-# BSD stat and date on macOS, GNU on Linux.
+# The folders the picker offers inside root $1 (relative to ~/best): an area's children and its
+# projects/ children; an org's children; any other folder's children. With no root, every area's
+# folders plus the orgs and their folders.
+candidate_folders() {
+  local root="${1:-}" a
+  if [ -z "$root" ]; then
+    for a in $areas; do candidate_folders "$a"; done
+    [ ! -d "$best/orgs" ] || find "$best/orgs" -mindepth 1 -maxdepth 2 -type d ! -name '.*' ! -name node_modules
+  elif is_area "$root"; then
+    [ ! -d "$best/$root" ] || find "$best/$root" -mindepth 1 -maxdepth 1 -type d ! -name '.*' ! -name node_modules ! -name projects
+    [ ! -d "$best/$root/projects" ] || find "$best/$root/projects" -mindepth 1 -maxdepth 1 -type d ! -name '.*' ! -name node_modules
+  else
+    [ ! -d "$best/$root" ] || find "$best/$root" -mindepth 1 -maxdepth 1 -type d ! -name '.*' ! -name node_modules
+  fi
+}
+
+# Pickable folders as "<creation date> <creation time> <path>". BSD stat and date on macOS, GNU on Linux.
 pickable_folders() {
   local gnu=""; stat -c %W / >/dev/null 2>&1 && gnu=1
-  { if [ -n "${1:-}" ]; then
-      find "$best/$1" -mindepth 1 -maxdepth 1 -type d ! -name '.*' ! -name node_modules
-    else
-      local tops=() t
-      for t in "$best"/*/; do t="${t%/}"; case " $not_area " in *" ${t##*/} "*) ;; *) tops+=("$t") ;; esac; done
-      local roots=() r
-      for r in "$best/projects" "$best/areas" "$best"/areas/* "$best"/orgs/* "${tops[@]}"; do [ -d "$r" ] && roots+=("$r"); done
-      [ ${#roots[@]} -eq 0 ] || find "${roots[@]}" -mindepth 1 -maxdepth 1 -type d ! -name '.*' ! -name node_modules
-      [ ! -d "$best/desk" ] || echo "$best/desk"
-    fi; } | while IFS= read -r dir; do
+  candidate_folders "${1:-}" | while IFS= read -r dir; do
     if [ -n "$gnu" ]; then t="$(stat -c %W "$dir")"; d="$(date -d "@$t" +%F)"
     else t="$(stat -f %B "$dir")"; d="$(date -r "$t" +%F)"; fi
     echo "$d $t $dir"
@@ -110,7 +113,7 @@ if [ -n "$list" ]; then
 fi
 
 if [ -z "$name" ]; then
-  [ -z "$agent$visibility" ] || usage
+  [ -z "$agent$local_only$repo_later" ] || usage
   command -v fzf >/dev/null || { echo "proj: picking a project needs fzf (brew install fzf)" >&2; exit 1; }
   # Inside an area, start with its folders; Ctrl-A reloads the list with all of ~/best.
   # Typing ranks fuzzy matches; equal matches keep that order.
@@ -125,7 +128,7 @@ if [ -z "$name" ]; then
       --header="$header")" || exit 1
   query="$(sed -n 1p <<<"$out")" key="$(sed -n 2p <<<"$out")" picked="$(sed -n 3p <<<"$out")"
   if [ "$key" = tab ]; then
-    [ -n "$query" ] || picked=desk
+    [ -n "$query" ] || picked=systems/desk
     printf 'instruction for claude in %s> ' "$picked" >&2
     IFS= read -r -e instruction </dev/tty
     [ -n "$instruction" ] || { echo "proj: empty instruction, nothing started" >&2; exit 1; }
@@ -136,89 +139,100 @@ if [ -z "$name" ]; then
   exit 0
 fi
 
-# A bare name goes into the current area, or into projects/ outside one.
-area="$(current_area)"
+# Ask which area a bare name typed outside every area goes into.
+ask_area() {
+  local answer
+  { : </dev/tty; } 2>/dev/null || { echo "proj: not in an area; say <area>/$name (areas: $areas)" >&2; exit 2; }
+  printf 'area for %s (work, personal, systems)> ' "$name" >&2
+  IFS= read -r answer </dev/tty
+  case "$answer" in
+    w|work) echo work ;;
+    p|personal) echo personal ;;
+    s|systems) echo systems ;;
+    *) echo "proj: no area $answer; nothing created" >&2; exit 2 ;;
+  esac
+}
+
+# Where the folder goes: a bare name into the current area (asked for outside one); <area>/<name>
+# into that area's projects/; orgs/<org>/<name> into that org; any other path into that folder.
+org=""
 case "$name" in
-  */*) parent="$best/${name%/*}"; slug="${name##*/}" ;;
-  *) parent="$best/${area:-projects}"; slug="$name" ;;
+  orgs/*/*/*) parent="$best/${name%/*}"; slug="${name##*/}" ;;
+  orgs/*/*) org="${name#orgs/}"; org="${org%%/*}"; parent="$best/orgs/$org"; slug="${name##*/}" ;;
+  orgs/*) echo "proj: say orgs/<org>/<name>" >&2; exit 2 ;;
+  */*) parent="$best/${name%/*}"; slug="${name##*/}"
+       ! is_area "${name%/*}" || parent="$parent/projects" ;;
+  *) area="$(current_area)"
+     [ -n "$area" ] || area="$(ask_area)"
+     case "$area" in orgs/*) org="${area#orgs/}"; parent="$best/$area" ;; *) parent="$best/$area/projects" ;; esac
+     slug="$name" ;;
 esac
-# A folder inside a repository (an area that is a repository, or any folder in one) holds its
-# entries as plain folders, with no repo of their own.
-monorepo=""
-[ "$(git -C "$parent" rev-parse --is-inside-work-tree 2>/dev/null)" = true ] && monorepo=1
-# Own projects and area entries are dated to the day; client projects, trials and the rest use the month.
-date_format=%Y-%m
-[ "$parent" = "$best/projects" ] || [ -n "$monorepo" ] && date_format=%Y-%m-%d
 slug="$(printf '%s' "$slug" | tr '[:upper:] _' '[:lower:]--' | tr -cd 'a-z0-9-')"
 [ -n "$slug" ] || { echo "proj: name must contain letters or digits" >&2; exit 2; }
-# Client work under orgs/ is private; everything else is public unless told otherwise.
-if [ -z "$visibility" ]; then
-  case "$parent/" in
-    "$best/orgs/"*) visibility=private ;;
-    *) visibility=public ;;
-  esac
+# Org folders are dated to the month; everything else to the day.
+date_format=%Y-%m-%d
+[ -z "$org" ] || date_format=%Y-%m
+
+# A new org becomes its own repository with a private GitHub repo orgs-<org>.
+if [ -n "$org" ] && { [ ! -d "$parent" ] ||
+    [ "$(git -C "$parent" rev-parse --show-toplevel 2>/dev/null)" != "$(cd "$parent" && pwd -P)" ]; }; then
+  org="$(printf '%s' "$org" | tr '[:upper:] _' '[:lower:]--' | tr -cd 'a-z0-9-')"
+  parent="$best/orgs/$org" repo="orgs-$org"
+  if [ -z "$local_only" ] && [ -z "$repo_later" ]; then
+    # Check the repo name before creating anything, so a taken name leaves no half-made repo.
+    owner="$(gh api user --jq .login)"
+    if out="$(gh api "repos/$owner/$repo" --jq .html_url 2>&1)"; then
+      echo "proj: $out already exists; clone it to $parent instead" >&2; exit 1
+    elif ! grep -q "Not Found" <<<"$out"; then
+      echo "proj: could not check GitHub: $out" >&2; exit 1
+    fi
+  fi
+  mkdir -p "$parent"
+  git -C "$parent" init -q -b main
+  printf '.DS_Store\n.env\n.env.*\n.supervise/\n' > "$parent/.gitignore"
+  git -C "$parent" add .gitignore
+  git -C "$parent" commit -q -m "Start $repo"
+  echo "Created org repo $parent"
+  if [ -z "$local_only" ] && [ -n "$repo_later" ]; then
+    # The repo comes later: a taken name leaves the org without a remote, said in the log and a
+    # notification.
+    logs="${XDG_STATE_HOME:-$HOME/.local/state}/proj/repos"; mkdir -p "$logs"
+    log="$logs/$(date +%Y-%m-%d-%H%M%S)-$repo.log"
+    (
+      set +e
+      if owner="$(gh api user --jq .login)" && ! gh api "repos/$owner/$repo" >/dev/null 2>&1 &&
+         gh repo create "$owner/$repo" --private --source "$parent" --push >/dev/null; then
+        echo "created $(git -C "$parent" remote get-url origin)"
+      else
+        echo "proj: no GitHub repo for $parent (name taken or gh failed); run gh repo create yourself"
+        osascript -e "display notification \"No GitHub repo for $repo: see $log\" with title \"proj\"" 2>/dev/null
+      fi
+    ) </dev/null >"$log" 2>&1 &
+    echo "GitHub repo $repo: being created in the background (log: $log)"
+  elif [ -z "$local_only" ]; then
+    gh repo create "$owner/$repo" --private --source "$parent" --push >/dev/null
+    url="$(git -C "$parent" remote get-url origin)"
+    echo "${url%.git}"
+  fi
 fi
 
+case "$parent" in "$best/work/projects"|"$best/personal/projects"|"$best/systems/projects") mkdir -p "$parent" ;; esac
+[ -d "$parent" ] || { echo "proj: no folder $parent" >&2; exit 1; }
 existing="$(find "$parent" -maxdepth 1 -type d \( -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-$slug" \
   -o -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-$slug" \) 2>/dev/null | sort | tail -1)"
 if [ -n "$existing" ]; then
   dir="$existing"
   echo "Reopening $dir"
   if url="$(git -C "$dir" remote get-url origin 2>/dev/null)"; then echo "${url%.git}"; fi
-elif [ -d "$parent/template" ] && git -C "$parent" rev-parse -q --is-inside-work-tree >/dev/null 2>&1; then
-  # A folder inside a repository with a template, such as projects/2026-10-08-trials/: copy it, no new repo.
+elif [ -d "$parent/template" ]; then
+  # A folder with a template, such as systems/projects/2026-10-08-trials/: copy it.
   dir="$parent/$(date +"$date_format")-$slug"
   cp -R "$parent/template" "$dir"
   echo "Created $dir from template"
-elif [ -n "$monorepo" ]; then
-  dir="$parent/$(date +"$date_format")-$slug"
-  mkdir -p "$dir"
-  echo "Created $dir"
 else
   dir="$parent/$(date +"$date_format")-$slug"
-  if [ "$visibility" != local ] && [ -z "$repo_later" ]; then
-    # Check the repo name before creating anything, so a taken name leaves no half-made folder.
-    owner="$(gh api user --jq .login)"
-    if out="$(gh api "repos/$owner/$slug" --jq .html_url 2>&1)"; then
-      echo "proj: $out already exists; pick another name" >&2; exit 1
-    elif ! grep -q "Not Found" <<<"$out"; then
-      echo "proj: could not check GitHub: $out" >&2; exit 1
-    fi
-  fi
   mkdir -p "$dir"
-  git -C "$dir" init -q -b main
-  cat > "$dir/AGENTS.md" <<AGENTS
-# $slug
-
-Scope: TODO
-
-- Visibility: $visibility
-- Still running or billing: none
-AGENTS
-  git -C "$dir" add AGENTS.md
-  git -C "$dir" commit -q -m "Start $slug"
   echo "Created $dir"
-  if [ "$visibility" != local ] && [ -n "$repo_later" ]; then
-    # The repo comes later: a taken name leaves the folder without a remote, said in the log and a
-    # notification.
-    logs="${XDG_STATE_HOME:-$HOME/.local/state}/proj/repos"; mkdir -p "$logs"
-    log="$logs/$(date +%Y-%m-%d-%H%M%S)-$slug.log"
-    (
-      set +e
-      if owner="$(gh api user --jq .login)" && ! gh api "repos/$owner/$slug" >/dev/null 2>&1 &&
-         gh repo create "$owner/$slug" "--$visibility" --source "$dir" --push >/dev/null; then
-        echo "created $(git -C "$dir" remote get-url origin)"
-      else
-        echo "proj: no GitHub repo for $dir (name taken or gh failed); run gh repo create yourself"
-        osascript -e "display notification \"No GitHub repo for $slug: see $log\" with title \"proj\"" 2>/dev/null
-      fi
-    ) </dev/null >"$log" 2>&1 &
-    echo "GitHub repo $slug: being created in the background (log: $log)"
-  elif [ "$visibility" != local ]; then
-    gh repo create "$owner/$slug" "--$visibility" --source "$dir" --push >/dev/null
-    url="$(git -C "$dir" remote get-url origin)"
-    echo "${url%.git}"
-  fi
 fi
 
 cd "$dir"
