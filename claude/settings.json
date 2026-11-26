@@ -71,7 +71,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$HOME/best/areas/dotfiles/claude/hooks/relink-settings.sh\"",
+            "command": "bash \"$HOME/best/systems/dotfiles/claude/hooks/relink-settings.sh\"",
             "timeout": 10
           }
         ]
@@ -121,7 +121,7 @@
       "### Org-wide",
       "**Organization**: None; personal setup of one person",
       "**Cloud provider(s)**: Fly.io, Cloudflare, Vercel and Google Cloud on the personal account",
-      "**Repository visibility**: every folder under `~/best` is its own GitHub repository under `alejoacelas`; public unless it holds credentials, employer or client information, or others' non-public information",
+      "**Repository visibility**: `~/best`'s top folders (work, personal, systems, each org) are private monorepos under `alejoacelas`; a project in one that holds no credentials, employer or client information, or others' non-public information is mirrored to its own public repository",
       "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
       "**Secrets management**: 1Password (`op`, `op-agent`); API keys loaded on demand into ignored `.env` files; never print, commit, or disclose secret values",
       "**Default / protected branches**: `main`, unprotected; agents commit and push to it directly",

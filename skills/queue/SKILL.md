@@ -30,7 +30,7 @@ Read `~/best/systems/desk/AGENTS.md` for the shared frontmatter and naming rules
 ```markdown
 ---
 people: [<slugs from ~/best/systems/desk/people/, [] if none>]
-projects: [<repository or project slug, if any>]
+projects: [<the project folder, if any: coaching, 2026-11-04-access-form, aim>]
 why: Alejo asked on <date> to queue <what>, in one line
 next: <the decision to take, verb-first> (do|skip|defer)
 queued: <YYYY-MM-DD>
