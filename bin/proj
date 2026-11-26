@@ -57,7 +57,8 @@ current_area() {
 }
 
 # Pickable folders as "<creation date> <creation time> <path>". With an area, that area's folders;
-# otherwise everything in projects/, areas/, orgs/<company>/ and the top-level areas, plus desk.
+# otherwise projects, named areas and their immediate children, org folders, top-level area
+# children, and desk.
 # BSD stat and date on macOS, GNU on Linux.
 pickable_folders() {
   local gnu=""; stat -c %W / >/dev/null 2>&1 && gnu=1
@@ -67,8 +68,8 @@ pickable_folders() {
       local tops=() t
       for t in "$best"/*/; do t="${t%/}"; case " $not_area " in *" ${t##*/} "*) ;; *) tops+=("$t") ;; esac; done
       local roots=() r
-      for r in "$best/projects" "$best/areas" "$best"/orgs/* "${tops[@]}"; do [ -d "$r" ] && roots+=("$r"); done
-      [ ${#roots[@]} -eq 0 ] || find "${roots[@]}" -mindepth 1 -maxdepth 1 -type d ! -name '.*'
+      for r in "$best/projects" "$best/areas" "$best"/areas/* "$best"/orgs/* "${tops[@]}"; do [ -d "$r" ] && roots+=("$r"); done
+      [ ${#roots[@]} -eq 0 ] || find "${roots[@]}" -mindepth 1 -maxdepth 1 -type d ! -name '.*' ! -name node_modules
       [ ! -d "$best/desk" ] || echo "$best/desk"
     fi; } | while IFS= read -r dir; do
     if [ -n "$gnu" ]; then t="$(stat -c %W "$dir")"; d="$(date -d "@$t" +%F)"
