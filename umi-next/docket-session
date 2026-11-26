@@ -5,7 +5,7 @@ UmiNext runs this (as ~/.config/umi-next/docket-hook) once a docketed session's 
 with the session as JSON on stdin (next/DESIGN.md in the umi repository). It reads the end of
 the session's transcript, has `claude -p` write the item in the queue skill's format, makes a
 session link with `umi-link --app next` on the agent server, then commits and pushes the item
-to ~/best/desk. Any failure exits non-zero with the reason on stderr, and UmiNext shows the
+to ~/best/systems/desk. Any failure exits non-zero with the reason on stderr, and UmiNext shows the
 session in Review with it.
 
     docket-session < session.json        # what UmiNext does

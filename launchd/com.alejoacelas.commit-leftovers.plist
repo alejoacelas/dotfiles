@@ -4,7 +4,7 @@
   <key>Label</key><string>com.alejoacelas.commit-leftovers</string>
   <key>ProgramArguments</key><array>
     <string>/opt/homebrew/bin/python3</string>
-    <string>/Users/alejo/best/areas/dotfiles/bin/commit-leftovers</string>
+    <string>/Users/alejo/best/systems/dotfiles/bin/commit-leftovers</string>
   </array>
   <key>EnvironmentVariables</key><dict><key>PATH</key><string>/opt/homebrew/bin:/usr/bin:/bin</string></dict>
   <key>StartCalendarInterval</key><dict><key>Hour</key><integer>12</integer><key>Minute</key><integer>30</integer></dict>

@@ -1,12 +1,12 @@
 ---
 name: summarize-call
-description: Fetch a Granola call transcript from the API, clean it, and file a tidied transcript plus a structured summary in ~/best/desk, following that repository's AGENTS.md. Use when the user wants to pull, clean, summarize, or archive Granola calls — "summarise my call", "save my last Granola call", "archive these calls".
+description: Fetch a Granola call transcript from the API, clean it, and file a tidied transcript plus a structured summary in ~/best/systems/desk, following that repository's AGENTS.md. Use when the user wants to pull, clean, summarize, or archive Granola calls — "summarise my call", "save my last Granola call", "archive these calls".
 ---
 
 # Granola call → tidied transcript + summary
 
 Adapted from [HartreeWorks/skill--summarise-granola](https://github.com/HartreeWorks/skill--summarise-granola),
-rewired to file into `~/best/desk`. Reads transcripts over Granola's
+rewired to file into `~/best/systems/desk`. Reads transcripts over Granola's
 [public API](https://docs.granola.ai) with a personal key (`scripts/granola.py`).
 
 ## Where it runs
@@ -14,17 +14,17 @@ rewired to file into `~/best/desk`. Reads transcripts over Granola's
 The agent server runs this pipeline on its own for every new Granola call: within about 20
 minutes of a call ending it files the call in desk, creates the doc, shares it with the
 participants and emails Alejo the doc with links he could share (Step 10) (`desk-pipeline/calls.py` and
-`desk-pipeline/jobs/call.md` in [clerk](https://github.com/alejoacelas/ops/tree/main/clerk), `~/best/ops/clerk`, which follow
+`desk-pipeline/jobs/call.md` in [clerk](https://github.com/alejoacelas/systems/tree/main/clerk), `~/best/systems/clerk`, which follow
 this file). Use this skill by hand as the fallback: for a call the server missed or failed
 on, or to redo one. First check that the call isn't filed already:
-`rg -l '^thread: <note id>' ~/best/desk/comms`.
+`rg -l '^thread: <note id>' ~/best/systems/desk/comms`.
 
-Run this workflow from a session whose working directory is inside `~/best/desk`.
+Run this workflow from a session whose working directory is inside `~/best/systems/desk`.
 When triggered anywhere else, hand the job to a headless Claude started there and
 carry on with the current task:
 
 ```bash
-cd ~/best/desk && nohup claude -p "<request>" --dangerously-skip-permissions > <log> 2>&1 &
+cd ~/best/systems/desk && nohup claude -p "<request>" --dangerously-skip-permissions > <log> 2>&1 &
 ```
 
 Write the request so it stands on its own: ask for this skill, name the call and
@@ -39,13 +39,13 @@ and share the doc yourself.
 
 ## Destination and paths
 
-Always save calls in `~/best/desk`. Before fetching or writing, read `~/best/desk/AGENTS.md`
+Always save calls in `~/best/systems/desk`. Before fetching or writing, read `~/best/systems/desk/AGENTS.md`
 and the `people/` file of each participant. That repository defines the filing paths
 and frontmatter. If it is missing, stop and report that; do not create an archive in
 the current project.
 
 Resolve this skill's directory from the `SKILL.md` you loaded and set
-`CALL_SKILL` to that absolute directory. Run archive operations from `~/best/desk`;
+`CALL_SKILL` to that absolute directory. Run archive operations from `~/best/systems/desk`;
 run the bundled helpers by their absolute paths as shown below. References are
 relative to this skill, not the working directory. Temporary transcripts and
 garble inventories stay in `$CALL_SKILL/data/`.
@@ -158,7 +158,7 @@ order, stopping at the first hit:
    `gog -a <account> -j gmail search "from:<address or name>"` — search each
    address in their `people/` file and their name, and take the address they most
    recently wrote from.
-2. The `emails:` field of their file in `~/best/desk/people/`, when it lists one
+2. The `emails:` field of their file in `~/best/systems/desk/people/`, when it lists one
    address.
 3. Granola's attendee list for the note (`GET /v1/notes/<id>` returns `attendees` and
    `calendar_event.invitees`), then the calendar event for the call — its attendees' emails. Check the personal
@@ -207,9 +207,9 @@ topic shifts, preserve exact wording for the categories listed there. Repaired
 garbles are fixed silently — no bracket note; only unresolved ones stay marked
 `[unclear]` / `[name unclear]`.
 
-Save to `~/best/desk/comms/<YYYY-MM>/<YYYY-MM-DD>-<slug>-trans.md`, opening with
+Save to `~/best/systems/desk/comms/<YYYY-MM>/<YYYY-MM-DD>-<slug>-trans.md`, opening with
 frontmatter that lists the other participants as `people:` slugs (and `projects:` when
-the call belongs to one), as `~/best/desk/AGENTS.md` specifies, followed by
+the call belongs to one), as `~/best/systems/desk/AGENTS.md` specifies, followed by
 `source: granola`, `thread: <Granola note id>` and `link: <the note's web_url>`. Create a
 `people/<slug>.md` file for any participant who doesn't have one yet, with the email
 you found in Step 4.

@@ -20,7 +20,7 @@ the links he might send the other participants. Nobody else gets it.
    last 7 days, plus `curl -s 127.0.0.1:8770/api/page` (today); a day that answers "this
    day is now the page" is today. Day pages repeat unchanged sections, so keep each
    distinct version once, under the first day it appears. Other sources that count: his
-   notes in `~/best/desk/notes/` with `written_by: alejo` or `mixed` and no `gdoc:` of
+   notes in `~/best/systems/desk/notes/` with `written_by: alejo` or `mixed` and no `gdoc:` of
    their own, and Diary entries (`source: diary`). Copy his words as written, under a
    heading per day or source, after one line saying where they come from; don't
    summarise or add your own text. Create the doc with `gog -a <account> -j docs create
@@ -34,10 +34,10 @@ Where to look, for mentioned and suggested:
 - His Google Docs, private and public: `gog -a <account> -j drive search "<words>" --max 10`
   on both accounts (`alejoacelas@gmail.com`, `alejo@impact-ops.org`), a few searches with
   the call's topics.
-- `~/best/desk/sent/`: what he has already sent people (its `gdoc:` and links).
-- `~/best/desk/notes/` with `written_by: alejo` or `mixed`, and their `gdoc:`.
+- `~/best/systems/desk/sent/`: what he has already sent people (its `gdoc:` and links).
+- `~/best/systems/desk/notes/` with `written_by: alejo` or `mixed`, and their `gdoc:`.
 - His public repositories: `gh repo list alejoacelas --visibility public --limit 100`.
-- `~/best/desk/links/work/`: pages he has read lately (`rg -i '<topic>' ~/best/desk/links/work`).
+- `~/best/systems/desk/links/work/`: pages he has read lately (`rg -i '<topic>' ~/best/systems/desk/links/work`).
 - The web, only to find the URL of something named in the call.
 
 Never suggest anything from another person's call or private conversation, a doc someone

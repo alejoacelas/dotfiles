@@ -9,7 +9,7 @@ Alejo drafts in the doc (outreach emails, interview questions, essays, often for
 Impact Ops) and types requests to you inline as `[...]`. Requests are terse and
 point at the nearby text: "[doing?]" means "is *doing* the right word here?",
 "[more options for 2]" refers to your earlier option (b) or sentence 2. When a
-request mentions calls or people, read the call notes in `~/best/desk/comms/` or
+request mentions calls or people, read the call notes in `~/best/systems/desk/comms/` or
 Granola.
 
 ## Each run

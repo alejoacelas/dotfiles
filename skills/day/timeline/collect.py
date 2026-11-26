@@ -347,7 +347,7 @@ def screen(D):
 
 
 def call_summaries(D):
-    """Filed call summaries in ~/best/desk, joined to that day's calendar event by a shared name."""
+    """Filed call summaries in ~/best/systems/desk, joined to that day's calendar event by a shared name."""
     for day in D.days:
         k = day.isoformat()
         for path in glob.glob(os.path.join(BEST, "desk", "**", f"{k}-*-sum.md"), recursive=True):

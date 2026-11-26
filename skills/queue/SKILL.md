@@ -1,12 +1,12 @@
 ---
 name: queue
-description: Put something from the current session on Alejo's next morning docket, as a queued item in ~/best/desk/requested/ with links to the work and a link that reopens this session in Umi. Use when Alejo says "queue this", "add this to my docket", "put it on tomorrow's docket" or "remind me on the docket".
+description: Put something from the current session on Alejo's next morning docket, as a queued item in ~/best/systems/desk/requested/ with links to the work and a link that reopens this session in Umi. Use when Alejo says "queue this", "add this to my docket", "put it on tomorrow's docket" or "remind me on the docket".
 ---
 
 # Queue for the docket
 
 The docket is the 08:00 London Slack DM from Clerk, the agent server's pipeline
-(`~/best/ops/clerk`; see "Queued items" in its `docs/desk-pipeline.md`).
+(`~/best/systems/clerk`; see "Queued items" in its `docs/desk-pipeline.md`).
 It lists every `requested/` item whose `queued:` date has arrived until the item has
 `closed:`.
 
@@ -24,12 +24,12 @@ often it runs and when it ends.
 
 ## Write the item
 
-Read `~/best/desk/AGENTS.md` for the shared frontmatter and naming rules. Then write
-`~/best/desk/requested/YYYY-MM/<today>-<slug>.md`:
+Read `~/best/systems/desk/AGENTS.md` for the shared frontmatter and naming rules. Then write
+`~/best/systems/desk/requested/YYYY-MM/<today>-<slug>.md`:
 
 ```markdown
 ---
-people: [<slugs from ~/best/desk/people/, [] if none>]
+people: [<slugs from ~/best/systems/desk/people/, [] if none>]
 projects: [<repository or project slug, if any>]
 why: Alejo asked on <date> to queue <what>, in one line
 next: <the decision to take, verb-first> (do|skip|defer)
@@ -71,7 +71,7 @@ Queued by Alejo from a <Claude Code|Codex> session on <machine> on <date>.
 ## Commit
 
 ```bash
-cd ~/best/desk && git pull --rebase -q && git add requested && git commit -qm "Queue <slug> for the docket" && git push -q
+cd ~/best/systems/desk && git pull --rebase -q && git add requested && git commit -qm "Queue <slug> for the docket" && git push -q
 ```
 
 Tell Alejo in one line what you queued and for which docket.

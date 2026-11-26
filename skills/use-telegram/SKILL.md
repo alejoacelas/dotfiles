@@ -32,4 +32,4 @@ tg --write archive-joined   # archive chats that hold only "X joined Telegram"
 ```
 
 Setup, credentials and re-login are in
-[telegram-cli's AGENTS.md](/Users/alejo/best/areas/agent-tools/telegram/cli/AGENTS.md).
+[telegram-cli's AGENTS.md](/Users/alejo/best/systems/agent-tools/telegram/cli/AGENTS.md).

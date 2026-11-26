@@ -4,7 +4,7 @@
 Usage: chrome_export.py [--days 3]
 publish runs it hourly and copies the result to the agent server
 (/srv/agent-share/chrome-history/visits.json), where clerk's desk-links job files the pages Alejo
-read into ~/best/desk/links/. Each visit: t (local ISO time), url, title, dur (seconds, capped at
+read into ~/best/systems/desk/links/. Each visit: t (local ISO time), url, title, dur (seconds, capped at
 30 minutes), profile.
 """
 import datetime as dt

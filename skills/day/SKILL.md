@@ -34,7 +34,7 @@ description: Gather what Alejo did on a given day from agent sessions, the focus
    expands prompts).
 2. Add what the script can't reach:
    - Calendar events from every calendar the Google Calendar connector lists.
-   - Call summaries filed that day: `find ~/best/desk -name 'YYYY-MM-DD-*-sum.md'`.
+   - Call summaries filed that day: `find ~/best/systems/desk -name 'YYYY-MM-DD-*-sum.md'`.
 3. Answer the question Alejo asked, in the form he asked for. Without a stated
    form, lead with the main threads of work, then meetings, then everything else.
    When the plans page lists priorities, say how much focus each one got, by

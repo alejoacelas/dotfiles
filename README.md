@@ -8,9 +8,9 @@ Inspired by [benthamite/dotfiles](https://github.com/benthamite/dotfiles).
 
 ```sh
 mkdir -p ~/best
-git clone https://github.com/alejoacelas/dotfiles ~/best/areas/dotfiles
-brew bundle --file ~/best/areas/dotfiles/Brewfile
-~/best/areas/dotfiles/bin/install.sh
+git clone https://github.com/alejoacelas/dotfiles ~/best/systems/dotfiles
+brew bundle --file ~/best/systems/dotfiles/Brewfile
+~/best/systems/dotfiles/bin/install.sh
 ```
 
 On an existing machine, run just the last command. The installer links configuration
@@ -48,7 +48,7 @@ skips generated agent instructions. Update it against CLI help and Stripe's
 reference; installing an upstream skill is unnecessary.
 
 [`summarize-call`](skills/summarize-call/SKILL.md) is the official
-call workflow for both agents. It files in `~/best/desk` under that repository's
+call workflow for both agents. It files in `~/best/systems/desk` under that repository's
 instructions. Both clients link to the same skill source. The older synced
 `summarise-granola` skill is disabled through Claude's `skillOverrides`, including
 its `anthropic-skills:` name, so account sync cannot reactivate it locally.
@@ -64,8 +64,8 @@ in its own `tests/` directory.
 Private skill sources live in an optional, independent repository. To install them:
 
 ```sh
-gh repo clone alejoacelas/private-skills ~/best/areas/dotfiles/private-skills
-~/best/areas/dotfiles/bin/install.sh
+gh repo clone alejoacelas/private-skills ~/best/systems/dotfiles/private-skills
+~/best/systems/dotfiles/bin/install.sh
 ```
 
 `private-skills/` is Git-ignored here and retains its own history and private remote.
@@ -80,13 +80,13 @@ Saved skill cases, their trials and review feedback live in a separate private
 repository, checked out at `skill-cases/` and Git-ignored here:
 
 ```sh
-gh repo clone alejoacelas/skill-cases ~/best/areas/dotfiles/skill-cases
+gh repo clone alejoacelas/skill-cases ~/best/systems/dotfiles/skill-cases
 ```
 
 ## Helpers
 
 `bin/adb-phone` connects the Android test phone and forwards any supplied `adb`
-arguments to it. Use `~/best/areas/dotfiles/bin/adb-phone`; shared helpers live here rather
+arguments to it. Use `~/best/systems/dotfiles/bin/adb-phone`; shared helpers live here rather
 than alongside projects.
 
 `proj <folder>/<name> [--claude|--codex]` creates or reopens a dated project in
