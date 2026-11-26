@@ -254,6 +254,42 @@ trust_level = "trusted"
 [projects."/Users/alejo/best"]
 trust_level = "trusted"
 
+[projects."/Users/alejo/best/work"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/personal"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/systems"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/orgs/aim"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/orgs/impact-ops"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/systems/desk"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/systems/agent-tools"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/systems/dotfiles"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/systems/umi"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/work/ask-their-claude"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/personal/websites/website"]
+trust_level = "trusted"
+
+[projects."/Users/alejo/best/personal/websites/blog"]
+trust_level = "trusted"
+
 [projects."/Users/alejo/people"]
 trust_level = "trusted"
 
@@ -261,21 +297,6 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/Users/alejo/projects"]
-trust_level = "trusted"
-
-[projects."/Users/alejo/best/projects"]
-trust_level = "trusted"
-
-[projects."/Users/alejo/best/desk"]
-trust_level = "trusted"
-
-[projects."/Users/alejo/best/projects/2026-10-16-uplift-modelling"]
-trust_level = "trusted"
-
-[projects."/Users/alejo/best/work"]
-trust_level = "trusted"
-
-[projects."/Users/alejo/best/areas/life"]
 trust_level = "trusted"
 
 [hooks.state."tern@tern:hooks/hooks.json:stop:0:0"]
