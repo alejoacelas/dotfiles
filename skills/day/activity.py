@@ -2,7 +2,7 @@
 """activity.py: what Alejo did on one day, as a markdown timeline. Read-only.
 
 Usage: activity.py [YYYY-MM-DD | -N] [--json]   (default today; -1 is yesterday)
-Focus time in Umi and Umi Next, then per project (top folder and child under ~/best): agent sessions (Claude Code,
+Focus time in Umi, Umi Next and BB, then per project (top folder and child under ~/best): agent sessions (Claude Code,
 Codex) with their focus time and how they ended, other focus, commits. Then the plans app's day and
 Chrome history for every profile. Prints markdown (or --json) to stdout and saves nothing.
 """
@@ -303,7 +303,7 @@ def render(d):
         line += f", {f['first']}–{f['last']}"
         if f["breaks"]:
             line += "; breaks " + ", ".join(f"{b['start']}–{b['end']}" for b in f["breaks"])
-        print(line + ". Focus counts keyboard focus in Umi or Umi Next while Alejo was active in the last 3 "
+        print(line + ". Focus counts keyboard focus in Umi, Umi Next or BB while Alejo was active in the last 3 "
               "minutes.\n")
         if d["focus_error"]:
             print(f"Focus log error: {d['focus_error']}.\n")

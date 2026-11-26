@@ -1,6 +1,6 @@
 ---
 name: day
-description: Gather what Alejo did on a given day from agent sessions, the focus logs of Umi and Umi Next, commits, the plans app, Chrome history, calendar and calls. Use when he asks what he worked on, where his time went, or wants a summary, log or update covering one or more days.
+description: Gather what Alejo did on a given day from agent sessions, the focus logs of Umi, Umi Next and BB, commits, the plans app, Chrome history, calendar and calls. Use when he asks what he worked on, where his time went, or wants a summary, log or update covering one or more days.
 ---
 
 # Day
@@ -8,11 +8,14 @@ description: Gather what Alejo did on a given day from agent sessions, the focus
 1. Run `activity.py [YYYY-MM-DD | -N]` from this skill's folder (default today,
    `-1` yesterday) once per day asked about. Add `--json` for the same data as
    JSON. It prints:
-   - Focus for the day across Umi and Umi Next: total minutes of keyboard
+   - Focus for the day across Umi, Umi Next and BB: total minutes of keyboard
      focus, first and last focus, and breaks of 30 minutes or more. Focus is
-     the best measure of where his attention went. Each app's log is read with
-     `umi-next focus-log --by session`; on days with focus in both apps, rows
-     name their app.
+     the best measure of where his attention went. Umi's and Umi Next's logs are
+     read with `umi-next focus-log --by session`; BB's is the Later plugin's
+     activity log (`bb later log-path`), which also records shortcuts and
+     clicks. On days with focus in more than one app, rows name their app. A BB
+     thread shows as a "BB thread" focus row under its folder's project; its
+     Claude session is counted among the scripted runs, since BB starts it.
    - Per project (the repository under `~/best`), largest focus first: agent
      sessions with their title, first and last prompt, focus minutes and the
      agent's last summary ("ended with"); other focus, such as files, pages and
@@ -45,7 +48,7 @@ description: Gather what Alejo did on a given day from agent sessions, the focus
    what he worked on, in order of time, and how it compared with his
    priorities. Show the draft to him; the plans page is his to edit.
 
-Focus covers only Umi and Umi Next. Time in other apps shows up through Dayflow's screen
+Focus covers only Umi, Umi Next and BB. Time in other apps shows up through Dayflow's screen
 record, Chrome history, the calendar and call summaries. Dayflow's cards are Claude's reading of
 screenshots: trust them for what app and subject were on screen, less for exact times or results.
 
