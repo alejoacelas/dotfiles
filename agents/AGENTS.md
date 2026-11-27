@@ -119,7 +119,8 @@ When opening any Claude Code or Codex session, use
 restricted permissions.
 
 Reach Gmail, Drive, Docs and Calendar with `gog`, Slack with the `use-slack` skill,
-Granola with `granola` and Exa search with `exa-pp-cli websearch` and `contents`.
+Granola with `granola`, Asana with `dharma` and Exa search with `exa-pp-cli websearch`
+and `contents`. `slack-pp-cli` searches Slack and keeps a local copy of its history.
 The claude.ai connectors are blocked in `claude/settings.json`, so a session works the
 same on either Claude account and there is one tool per service to maintain.
 
