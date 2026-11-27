@@ -1,6 +1,6 @@
 ---
 name: queue
-description: Put something from the current session on Alejo's next morning docket, as a queued item in ~/best/systems/desk/requested/ with links to the work and a link that reopens this session in BB or Umi. Use when Alejo says "queue this", "add this to my docket", "put it on tomorrow's docket" or "remind me on the docket".
+description: Put something from the current session on Alejo's next morning docket, as a queued item in ~/best/systems/desk/requested/ with links to the work and a link that reopens this session in BB. Use when Alejo says "queue this", "add this to my docket", "put it on tomorrow's docket" or "remind me on the docket".
 ---
 
 # Queue for the docket
@@ -34,16 +34,14 @@ projects: [<the project folder, if any: coaching, 2026-11-04-access-form, aim>]
 why: Alejo asked on <date> to queue <what>, in one line
 next: <the decision to take, verb-first> (do|skip|defer)
 queued: <YYYY-MM-DD>
-bb: <BB link, for a session in BB>
-bb_web: <BB web link, with bb>
-umi: <umi link, for any other session>
-umi_page: <page link, with umi>
+bb: <BB link>
+bb_web: <BB web link>
 ---
 
 Queued by Alejo from a <Claude Code|Codex> session on <machine> on <date>.
 
 - <links: artifacts, docs, PRs, repositories, files>
-- Session: [work on this in BB](<BB link>), or [work on this in Umi](<page link>)
+- Session: [work on this in BB](<BB link>)
 
 <two to five lines: what was done, what's left, what the decision depends on>
 ```
@@ -51,27 +49,11 @@ Queued by Alejo from a <Claude Code|Codex> session on <machine> on <date>.
 - `queued:` is today's date unless Alejo names a later one; the next docket shows any
   item whose date has arrived.
 - `next:` is a recommendation he can take with one key, like a docket line.
-- Session link in a BB thread (`$BB_THREAD_ID` is set): `bb later link` prints it. Write
-  it as `bb:` and leave out `umi:` and `umi_page:`. It opens the thread in the BB app on
-  the Mac that runs BB. Add `bb_web:` from `bb later link --web`, which opens the thread
-  in a browser on his phone or another Mac; leave it out when that command says BB
-  Connect is off.
-- Session link anywhere else: make it with `umi-link` on the agent server. Its JSON output
-  has the `umi` and `page` links.
-
-  ```bash
-  q() { printf '%q' "$1"; }  # ssh runs the arguments through a shell on the server
-  ssh agent-server "sudo -u agent -H /home/agent/.local/bin/umi-link new --json \
-    --title $(q "<title>") --folder $(q "<working directory relative to ~/best>") \
-    --remote $(q "<origin URL>") --branch $(q "<branch>") --agent <claude|codex> \
-    --resume <session id> --where mac --from $(hostname -s)"
-  ```
-
-  - Session id: for Claude Code, the newest `.jsonl` in
-    `~/.claude/projects/<working directory with / and . replaced by ->/`; for Codex, the
-    newest file under `~/.codex/sessions/`.
-  - Leave out `--remote` and `--branch` when the folder isn't a git checkout.
-  - On the agent server as `agent`, run `umi-link new` directly, with `--where server`.
+- Session link: in a BB thread (`$BB_THREAD_ID` is set), `bb later link` prints `bb:`,
+  which opens the thread in the BB app on the Mac that runs BB, and `bb later link --web`
+  prints `bb_web:`, which opens it in a browser on his phone or another Mac; leave
+  `bb_web:` out when that command says BB Connect is off. A session outside BB gets no
+  session link: leave both lines and the Session bullet out.
 - Link to files by their GitHub URL when the repository has a remote; a local path only
   opens on that machine.
 

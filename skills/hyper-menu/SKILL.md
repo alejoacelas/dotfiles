@@ -1,6 +1,6 @@
 ---
 name: hyper-menu
-description: Give an app a Hyper menu, the list of its commands that a lone tap of Caps Lock opens and one letter runs, and choose its shortcuts. Use when Alejo asks for a Hyper menu, a command menu or palette, or keyboard shortcuts in one of his apps or pages (BB, the plans app, the docket, Umi), or asks to add or move a command in one.
+description: Give an app a Hyper menu, the list of its commands that a lone tap of Caps Lock opens and one letter runs, and choose its shortcuts. Use when Alejo asks for a Hyper menu, a command menu or palette, or keyboard shortcuts in one of his apps or pages (BB, the plans app, the docket), or asks to add or move a command in one.
 ---
 
 # Hyper menu
@@ -53,7 +53,7 @@ shortcut learned in one works by the same rule in the next.
 - A command the app owns and gives no function for can be run by dispatching its own
   key event (BB's `⌘K` works this way). Check each one; some apps ignore made-up events.
 - A native app detects the tap as all four modifiers going down and up with no key
-  between, as Umi Next does.
+  between.
 
 ## Checking it
 
