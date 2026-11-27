@@ -99,11 +99,9 @@ changed. `proj <name>` run inside one creates the dated folder there; from `~/be
 it asks which. `proj orgs/<company>/<name>` creates an org folder, and a new org gets
 its own repository.
 
-These folders are their own repositories, ignored by the one around them:
-`systems/desk`, `systems/agent-tools`, `systems/dotfiles`, `systems/umi`,
-`work/projects/2026-11-11-colleague-ai-report-guides` and the sites in
-`personal/websites`. Public project folders are copied to their own public
-repositories on every push, as listed in each repository's `.github/mirrors.txt`.
+A few folders inside are their own repositories, ignored by the one around them.
+Public project folders are copied to their own public repositories on every push,
+as listed in each repository's `.github/mirrors.txt`.
 
 `systems/desk/` holds work with people outside, such as call prep, messages, notes
 and research. Follow [its instructions](/Users/alejo/best/systems/desk/AGENTS.md).
