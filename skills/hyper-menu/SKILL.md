@@ -19,11 +19,10 @@ shortcut learned in one works by the same rule in the next.
    left: `M-Z` for "hold M, press Z", or the usual glyphs (`⌘K`) for a shortcut the app
    already has. The key inside the menu is that shortcut's letter, so it isn't shown
    again, and a command reached by `⌘K` is K in the menu, never another letter.
-4. **Outside the menu the letter needs its modifier.** The app binds Hyper+letter. Hyper
-   itself sits under the left hand, so where the letters do too, add a layer key for the
-   right hand: Karabiner makes M, held 0.15 s, send Hyper+letter in that app only (copy the
-   "In BB, M held" rule and change the bundle identifier and letters). A tap of M still
-   types m.
+4. **Outside the menu the letter needs Hyper.** The app binds Hyper+letter. Hyper can be
+   held two ways: Caps Lock with the left hand, or M with the right. Karabiner makes M,
+   held 0.2 s, act as Hyper for the next letter or digit in every app, which is why rows
+   read `M-Z`. A tap of M still types m. So a new app needs no Karabiner change.
 
 ## Choosing what goes in
 
