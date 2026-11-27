@@ -88,6 +88,55 @@ def public_get(path: str, params: dict | None = None) -> any:
     return parsed
 
 
+def public_post(path: str, body: dict) -> any:
+    """POST a JSON body to the public API, with the same error handling as public_get."""
+    key = _read_api_key()
+    if not key and "GRANOLA_API_BASE" not in os.environ:
+        print("Error: Set GRANOLA_API_KEY in the environment or the skill's .env file.",
+              file=sys.stderr)
+        sys.exit(1)
+    args = ['curl', '-s', '--compressed', '-X', 'POST', f'{PUBLIC_API_BASE}{path}',
+            '-H', 'Accept: application/json', '-H', 'Content-Type: application/json',
+            '--data-binary', json.dumps(body)]
+    if key:
+        args += ['-H', f'Authorization: Bearer {key}']
+    result = subprocess.run(args, capture_output=True, text=True)
+    try:
+        parsed = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        print(f"Error: Invalid JSON response: {(result.stdout or result.stderr)[:200]}",
+              file=sys.stderr)
+        sys.exit(1)
+    if isinstance(parsed, dict) and (parsed.get('error') or set(parsed.keys()) == {'message'}):
+        print(f"Error: Granola API: {parsed.get('error') or parsed.get('message')}", file=sys.stderr)
+        sys.exit(1)
+    return parsed
+
+
+def search(path: str, argv: list[str]):
+    """Search note titles and summaries, or transcripts. Prints the API's JSON.
+
+    Each positional argument is one keyword entry: all its words must match, and
+    a note needs only one entry to match.
+    """
+    options = {'--participant': 'participant', '--from': 'from_date', '--to': 'to_date',
+               '--cursor': 'cursor'}
+    body, keywords, i = {}, [], 0
+    while i < len(argv):
+        if argv[i] in options:
+            if i + 1 >= len(argv):
+                print(f"Error: {argv[i]} needs a value", file=sys.stderr)
+                sys.exit(1)
+            body[options[argv[i]]] = argv[i + 1]
+            i += 2
+        else:
+            keywords.append(argv[i])
+            i += 1
+    if keywords:
+        body['keywords'] = keywords
+    print(json.dumps(public_post(path, body), indent=2, ensure_ascii=False))
+
+
 def slugify(text: str) -> str:
     """Convert text to a filename-safe slug."""
     text = text.replace('&', 'and')
@@ -301,6 +350,10 @@ def main():
             print("Error: Document ID required", file=sys.stderr)
             sys.exit(1)
         get_transcript(sys.argv[2])
+    elif command == 'search':
+        search('/notes/search', sys.argv[2:])
+    elif command == 'search-transcripts':
+        search('/notes/transcripts/search', sys.argv[2:])
     elif command == 'recent':
         n = int(sys.argv[2]) if len(sys.argv) > 2 else 1
         get_recent_transcript(n)

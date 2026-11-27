@@ -1,6 +1,6 @@
 ---
 name: summarize-call
-description: Fetch a Granola call transcript from the API, clean it, and file a tidied transcript plus a structured summary in ~/best/systems/desk, following that repository's AGENTS.md. Use when the user wants to pull, clean, summarize, or archive Granola calls — "summarise my call", "save my last Granola call", "archive these calls".
+description: Fetch a Granola call transcript from the API, clean it, and file a tidied transcript plus a structured summary in ~/best/systems/desk, following that repository's AGENTS.md. Use when the user wants to pull, clean, summarize, or archive Granola calls — "summarise my call", "save my last Granola call", "archive these calls". Also the way to look up Granola: list recent meetings, search notes by keyword, participant or date, search transcripts for what was said, and read a transcript.
 ---
 
 # Granola call → tidied transcript + summary
@@ -70,6 +70,10 @@ python3 "$CALL_SKILL/scripts/granola.py" list [n]      # n most recent meetings 
 python3 "$CALL_SKILL/scripts/granola.py" check         # recent-call / selection JSON
 python3 "$CALL_SKILL/scripts/granola.py" get <doc_id>  # print transcript markdown for one call
 python3 "$CALL_SKILL/scripts/granola.py" recent [n]    # nth most recent transcript
+python3 "$CALL_SKILL/scripts/granola.py" search [words...] [--participant X] [--from DATE] [--to DATE]
+                                                       # notes by title, summary, participant or date
+python3 "$CALL_SKILL/scripts/granola.py" search-transcripts <words...> [--participant X] [--from DATE] [--to DATE]
+                                                       # where something was said; each quoted argument is one alternative
 ```
 
 `get <doc_id>` prints the raw transcript to stdout (also saved under

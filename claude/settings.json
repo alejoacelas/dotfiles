@@ -42,7 +42,8 @@
       "mcp__claude_ai_Google_Drive",
       "mcp__claude_ai_Google_Docs",
       "mcp__claude_ai_Google_Calendar",
-      "mcp__claude_ai_Slack"
+      "mcp__claude_ai_Slack",
+      "mcp__claude_ai_Granola"
     ],
     "defaultMode": "bypassPermissions"
   },
