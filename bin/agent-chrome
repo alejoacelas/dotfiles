@@ -1,0 +1,12 @@
+#!/bin/bash
+# Run an agent-browser command against the agent Chrome on mac-air-2, which
+# agentcookie keeps signed in to the sites of the everyday Chrome on alejo-m4.
+# --pin-tab keeps each session on its own tab while several agents share the browser.
+set -eu
+if [ $# -lt 2 ]; then
+  echo 'usage: agent-chrome <session> <agent-browser command...>   (start a session with: tab new <url>)' >&2
+  exit 2
+fi
+session=$1
+shift
+exec ssh -o ConnectTimeout=10 mac-air-2 "PATH=/opt/homebrew/bin:\$PATH agent-browser --session $(printf '%q' "$session") --cdp 9222 --pin-tab $(printf '%q ' "$@")"

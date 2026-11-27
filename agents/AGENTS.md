@@ -124,6 +124,13 @@ and `contents`. `slack-pp-cli` searches Slack and keeps a local copy of its hist
 The claude.ai connectors are blocked in `claude/settings.json`, so a session works the
 same on either Claude account and there is one tool per service to maintain.
 
+For browser work, run `agent-chrome <session> <agent-browser command>`. It drives a
+Chrome on `mac-air-2` that stays signed in to the sites of my everyday Chrome and works
+from either Claude account. Pick a session name unique to your task, start it with
+`tab new <url>`, close your tabs when done and never run `close`. `agent-chrome x skills
+get core` prints the command guide. Use Claude in Chrome only for a site that Chrome is
+not signed in to.
+
 Write web pages as local HTML files and open them in my browser. Publish a
 claude.ai artifact only when I explicitly ask for one. Before handing me any UI,
 try every action it offers yourself in a browser (each key, button, field and

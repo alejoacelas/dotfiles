@@ -115,6 +115,7 @@ git -C "$DOTFILES" config core.hooksPath hooks
 
 link bin/proj "$HOME/.local/bin/proj"
 link bin/op-agent "$HOME/.local/bin/op-agent"
+link bin/agent-chrome "$HOME/.local/bin/agent-chrome"
 link skills/summarize-call/scripts/granola.py "$HOME/.local/bin/granola"
 link warp/keybindings.yaml "$HOME/.warp/keybindings.yaml"
 
