@@ -13,6 +13,15 @@ outside the agent vaults.
 `summarize-call` reads `GRANOLA_API_KEY` from its ignored `.env`: account `my.1password.com`,
 vault `server-agents`, item `GRANOLA_API_KEY — desk-pipeline`, field `credential`.
 
+Three CLIs keep a token in their own owner-only config, set once with `auth set-token` or
+`auth login`. All are in account `my.1password.com`, vault `mac-agents`, field `credential`
+unless noted: `exa-pp-cli` uses item `EXA_API_KEY — 2026-09-life-wiki`
+(`5ddc3jcbqlhok53vy2buyzhxdy`); `dharma` uses `ASANA_TOKEN — dharma`
+(`7gf4h2vxe7u4mz6ftcy5hhmkqu`); `slack-pp-cli` uses field `user_token` of
+`AI Uplift Slack API` (`ifyve5el5crjmu3kbvaq2od6ui`). Give `slack-pp-cli` only the user
+token: with the bot token also set it calls Slack as the bot, which is in almost no channels
+and cannot search.
+
 Archive all files retired from dotfiles in `~/best/archive/2026-11/systems/dotfiles/`.
 
 `codex/config.toml` is the one Codex configuration; Codex writes changes such as
