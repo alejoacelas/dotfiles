@@ -117,10 +117,6 @@ source = "/Users/alejo/.codex/.tmp/bundled-marketplaces/openai-bundled"
 source_type = "local"
 source = "/Users/alejo/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
-[marketplaces.umi]
-source_type = "local"
-source = "/Applications/Umi.app/Contents/Resources/agent-plugins"
-
 [history]
 persistence = "save-all"
 
@@ -172,9 +168,6 @@ enabled = false
 enabled = true
 
 [plugins."unified-computer-use@openai-bundled"]
-enabled = true
-
-[plugins."umi@umi"]
 enabled = true
 
 [plugins."documents@openai-primary-runtime"]
@@ -278,9 +271,6 @@ trust_level = "trusted"
 [projects."/Users/alejo/best/systems/dotfiles"]
 trust_level = "trusted"
 
-[projects."/Users/alejo/best/systems/umi"]
-trust_level = "trusted"
-
 [projects."/Users/alejo/best/work/projects/2026-11-11-colleague-ai-report-guides"]
 trust_level = "trusted"
 
@@ -327,42 +317,3 @@ trusted_content_hash = "sha256:4849e6cc03fe9b7a30dd837fa5ca4026618bc2e6019538ac1
 trusted_hash = "sha256:8ab6124baf7a0be571435f0692b08cb385e1e3bf163789b3edf7dde471a35970"
 trusted_content_hash = "sha256:4849e6cc03fe9b7a30dd837fa5ca4026618bc2e6019538ac1bd8ac1ae13ed4c0"
 
-[hooks.state."umi@umi:hooks/hooks.json:stop:0:0"]
-trusted_hash = "sha256:a5ee93b73504df8a119181185d62b8d40ba50f98179e09fe89890a28247f5ce8"
-trusted_content_hash = "sha256:5357a7ec9b36542ce73975b23a41167da614c6a1ec776b1a2b2a0c27a61269e7"
-
-[hooks.state."umi@umi:hooks/hooks.json:session_start:0:0"]
-trusted_hash = "sha256:9bb6b63c47a7b43cbae9c0b815942d5f06866069578e596b7083b830ef231f66"
-trusted_content_hash = "sha256:5357a7ec9b36542ce73975b23a41167da614c6a1ec776b1a2b2a0c27a61269e7"
-
-[hooks.state."umi@umi:hooks/hooks.json:permission_request:0:0"]
-trusted_hash = "sha256:1bcde8edce14fff8d2aa871302174850ce83e652eecf40c9e337e113eb9268da"
-trusted_content_hash = "sha256:5357a7ec9b36542ce73975b23a41167da614c6a1ec776b1a2b2a0c27a61269e7"
-
-[hooks.state."umi@umi:hooks/hooks.json:pre_tool_use:0:0"]
-trusted_hash = "sha256:351e00809b063ccf2607896e4f3a44df19570a1e9ebf23bda845399b3fab4bb7"
-trusted_content_hash = "sha256:5357a7ec9b36542ce73975b23a41167da614c6a1ec776b1a2b2a0c27a61269e7"
-
-[hooks.state."umi@umi:hooks/hooks.json:post_tool_use:0:0"]
-trusted_hash = "sha256:9f973c9713df2cd39c55ff644a99921ad38481ca9e89a918999d52eb44a90e4e"
-trusted_content_hash = "sha256:5357a7ec9b36542ce73975b23a41167da614c6a1ec776b1a2b2a0c27a61269e7"
-
-[hooks.state."umi@umi:hooks/hooks.json:session_end:0:0"]
-trusted_hash = "sha256:71c01bce620379f3feb739995769fdfc55d2c189acfe75ddbaa46762e88d629e"
-trusted_content_hash = "sha256:5357a7ec9b36542ce73975b23a41167da614c6a1ec776b1a2b2a0c27a61269e7"
-
-[hooks.state."umi@umi:hooks/hooks.json:user_prompt_submit:0:0"]
-trusted_hash = "sha256:02805ca69085fe2d47e2862dee58bdb8007640475d41dc3c457a271c2f867917"
-trusted_content_hash = "sha256:5357a7ec9b36542ce73975b23a41167da614c6a1ec776b1a2b2a0c27a61269e7"
-
-[hooks.state."umi@umi:hooks/hooks.json:interrupt:0:0"]
-trusted_hash = "sha256:7b1da22b6417aec5f46de491fcf36f6590b035147c62ee0dade55bbd3c2ac7f3"
-trusted_content_hash = "sha256:5357a7ec9b36542ce73975b23a41167da614c6a1ec776b1a2b2a0c27a61269e7"
-
-[hooks.state."umi@umi:hooks/hooks.json:pre_model_request:0:0"]
-trusted_hash = "sha256:181da4deedc370a181e19ad87256a88c938d4943bb8f8a32fc7fbb5031068c0a"
-trusted_content_hash = "sha256:5357a7ec9b36542ce73975b23a41167da614c6a1ec776b1a2b2a0c27a61269e7"
-
-[hooks.state."umi@umi:hooks/hooks.json:post_model_request:0:0"]
-trusted_hash = "sha256:3f512785790ab8493e536cf2a6aaface883b285cf0dd2eb41de4329d323b6263"
-trusted_content_hash = "sha256:5357a7ec9b36542ce73975b23a41167da614c6a1ec776b1a2b2a0c27a61269e7"

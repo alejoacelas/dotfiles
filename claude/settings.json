@@ -90,7 +90,6 @@
     ]
   },
   "enabledPlugins": {
-    "umi@umi": true,
     "swift-lsp@claude-plugins-official": true,
     "cc-plugin-privacy@builtin": false
   },
@@ -99,12 +98,6 @@
       "source": {
         "source": "github",
         "repo": "Crazytieguy/alignment-hive"
-      }
-    },
-    "umi": {
-      "source": {
-        "source": "directory",
-        "path": "/Applications/Umi.app/Contents/Resources/agent-plugins"
       }
     }
   },
@@ -155,7 +148,7 @@
       "### User-specific",
       "**Primary use of Claude Code**: software development and personal task/inbox management across the repositories in `~/best`",
       "**Trusted repos**: every repository under `/Users/alejo/best`",
-      "**Org-specific CLIs**: `gog` (Google Workspace), `op` / `op-agent` (1Password), `umi` / `umi-next` (terminal app), `tg` (Telegram), `warp-agent`, `hcloud` (Hetzner Cloud)",
+      "**Org-specific CLIs**: `gog` (Google Workspace), `op` / `op-agent` (1Password), `tg` (Telegram), `warp-agent`, `hcloud` (Hetzner Cloud)",
       "Routine under `/Users/alejo/best/`: file, git and task operations local to these repositories"
     ]
   }

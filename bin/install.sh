@@ -118,14 +118,6 @@ link bin/op-agent "$HOME/.local/bin/op-agent"
 link skills/summarize-call/scripts/granola.py "$HOME/.local/bin/granola"
 link warp/keybindings.yaml "$HOME/.warp/keybindings.yaml"
 
-# Umi: attention config (included from ~/.config/umi/config, which stays local) and palette commands.
-mkdir -p "$HOME/.config/umi"
-link umi/umi.config "$HOME/.config/umi/dotfiles.config"
-link umi/commands   "$HOME/.config/umi/commands"
-# UmiNext: the docket hook (umi-next/docket-session) it runs when a session sent to the docket finishes.
-mkdir -p "$HOME/.config/umi-next"
-link umi-next/docket-session "$HOME/.config/umi-next/docket-hook"
-
 # launchd jobs: copy each tracked job into ~/Library/LaunchAgents (launchd won't load a
 # symlinked job) and reload it when it changed.
 for plist in "$DOTFILES"/launchd/*.plist "$DOTFILES"/skills/day/timeline/mac/*.plist; do
