@@ -9,8 +9,8 @@
 //   });
 //   menu.open(); menu.close(); menu.toggle(); menu.destroy();
 //
-// Inside the menu an item's `key` alone runs it. `outside` is the label of the shortcut that
-// runs the same command with the menu closed, shown so the menu teaches it.
+// Each row shows `outside`, the shortcut that runs the command with the menu closed. Inside
+// the menu its letter alone (`key`) runs it, so `key` must be the letter `outside` ends in.
 
 const MODIFIER_KEYS = new Set(["Meta", "Control", "Alt", "Shift", "CapsLock", "OS", "Hyper", "Super"]);
 
@@ -32,10 +32,9 @@ const STYLE = `
   cursor: pointer; }
 .hyper-menu-item:hover, .hyper-menu-item.first { background: color-mix(in srgb, currentColor 10%, transparent); }
 .hyper-menu-item.off { opacity: 0.35; cursor: default; }
-.hyper-menu kbd { font: 11px ui-monospace, Menlo, monospace; min-width: 1.1em; text-align: center;
+.hyper-menu kbd { font: 11px ui-monospace, Menlo, monospace; min-width: 2.6em; text-align: center;
   border: 1px solid color-mix(in srgb, currentColor 30%, transparent); border-radius: 3px; padding: 0 4px; }
 .hyper-menu-label { flex: 1; }
-.hyper-menu-outside { font: 11px ui-monospace, Menlo, monospace; opacity: 0.55; }
 .hyper-menu-search { display: flex; align-items: center; gap: 8px; opacity: 0.8; }
 .hyper-menu-search input { flex: 1; font: inherit; color: inherit; background: none; border: 0; outline: 0; }
 `;
@@ -92,18 +91,13 @@ export function createHyperMenu({ groups, hyperTap = true, onRun, attributes = {
     const div = document.createElement("div");
     div.className = "hyper-menu-item" + (usable(item) ? "" : " off") + (first ? " first" : "");
     div.dataset.key = item.key || "";
+    // The row shows the outside shortcut; its letter alone is the key inside the menu.
     const kbd = document.createElement("kbd");
-    kbd.textContent = (item.key || "").toUpperCase();
+    kbd.textContent = item.outside || (item.key || "").toUpperCase();
     const label = document.createElement("span");
     label.className = "hyper-menu-label";
     label.textContent = item.label;
     div.append(kbd, label);
-    if (item.outside) {
-      const outside = document.createElement("span");
-      outside.className = "hyper-menu-outside";
-      outside.textContent = item.outside;
-      div.append(outside);
-    }
     div.addEventListener("mousedown", (e) => { e.preventDefault(); run(item); });
     return div;
   }

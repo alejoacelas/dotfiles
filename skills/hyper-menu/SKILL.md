@@ -15,9 +15,10 @@ shortcut learned in one works by the same rule in the next.
    content, so nothing behind it moves or resizes. A second tap or Esc closes it.
 2. **Inside the menu, one unmodified letter runs a command** and closes the menu. `/`
    searches every command by name; Enter runs the first match.
-3. **Each row shows the shortcut that runs the same command with the menu closed**, on the
-   right, so the menu teaches it. Write it `M-Z` when it is "hold M, press Z", or the usual
-   glyphs (`⌘K`) for a shortcut the app already has.
+3. **Each row shows only the shortcut that runs the command with the menu closed**, at its
+   left: `M-Z` for "hold M, press Z", or the usual glyphs (`⌘K`) for a shortcut the app
+   already has. The key inside the menu is that shortcut's letter, so it isn't shown
+   again, and a command reached by `⌘K` is K in the menu, never another letter.
 4. **Outside the menu the letter needs its modifier.** The app binds Hyper+letter. Hyper
    itself sits under the left hand, so where the letters do too, add a layer key for the
    right hand: Karabiner makes M, held 0.15 s, send Hyper+letter in that app only (copy the
@@ -29,7 +30,7 @@ shortcut learned in one works by the same rule in the next.
 - Put in the commands he runs often and the ones that need a modifier to reach. Leave the
   rest to `/` search or the app's own palette.
 - The same letter means the same thing in every app: Z snooze or hide, X set aside for
-  later, W close, R rename, T new, S search or switch, E fold, B sidebar, G go to what is
+  later, W close, R rename, T new, E fold, B sidebar, G go to what is
   waiting. Reuse these before inventing a letter.
 - Letters for M- shortcuts sit under the left hand (Q W E R T A S D F G Z X C V B), since
   the right hand holds M. Inside the menu any key will do.
