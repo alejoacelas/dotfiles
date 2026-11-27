@@ -50,7 +50,7 @@
     ],
     "defaultMode": "bypassPermissions"
   },
-  "model": "opus",
+  "model": "fable",
   "skillOverrides": {
     "anthropic-skills:summarise-granola": "off",
     "summarise-granola": "off",
@@ -115,6 +115,9 @@
     },
     "claude-opus-5-5": {
       "effortLevel": "medium"
+    },
+    "claude-fable-5-2": {
+      "effortLevel": "high"
     }
   },
   "remote": {
