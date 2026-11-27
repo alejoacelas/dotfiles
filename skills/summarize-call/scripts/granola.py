@@ -2,11 +2,15 @@
 """
 Granola transcript extraction utility.
 
-Usage:
-    python granola.py check             # Check for recent call or list 5 most recent
-    python granola.py list [n]          # List the n most recent meetings (default: 20)
-    python granola.py get <doc_id>      # Get transcript for a specific meeting
-    python granola.py recent [n]        # Get transcript for nth most recent meeting (default: 1)
+Usage (installed on PATH as `granola`):
+    granola list [n]          # the n most recent meetings (default: 20)
+    granola search [words...] [--participant X] [--from DATE] [--to DATE]
+                              # notes by title, summary, participant or date
+    granola search-transcripts <words...> [--participant X] [--from DATE] [--to DATE]
+                              # where something was said; each argument is one alternative
+    granola get <note_id>     # transcript of one meeting
+    granola recent [n]        # transcript of the nth most recent meeting (default: 1)
+    granola check             # recent call, or the 5 most recent, as JSON
 
 Transcripts are saved under the skill-local data/transcripts/ directory.
 """

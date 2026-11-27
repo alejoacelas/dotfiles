@@ -115,6 +115,7 @@ git -C "$DOTFILES" config core.hooksPath hooks
 
 link bin/proj "$HOME/.local/bin/proj"
 link bin/op-agent "$HOME/.local/bin/op-agent"
+link skills/summarize-call/scripts/granola.py "$HOME/.local/bin/granola"
 link warp/keybindings.yaml "$HOME/.warp/keybindings.yaml"
 
 # Umi: attention config (included from ~/.config/umi/config, which stays local) and palette commands.

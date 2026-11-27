@@ -43,7 +43,10 @@
       "mcp__claude_ai_Google_Docs",
       "mcp__claude_ai_Google_Calendar",
       "mcp__claude_ai_Slack",
-      "mcp__claude_ai_Granola"
+      "mcp__claude_ai_Granola",
+      "mcp__claude_ai_Exa",
+      "mcp__claude_ai_Fathom_Your_Meeting_Intelligence_Layer",
+      "mcp__claude_ai_Wispr_Flow"
     ],
     "defaultMode": "bypassPermissions"
   },
