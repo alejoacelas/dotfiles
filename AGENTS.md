@@ -13,7 +13,7 @@ outside the agent vaults.
 `summarize-call` reads `GRANOLA_API_KEY` from its ignored `.env`: account `my.1password.com`,
 vault `server-agents`, item `GRANOLA_API_KEY — desk-pipeline`, field `credential`.
 
-Archive all files retired from dotfiles in `~/best/archive/dotfiles/`.
+Archive all files retired from dotfiles in `~/best/archive/2026-11/systems/dotfiles/`.
 
 `codex/config.toml` is the one Codex configuration; Codex writes changes such as
 folder trust through its link, so commit them. Verify both clients with fresh sessions after hook changes.

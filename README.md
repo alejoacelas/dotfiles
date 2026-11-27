@@ -54,7 +54,7 @@ instructions. Both clients link to the same skill source. The older synced
 its `anthropic-skills:` name, so account sync cannot reactivate it locally.
 
 Historical instruction snapshots remain in Git history. Retired files
-live in `~/best/archive/dotfiles/`.
+live in `~/best/archive/2026-11/systems/dotfiles/`.
 
 Repository tests live in `tests/`; skill-specific tests travel with their skill
 in its own `tests/` directory.
