@@ -65,9 +65,7 @@ context and pass it explicitly on every cloud write.
 ## Machines
 
 - `alejo-m4` is the main Mac, `mac-air-2` the other Mac and `agent-server` the
-  server; each reaches the others with `ssh <name>` over Tailscale. Only the main
-  Mac has dotfiles and `~/best`. The other Mac holds only projects started on it.
-  Do computer use and browser testing on the other Mac. When a browser step needs
+  server; each reaches the others with `ssh <name>` over Tailscale. Do computer use and browser testing on the other Mac. When a browser step needs
   me (signing in, 2FA, a confirmation), use the browser on the Mac I'm working on.
 - On the server, work as the `agent` user (`sudo -iu agent`). Its `gh`, `gog` and
   git pushes go through a credential broker; to give it an API key, add a broker
@@ -139,17 +137,6 @@ similar grants with a stable local identity. Ad-hoc signatures change identity o
 each build, leaving enabled privacy toggles that the rebuilt app cannot use. Fail
 the build when its expected signing identity is missing; never silently fall back
 to ad-hoc signing.
-
-Open Markdown for my review in Umi: `open -a Umi "/absolute/path/to/file.md"`.
-After I review or edit a document, reread it before making further changes.
-
-My terminals run inside Umi, the app that also hosts the Markdown editor. When I
-ask for anything about panes, tabs or windows (open a session "here" or "in a
-pane", split, move, rename, read or type into another pane, show a file in the
-editor), run `umi help` and use the `umi` command it lists. Inside Umi, these
-commands act on your own pane, tab and window by default. To reopen a past
-Claude session in a pane, run
-`umi split right --cwd <dir> --cmd "claude --dangerously-skip-permissions --resume <session-id>"`.
 
 Put each Google Doc you create in my personal Drive (`alejoacelas@gmail.com`) into the
 top-level folder it belongs to (Work, Calls, Know-how, Thinking, Life, Events, or a
