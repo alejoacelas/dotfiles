@@ -9,6 +9,7 @@ still doing is never swept up. launchd runs this daily
 A repository is left alone and reported on the docket, as one desk generated/ item,
 when its changes hold a secret-looking file or a file too big for GitHub, when it is
 mid-merge or rebase, on a detached HEAD, has no remote, or the push fails.
+Repositories inside a `scratch/` folder are throwaway sandboxes and are skipped.
 
   commit-leftovers            commit what has been stable for 3 days
   commit-leftovers --dry-run  say what it would do, change nothing
@@ -29,7 +30,8 @@ DESK = ROOT / "systems" / "desk"
 STATE = Path(os.environ.get("COMMIT_LEFTOVERS_STATE", Path.home() / ".local/state/commit-leftovers.json"))
 STABLE_FOR = timedelta(days=3)
 MAX_DEPTH = 4
-SKIP_DIRS = {".git", "node_modules", ".venv", "venv", "__pycache__", ".next", "dist", "build"}
+SKIP_DIRS = {".git", "node_modules", ".venv", "venv", "__pycache__", ".next", "dist", "build",
+             "scratch"}  # scratch/: throwaway sandboxes, never committed or reported
 EMPTY_TREE = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
 TOO_BIG = 95 * 1024 * 1024  # GitHub rejects files over 100 MB
 
