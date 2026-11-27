@@ -16,13 +16,16 @@ shortcut learned in one works by the same rule in the next.
 2. **Inside the menu, one unmodified letter runs a command** and closes the menu. `/`
    searches every command by name; Enter runs the first match.
 3. **Each row shows only the shortcut that runs the command with the menu closed**, at its
-   left: `M-Z` for "hold M, press Z", or the usual glyphs (`⌘K`) for a shortcut the app
+   left: `;-Z` for "`;` and Z together", or the usual glyphs (`⌘K`) for a shortcut the app
    already has. The key inside the menu is that shortcut's letter, so it isn't shown
    again, and a command reached by `⌘K` is K in the menu, never another letter.
 4. **Outside the menu the letter needs Hyper.** The app binds Hyper+letter. Hyper can be
-   held two ways: Caps Lock with the left hand, or M with the right. Karabiner makes M,
-   held 0.2 s, act as Hyper for the next letter or digit in every app, which is why rows
-   read `M-Z`. A tap of M still types m. So a new app needs no Karabiner change.
+   pressed two ways: Caps Lock held with the left hand, or `;` with the right. Karabiner
+   treats `;` and a letter or digit pressed right after it, while `;` is still down, as
+   Hyper+that key in every app, which is why rows read `;-Z`. There is no hold to wait
+   for, and `;` otherwise types as usual. `;` was chosen because a letter almost never
+   follows it without a space, so typing doesn't set it off. A new app needs no Karabiner
+   change.
 
 ## Choosing what goes in
 
@@ -31,8 +34,8 @@ shortcut learned in one works by the same rule in the next.
 - The same letter means the same thing in every app: Z snooze or hide, X set aside for
   later, W close, R rename, T new, E fold, B sidebar, G go to what is
   waiting. Reuse these before inventing a letter.
-- Letters for M- shortcuts sit under the left hand (Q W E R T A S D F G Z X C V B), since
-  the right hand holds M. Inside the menu any key will do.
+- Letters for `;-` shortcuts sit under the left hand (Q W E R T A S D F G Z X C V B), since
+  the right hand holds `;`. Inside the menu any key will do.
 - Group rows by what they act on (this thread, all threads, the app), most used first, at
   most about six rows a group.
 - A command that can't run now (no thread open) stays in its place, dimmed, so rows never
@@ -58,6 +61,6 @@ Drive it in a browser before handing it over: the tap opens and closes it, a Hyp
 chord does not open it, every letter runs its command, `/` plus Enter runs a match, Esc
 restores focus. Playwright presses the tap as four `keyboard.down` calls and four
 `keyboard.up` calls. Karabiner only sees a real keyboard, so say that the Caps Lock key and
-the M layer themselves were not pressed.
+the `;` layer themselves were not pressed.
 
 The first one is BB's, in `~/best/systems/bb-plugin/src/Controller.tsx`.

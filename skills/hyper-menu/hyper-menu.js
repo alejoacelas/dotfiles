@@ -4,7 +4,7 @@
 //
 //   const menu = createHyperMenu({
 //     groups: () => [{ title: "This thread", items: [
-//       { key: "z", label: "Snooze", outside: "M-Z", run: snooze, enabled: () => hasThread() },
+//       { key: "z", label: "Snooze", outside: ";-Z", run: snooze, enabled: () => hasThread() },
 //     ] }],
 //   });
 //   menu.open(); menu.close(); menu.toggle(); menu.destroy();

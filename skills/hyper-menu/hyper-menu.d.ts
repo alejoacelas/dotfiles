@@ -2,7 +2,7 @@ export interface HyperMenuItem {
   /** The single key that runs it inside the menu; lowercase, and the letter `outside` ends in. */
   key: string;
   label: string;
-  /** The shortcut that runs it with the menu closed, such as "M-Z" or "⌘K"; shown on the row. */
+  /** The shortcut that runs it with the menu closed, such as ";-Z" or "⌘K"; shown on the row. */
   outside?: string;
   run: () => void;
   /** Dimmed and not runnable when this returns false. */
