@@ -35,6 +35,7 @@ why: Alejo asked on <date> to queue <what>, in one line
 next: <the decision to take, verb-first> (do|skip|defer)
 queued: <YYYY-MM-DD>
 bb: <BB link, for a session in BB>
+bb_web: <BB web link, with bb>
 umi: <umi link, for any other session>
 umi_page: <page link, with umi>
 ---
@@ -52,7 +53,9 @@ Queued by Alejo from a <Claude Code|Codex> session on <machine> on <date>.
 - `next:` is a recommendation he can take with one key, like a docket line.
 - Session link in a BB thread (`$BB_THREAD_ID` is set): `bb later link` prints it. Write
   it as `bb:` and leave out `umi:` and `umi_page:`. It opens the thread in the BB app on
-  the Mac that runs BB.
+  the Mac that runs BB. Add `bb_web:` from `bb later link --web`, which opens the thread
+  in a browser on his phone or another Mac; leave it out when that command says BB
+  Connect is off.
 - Session link anywhere else: make it with `umi-link` on the agent server. Its JSON output
   has the `umi` and `page` links.
 
