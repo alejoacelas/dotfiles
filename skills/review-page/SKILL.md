@@ -11,15 +11,17 @@ leaving the page, and keeps every decision he makes.
 
 ## Principles
 
-- **Land on a still overview.** The first view shows everything he needs to choose
-  where to look, and he stays on it. More detail appears in place on click or
-  hover, in a side panel or over the page, and never moves him down the page or to
-  another one. Toggles may change what the overview shows.
+- **Make the first view the home.** Everything on the page is reached from the
+  first view and returns to it: it shows what he needs to choose where to look,
+  and the rest opens from it in place, in a side panel or over the page, on click
+  or hover. Not everything has to be visible on landing. Toggles may change what
+  the first view shows.
 - **Keep evidence one step away.** Put the source excerpt, example output or detail
   behind that click or hover, on the item it supports. Point links at the exact
   spot in the source.
-- **Make it keyboard-first.** Arrow keys move between items. Add at most a handful
-  of other keys, for picks, grades or toggles, and show them on the page.
+- **Make it keyboard-first.** Give the arrow keys a role where you can. Assign
+  three to six other hotkeys when there are actions he'll repeat, and show the
+  keys on the page.
 - **Give items and views persistent links.** Ideally each item and each view has its
   own address, so a link reopens the page on that item in that view.
 - **Send his decisions back to the agent.** Save picks and comments where the agent
@@ -33,5 +35,4 @@ leaving the page, and keeps every decision he makes.
 ## Conventions
 
 - Hardcode light mode: the page looks the same whatever the system theme.
-- Write local HTML and open it in his browser. Publish a claude.ai
-  artifact only when he explicitly asks for one.
+- Publish a claude.ai artifact only when he explicitly asks for one.
