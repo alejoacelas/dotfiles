@@ -38,7 +38,9 @@ likely misunderstanding.
 
 Commit each logical change immediately unless the change is temporary. Commit
 before making further changes. Push after every commit. Keep commits
-single-purpose. Keep repositories public unless they contain credentials, employer
+single-purpose. Pull with `git pull --no-rebase` in `work/`, `personal/`, `systems/`
+and the org repositories: a rebase flattens the merges that hold each project's
+history. Keep repositories public unless they contain credentials, employer
 or client information, or others' non-public information.
 
 ## Safety
@@ -77,26 +79,31 @@ context and pass it explicitly on every cloud write.
 
 ## Filesystem organization
 
-All our work lives in `~/best/`, in a few top folders, named in lowercase words
-separated by dashes. Each top folder except `archive/` is one private monorepo
-(each org is its own). A few folders inside are their own repositories, ignored by
-the monorepo around them: `systems/desk`, `systems/agent-tools`, `systems/dotfiles`,
-`systems/umi`, `work/ask-their-claude` and the sites in `personal/websites`.
+All our work lives in `~/best/`, in five top folders:
 
-- `work/`: my work.
+- `work/`: my work, except work contracted by one organisation.
+- `orgs/<company>/`: work contracted by an organisation, in dated `YYYY-MM-name`
+  folders, kept apart so the organisation's information stays in one place. Before
+  working on one, read the desk items tagged `projects: [<company>]`.
 - `personal/`: my life outside work.
 - `systems/`: the systems that capture, prioritise and plan my work, and my tools
   and setup.
-- `orgs/<company>/`: work delivered to an organisation, in dated `YYYY-MM-name`
-  folders. Before working on one, read the desk items tagged
-  `projects: [<company>]`.
-- `archive/`: retired or finished work. Before archiving a tool, stop anything
-  that runs it.
+- `archive/`: retired or finished work, in `YYYY-MM` folders by the month in the
+  folder's name. The current month splits again into `systems/`, `work/`, `orgs/`
+  and `personal/`. Before archiving a tool, stop anything that runs it.
 
-Inside `work/`, `personal/` and `systems/`, undated folders are ongoing parts and
-`projects/YYYY-MM-DD-name` folders are one-off efforts. `proj <name>` run inside one
-creates the dated folder there; from `~/best` it asks which. `proj orgs/<company>/<name>`
-creates an org folder, and a new org gets its own repository.
+`work/`, `personal/` and `systems/` are each one private repository, and each org
+is its own. Inside them, undated folders are ongoing parts and
+`projects/YYYY-MM-DD-name` folders are one-off efforts or ones no longer actively
+changed. `proj <name>` run inside one creates the dated folder there; from `~/best`
+it asks which. `proj orgs/<company>/<name>` creates an org folder, and a new org gets
+its own repository.
+
+These folders are their own repositories, ignored by the one around them:
+`systems/desk`, `systems/agent-tools`, `systems/dotfiles`, `systems/umi`,
+`work/projects/2026-11-11-colleague-ai-report-guides` and the sites in
+`personal/websites`. Public project folders are copied to their own public
+repositories on every push, as listed in each repository's `.github/mirrors.txt`.
 
 `systems/desk/` holds work with people outside, such as call prep, messages, notes
 and research. Follow [its instructions](/Users/alejo/best/systems/desk/AGENTS.md).
