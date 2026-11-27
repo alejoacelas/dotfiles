@@ -118,6 +118,10 @@ When opening any Claude Code or Codex session, use
 `codex --dangerously-bypass-approvals-and-sandbox`, unless I explicitly request
 restricted permissions.
 
+Reach Gmail, Drive, Docs and Calendar with `gog`, and Slack with the `use-slack`
+skill. Their claude.ai connectors are blocked in `claude/settings.json`, so a session
+works the same on either Claude account and there is one tool per service to maintain.
+
 Write web pages as local HTML files and open them in my browser. Publish a
 claude.ai artifact only when I explicitly ask for one. Before handing me any UI,
 try every action it offers yourself in a browser (each key, button, field and
