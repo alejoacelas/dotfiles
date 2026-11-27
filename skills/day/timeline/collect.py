@@ -2,7 +2,7 @@
 """collect.py: raw, timestamped activity for a range of days, as JSON for the timeline page. Read-only.
 
 Usage: collect.py FIRST_DAY [LAST_DAY] [--out FILE]   (days as YYYY-MM-DD or -N; LAST_DAY defaults to FIRST_DAY)
-Per day: agent sessions with every prompt and when each agent turn ended, focus stretches from Umi and Umi Next, commits
+Per day: agent sessions with every prompt and when each agent turn ended, focus stretches from BB, commits
 (marked when an automation committed them), Chrome visits, calendar events with their filed call
 summaries, the plans app's page, and Dayflow's screen record (activity cards, minute-level observations, and
 stretches when keyboard or mouse input was recent). Times are local "HH:MM:SS"-free minutes since midnight (floats).
@@ -210,15 +210,9 @@ def codex_sessions(D):
             add_session(D, s)
 
 
-def umi_focus(D):
-    """Focus stretches from Umi and Umi Next together: one stream of attention."""
-    stretches, errors = [], []
-    for app in focuslog.APPS:
-        log = focuslog.read(app, D.start, D.end)
-        if log and "error" in log:
-            errors.append(log["error"])
-        elif log:
-            stretches += log.get("stretches", [])
+def bb_focus(D):
+    """Focus stretches from BB (the Later plugin's activity log)."""
+    stretches = focuslog.stretches(D.start, D.end)
     for st in stretches:
         a, b = local(st["start_ts"]), local(st["end_ts"])
         k, m0 = D.key(a)
@@ -232,7 +226,7 @@ def umi_focus(D):
                                   "session": (st.get("agent") or {}).get("session"),
                                   "title": short(st.get("title", ""), 120), "project": project(path),
                                   "path": where(path)})
-    return "; ".join(errors) or None
+    return None
 
 
 def commits(D):
@@ -386,7 +380,7 @@ def main():
     first = parse_day(args[0]) if args else dt.date.today()
     last = parse_day(args[1]) if len(args) > 1 else first
     D = Days(first, last)
-    errors = [umi_focus(D), calendar(D), plans(D), screen(D)]
+    errors = [bb_focus(D), calendar(D), plans(D), screen(D)]
     claude_sessions(D)
     codex_sessions(D)
     commits(D)

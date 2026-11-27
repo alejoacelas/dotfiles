@@ -174,7 +174,6 @@ function show(k) {
   if (temp) extras.push(`${temp.sessions.length} sessions in temporary folders`);
   const runs = Object.entries(d.scripted_runs || {});
   if (runs.length) extras.push(`Scripted runs: ${runs.map(([w, n]) => `${n} in ${esc(w)}`).join(", ")}`);
-  if (d.retire_umi) extras.push(esc(d.retire_umi));
   if (extras.length) html += `<section class="card compact">${extras.map(x => `<div>${x}</div>`).join("")}</section>`;
   $("projects").innerHTML = html || `<section class="card compact">Nothing recorded.</section>`;
 

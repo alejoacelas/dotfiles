@@ -2,7 +2,7 @@
 """activity.py: what Alejo did on one day, as a markdown timeline. Read-only.
 
 Usage: activity.py [YYYY-MM-DD | -N] [--json]   (default today; -1 is yesterday)
-Focus time in Umi, Umi Next and BB, then per project (top folder and child under ~/best): agent sessions (Claude Code,
+Focus time in BB, then per project (top folder and child under ~/best): agent sessions (Claude Code,
 Codex) with their focus time and how they ended, other focus, commits. Then the plans app's day and
 Chrome history for every profile. Prints markdown (or --json) to stdout and saves nothing.
 """
@@ -220,7 +220,6 @@ def build():
     sessions += codex_sessions()
     focus = focuslog.by_session(START, END)
     groups = focus["groups"]
-    two_apps = len(focus["seconds_by_app"]) > 1  # name the app on each row only when both have focus
     by_session = defaultdict(list)  # an agent session resumed in the other app has focus in both
     for g in groups:
         if g.get("agent", {}).get("session"):
@@ -234,7 +233,7 @@ def build():
                 "first_prompt": short(s["prompts"][0]), "last_prompt": short(s["prompts"][-1], 160),
                 "focus_seconds": sum(g["seconds"] for g in gs),
                 "summary": next((g["summary"] for g in reversed(gs) if g.get("summary")), None),
-                "apps": sorted({g["app"] for g in gs}) if two_apps else []}
+                "apps": []}
         p = projects[project(s["cwd"])]
         p["sessions"].append(item)
         p["focus_seconds"] += item["focus_seconds"]
@@ -245,7 +244,7 @@ def build():
         p["focus"].append({"kind": g["agent"]["kind"] + " session" if g.get("agent") else g["kind"],
                            "label": g["label"], "seconds": g["seconds"], "summary": g.get("summary"),
                            "first": hm(local(g["first"])), "last": hm(local(g["last"])),
-                           "app": g["app"] if two_apps else None})
+                           "app": None})
         p["focus_seconds"] += g["seconds"]
     for repo, lines in commits():
         projects[repo]["commits"] = lines
@@ -256,7 +255,7 @@ def build():
 
     shape = None
     if focus.get("first"):
-        shape = {"total_seconds": focus["total_seconds"], "by_app": focus["seconds_by_app"],
+        shape = {"total_seconds": focus["total_seconds"], "by_app": {},
                  "first": hm(local(focus["first"])),
                  "last": hm(local(focus["last"])),
                  "breaks": [{"start": hm(local(b["start"])), "end": hm(local(b["end"])), "seconds": b["seconds"]}
@@ -269,7 +268,7 @@ def build():
              "first": hm(v["first"]), "last": hm(v["last"]), "titles": v["titles"]} for host, v in sites]})
 
     return {"date": DAY.isoformat(), "weekday": f"{DAY:%a %d %b %Y}", "focus": shape,
-            "focus_error": "; ".join(focus["errors"]) or None, "retire_umi": focuslog.retire_note(),
+            "focus_error": None,
             "projects": [{"name": name, **p} for name, p in ordered],
             "scripted_runs": dict(sorted(scripted.items(), key=lambda kv: -kv[1])),
             "plans": plans(), "chrome": browsing, "screen": screen()}
@@ -303,7 +302,7 @@ def render(d):
         line += f", {f['first']}–{f['last']}"
         if f["breaks"]:
             line += "; breaks " + ", ".join(f"{b['start']}–{b['end']}" for b in f["breaks"])
-        print(line + ". Focus counts keyboard focus in Umi, Umi Next or BB while Alejo was active in the last 3 "
+        print(line + ". Focus counts keyboard focus in BB while Alejo was active in the last 3 "
               "minutes.\n")
         if d["focus_error"]:
             print(f"Focus log error: {d['focus_error']}.\n")
@@ -366,8 +365,6 @@ def render(d):
             titles = "; ".join(s["titles"][:4]) + (f"; +{len(s['titles']) - 4} more" if len(s["titles"]) > 4 else "")
             print(f"- {s['host']}: {s['visits']} visits, ~{s['minutes']} min, {s['first']}–{s['last']}. {titles}")
         print()
-    if d["retire_umi"]:
-        print(d["retire_umi"])
 
 
 if __name__ == "__main__":
